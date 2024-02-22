@@ -1789,8 +1789,8 @@ trade(14, {
 
 trade(1, {
     Item.SpiderPope: -1,
-    Item.PreservedSurfaceBlooms: 52,
-    Item.RumourOfTheUpperRiver: 80
+    Item.PreservedSurfaceBlooms: 55,
+    Item.RumourOfTheUpperRiver: 88
 })
 
 # Prismatic Walrus
