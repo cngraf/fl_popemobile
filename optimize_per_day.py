@@ -8,6 +8,12 @@ from itertools import count
 
 import numpy as np
 
+'''
+TODO
+- electrostatic machine
+- khan's heart stuff esp. ivory
+'''
+
 class Rarity(Enum):
     Rare = 10
     Unusual = 20
@@ -318,7 +324,21 @@ per_day({
 # ██║   ██║██╔═══╝ ██╔═══╝     ██║  ██║██╔══╝  ██║     ██╔═██╗ 
 # ╚██████╔╝██║     ██║         ██████╔╝███████╗╚██████╗██║  ██╗
 #  ╚═════╝ ╚═╝     ╚═╝         ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝
-                                                                                        
+
+
+'''
+TODO
+- Lofty Tower with inculcating kraken
+- Urchins with that one HOJOTOHO fate story 
+- Check out Red (free) cards esp. Discordance stuff
+- improve Aunt payout
+    - can't do actions into more actions, will break everything
+    - just add a bunch of echoes or sth
+- check location-specific London cards
+    - skin of the bazaar?
+    - that university one?
+'''
+
 # ----------------------
 # --- Cards: Lodgings
 # ----------------------
@@ -380,6 +400,25 @@ card("Riding your Velocipede", Rarity.Standard, False, {
 })
 
 # -----------------------------------------------------
+# --- Cards: Clubs
+# ----------------------------------------------------
+
+# # Sophia's
+# # Can also be Tomb-Colony favour, maybe 50/50?
+# card("Club: Sophia's", Rarity.Standard, True, {
+#     Item.RumourOfTheUpperRiver: -5,
+#     Item.PieceOfRostygold: 1500,
+#     Item.JetBlackStinger: 5
+# })
+
+card("More Larks with the Young Stags", Rarity.Standard, True, {
+    # Item.PieceOfRostygold: -500,
+    Item.Echo: -5, # everyone has rostygold
+    Item.FavSociety: 2,
+    Item.FavBohemians: 1
+})
+
+# -----------------------------------------------------
 # --- Cards: Dreams
 # ----------------------------------------------------
 
@@ -419,7 +458,7 @@ card("Constables Faction", Rarity.Standard, False, {
 })
 
 # Criminals
-card("Criminals Faction", Rarity.Standard, True, {
+card("Criminals Faction", Rarity.Standard, False, {
     Item.Suspicion: 1,
     Item.FavCriminals: 1,
 })
@@ -431,7 +470,7 @@ card("Docks Faction", Rarity.Standard, True, {
 })
 
 # GreatGame
-card("Great Game Faction", Rarity.Standard, True, {
+card("Great Game Faction", Rarity.Standard, False, {
     Item.Wounds: 1,
     Item.FavGreatGame: 1
 })
@@ -443,7 +482,7 @@ card("Burning Shadows: the Devils of London", Rarity.Standard, False, {
 })
 
 # Revolutionaries
-card("Rev Faction", Rarity.Standard, True, {
+card("Rev Faction", Rarity.Standard, False, {
     Item.Echo: -0.5,
     Item.FavRevolutionaries: 1 
 })
@@ -466,7 +505,7 @@ card("Tomb Colonies Faction", Rarity.Standard, True, {
 })
 
 # Urchins
-card("Urchins Faction", Rarity.Standard, True, {
+card("Urchins Faction", Rarity.Standard, False, {
     Item.Echo: -0.1,
     Item.FavUrchins: 1
 })
@@ -549,7 +588,7 @@ card("A Polite Invitation", Rarity.Standard, False, {
     # TODO: Separate entry for party carousel
 })
 
-card("Give a Gift!", Rarity.Standard, True, {
+card("Give a Gift!", Rarity.Standard, False, {
     # TODO
 })
 
@@ -560,7 +599,7 @@ card("A day at the races", Rarity.Standard, True, {
 
 # Avoidable!
 # Sulky Bat >= 1
-card("A parliament of bats", Rarity.Standard, True, {
+card("A parliament of bats", Rarity.Standard, False, {
     Item.VisionOfTheSurface: -1,
     Item.FavGreatGame: 1
 })
@@ -569,13 +608,13 @@ card("One's public", Rarity.Standard, False, {
     # TODO    
 })
 
-card("A Day with God's Editors", Rarity.Standard, True, {
+card("A Day with God's Editors", Rarity.Standard, False, {
     Item.TaleOfTerror: -1,
     Item.FavChurch: 1
 })
 
 # Avoidable? unsure
-card("Bringing the revolution", Rarity.Standard, True, {
+card("Bringing the revolution", Rarity.Standard, False, {
     Item.CompromisingDocument: -1,
     Item.FavRevolutionaries: 1
 })
@@ -634,15 +673,6 @@ card("Investigation the Affluent Photographer", Rarity.Standard, False, {
 card("The Geology of Winewound", Rarity.Standard, False, {
     # TODO
 })
-
-# Sophia's
-# Can also be Tomb-Colony favour, maybe 50/50?
-card("Club: Sophia's", Rarity.Standard, True, {
-    Item.RumourOfTheUpperRiver: -5,
-    Item.PieceOfRostygold: 1500,
-    Item.JetBlackStinger: 5
-})
-
 
 # > Ask her about the sudden influx of bones
 # Debatable whether this one is "good"
@@ -1768,7 +1798,7 @@ trade(9, {
     Item.PrismaticFrame: -1,
     Item.SabreToothedSkull: -1,
     Item.CarvedBallOfStygianIvory: -2,
-    Item.AmberCrustedFin: -2,
+    Item.AmberCrustedFin: -3,
     Item.JetBlackStinger: -1,
     Item.PrismaticWalrus: 1,
 })
@@ -1800,7 +1830,7 @@ trade(9, {
     Item.SabreToothedSkull: -1,
     Item.WingOfAYoungTerrorBird: -2,
     Item.UnidentifiedThighbone: -2,
-    Item.WitheredTentacle: -1,
+    Item.JetBlackStinger: -1,
     Item.WoolyGothmother: 1
 })
 
