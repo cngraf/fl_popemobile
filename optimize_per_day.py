@@ -75,6 +75,7 @@ class Item(Enum):
     # Currency
     HinterlandScrip = auto()
     RatShilling = auto()
+    AssortmentOfKhaganianCoinage = auto()
 
     # Elder
     JadeFragment = auto()
@@ -1280,58 +1281,6 @@ trade(1 + jericho_add, {
 #     Item.AeolianScream: 1
 # })
 
-## ------------
-## Zailing
-## ------------
-
-# ballparking EPA for zailing with piracy
-trade(0, {
-    Item.ZailingDraws: -1,
-    Item.Echo: 3
-})
-
-## ------------
-## Court of the Wakeful Eye Grind
-## ------------
-
-# Round trip between London and CotWE
-# with zub or yacht
-trade(14, {
-    Item.ZailingDraws: 12,
-    # Psuedo item represents tribute cap of 260
-    Item.TimeAtWakefulCourt: 13
-})
-
-trade(4, {
-    Item.Tribute: -20,
-    Item.TimeAtWakefulCourt: -1,
-    Item.NightWhisper: 1
-})
-
-trade(1, {
-    Item.FavBohemians: -7,
-    Item.Tribute: 23
-})
-
-trade(1, {
-    Item.FavChurch: -7,
-    Item.Tribute: 23
-})
-
-trade(1, {
-    Item.FavCriminals: -7,
-    Item.Tribute: 23
-})
-
-trade(1, {
-    Item.FavDocks: -7,
-    Item.Tribute: 23
-})
-
-trade(1, {
-    Item.FavSociety: -7,
-    Item.Tribute: 23
-})
 
 ## -------------------------
 ## Innate Item Conversions
@@ -1548,126 +1497,6 @@ trade(1, {
     Item.Echo: 12.5
 })
 
-# --------------
-# Port Cecil
-# -------------
-
-# 7? actions to zail from london? 4 + 2 + 1
-# TODO: check round trip length
-trade(14, {
-    Item.PortCecilCycles: 4, # arbitrary, how many times thru before home
-    Item.ZailingDraws: 12
-})
-
-# ideal cycle w/ maxed stats
-# - 13 AotRS (reliable but less profitable w less)
-# - 334 Watchful (required to guarantee 50/50 split)
-# - 334 Persuasive  (required to guarantee 50/50 split)
-# 5x (red science miners => 7x map scrap, 1x knob scintillack)
-# 1x (instruct the cats => 5x scrap of i.g., 7x romantic notion)
-# 5x (prey on miners concerns => 6x journal ofinf)
-# 2x (deploy cat wrangling => 30x silvered cats claw)
-#   OR (distact w wildlife => 4x withered tentacle)
-
-trade(14, {
-    Item.PortCecilCycles: -1,
-    Item.MapScrap: 35,
-    Item.KnobOfScintillack: 5,
-    Item.ScrapOfIncendiaryGossip: 5,
-    Item.RomanticNotion: 7,
-    Item.JournalOfInfamy: 30,
-    Item.WitheredTentacle: 8,
-    Item.LostResearchAssistant: 1,
-    Item.SegmentedRibcage: 3
-})
-
-# alternative in carousel
-trade(0, {
-    Item.WitheredTentacle: -4,
-    Item.SilveredCatsClaw: 30
-})
-
-# slightly less profitable but more achievable grind
-# 5x direct miners toward dig site
-# - doesn't derail on failure
-# - 90% success w 273 P, 100% w 300
-# 1x instruct cats in calc
-# 3x liberate raw scintillack
-# 3x bring refreshments
-# 1x distract cats w/ wildlife
-
-trade (14, {
-    Item.PortCecilCycles: -1,
-    Item.ZeeZtory: 6 * 5,
-    Item.ScrapOfIncendiaryGossip: 5,
-    Item.RomanticNotion: 7,
-    Item.KnobOfScintillack: 3,
-    Item.MemoryOfDistantShores: 4 * 3,
-    Item.WitheredTentacle: 4,
-    Item.LostResearchAssistant: 1, 
-    Item.SegmentedRibcage: 3
-})
-
-# --------------
-# Ealing & Helicon
-# -------------
-
-# TODO: fix total carousel stuff here
-trade(1, {
-    Item.FinBoneCollected: -10,
-    Item.AmberCrustedFin: 1
-})
-
-
-# --------------
-# Balmoral
-# -------------
-
-# 2x (1 action, 4 research) to enter
-# 1 action to go to glade
-# 3x (1 action, 3 bombazine) to darken
-# 1 action wander
-# 1 action locate red deer
-# 1 action cash out with keeper
-
-# TODO: double check action counts for these
-# Mammoth Ribcage
-trade(9, {
-    Item.VolumeOfCollatedResearch: -8,
-    Item.ThirstyBombazineScrap: -9,
-
-    Item.MammothRibcage: 1,
-    Item.HolyRelicOfTheThighOfStFiacre: 1,
-    Item.FemurOfAJurassicBeast: 2,
-    Item.BoneFragments: 400
-})
-
-# Skeleton with 7 Necks
-trade(7, {
-    Item.VolumeOfCollatedResearch: -8,
-    Item.UnprovenancedArtefact: -4,
-
-    Item.SkeletonWithSevenNecks: 1
-})
-
-# --------------
-# Station VIII
-# -------------
-
-trade(1, {
-    Item.OilOfCompanionship: -1,
-    Item.RumourOfTheUpperRiver: -98,
-
-    Item.PrismaticFrame: 1
-})
-
-# guessing how this works, havent unlocked  yet
-trade(2, {
-    Item.AntiqueMystery: -2,
-    Item.ConsignmentOfScintillackSnuff: -2,
-
-    Item.OilOfCompanionship: 1
-})
 
 # --------------
 # Laboratory
@@ -1805,8 +1634,8 @@ trade(9, {
 
 trade(1, {
     Item.PrismaticWalrus: -1,
-    Item.HinterlandScrip: 908,
-    Item.CarvedBallOfStygianIvory: 17
+    Item.HinterlandScrip: 984,
+    Item.CarvedBallOfStygianIvory: 21
 })
 
 # Mammoth the Hedgehog
@@ -1889,6 +1718,192 @@ trade(13, {
     Item.NoduleOfWarmAmber: 5635,
     Item.KnobOfScintillack: 14
 })
+
+# ███████╗ █████╗ ██╗██╗     ██╗███╗   ██╗ ██████╗ 
+# ╚══███╔╝██╔══██╗██║██║     ██║████╗  ██║██╔════╝ 
+#   ███╔╝ ███████║██║██║     ██║██╔██╗ ██║██║  ███╗
+#  ███╔╝  ██╔══██║██║██║     ██║██║╚██╗██║██║   ██║
+# ███████╗██║  ██║██║███████╗██║██║ ╚████║╚██████╔╝
+# ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝ 
+                                                 
+# ballparking EPA for zailing with piracy
+trade(0, {
+    Item.ZailingDraws: -1,
+    Item.Echo: 3
+})
+
+## ------------
+## Court of the Wakeful Eye Grind
+## ------------
+
+# Round trip between London and CotWE
+# with zub or yacht
+trade(14, {
+    Item.ZailingDraws: 12,
+    # Psuedo item represents tribute cap of 260
+    Item.TimeAtWakefulCourt: 13
+})
+
+trade(4, {
+    Item.Tribute: -20,
+    Item.TimeAtWakefulCourt: -1,
+    Item.NightWhisper: 1
+})
+
+trade(1, {
+    Item.FavBohemians: -7,
+    Item.Tribute: 23
+})
+
+trade(1, {
+    Item.FavChurch: -7,
+    Item.Tribute: 23
+})
+
+trade(1, {
+    Item.FavCriminals: -7,
+    Item.Tribute: 23
+})
+
+trade(1, {
+    Item.FavDocks: -7,
+    Item.Tribute: 23
+})
+
+trade(1, {
+    Item.FavSociety: -7,
+    Item.Tribute: 23
+})
+
+
+# --------------
+# Port Cecil
+# -------------
+
+# 7? actions to zail from london? 4 + 2 + 1
+# TODO: check round trip length
+trade(14, {
+    Item.PortCecilCycles: 4, # arbitrary, how many times thru before home
+    Item.ZailingDraws: 12
+})
+
+# ideal cycle w/ maxed stats
+# - 13 AotRS (reliable but less profitable w less)
+# - 334 Watchful (required to guarantee 50/50 split)
+# - 334 Persuasive  (required to guarantee 50/50 split)
+# 5x (red science miners => 7x map scrap, 1x knob scintillack)
+# 1x (instruct the cats => 5x scrap of i.g., 7x romantic notion)
+# 5x (prey on miners concerns => 6x journal ofinf)
+# 2x (deploy cat wrangling => 30x silvered cats claw)
+#   OR (distact w wildlife => 4x withered tentacle)
+
+trade(14, {
+    Item.PortCecilCycles: -1,
+    Item.MapScrap: 35,
+    Item.KnobOfScintillack: 5,
+    Item.ScrapOfIncendiaryGossip: 5,
+    Item.RomanticNotion: 7,
+    Item.JournalOfInfamy: 30,
+    Item.WitheredTentacle: 8,
+    Item.LostResearchAssistant: 1,
+    Item.SegmentedRibcage: 3
+})
+
+# alternative in carousel
+trade(0, {
+    Item.WitheredTentacle: -4,
+    Item.SilveredCatsClaw: 30
+})
+
+# slightly less profitable but more achievable grind
+# 5x direct miners toward dig site
+# - doesn't derail on failure
+# - 90% success w 273 P, 100% w 300
+# 1x instruct cats in calc
+# 3x liberate raw scintillack
+# 3x bring refreshments
+# 1x distract cats w/ wildlife
+
+trade (14, {
+    Item.PortCecilCycles: -1,
+    Item.ZeeZtory: 6 * 5,
+    Item.ScrapOfIncendiaryGossip: 5,
+    Item.RomanticNotion: 7,
+    Item.KnobOfScintillack: 3,
+    Item.MemoryOfDistantShores: 4 * 3,
+    Item.WitheredTentacle: 4,
+    Item.LostResearchAssistant: 1, 
+    Item.SegmentedRibcage: 3
+})
+
+
+# █████╗  █████╗ ██╗██╗     ██╗    ██╗ █████╗ ██╗   ██╗
+# ██╔══██╗██╔══██╗██║██║     ██║    ██║██╔══██╗╚██╗ ██╔╝
+# ██████╔╝███████║██║██║     ██║ █╗ ██║███████║ ╚████╔╝ 
+# ██╔══██╗██╔══██║██║██║     ██║███╗██║██╔══██║  ╚██╔╝  
+# ██║  ██║██║  ██║██║███████╗╚███╔███╔╝██║  ██║   ██║   
+# ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   
+                                                     
+# --------------
+# Ealing & Helicon
+# -------------
+
+# TODO: fix total carousel stuff here
+trade(1, {
+    Item.FinBoneCollected: -10,
+    Item.AmberCrustedFin: 1
+})
+
+# --------------
+# Balmoral
+# -------------
+
+# 2x (1 action, 4 research) to enter
+# 1 action to go to glade
+# 3x (1 action, 3 bombazine) to darken
+# 1 action wander
+# 1 action locate red deer
+# 1 action cash out with keeper
+
+# TODO: double check action counts for these
+# Mammoth Ribcage
+trade(9, {
+    Item.VolumeOfCollatedResearch: -8,
+    Item.ThirstyBombazineScrap: -9,
+
+    Item.MammothRibcage: 1,
+    Item.HolyRelicOfTheThighOfStFiacre: 1,
+    Item.FemurOfAJurassicBeast: 2,
+    Item.BoneFragments: 400
+})
+
+# Skeleton with 7 Necks
+trade(7, {
+    Item.VolumeOfCollatedResearch: -8,
+    Item.UnprovenancedArtefact: -4,
+
+    Item.SkeletonWithSevenNecks: 1
+})
+
+# --------------
+# Station VIII
+# -------------
+
+trade(1, {
+    Item.OilOfCompanionship: -1,
+    Item.RumourOfTheUpperRiver: -98,
+
+    Item.PrismaticFrame: 1
+})
+
+# guessing how this works, havent unlocked  yet
+trade(2, {
+    Item.AntiqueMystery: -2,
+    Item.ConsignmentOfScintillackSnuff: -2,
+
+    Item.OilOfCompanionship: 1
+})
+
 
 # -------------------------------
 # ---- Opportunity Deck Math ----
