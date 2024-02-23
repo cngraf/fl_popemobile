@@ -10,12 +10,41 @@ import numpy as np
 
 '''
 TODO
+short term
 - electrostatic machine
-- khan's heart stuff esp. ivory
-- scrip optimization?
 - consolidate config options
-    - prereq: add config options
+- parabola stuff?
+- Lofty Tower with inculcating kraken
+- Urchins with that one HOJOTOHO fate story 
+- Check out Red (free) cards esp. Discordance stuff
+- improve Aunt payout
+    - can't do actions into more actions, will probably break everything
+    - just add a bunch of echoes or sth
+- check location-specific London cards
+    - skin of the bazaar?
+    - that university one for TC favours
+
+medium term
+- better way to A/B test without just commenting out shit
+    - this script is currently equivalent to a pathfinding algorithm that tells you the shortest distance
+    - but doesn't actually tell you the steps required to get there. you gotta like infer it from the output
+    - create a Trade class or something?
+    - the answer is always more abstraction
+    
+long term
+- option to optimize for hinterland scrip instead of echoes
+    - fuck it optimize for any item
+- incorporate a given character's capabilities
+    - what are your stats, what various options do you have unlocked
+    - in general more fine-grained control over the various base assumptions
 '''
+
+# Important Parameters
+actions_per_day = 144.0
+cards_seen_per_day = 96.0
+
+# rare success rate
+default_rare_success_rate = 0.05
 
 class Rarity(Enum):
     Rare = 10
@@ -221,10 +250,9 @@ class Item(Enum):
     # Qualities
     # -----
 
-    # BoardMemberTentacledEntrepreneur = auto()
+    # BoardMemberTentacledEntrepreneu = auto()
     ResearchOnAMorbidFad = auto()
     
-    # MakingWaves = auto()
     Tribute = auto()
 
     # ----- Psuedo Items
@@ -243,9 +271,6 @@ class Item(Enum):
     MammothTheHedgehog = auto()
     WoolyGothmother = auto()
 
-actions_per_day = 144.0
-cards_seen_per_day = 96.0
-
 def pyramid(n): return n * (n+1) / 2
 
 def per_day(exchanges):
@@ -262,20 +287,15 @@ def trade(actionCost, exchanges):
         A[n, item.value] = value
 
 def card(name, freq, isGood, exchanges):
-    # n = next(counter)
-    # b[n] = 0
-    # A[n, Item.Action.value] = -1
-    # A[n, Item.CardDraw.value] = -1
     global LondonDeckSize
     global GoodCardsInDeck
     LondonDeckSize += freq.value
     if isGood:
         GoodCardsInDeck += freq.value
         for item, value in exchanges.items():
-            # A[n, item.value] = value    
             LondonCardsByItem[item.value] += (value * freq.value)
 
-
+# hack
 var_buffer = 500
 num_vars = max(Item, key=lambda x: x.value).value + 1 + var_buffer
 
@@ -286,10 +306,14 @@ counter = count(start=-1)
 
 bounds = [(0, None) for _ in range(num_vars)]
 
-# bounds[Item.Action.value] = (0, actions_per_day)
-# bounds[Item.CardDraws.value] = (0, cards_seen_per_day)
+# in practice it seems this rarely affects the output, but it makes me feel better
+# I don't know if this even works the way I think it does as far as modeling long-term stockpiling
+# but if you set it too low, you will lock out certain trades
+# eg setting the upper bound of Bohemian favours to 3 will lock out the Jericho option
+# so really it's a source of bugs more than anything else
+# still keeping it in
 
-# actually a little higher since you can overflow
+# menace bounds actually a little higher since you can overflow
 bounds[Item.Wounds.value] = (0, 36)
 bounds[Item.Scandal.value] = (0, 36)
 bounds[Item.Suspicion.value] = (0, 36)
@@ -317,14 +341,14 @@ bounds[Item.FavUrchins.value] = (0, 7)
 
 bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
 
-# rare success rate
-default_rsr = 0.05
-
-
 # for card averages
 LondonDeckSize = 0
 GoodCardsInDeck = 0
 LondonCardsByItem = [0] * num_vars
+
+# ---------------- Trades ----------------------------
+
+# Plug in the basic economic contraints
 
 per_day({
     Item.Action: actions_per_day,
@@ -338,20 +362,6 @@ per_day({
 # ██║   ██║██╔═══╝ ██╔═══╝     ██║  ██║██╔══╝  ██║     ██╔═██╗ 
 # ╚██████╔╝██║     ██║         ██████╔╝███████╗╚██████╗██║  ██╗
 #  ╚═════╝ ╚═╝     ╚═╝         ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝
-
-
-'''
-TODO
-- Lofty Tower with inculcating kraken
-- Urchins with that one HOJOTOHO fate story 
-- Check out Red (free) cards esp. Discordance stuff
-- improve Aunt payout
-    - can't do actions into more actions, will break everything
-    - just add a bunch of echoes or sth
-- check location-specific London cards
-    - skin of the bazaar?
-    - that university one?
-'''
 
 # ----------------------
 # --- Cards: Lodgings
@@ -367,9 +377,9 @@ card("Lair in the Marshes", Rarity.Standard, True, {
 # The Tower of Knives: Difficulties at a Smoky Flophouse
 # The next victim?
 card("The Tower of Knives", Rarity.Standard, True, {
-    Item.FavCriminals: 0.5 - default_rsr / 2.0,
-    Item.FavRevolutionaries: 0.5 - default_rsr / 2.0,
-    Item.AeolianScream: default_rsr
+    Item.FavCriminals: 0.5 - default_rare_success_rate / 2.0,
+    Item.FavRevolutionaries: 0.5 - default_rare_success_rate / 2.0,
+    Item.AeolianScream: default_rare_success_rate
 })
 
 # The Tower of Eyes: Behind Closed Doors at a Handsome Townhouse
@@ -839,7 +849,7 @@ trade(1, {
 # Card: Intervene in an Attack
 trade(1, {
     Item.SeeingBanditryInTheUpperRiver: -1,
-    Item.InCorporateDebt: -1 * default_rsr,
+    Item.InCorporateDebt: -1 * default_rare_success_rate,
     Item.PieceOfRostygold: 400
 })
 
@@ -1303,8 +1313,8 @@ trade(1 + jericho_add, {
 trade(1, {
     Item.MemoryOfDistantShores: -50,
     Item.VolumeOfCollatedResearch: 10,
-    Item.CrypticClue: 50 * (0.6 - default_rsr),
-    Item.UncannyIncunabulum: 2 * default_rsr
+    Item.CrypticClue: 50 * (0.6 - default_rare_success_rate),
+    Item.UncannyIncunabulum: 2 * default_rare_success_rate
 })
 
 # requires urchin war active
@@ -1320,8 +1330,8 @@ trade(1,{
     Item.JournalOfInfamy: -50,
     Item.ConnectedBenthic: -5,
     Item.ExtraordinaryImplication: 10,
-    Item.ShardOfGlim: 100 * (0.6 - default_rsr),
-    Item.StormThrenody: 2 * default_rsr
+    Item.ShardOfGlim: 100 * (0.6 - default_rare_success_rate),
+    Item.StormThrenody: 2 * default_rare_success_rate
 })
 
 # # Implications to Incunabula @ 25:5
@@ -1329,8 +1339,8 @@ trade(1, {
     Item.ExtraordinaryImplication: -25,
     Item.ConnectedBenthic: -20,
     Item.UncannyIncunabulum: 5,
-    Item.NevercoldBrassSliver: 200 * (0.6 - default_rsr),
-    Item.Echo: 62.5 * default_rsr # Nodule of Pulsating Amber
+    Item.NevercoldBrassSliver: 200 * (0.6 - default_rare_success_rate),
+    Item.Echo: 62.5 * default_rare_success_rate # Nodule of Pulsating Amber
 })
 
 ## ------------
