@@ -12,6 +12,9 @@ import numpy as np
 TODO
 - electrostatic machine
 - khan's heart stuff esp. ivory
+- scrip optimization?
+- consolidate config options
+    - prereq: add config options
 '''
 
 class Rarity(Enum):
@@ -66,6 +69,7 @@ class Item(Enum):
     # Curiosity
     WhirringContraption = auto()
     OilOfCompanionship = auto()
+    CracklingDevice = auto()
 
     # Cartography
     ShardOfGlim = auto()
@@ -298,9 +302,18 @@ bounds[Item.Tribute.value] = (0, 260)
 bounds[Item.TimeAtWakefulCourt.value] = (0, 13)
 bounds[Item.TimeAtJerichoLocks.value] = (0, 5)
 
-bounds[Item.NightWhisper.value] = (0, 300)
-
 bounds[Item.FavBohemians.value] = (0, 7)
+bounds[Item.FavChurch.value] = (0, 7)
+bounds[Item.FavConstables.value] = (0, 7)
+bounds[Item.FavCriminals.value] = (0, 7)
+bounds[Item.FavDocks.value] = (0, 7)
+bounds[Item.FavGreatGame.value] = (0, 7)
+bounds[Item.FavHell.value] = (0, 7)
+bounds[Item.FavRevolutionaries.value] = (0, 7)
+bounds[Item.FavRubberyMen.value] = (0, 7)
+bounds[Item.FavSociety.value] = (0, 7)
+bounds[Item.FavTombColonies.value] = (0, 7)
+bounds[Item.FavUrchins.value] = (0, 7)
 
 bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
 
@@ -1354,6 +1367,11 @@ trade(1, {
     Item.RatShilling: 850
 })
 
+trade(1, {
+    Item.CracklingDevice: -1,
+    Item.RatShilling: 850
+})
+
 ## ------------
 ## Various London Carousels?
 ## ------------
@@ -1836,6 +1854,20 @@ trade (14, {
     Item.SegmentedRibcage: 3
 })
 
+# -------------
+# Khan's Heart
+# -------------
+
+# selling
+trade(0, {
+    Item.CarvedBallOfStygianIvory: -1,
+    Item.AssortmentOfKhaganianCoinage: 5
+})
+
+trade(0, {
+    Item.AssortmentOfKhaganianCoinage: -130,
+    Item.CracklingDevice: 1
+})
 
 # █████╗  █████╗ ██╗██╗     ██╗    ██╗ █████╗ ██╗   ██╗
 # ██╔══██╗██╔══██╗██║██║     ██║    ██║██╔══██╗╚██╗ ██╔╝
