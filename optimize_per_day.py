@@ -17,14 +17,22 @@ short term
 - Lofty Tower with inculcating kraken
 - Urchins with that one HOJOTOHO fate story 
 - Check out Red (free) cards esp. Discordance stuff
-- improve Aunt payout
-    - can't do actions into more actions, will probably break everything
-    - just add a bunch of echoes or sth
 - check location-specific London cards
     - skin of the bazaar?
     - that university one for TC favours
 
+- figure out why the "Action" item is being valued at more than 1.0 Actions
+    - think it's to do with the opportunity deck
+    - experimentally it seems to track the multiplicative effect of adding the deck compared to base EPA
+    - so with the opp deck enabled, we get the "Action" item valued at 1.31 Actions w/ overall EPA of 6.531
+    - disable it (`cards_seen_per_day = 0`) and we get 1.00 and 4.899
+    - those line up
+    - so that's okay, I guess?
+
 medium term
+- option to optimize for hinterland scrip instead of echoes
+    - fuck it optimize for any item
+    - it already does this, just the option for the terminal output
 - better way to A/B test without just commenting out shit
     - this script is currently equivalent to a pathfinding algorithm that tells you the shortest distance
     - but doesn't actually tell you the steps required to get there. you gotta like infer it from the output
@@ -32,8 +40,7 @@ medium term
     - the answer is always more abstraction
     
 long term
-- option to optimize for hinterland scrip instead of echoes
-    - fuck it optimize for any item
+
 - incorporate a given character's capabilities
     - what are your stats, what various options do you have unlocked
     - in general more fine-grained control over the various base assumptions
@@ -45,6 +52,10 @@ cards_seen_per_day = 96.0
 
 # rare success rate
 default_rare_success_rate = 0.05
+
+# for modeling actions that can grant more actions
+# eg. the 30% success on the aunt card
+replacement_epa = 6.5
 
 class Rarity(Enum):
     Rare = 10
@@ -159,6 +170,7 @@ class Item(Enum):
     UncannyIncunabulum = auto()
 
     # Nostaliga
+    DropOfPrisonersHoney = auto()
     RomanticNotion = auto()
     VisionOfTheSurface = auto()
 
@@ -202,6 +214,7 @@ class Item(Enum):
     NoduleOfPulsatingAmber = auto()
 
     # Rumour
+    InklingOfIdentity = auto()
     ScrapOfIncendiaryGossip = auto()
     NightOnTheTown = auto()
     RumourOfTheUpperRiver = auto()
@@ -216,6 +229,7 @@ class Item(Enum):
     ApostatesPsalm = auto()
 
     # Wines
+    BottleOfGreyfields1882 = auto()
     BottleOfStranglingWillowAbsinthe = auto()
 
     # Wild Words
@@ -314,6 +328,8 @@ bounds = [(0, None) for _ in range(num_vars)]
 # still keeping it in
 
 # menace bounds actually a little higher since you can overflow
+# also should maybe have negative bound, since menace reduction is usually a side-effect rather than a cost
+# tried setting it to (-100, 36) and EPA went down slightly so who the heck knows
 bounds[Item.Wounds.value] = (0, 36)
 bounds[Item.Scandal.value] = (0, 36)
 bounds[Item.Suspicion.value] = (0, 36)
@@ -528,10 +544,16 @@ card("Tomb Colonies Faction", Rarity.Standard, True, {
     Item.FavTombColonies: 1
 })
 
-# Urchins
-card("Urchins Faction", Rarity.Standard, False, {
-    Item.Echo: -0.1,
-    Item.FavUrchins: 1
+# # Urchins
+# card("Urchins Faction", Rarity.Standard, False, {
+#     Item.Echo: -0.1,
+#     Item.FavUrchins: 1
+# })
+
+# With HOJOTOHO ending
+card("Urchins Faction", Rarity.Standard, True, {
+    Item.FavUrchins: 1,
+    Item.Nightmares: -2
 })
 
 # ----------------------
@@ -791,16 +813,19 @@ card("A Trade in Souls card", Rarity.Standard, True, {
     Item.FavSociety: 1
 })
 
-# Society ending
-# TODO: Check rarity
-# TODO: add chance of action refresh. think it won't work w current impl
-# currently assumes 100% failure rate
+# Society ending since that's what I have
+# probably the best of the aunt-bitions anyway
 card("The OP Aunt card", Rarity.Standard, True, {
-    Item.Echo: -2, # 50x bottle of greyfields 1882
-    Item.FavSociety: 1,
-    Item.ScrapOfIncendiaryGossip: 3,
-    # Item.InklingOfIdentity: 5,
-    Item.Scandal: -2,
+    Item.BottleOfGreyfields1882: -50,
+
+    # 0.7 Failure
+    Item.FavSociety: 1 * 0.7,
+    Item.ScrapOfIncendiaryGossip: 3 * 0.7,
+    Item.InklingOfIdentity: 5 * 0.7,
+    Item.Scandal: -2 * 0.7,
+    
+    # 0.3 success
+    Item.Echo: 10 * replacement_epa * 0.3
 })
 
 
@@ -813,9 +838,12 @@ card("The OP Aunt card", Rarity.Standard, True, {
 #  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
                                                            
 
-## ------------
-## Social Menace Clears
-## ------------
+## ------------------------------
+## -------- Menace Stuff --------
+## ------------------------------
+
+# Social Actions, ignoring the cost to the other party
+# Better options for Scandal and Suspicion exist @ -6 (dupe/betrayal) but those have a weekly limit
 
 trade(1, {
     Item.Wounds: -6
@@ -833,50 +861,24 @@ trade(1, {
     Item.Nightmares: -6
 })
 
-trade(1, {
-    Item.Scandal: -5
-})
+# Not a real action, represents the fact that menace reduction is a side effect rather than a cost
+# otherwise we might miss a grind that's net negative on a given menace
 
-# Banditry
-
-# Sets to 3
-# In practice probably slightly better w overcap
 trade(1, {
-    Item.SeeingBanditryInTheUpperRiver: - (pyramid(8) - pyramid(3)),
-    Item.Scandal: 12
-})
-
-# Card: Intervene in an Attack
-trade(1, {
-    Item.SeeingBanditryInTheUpperRiver: -1,
-    Item.InCorporateDebt: -1 * default_rare_success_rate,
-    Item.PieceOfRostygold: 400
+    Item.Wounds: 10
 })
 
 trade(1, {
-
+    Item.Scandal: 10
 })
 
-# -----
-# Board Member Stuff
-# -----
-
-# Tentacled Entrepreneur rotation
-trade(7, {
-    Item.InCorporateDebt: -15,
-    Item.HinterlandScrip: 10
+trade(1, {
+    Item.Suspicion: 10
 })
-# trade(1, {
-#     Item.BoardMemberTentacledEntrepreneur: 1,
-#     Item.InCorporateDebt: -15,
-#     Item.HinterlandScrip: 10
-# })
 
-# # double check action cost
-# # start vote + collect votes + declare victory?
-# trade(6, {
-#     Item.BoardMemberTentacledEntrepreneur: -1
-# })
+trade(1, {
+    Item.Nightmares: 10
+})
 
 ## -----------------------
 ## --- Selling to Bazaar
@@ -1015,6 +1017,10 @@ trade(0, {
 
 
 # Nostalgia
+trade(0, {
+    Item.Echo: -0.04,
+    Item.DropOfPrisonersHoney: 1
+})
 
 trade(0, {
     Item.RomanticNotion: -1,
@@ -1099,6 +1105,12 @@ trade(0, {
 trade(0, {
     Item.NightWhisper: -1,
     Item.Echo: 62.5
+})
+
+# Wines
+trade(0, {
+    Item.Echo: -0.04,
+    Item.BottleOfGreyfields1882: 1
 })
 
 
@@ -1885,7 +1897,31 @@ trade(0, {
 # ██╔══██╗██╔══██║██║██║     ██║███╗██║██╔══██║  ╚██╔╝  
 # ██║  ██║██║  ██║██║███████╗╚███╔███╔╝██║  ██║   ██║   
 # ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   
-                                                     
+
+# Sets to 3
+# In practice probably slightly better w overcap
+trade(1, {
+    Item.SeeingBanditryInTheUpperRiver: - (pyramid(8) - pyramid(3)),
+    Item.Scandal: 12
+})
+
+# Card: Intervene in an Attack
+trade(1, {
+    Item.SeeingBanditryInTheUpperRiver: -1,
+    Item.InCorporateDebt: -1 * default_rare_success_rate,
+    Item.PieceOfRostygold: 400
+})
+
+# -----
+# Board Member Stuff
+# -----
+
+# Tentacled Entrepreneur rotation
+trade(7, {
+    Item.InCorporateDebt: -15,
+    Item.HinterlandScrip: 10
+})
+
 # --------------
 # Ealing & Helicon
 # -------------
@@ -2014,18 +2050,17 @@ print("Opp Deck")
 print(f"{'Item Name':^30}")
 for item, quantity in zip(Item, opt_result.x):
     item_name = f"{item.name:30}"
-    per_action = f"{(1.0/(quantity * actions_per_day) if quantity != 0 else 0.0):10.2f}"
+    per_action = f"{(1.0/(quantity * actions_per_day) if quantity != 0 else 0.0):10.3f}"
     per_card = LondonCardsByItem[item.value] / LondonDeckSize
-    # per_card = f"{(LondonCardsByItem[item.value] / LondonDeckSize):10.2f}" if LondonCardsByItem[item.value] > 0 else f"{'n/a':^10}"
     per_day_of_draws = per_card * cards_seen_per_day
     print(item_name + per_action + ((f"{per_card:10.2f}" + f"{per_day_of_draws:10.2f}") if per_card != 0 else ""))
 
-print("------Summary & Assumptions-------")
-print(f"Total Actions per Day: {actions_per_day}")
-print(f"Cards Drawn per Day: {cards_seen_per_day}")
-print(f"Good Card Density: {good_card_density:.2}")
-print(f"Actions spent on Cards per Day: {good_cards_per_day}")
-print(f"Echoes per Day: {-1.0/(opt_result.fun):.7}")
-print(f"EPA @ {actions_per_day} & {cards_seen_per_day}: {-1.0/(opt_result.fun * actions_per_day):.3}")
+print("------Assumptions-------")
+print(f"Total Actions per Day:            {actions_per_day:10}")
+print(f"Cards Drawn per Day:              {cards_seen_per_day:10}")
 
-# print(bounds)
+print("------Summary-------")
+print(f"Good Card Density:                {good_card_density:10.3f}")
+print(f"Actions spent on Cards per Day:   {good_cards_per_day:10.3f}")
+print(f"Echoes per Day:                   {-1.0/(opt_result.fun):10.3f}")
+print(f"EPA @ {actions_per_day} & {cards_seen_per_day}:               {-1.0/(opt_result.fun * actions_per_day):10.3f}")
