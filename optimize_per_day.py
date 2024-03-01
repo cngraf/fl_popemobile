@@ -7,20 +7,48 @@ from enum import Enum, auto
 from itertools import count
 
 import numpy as np
+import pprint
 
 '''
 TODO
+
+LOW COMPLEXITY
+- location-specific opp deck cards
+- all the chimes & chimes-tier carousels
+    - brawling with dockers
+    - sunken embassy
+    - spider debates
+    - whatever other crap i forgot
+- shuttered palace stuff
+    - five correspondence symphonies followed by one "it's not unusual"
+- remaining hearts' game payouts
+- remaining newspaper options
+- heists
+- professional activities
+- museum of prelapsarian history
+
+MEDIUM COMPLEXITY
+- laboratory w/ prescribed setup
+- parabolan hunts
+- parabolan war
+
+HIGH COMPLEXITY
+- better model of zailing deck
+- bone market
+
 short term
+- RIP Spider-Pope, update recipe outputs
 - electrostatic machine
-- consolidate config options
 - parabola stuff?
 - Lofty Tower with inculcating kraken
-- Urchins with that one HOJOTOHO fate story 
 - Check out Red (free) cards esp. Discordance stuff
 - check location-specific London cards
     - skin of the bazaar?
     - that university one for TC favours
-
+- bone market exhaustion
+    - model it as just 4/7ths of a point per day?
+    - fuck maybe we have to move to a per-week basis blergh
+    
 - figure out why the "Action" item is being valued at more than 1.0 Actions
     - think it's to do with the opportunity deck
     - experimentally it seems to track the multiplicative effect of adding the deck compared to base EPA
@@ -50,8 +78,11 @@ long term
 actions_per_day = 144.0
 cards_seen_per_day = 96.0
 
-# rare success rate
+# placeholder for upconversions and stuff
+# if anyone knows the real values please share
 default_rare_success_rate = 0.05
+
+zailing_epa = 3.2
 
 # for modeling actions that can grant more actions
 # eg. the 30% success on the aunt card
@@ -134,9 +165,19 @@ class Item(Enum):
     PieceOfRostygold = auto()
 
     # Great Game
-    ViennaOpening = auto()
+    WellPlacedPawn = auto()
     FinalBreath = auto()
+    MovesInTheGreatGame = auto()
+    VitalIntelligence = auto()
+    CopperCipherRing = auto()
+    CorrespondingSounder = auto()
+
+    ViennaOpening = auto()
+    EpauletteMate = auto()
     QueenMate = auto()
+    Stalemate = auto()
+    MuchNeededGap = auto()
+    InterceptedCablegram = auto()
 
     # Historical
     SilveredCatsClaw = auto()
@@ -264,6 +305,8 @@ class Item(Enum):
     # Qualities
     # -----
 
+    Infiltrating = auto()
+
     # BoardMemberTentacledEntrepreneu = auto()
     ResearchOnAMorbidFad = auto()
     
@@ -311,7 +354,8 @@ def card(name, freq, isGood, exchanges):
 
 # hack
 var_buffer = 500
-num_vars = max(Item, key=lambda x: x.value).value + 1 + var_buffer
+num_items = max(Item, key=lambda x: x.value).value
+num_vars = num_items + 1 + var_buffer
 
 A = lil_matrix((num_vars, num_vars))
 
@@ -1131,140 +1175,6 @@ trade(3, {
 })
 
 
-## --------------------------------------
-## ----------- Favour Cards
-## --------------------------------------
-
-# Bundle of all favour cards
-# minus hell which lacks good trades?
-# card(11, {
-#     Item.Echo: -2.7,
-#     Item.Suspicion: 1,
-#     Item.Wounds: 1,
-
-#     Item.FavBohemians: 1,
-#     Item.FavChurch: 1,
-#     Item.FavConstables: 1,
-#     Item.FavCriminals: 1,
-#     Item.FavDocks: 1,
-#     Item.FavGreatGame: 1,
-#     Item.FavRevolutionaries: 1,
-#     Item.FavRubberyMen: 1,
-#     Item.FavSociety: 1,
-#     Item.FavTombColonies: 1,
-#     Item.FavUrchins: 1
-# })
-
-# TODO: upper river cards
-# card("UR Respectable passengers", Rarity.Standard, {
-#     Item.FavCriminals: 1,
-#     Item.SeeingBanditryInTheUpperRiver: 2
-# })
-
-# -----------------------------------
-# ---- Calling in Favours in Jericho
-# -----------------------------------
-
-# how to model cost of actually going to jericho
-# just bundle all the favours together?
-
-# trade(1, {
-#     Item.TimeAtJerichoLocks: 5,
-#     Item.RumourOfTheUpperRiver: 1
-# })
-
-# def trade(actionCost, exchanges):
-#     n = next(counter)
-#     b[n] = actionCost
-#     for item, value in exchanges.items():
-#         A[n, item.value] = value
-
-# hack
-jericho_add = 0.0
-
-# hack
-def jericho_trade(exchange):
-    exchange[Item.RumourOfTheUpperRiver] = jericho_add
-    trade(1 + jericho_add, exchange)
-
-# currently putting all the weight of getting to/from Jericho on bohemians
-# other factions are modeled as always-availabel trade since it's assumed
-# you won't overcap on them by the next time you have at least 4 bohe to trade
-
-trade(3, {
-    Item.FavBohemians: -4,
-    Item.HolyRelicOfTheThighOfStFiacre: 2,
-    Item.WingOfAYoungTerrorBird: 1,
-    Item.RumourOfTheUpperRiver: 2
-})
-
-trade(1 + jericho_add, {
-    Item.FavChurch: -4,
-    Item.RattyReliquary: 2,
-    Item.ApostatesPsalm: 1,
-})
-
-trade(1 + jericho_add, {
-    Item.FavConstables: -4,
-    Item.CaveAgedCodeOfHonour: 2,
-    Item.SwornStatement: 1
-})
-
-trade(1 + jericho_add, {
-    Item.FavCriminals: -4,
-    Item.HumanRibcage: 2,
-    Item.HumanArm: 1
-})
-
-trade(1 + jericho_add, {
-    Item.FavDocks: -4,
-    Item.UncannyIncunabulum: 2,
-    Item.KnobOfScintillack: 1
-})
-
-trade(1 + jericho_add, {
-    Item.FavGreatGame: -4,
-    Item.ViennaOpening: 1,
-    Item.QueenMate: 1
-})
-
-trade(1 + jericho_add, {
-    Item.FavHell: -4,
-    Item.ThornedRibcage: 2,
-    Item.QueerSoul: 1
-})
-
-trade(1 + jericho_add, {
-    Item.FavRevolutionaries: -4,
-    Item.UnlawfulDevice: 2,
-    Item.ThirstyBombazineScrap: 1
-})
-
-trade(1 + jericho_add, {
-    Item.FavRubberyMen: -4,
-    Item.FlourishingRibcage: 2,
-    Item.BasketOfRubberyPies: 1,
-})
-
-trade(1 + jericho_add, {
-    Item.FavSociety: -4,
-    Item.FavourInHighPlaces: 2,
-    Item.NightOnTheTown: 1
-})
-
-trade(1 + jericho_add, {
-    Item.FavTombColonies: -4,
-    Item.AntiqueMystery: 2,
-    Item.UnprovenancedArtefact: 1,
-})
-
-trade(1 + jericho_add, {
-    Item.FavUrchins: -4,
-    Item.StormThrenody: 2,
-    Item.AeolianScream: 1
-})
-
-
 # # All favours in one visit?
 # trade(12, {
 #     Item.FavBohemians: -4,
@@ -1656,11 +1566,12 @@ trade(14, {
     Item.SpiderPope: 1
 })
 
-trade(1, {
-    Item.SpiderPope: -1,
-    Item.PreservedSurfaceBlooms: 55,
-    Item.RumourOfTheUpperRiver: 88
-})
+# # halving the payouts until real figures known
+# trade(1, {
+#     Item.SpiderPope: -1,
+#     Item.PreservedSurfaceBlooms: 55, # * 0.5,
+#     Item.RumourOfTheUpperRiver: 88 #* 0.5
+# })
 
 # Prismatic Walrus
 trade(9, {
@@ -1759,6 +1670,21 @@ trade(13, {
     Item.KnobOfScintillack: 14
 })
 
+# ██╗  ██╗██╗  ██╗ █████╗ ███╗   ██╗ █████╗ ████████╗███████╗
+# ██║ ██╔╝██║  ██║██╔══██╗████╗  ██║██╔══██╗╚══██╔══╝██╔════╝
+# █████╔╝ ███████║███████║██╔██╗ ██║███████║   ██║   █████╗  
+# ██╔═██╗ ██╔══██║██╔══██║██║╚██╗██║██╔══██║   ██║   ██╔══╝  
+# ██║  ██╗██║  ██║██║  ██║██║ ╚████║██║  ██║   ██║   ███████╗
+# ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
+
+# Intercept a cablegram
+trade(2, {
+    Item.Infiltrating: -20,
+    Item.InterceptedCablegram: 5,
+    Item.VitalIntelligence: 1
+})
+
+
 # ███████╗ █████╗ ██╗██╗     ██╗███╗   ██╗ ██████╗ 
 # ╚══███╔╝██╔══██╗██║██║     ██║████╗  ██║██╔════╝ 
 #   ███╔╝ ███████║██║██║     ██║██╔██╗ ██║██║  ███╗
@@ -1769,7 +1695,7 @@ trade(13, {
 # ballparking EPA for zailing with piracy
 trade(0, {
     Item.ZailingDraws: -1,
-    Item.Echo: 3
+    Item.Echo: zailing_epa
 })
 
 ## ------------
@@ -1891,7 +1817,7 @@ trade(0, {
     Item.CracklingDevice: 1
 })
 
-# █████╗  █████╗ ██╗██╗     ██╗    ██╗ █████╗ ██╗   ██╗
+#  █████╗  █████╗ ██╗██╗     ██╗    ██╗ █████╗ ██╗   ██╗
 # ██╔══██╗██╔══██╗██║██║     ██║    ██║██╔══██╗╚██╗ ██╔╝
 # ██████╔╝███████║██║██║     ██║ █╗ ██║███████║ ╚████╔╝ 
 # ██╔══██╗██╔══██║██║██║     ██║███╗██║██╔══██║  ╚██╔╝  
@@ -1931,6 +1857,92 @@ trade(1, {
     Item.FinBoneCollected: -10,
     Item.AmberCrustedFin: 1
 })
+
+
+# -----------------------------------
+# ---- Calling in Favours in Jericho
+# -----------------------------------
+
+# hack to model dipping into jericho to trade favours
+# when you would otherwise not go there
+
+jericho_add = 0.0
+def jericho_trade(exchange):
+    exchange[Item.RumourOfTheUpperRiver] = jericho_add
+    trade(1 + jericho_add, exchange)
+
+jericho_trade({
+    Item.FavBohemians: -4,
+    Item.HolyRelicOfTheThighOfStFiacre: 2,
+    Item.WingOfAYoungTerrorBird: 1,
+})
+
+jericho_trade({
+    Item.FavChurch: -4,
+    Item.RattyReliquary: 2,
+    Item.ApostatesPsalm: 1,
+})
+
+jericho_trade({
+    Item.FavConstables: -4,
+    Item.CaveAgedCodeOfHonour: 2,
+    Item.SwornStatement: 1
+})
+
+jericho_trade({
+    Item.FavCriminals: -4,
+    Item.HumanRibcage: 2,
+    Item.HumanArm: 1
+})
+
+jericho_trade({
+    Item.FavDocks: -4,
+    Item.UncannyIncunabulum: 2,
+    Item.KnobOfScintillack: 1
+})
+
+jericho_trade({
+    Item.FavGreatGame: -4,
+    Item.ViennaOpening: 1,
+    Item.QueenMate: 1
+})
+
+jericho_trade({
+    Item.FavHell: -4,
+    Item.ThornedRibcage: 2,
+    Item.QueerSoul: 1
+})
+
+jericho_trade({
+    Item.FavRevolutionaries: -4,
+    Item.UnlawfulDevice: 2,
+    Item.ThirstyBombazineScrap: 1
+})
+
+jericho_trade({
+    Item.FavRubberyMen: -4,
+    Item.FlourishingRibcage: 2,
+    Item.BasketOfRubberyPies: 1,
+})
+
+jericho_trade({
+    Item.FavSociety: -4,
+    Item.FavourInHighPlaces: 2,
+    Item.NightOnTheTown: 1
+})
+
+jericho_trade({
+    Item.FavTombColonies: -4,
+    Item.AntiqueMystery: 2,
+    Item.UnprovenancedArtefact: 1,
+})
+
+jericho_trade({
+    Item.FavUrchins: -4,
+    Item.StormThrenody: 2,
+    Item.AeolianScream: 1
+})
+
 
 # --------------
 # Balmoral
@@ -2033,34 +2045,84 @@ trade(good_cards_per_day, card_exchange)
 # ------------------------------------------
 # ---------------- Optimization ------------
 # ------------------------------------------
-# linear optimize
+
+optimize_for = Item.Echo
+
 c = np.zeros(num_vars)
-c[Item.Echo.value] = -1
+c[optimize_for.value] = -1
 
 opt_result = linprog(c, A_ub=A.toarray(), b_ub=b, bounds=bounds, method='highs')
 print(opt_result)
 
 print("Opp Deck")
 
-# for item, quantity in zip(Item, opt_result.x):
-#     if LondonCardsByItem[item.value] > 0:
-#         cards = LondonCardsByItem[item.value]
-#         print(f"{item.name}: 1 in {LondonDeckSize / LondonCardsByItem[item.value]:10.3f}")
-
 print(f"{'Item Name':^30}")
+# for item, quantity in zip(Item, opt_result.x):
+#     item_name = f"{item.name:30}"
+#     per_action = f"{(1.0/(quantity * actions_per_day) if quantity != 0 else 0.0):10.3f}"
+#     per_card = LondonCardsByItem[item.value] / LondonDeckSize
+#     per_day_of_draws = per_card * cards_seen_per_day
+#     print(item_name + per_action + ((f"{per_card:10.2f}" + f"{per_day_of_draws:10.2f}") if per_card != 0 else ""))
+
+
 for item, quantity in zip(Item, opt_result.x):
     item_name = f"{item.name:30}"
-    per_action = f"{(1.0/(quantity * actions_per_day) if quantity != 0 else 0.0):10.3f}"
-    per_card = LondonCardsByItem[item.value] / LondonDeckSize
-    per_day_of_draws = per_card * cards_seen_per_day
-    print(item_name + per_action + ((f"{per_card:10.2f}" + f"{per_day_of_draws:10.2f}") if per_card != 0 else ""))
+    index = item.value
+    print(item_name
+        + f"{quantity:10.3}"
+        # + f"{opt_result.lower.residual[index]:10.3}"
+        # + f"{opt_result.lower.marginals[index]:10.3}"
+        # + f"{opt_result.upper.residual[index]:10.3}"
+        # + f"{opt_result.upper.marginals[index]:10.3}"
+        )
+
+
 
 print("------Assumptions-------")
 print(f"Total Actions per Day:            {actions_per_day:10}")
 print(f"Cards Drawn per Day:              {cards_seen_per_day:10}")
+print(f"Optimize For:                     {optimize_for}")
 
 print("------Summary-------")
 print(f"Good Card Density:                {good_card_density:10.3f}")
 print(f"Actions spent on Cards per Day:   {good_cards_per_day:10.3f}")
-print(f"Echoes per Day:                   {-1.0/(opt_result.fun):10.3f}")
-print(f"EPA @ {actions_per_day} & {cards_seen_per_day}:               {-1.0/(opt_result.fun * actions_per_day):10.3f}")
+print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
+print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
+
+# pp = pprint.PrettyPrinter(indent=4)
+# pp.pprint(A)
+# pp.pprint(A[0])
+# pp.pprint(A[100, 0])
+
+# print("-----Trades NOT USED-------")
+# for i in range(0, len(opt_result.slack)):
+#     slack = opt_result.slack[i]
+#     marginal = opt_result.ineqlin.marginals[i]
+#     if (slack != 1.0 and (slack > 1.0 or  marginal == 0)):
+#         trade_items = ""
+#         for ii in range(0, num_items):
+#             if A[i, ii] != 0:
+#                 trade_items += str(Item(ii)) + ":" + str(A[i, ii]) + "; "
+#         print(f"Slack: {slack:3.3} " + trade_items)
+
+
+print("-----Trades In Grind-------")
+for i in range(0, len(opt_result.slack)):
+    slack = opt_result.slack[i]
+    marginal = opt_result.ineqlin.marginals[i]
+    if (slack < 1.0 and marginal != 0):
+        lose_items = ""
+        gain_items = ""
+        for ii in range(0, num_items):
+            quantity = round(A[i, ii],2)
+            if int(quantity) == quantity:
+                quantity = int(quantity)
+            if quantity < 0:
+                lose_items += str(Item(ii)) + ":" + str(quantity) + "; "
+            if quantity > 0:
+                gain_items += str(Item(ii)) + ":" + str(quantity) + "; "
+        trade_items = lose_items + " => " + gain_items            
+        trade_items = trade_items.replace("Item.","");
+        print(f"Slack: {slack:3.3} & {marginal:10.3}       " + trade_items)
+
+print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
