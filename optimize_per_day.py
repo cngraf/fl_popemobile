@@ -82,11 +82,24 @@ cards_seen_per_day = 96.0
 # if anyone knows the real values please share
 default_rare_success_rate = 0.05
 
+# maybe improve slightly with EPA
 zailing_epa = 3.2
+
+# lab research per action
+# somewhat optimistic
+lab_rpa = 33
 
 # for modeling actions that can grant more actions
 # eg. the 30% success on the aunt card
 replacement_epa = 6.5
+
+# for modeling time spent outside london
+replacement_good_card_density = 0.33
+
+# class ZeeRegion(Enum):
+#     HomeWaters = auto()
+#     ShepherdsWash = auto()
+
 
 class Rarity(Enum):
     Rare = 10
@@ -157,15 +170,30 @@ class Item(Enum):
     ParabolanParable = auto()
     CartographersHoard = auto()
 
+    # Contraband
+    FlawedDiamond = auto()
+    OstentatiousDiamond = auto()
+    MagnificentDiamond = auto()
+    FabulousDiamond = auto()
+    LondondStreetSign = auto()
+    UseOfVillains = auto()
+    ComprehensiveBribe = auto()
+    Hillmover = auto()
+
     # Currency
     HinterlandScrip = auto()
     RatShilling = auto()
     AssortmentOfKhaganianCoinage = auto()
+    FourthCityEcho = auto()
 
     # Elder
     JadeFragment = auto()
+    RelicOfTheThirdCity = auto()
     MysteryOfTheElderContinent = auto()
+    PresbyteratePassphrase = auto()
     AntiqueMystery = auto()
+    PrimaevalHint = auto()
+    ElementalSecret = auto()
 
     # Goods
     CertifiableScrap = auto()
@@ -173,6 +201,10 @@ class Item(Enum):
     PreservedSurfaceBlooms = auto()
     KnobOfScintillack = auto()
     PieceOfRostygold = auto()
+    BessemerSteelIngot = auto()
+    NightsoilOfTheBazaar = auto()
+    PerfumedGunpowder = auto()
+    RailwaySteel = auto()
 
     # Great Game
     WellPlacedPawn = auto()
@@ -222,6 +254,11 @@ class Item(Enum):
     TaleOfTerror = auto()
     ExtraordinaryImplication = auto()
     UncannyIncunabulum = auto()
+    DirefulReflection = auto()
+    SearingEnigma = auto()
+    DreadfulSurmise = auto()
+    ImpossibleTheorem = auto()
+    MemoryOfALesserSelf = auto()
 
     # Nostalgia
     DropOfPrisonersHoney = auto()
@@ -238,13 +275,16 @@ class Item(Enum):
     BoneFragments = auto()
     FemurOfAJurassicBeast = auto()
     FinBoneCollected = auto()
+    FivePointedRibcage = auto()
     FlourishingRibcage = auto()
     HolyRelicOfTheThighOfStFiacre = auto()
     HornedSkull = auto()
     HumanArm = auto()
     HumanRibcage = auto()
     JetBlackStinger = auto()
+    LeviathanFrame = auto()
     MammothRibcage = auto()
+    PentagrammicSkull = auto()
     PlasterTailBones = auto()
     PrismaticFrame = auto()
     SabreToothedSkull = auto()
@@ -257,8 +297,14 @@ class Item(Enum):
     WitheredTentacle = auto()
 
     # Rag Trade
+    SilkScrap = auto()
+    SurfaceSilkScrap = auto()
     WhisperSatinScrap = auto()
     ThirstyBombazineScrap = auto()
+    PuzzleDamaskScrap = auto()
+    ParabolaLinenScrap = auto()
+    ScrapOfIvoryOrganza = auto()
+    VeilsVelvetScrap = auto()
 
     # Ratness
     RatOnAString = auto()
@@ -274,8 +320,13 @@ class Item(Enum):
     # Rumour
     InklingOfIdentity = auto()
     ScrapOfIncendiaryGossip = auto()
+    AnIdentityUncovered = auto()
+    BlackmailMaterial = auto()
     NightOnTheTown = auto()
     RumourOfTheUpperRiver = auto()
+    DiaryOfTheDead = auto()
+    MortificationOfAGreatPower = auto()
+    IntriguersCompendium = auto()
 
     # Sustenance
     RemainsOfAPinewoodShark = auto()
@@ -287,16 +338,25 @@ class Item(Enum):
     ApostatesPsalm = auto()
 
     # Wines
+    BottleOfGreyfields1879 = auto()
     BottleOfGreyfields1882 = auto()
+    BottelofMorelways1872 = auto()
     BottleOfStranglingWillowAbsinthe = auto()
+    BottleOfBrokenGiant1844 = auto()
+    CellarOfWine = auto()
     BottleOfFourthCityAirag = auto()
+    TearsOfTheBazaar = auto()
+    VialOfMastersBlood = auto()
 
     # Wild Words
+    PrimordialShriek = auto()
     ManiacsPrayer = auto()
     CorrespondencePlaque = auto()
     AeolianScream = auto( )
     StormThrenody = auto()
     NightWhisper = auto()
+    StarstoneDemark = auto()
+    BreathOfTheVoid = auto()
 
 
     # Zee-Treasures
@@ -323,6 +383,13 @@ class Item(Enum):
     # Qualities
     # -----
 
+    HeartsGameExploits = auto()
+
+    # Laboratory
+    LaboratoryResearch = auto()
+    ParabolanResearch = auto()
+
+
     Infiltrating = auto()
 
     # BoardMemberTentacledEntrepreneu = auto()
@@ -330,12 +397,25 @@ class Item(Enum):
     
     Tribute = auto()
 
+    # Piracy
+    ChasingDownYourBounty = auto()
+    StashedTreasure = auto()
+
     # ----- Psuedo Items
     PortCecilCycles = auto()
     TimeAtJerichoLocks = auto()
     TimeAtWakefulCourt  = auto() # tribute grind
     ZailingDraws = auto() # self-explanatory
     SlightedAcquaintance = auto() # newspaper
+
+    # Zailing
+    HomeWatersZeeDraw = auto()
+    ShephersWashZeeDraw = auto()
+    StormbonesZeeDraw = auto()
+    SeaOfVoicesZeeDraw = auto()
+    SaltSteppesZeeDraw = auto()
+    PillaredSeaZeeDraw = auto()
+    SnaresZeeDraw = auto()
 
     # --- Bone Market Recipes
     ThreeLeggedMammoth = auto()
@@ -1369,15 +1449,66 @@ trade(0, {
     Item.Echo: 1
 })
 
+
+# Crow-Crease Cryptics
+
 trade(0, {
-    Item.RatShilling: -7,
-    Item.CompromisingDocument: 1
+    Item.RatShilling: -1,
+    Item.InklingOfIdentity: 1
 })
 
 trade(0, {
     Item.RatShilling: -1,
     Item.ManiacsPrayer: 1
 })
+
+trade(0, {
+    Item.RatShilling: -2,
+    Item.AppallingSecret: 1
+})
+
+trade(0, {
+    Item.RatShilling: -7,
+    Item.CompromisingDocument: 1
+})
+
+trade(0, {
+    Item.RatShilling: -7,
+    Item.CorrespondencePlaque: 1
+})
+
+trade(0, {
+    Item.RatShilling: -7,
+    Item.JournalOfInfamy: 1
+})
+
+trade(0, {
+    Item.RatShilling: -7,
+    Item.TaleOfTerror: 1
+})
+
+trade(0, {
+    Item.RatShilling: -50,
+    Item.TouchingLoveStory: 1
+})
+
+trade(0, {
+    Item.RatShilling: -1000,
+    Item.BlackmailMaterial: 1
+})
+
+#
+
+
+
+# Tier 4
+
+trade(0, {
+    Item.FourthCityEcho: -1,
+    Item.RatShilling: 125
+})
+
+# Tier 5
 
 trade(1, {
     Item.UncannyIncunabulum: -5,
@@ -1390,7 +1521,24 @@ trade(1, {
 })
 
 trade(1, {
+    Item.RattyReliquary: -5,
+    Item.RatShilling: 850
+})
+
+trade(1, {
+    Item.UnlawfulDevice: -5,
+    Item.RatShilling: 850
+})
+
+# Tier 6
+
+trade(1, {
     Item.NightWhisper: -1,
+    Item.RatShilling: 850
+})
+
+trade(1, {
+    Item.ParabolaLinenScrap: -1,
     Item.RatShilling: 850
 })
 
@@ -1398,6 +1546,13 @@ trade(1, {
     Item.CracklingDevice: -1,
     Item.RatShilling: 850
 })
+
+trade(1, {
+    Item.CaptivatingBallad: -1,
+    Item.RatShilling: 850
+})
+
+# Tier 7
 
 ## ------------
 ## Various London Carousels?
@@ -1408,14 +1563,6 @@ trade(20, {
     Item.ApostatesPsalm: 3,
     Item.NevercoldBrassSliver: ((38 * 20) - 50) * 10
 })
-
-
-# Hearts' Game
-trade(6, {
-    Item.Echo: 12.5,
-    Item.WhirringContraption: 1
-})
-
 
 # 50:51 Cross-Conversion Carousel
 trade(1, {
@@ -1636,7 +1783,6 @@ trade(1, {
     Item.CarvedBallOfStygianIvory: 21
 })
 
-
 # Mammoth of the Deep
 # Fish, Gothic
 trade(10, {
@@ -1661,12 +1807,12 @@ trade(14, {
     Item.SpiderPope: 1
 })
 
-# # halving the payouts until real figures known
-# trade(1, {
-#     Item.SpiderPope: -1,
-#     Item.PreservedSurfaceBlooms: 55, # * 0.5,
-#     Item.RumourOfTheUpperRiver: 88 #* 0.5
-# })
+# new figures per calculator
+trade(1, {
+    Item.SpiderPope: -1,
+    Item.PreservedSurfaceBlooms: 55,
+    Item.RumourOfTheUpperRiver: 24
+})
 
 # Prismatic Walrus
 trade(9, {
@@ -1763,6 +1909,139 @@ trade(13, {
 
     Item.NoduleOfWarmAmber: 5635,
     Item.KnobOfScintillack: 14
+})
+
+# ██╗  ██╗███████╗ █████╗ ██████╗ ████████╗███████╗     ██████╗  █████╗ ███╗   ███╗███████╗
+# ██║  ██║██╔════╝██╔══██╗██╔══██╗╚══██╔══╝██╔════╝    ██╔════╝ ██╔══██╗████╗ ████║██╔════╝
+# ███████║█████╗  ███████║██████╔╝   ██║   ███████╗    ██║  ███╗███████║██╔████╔██║█████╗  
+# ██╔══██║██╔══╝  ██╔══██║██╔══██╗   ██║   ╚════██║    ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  
+# ██║  ██║███████╗██║  ██║██║  ██║   ██║   ███████║    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗
+# ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝     ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝
+# Hearts' Game
+
+trade(1, {
+    Item.HeartsGameExploits: 1
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -5,
+    Item.Echo: 12.5,
+    Item.WhirringContraption: 1
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -14,
+    Item.BessemerSteelIngot: 100
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -18,
+    Item.MortificationOfAGreatPower: 1
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -25,
+    Item.SaltSteppeAtlas: 1,
+    Item.PuzzlingMap: 4,
+    Item.PartialMap: 4,
+    Item.MapScrap: 5
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -65,
+    Item.IntriguersCompendium: 1
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -65,
+    Item.LeviathanFrame: 1
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -65,
+    Item.ElementalSecret: 1
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -65,
+    Item.StarstoneDemark: 1
+})
+
+trade(1, {
+    Item.HeartsGameExploits: -80,
+    Item.ScrapOfIvoryOrganza: 1
+})
+
+# ██╗      █████╗ ██████╗  ██████╗ ██████╗  █████╗ ████████╗ ██████╗ ██████╗ ██╗   ██╗
+# ██║     ██╔══██╗██╔══██╗██╔═══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝
+# ██║     ███████║██████╔╝██║   ██║██████╔╝███████║   ██║   ██║   ██║██████╔╝ ╚████╔╝ 
+# ██║     ██╔══██║██╔══██╗██║   ██║██╔══██╗██╔══██║   ██║   ██║   ██║██╔══██╗  ╚██╔╝  
+# ███████╗██║  ██║██████╔╝╚██████╔╝██║  ██║██║  ██║   ██║   ╚██████╔╝██║  ██║   ██║   
+# ╚══════╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+# Laboratory
+
+trade(1, {
+    Item.LaboratoryResearch: lab_rpa
+})
+
+# TODO better estimate
+trade(1, {
+    Item.ParabolanResearch: 12
+})
+
+# Cartographic Projects -----------
+
+trade(2, {
+    Item.LaboratoryResearch: -2700,
+    Item.CartographersHoard: 1
+})
+
+# Small Gazette
+trade(2, {
+    Item.LaboratoryResearch: -60,
+    Item.GlassGazette: 5
+})
+
+# Big Gazette
+trade(2, {
+    Item.LaboratoryResearch: -2500,
+    Item.GlassGazette: 125
+})
+
+# Biological Projects ------------
+
+# False Snake
+trade(2, {
+    Item.LaboratoryResearch: -100,
+    Item.MemoryOfDistantShores: 20,
+    Item.UnearthlyFossil: 1
+})
+
+# Dissect the Pinewood Shark
+trade(2, {
+    Item.LaboratoryResearch: -100,
+    Item.IncisiveObservation: 2,
+    Item.FinBoneCollected: 38,
+    Item.BoneFragments: 500
+})
+
+# Geology Projects --------------
+
+trade(2, {
+    Item.LaboratoryResearch: -100,
+    Item.SurveyOfTheNeathsBones: 25
+})
+
+trade(2, {
+    Item.LaboratoryResearch: -2700,
+    Item.SurveyOfTheNeathsBones: 125
+})
+
+# Mathematical Projects ------------
+
+trade(2, {
+    Item.LaboratoryResearch: -13000,
+    Item.ImpossibleTheorem: 1,
 })
 
 # ██╗  ██╗██╗  ██╗ █████╗ ███╗   ██╗ █████╗ ████████╗███████╗
@@ -1878,12 +2157,82 @@ trade(2, {
 #  ███╔╝  ██╔══██║██║██║     ██║██║╚██╗██║██║   ██║
 # ███████╗██║  ██║██║███████╗██║██║ ╚████║╚██████╔╝
 # ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝ 
-                                                 
+    
 # ballparking EPA for zailing with piracy
 trade(0, {
     Item.ZailingDraws: -1,
     Item.Echo: zailing_epa
 })
+
+# rounding up for overflow
+trade(2, {
+    Item.ChasingDownYourBounty: -120,
+    Item.StashedTreasure: 5500
+})
+
+# amortizing travel cost
+trade(0, {
+    Item.StashedTreasure: -1250,
+    Item.MourningCandle: 5
+})
+
+trade(0, {
+    Item.StashedTreasure: -1250,
+    Item.CaveAgedCodeOfHonour: 1
+})
+
+trade(0, {
+    Item.StashedTreasure: -6250,
+    Item.RelativelySafeZeeLane: 1
+})
+
+trade(0, {
+    Item.StashedTreasure: -6250,
+    Item.SaltSteppeAtlas: 1
+})
+
+trade(0, {
+    Item.StashedTreasure: -31250,
+    Item.FabulousDiamond: 1
+})
+
+# optimistic 100% draw rate of chasing cards
+# pessimistic no rare success
+trade(0, {
+    Item.HomeWatersZeeDraw: -1,
+    Item.ChasingDownYourBounty: 8
+})
+
+trade(0, {
+    Item.ShephersWashZeeDraw: -1,
+    Item.ChasingDownYourBounty: 8.5
+})
+
+trade(0, {
+    Item.StormbonesZeeDraw: -1,
+    Item.ChasingDownYourBounty: 8.5
+})
+
+trade(0, {
+    Item.SeaOfVoicesZeeDraw: -1,
+    Item.ChasingDownYourBounty: 9
+})
+
+trade(0, {
+    Item.SaltSteppesZeeDraw: -1,
+    Item.ChasingDownYourBounty: 13.5
+})
+
+trade(0, {
+    Item.PillaredSeaZeeDraw: -1,
+    Item.ChasingDownYourBounty: 14.5
+})
+
+trade(0, {
+    Item.StormbonesZeeDraw: -1,
+    Item.ChasingDownYourBounty: 15.5
+})
+
 
 ## ------------
 ## Court of the Wakeful Eye Grind
@@ -1891,8 +2240,11 @@ trade(0, {
 
 # Round trip between London and CotWE
 # with zub or yacht
+
 trade(14, {
-    Item.ZailingDraws: 12,
+    # Item.ZailingDraws: 12,
+    Item.HomeWatersZeeDraw: 4,
+    Item.ShephersWashZeeDraw: 8,
     # Psuedo item represents tribute cap of 260
     Item.TimeAtWakefulCourt: 13
 })
@@ -1987,6 +2339,87 @@ trade (14, {
     Item.WitheredTentacle: 4,
     Item.LostResearchAssistant: 1, 
     Item.SegmentedRibcage: 3
+})
+
+# ███████╗ █████╗ ████████╗███████╗
+# ██╔════╝██╔══██╗╚══██╔══╝██╔════╝
+# █████╗  ███████║   ██║   █████╗  
+# ██╔══╝  ██╔══██║   ██║   ██╔══╝  
+# ██║     ██║  ██║   ██║   ███████╗
+# ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚══════╝
+
+# -------------------
+# --- Upwards
+# ------------------
+
+# TODO: confirm all of this
+
+trade(9, {
+    Item.CartographersHoard: -1,
+    Item.FivePointedRibcage: 1
+})
+
+trade(7, {
+    Item.FavourInHighPlaces: -1,
+    Item.CartographersHoard: -1,
+    Item.FivePointedRibcage: 1
+})
+
+trade(9, {
+    Item.PentagrammicSkull: 1,
+    Item.BoneFragments: 1900
+})
+
+trade(7, {
+    Item.FavourInHighPlaces: -1,
+    Item.PentagrammicSkull: 1,
+    Item.BoneFragments: 1900
+})
+
+# -------------------
+# --- Philosofruits
+# -------------------
+
+# TODO: travel cost estimate
+# using wiki values
+
+trade(5, {
+    Item.CardDraws: -5,
+    Item.BlackmailMaterial: 1,
+    Item.AnIdentityUncovered: 3
+})
+
+trade(5, {
+    Item.CardDraws: -5,
+    Item.AntiqueMystery: 1,
+    Item.PresbyteratePassphrase: 3
+})
+
+trade(5, {
+    Item.CardDraws: -5,
+    Item.UncannyIncunabulum: 1,
+    Item.ExtraordinaryImplication: 3
+})
+
+trade(13, {
+    Item.CardDraws: -13,
+    Item.ComprehensiveBribe: 4,
+})
+
+trade(10, {
+    Item.CardDraws: -10,
+    Item.CorrespondencePlaque: 90,
+})
+
+trade(20, {
+    Item.CardDraws: -20,
+    Item.BottleOfFourthCityAirag: 1,
+    Item.CellarOfWine: 2
+})
+
+trade(11, {
+    Item.CardDraws: -11,
+    Item.StormThrenody: 4
 })
 
 #  █████╗  █████╗ ██╗██╗     ██╗    ██╗ █████╗ ██╗   ██╗
