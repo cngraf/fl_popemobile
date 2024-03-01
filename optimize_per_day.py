@@ -146,6 +146,16 @@ class Item(Enum):
     ShardOfGlim = auto()
     MapScrap = auto()
     ZeeZtory = auto()
+    PartialMap = auto()
+    PuzzlingMap = auto()
+    SaltSteppeAtlas = auto()
+    RelativelySafeZeeLane = auto()
+    SightingOfAParabolanLandmark = auto()
+    GlassGazette = auto()
+    VitreousAlmanac = auto()
+    OneiromanticRevelation = auto()
+    ParabolanParable = auto()
+    CartographersHoard = auto()
 
     # Currency
     HinterlandScrip = auto()
@@ -199,7 +209,10 @@ class Item(Enum):
 
     # Luminosity
     LumpOfLamplighterBeeswax = auto()
+    PhosphorescentScarab = auto()
     MemoryOfLight = auto()
+    MourningCandle = auto()
+    KhaganianLightbulb = auto()
 
     # Mysteries
     WhisperedHint = auto()
@@ -210,10 +223,14 @@ class Item(Enum):
     ExtraordinaryImplication = auto()
     UncannyIncunabulum = auto()
 
-    # Nostaliga
+    # Nostalgia
     DropOfPrisonersHoney = auto()
     RomanticNotion = auto()
     VisionOfTheSurface = auto()
+    TouchingLoveStory = auto()
+    BazaarPermit = auto()
+    EmeticRevelation = auto()
+    CaptivatingBallad = auto()
 
     # Osteology
     AlbatrossWing = auto()
@@ -272,6 +289,7 @@ class Item(Enum):
     # Wines
     BottleOfGreyfields1882 = auto()
     BottleOfStranglingWillowAbsinthe = auto()
+    BottleOfFourthCityAirag = auto()
 
     # Wild Words
     ManiacsPrayer = auto()
@@ -946,6 +964,56 @@ trade(0, {
     Item.Echo: 0.10
 })
 
+trade(0, {
+    Item.ZeeZtory: -1,
+    Item.Echo: 0.5
+})
+
+trade(0, {
+    Item.PartialMap: -1,
+    Item.Echo: 2.5
+})
+
+trade(0, {
+    Item.PuzzlingMap: -1,
+    Item.Echo: 12.5
+})
+
+trade(0, {
+    Item.SaltSteppeAtlas: -1,
+    Item.Echo: 62.5
+})
+
+trade(0, {
+    Item.RelativelySafeZeeLane: -1,
+    Item.Echo: 62.5
+})
+
+trade(0, {
+    Item.SightingOfAParabolanLandmark: -1,
+    Item.Echo: 0.1
+})
+
+trade(0, {
+    Item.VitreousAlmanac: -1,
+    Item.Echo: 12.5
+})
+
+trade(0, {
+    Item.OneiromanticRevelation: -1,
+    Item.Echo: 62.5
+})
+
+trade(0, {
+    Item.ParabolanParable: -1,
+    Item.Echo: 312.5
+})
+
+trade(0, {
+    Item.CartographersHoard: -1,
+    Item.Echo: 312.5
+})
+
 # Currency ------
 trade(0, {
     Item.HinterlandScrip: -1,
@@ -1040,6 +1108,33 @@ trade(0, {
 trade(0, {
     Item.LegalDocument: -1,
     Item.Echo: 12.5
+})
+
+# Luminosity ---------
+
+trade(0, {
+    Item.LumpOfLamplighterBeeswax: -1,
+    Item.Echo: 0.01
+})
+
+trade(0, {
+    Item.PhosphorescentScarab: -1,
+    Item.Echo: 0.10
+})
+
+trade(0, {
+    Item.MemoryOfLight: -1,
+    Item.CrypticClue: 25
+})
+
+trade(0, {
+    Item.LumpOfLamplighterBeeswax: -1,
+    Item.Echo: 0.01
+})
+
+trade(0, {
+    Item.MourningCandle: -1,
+    Item.Echo: 2.5
 })
 
 # Mysteries ---------
@@ -1677,12 +1772,104 @@ trade(13, {
 # ██║  ██╗██║  ██║██║  ██║██║ ╚████║██║  ██║   ██║   ███████╗
 # ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝   ╚══════╝
 
+# -------------
+# Khaganian Markets
+# -------------
+
+# selling
+trade(0, {
+    Item.DeepZeeCatch: -1,
+    Item.AssortmentOfKhaganianCoinage: 1
+})
+
+trade(0, {
+    Item.CarvedBallOfStygianIvory: -1,
+    Item.AssortmentOfKhaganianCoinage: 5
+})
+
+trade(0, {
+    Item.JasmineLeaves: -1,
+    Item.MoonPearl: 10
+})
+
+trade(0, {
+    Item.BottleOfFourthCityAirag: -1,
+    Item.AssortmentOfKhaganianCoinage: 125
+})
+
+trade(0, {
+    Item.CaptivatingBallad: -1,
+    Item.AssortmentOfKhaganianCoinage: 125
+})
+
+trade(0, {
+    Item.CracklingDevice: -1,
+    Item.AssortmentOfKhaganianCoinage: 125
+})
+
+trade(0, {
+    Item.MuchNeededGap: -1,
+    Item.AssortmentOfKhaganianCoinage: 125
+})
+
+trade(0, {
+    Item.OneiricPearl: -1,
+    Item.AssortmentOfKhaganianCoinage: 125
+})
+
+trade(0, {
+    Item.SaltSteppeAtlas: -1,
+    Item.AssortmentOfKhaganianCoinage: 125
+})
+
+# -------------
+# Mightnight Market
+# -------------
+
+trade(0, {
+    Item.AssortmentOfKhaganianCoinage: -2,
+    Item.DeepZeeCatch: 1
+})
+
+trade(0, {
+    Item.AssortmentOfKhaganianCoinage: -10,
+    Item.CarvedBallOfStygianIvory: 1
+})
+
+trade(0, {
+    Item.TouchingLoveStory: -10,
+    Item.TouchingLoveStory: 1
+})
+
+trade(0, {
+    Item.MoonPearl: -20,
+    Item.JasmineLeaves: 1
+})
+
+trade(0, {
+    Item.MoonPearl: -20,
+    Item.KhaganianLightbulb: 1
+})
+
+trade(0, {
+    Item.AssortmentOfKhaganianCoinage: -130,
+    Item.CracklingDevice: 1
+})
+
+
+
+# -------------
+# Intrigues
+# -------------
+
 # Intercept a cablegram
 trade(2, {
     Item.Infiltrating: -20,
     Item.InterceptedCablegram: 5,
     Item.VitalIntelligence: 1
 })
+
+
 
 
 # ███████╗ █████╗ ██╗██╗     ██╗███╗   ██╗ ██████╗ 
@@ -1800,21 +1987,6 @@ trade (14, {
     Item.WitheredTentacle: 4,
     Item.LostResearchAssistant: 1, 
     Item.SegmentedRibcage: 3
-})
-
-# -------------
-# Khan's Heart
-# -------------
-
-# selling
-trade(0, {
-    Item.CarvedBallOfStygianIvory: -1,
-    Item.AssortmentOfKhaganianCoinage: 5
-})
-
-trade(0, {
-    Item.AssortmentOfKhaganianCoinage: -130,
-    Item.CracklingDevice: 1
 })
 
 #  █████╗  █████╗ ██╗██╗     ██╗    ██╗ █████╗ ██╗   ██╗
