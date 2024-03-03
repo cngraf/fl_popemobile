@@ -12,33 +12,51 @@ import pprint
 '''
 TODO
 
-LOW COMPLEXITY
+
+London
 - location-specific opp deck cards
 - all the chimes & chimes-tier carousels
     - brawling with dockers
     - sunken embassy
     - spider debates
     - whatever other crap i forgot
-- shuttered palace stuff
-    - five correspondence symphonies followed by one "it's not unusual"
 - remaining hearts' game payouts
-- remaining newspaper options
-- heists
-- professional activities
-- museum of prelapsarian history
+- all the MYN locations
+- forgotten quarter expeditions
 
-MEDIUM COMPLEXITY
-- laboratory w/ prescribed setup
-- parabolan hunts
+Laboratory
+- model the actual deck & bonus payoffs
+- highly dependent on exclusive character choices?
+    - ambition, profession, etc.
+- sounds like a lot of work payoff so putting this off unless something looks esp. promising
+
+Parabola
 - parabolan war
+- most parabolan hunts
+- waswood shores?
+    - figure out the odds
+- basically everything else
 
-HIGH COMPLEXITY
-- better model of zailing deck
-- bone market
+Zailing
+- godfall
+- polythreme
+- irem
+- other port cecil options
+- hunting the beasts
+- random smaller islands
+- better model of the deck
+
+Khanate
+- model the round-trip costs
+- smuggling
+- intrigues
+
+Railway
+- TONS of shit
+- opportunity deck
+- TRACKLAYER CITY
 
 short term
-- RIP Spider-Pope, update recipe outputs
-- electrostatic machine
 - parabola stuff?
 - Lofty Tower with inculcating kraken
 - Check out Red (free) cards esp. Discordance stuff
@@ -48,27 +66,13 @@ short term
 - bone market exhaustion
     - model it as just 4/7ths of a point per day?
     - fuck maybe we have to move to a per-week basis blergh
-    
-- figure out why the "Action" item is being valued at more than 1.0 Actions
-    - think it's to do with the opportunity deck
-    - experimentally it seems to track the multiplicative effect of adding the deck compared to base EPA
-    - so with the opp deck enabled, we get the "Action" item valued at 1.31 Actions w/ overall EPA of 6.531
-    - disable it (`cards_seen_per_day = 0`) and we get 1.00 and 4.899
-    - those line up
-    - so that's okay, I guess?
 
 medium term
 - option to optimize for hinterland scrip instead of echoes
     - fuck it optimize for any item
     - it already does this, just the option for the terminal output
-- better way to A/B test without just commenting out shit
-    - this script is currently equivalent to a pathfinding algorithm that tells you the shortest distance
-    - but doesn't actually tell you the steps required to get there. you gotta like infer it from the output
-    - create a Trade class or something?
-    - the answer is always more abstraction
     
 long term
-
 - incorporate a given character's capabilities
     - what are your stats, what various options do you have unlocked
     - in general more fine-grained control over the various base assumptions
@@ -132,9 +136,30 @@ class Ambition(Enum):
     LightFingers = auto()
     Nemesis = auto()
 
+class Treasure(Enum):
+    NoTreasure = auto()
+
+    VastNetworkOfConnections = auto()
+    WingedAndTalonedSteed = auto()
+    SocietyOfTheThreeFingeredHand = auto()
+    LongDeadPriestsOfTheRedBird = auto()
+
+    TheRobeOfMrCards = auto()
+    NewlyCastCrownOfTheCityOfLondon = auto()
+    LeaseholdOnAllOfLondon = auto()
+    PalatialHomeInTheArcticCircle = auto()
+    TheMarvellous = auto()
+
+    KittenSizedDiamond = auto()
+    FalseStartOfYourOwn = auto()
+
+    YourLovedOneReturned = auto() # any differences?
+    BloodiedTravellingCoatOfMrCups = auto()
+
 # Player Stuff
     
 profession = Profession.NoProfession
+treasure = Treasure.NoTreasure
 
 class Item(Enum):
     Echo = 0
@@ -271,6 +296,7 @@ class Item(Enum):
     SwornStatement = auto()
     CaveAgedCodeOfHonour = auto()
     LegalDocument = auto()
+    FragmentOfTheTragedyProcedures = auto()
 
     # Luminosity
     LumpOfLamplighterBeeswax = auto()
@@ -451,6 +477,9 @@ class Item(Enum):
 
     # TODO: organize this section somehow
 
+    AConsequenceOfYourAmbition = auto()
+    BraggingRightsAtTheMedusasHead = auto()
+
     HeartsGameExploits = auto()
 
     # Laboratory
@@ -472,6 +501,7 @@ class Item(Enum):
     EsteemOfTheGuild = auto()
 
     # ----- Psuedo Items
+    VisitFromTimeTheHealer = auto()
     PortCecilCycles = auto()
     TimeAtJerichoLocks = auto()
     TimeAtWakefulCourt  = auto() # tribute grind
@@ -487,6 +517,9 @@ class Item(Enum):
     SaltSteppesZeeDraw = auto()
     PillaredSeaZeeDraw = auto()
     SnaresZeeDraw = auto()
+
+    # Upper River
+    DigsInEvenlode = auto()
 
     # --- Bone Market Recipes
     ThreeLeggedMammoth = auto()
@@ -585,9 +618,79 @@ LondonCardsByItem = [0] * num_vars
 
 per_day({
     Item.Action: actions_per_day,
-    Item.CardDraws: cards_seen_per_day
+    Item.CardDraws: cards_seen_per_day,
+    Item.VisitFromTimeTheHealer: 1/7
 })
 
+
+# Time-gated stuff
+# Lots missing
+
+def rewards_of_ambition(treasure):
+    if treasure == Treasure.NoTreasure:
+        return {}
+    # Bag a Legend
+    elif treasure == Treasure.VastNetworkOfConnections:
+        return {
+            Item.ParabolaLinenScrap: 1,
+            Item.HinterlandScrip: 5,
+            Item.Nightmares: -5,
+            Item.BraggingRightsAtTheMedusasHead: 5
+        }
+    elif treasure == Treasure.SocietyOfTheThreeFingeredHand:
+        return {
+            Item.SearingEnigma: 1,
+            Item.Nightmares: -5,
+            Item.BraggingRightsAtTheMedusasHead: 5
+        }
+    elif treasure == Treasure.WingedAndTalonedSteed:
+        return {
+            Item.NightWhisper: 1,
+            Item.Wounds: -5,
+            Item.BraggingRightsAtTheMedusasHead: 5
+        }
+    elif treasure == Treasure.LongDeadPriestsOfTheRedBird:
+        return {
+            Item.PrimaevalHint: 1,
+            Item.Wounds: -5,
+            Item.BraggingRightsAtTheMedusasHead: 5
+        }
+    # Hearts Desire
+    elif treasure == Treasure.TheRobeOfMrCards:
+        return {
+            Item.FragmentOfTheTragedyProcedures: 1,
+            Item.Suspicion: -5
+        }
+    elif treasure == Treasure.NewlyCastCrownOfTheCityOfLondon:
+        return {
+            Item.BottleOfFourthCityAirag: 1,
+            Item.Scandal: -5
+        }
+    elif treasure == Treasure.LeaseholdOnAllOfLondon:
+        return {
+            Item.SearingEnigma: 1,
+            Item.Wounds: -5
+        }    
+    elif treasure == Treasure.PalatialHomeInTheArcticCircle:
+        return {
+            Item.NightWhisper: 1,
+            Item.Nightmares: -5
+        }
+    elif treasure == Treasure.TheRobeOfMrCards:
+        return {
+            Item.PrimaevalHint: 1,
+            Item.Nightmares: -5
+        }
+    # TODO
+
+trade(0, {
+    Item.VisitFromTimeTheHealer: -1,
+    Item.AConsequenceOfYourAmbition: 1
+})
+
+ambition_reward = rewards_of_ambition(treasure)
+ambition_reward[Item.AConsequenceOfYourAmbition] = -4
+trade(1, ambition_reward)
 
 #  ██████╗ ██████╗ ██████╗     ██████╗ ███████╗ ██████╗██╗  ██╗
 # ██╔═══██╗██╔══██╗██╔══██╗    ██╔══██╗██╔════╝██╔════╝██║ ██╔╝
@@ -3089,6 +3192,35 @@ jericho_trade({
     Item.FavUrchins: -4,
     Item.StormThrenody: 2,
     Item.AeolianScream: 1
+})
+
+# --------------
+# Evenlode
+# -------------
+
+
+railway_card("Digs in the Magistracy of the Evenlode", Rarity.Standard, True, {
+    Item.DigsInEvenlode: 1
+})
+
+trade(0, {
+    Item.DigsInEvenlode: -1,
+    Item.SurveyOfTheNeathsBones: -120,
+    Item.PalaeontologicalDiscovery: 5
+})
+
+
+trade(0, {
+    Item.DigsInEvenlode: -1,
+    Item.SurveyOfTheNeathsBones: -140,
+    Item.PalaeontologicalDiscovery: 6
+})
+
+# specific treasure only
+trade(0, {
+    Item.DigsInEvenlode: -1,
+    Item.SurveyOfTheNeathsBones: -240,
+    Item.PalaeontologicalDiscovery: 10
 })
 
 
