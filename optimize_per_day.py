@@ -2065,21 +2065,55 @@ trade(1, {
 
 # Sell to Tentacled Entrepreneur
 # 64 vs 74 final breath if amalgamy week
-trade(13, {
-    Item.SkeletonWithSevenNecks: -1,
-    Item.BrightBrassSkull: -2,
-    Item.NevercoldBrassSliver: -400,
-    Item.SabreToothedSkull: -5,
-    Item.AlbatrossWing: -2,
 
-    Item.MemoryOfDistantShores: 1171,
-    Item.FinalBreath: 74
-})
+# testing various balances of brass vs. sabre-toothed skull
+# capping at 2 bc 3 brass skulls requires 375 shadowy to 100% the sale
+for i in range(0, 3):
+    zoo_bonus = 0.1
 
+    brass_skulls = i
+    sabre_toothed_skulls = 7 - i
 
+    penny_value = 6250 + 2500
+    penny_value += 6500 * brass_skulls
+    penny_value += 6250 * sabre_toothed_skulls
+
+    trade(12, {
+        Item.SkeletonWithSevenNecks: -1,
+        Item.BrightBrassSkull: -1 * brass_skulls,
+        Item.NevercoldBrassSliver: -200 * brass_skulls,
+        Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
+        Item.AlbatrossWing: -2,
+        Item.MemoryOfDistantShores: 5 + (penny_value * (1 + zoo_bonus)/50),
+        # amalgamy week
+        Item.FinalBreath: 74
+    })
+
+# same as above but with 1x skull in coral and different wings
+for i in range(0, 3):
+    brass_skulls = i
+    sabre_toothed_skulls = 6 - i
+
+    penny_value = 6250 + 1750 + 500
+    penny_value += 6500 * brass_skulls
+    penny_value += 6250 * sabre_toothed_skulls
+
+    zoo_bonus = 0.1
+
+    trade(12, {
+        Item.SkeletonWithSevenNecks: -1,
+        Item.BrightBrassSkull: -1 * brass_skulls,
+        Item.NevercoldBrassSliver: -200 * brass_skulls,
+        Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
+        Item.SkullInCoral: -1,
+        Item.WingOfAYoungTerrorBird: -2,
+        Item.MemoryOfDistantShores: 5 + (penny_value * (1 + zoo_bonus)/50),
+        # amalgamy week
+        Item.FinalBreath: 74
+    })
 
 # Naive Collector
-trade(13, {
+trade(12, {
     Item.SkeletonWithSevenNecks: -1,
     Item.BrightBrassSkull: -3,
     Item.NevercoldBrassSliver: -600,
@@ -2090,7 +2124,7 @@ trade(13, {
 })
 
 # Hoarding Palaeo
-trade(13, {
+trade(12, {
     Item.SkeletonWithSevenNecks: -1,
     Item.BrightBrassSkull: -2,
     Item.NevercoldBrassSliver: -400,
@@ -2102,7 +2136,7 @@ trade(13, {
 })
 
 # Zailor Particular
-trade(13, {
+trade(12, {
     Item.SkeletonWithSevenNecks: -1,
     Item.BrightBrassSkull: -2,
     Item.NevercoldBrassSliver: -400,
@@ -2110,7 +2144,20 @@ trade(13, {
     Item.WingOfAYoungTerrorBird: -2,
 
     Item.NoduleOfWarmAmber: 5635,
-    Item.KnobOfScintillack: 14
+    Item.KnobOfScintillack: 18
+})
+
+# antique birds week
+trade(12, {
+    Item.SkeletonWithSevenNecks: -1,
+    Item.BrightBrassSkull: -2,
+    Item.NevercoldBrassSliver: -400,
+    Item.SabreToothedSkull: -5,
+    Item.WingOfAYoungTerrorBird: -1,
+    Item.AlbatrossWing: -1,
+
+    Item.NoduleOfWarmAmber: 5745,
+    Item.KnobOfScintillack: 21
 })
 
 # ██╗  ██╗███████╗ █████╗ ██████╗ ████████╗███████╗     ██████╗  █████╗ ███╗   ███╗███████╗
@@ -2730,6 +2777,58 @@ trade(0, {
 trade(1, {
     Item.FinBonesCollected: -10,
     Item.AmberCrustedFin: 1
+})
+
+# -- Butcher
+trade(1, {
+    Item.BoneFragments: -130,
+    Item.NoduleOfWarmAmber: -2,
+    Item.WarblerSkeleton: 2
+})
+
+trade(1, {
+    Item.BoneFragments: -100,
+    Item.NoduleOfWarmAmber: -2,
+    Item.BatWing: 2
+})
+
+trade(1, {
+    Item.BoneFragments: -2000,
+    Item.NoduleOfWarmAmber: -25,
+    Item.AlbatrossWing: 2
+})
+
+trade(1, {
+    Item.BoneFragments: -4900,
+    Item.NoduleOfWarmAmber: -125,
+    Item.SabreToothedSkull: 1,
+    Item.FemurOfASurfaceDeer: 0.5,
+    Item.UnidentifiedThighbone: 0.5
+})
+
+trade(1, {
+    Item.BoneFragments: -1000,
+    Item.NoduleOfWarmAmber: -5,
+    Item.HornedSkull: 1
+})
+
+trade(1, {
+    Item.BoneFragments: -200,
+    Item.NoduleOfWarmAmber: -2,
+    Item.TombLionsTail: 2
+})
+
+trade(1, {
+    Item.BoneFragments: -100,
+    Item.NoduleOfWarmAmber: -25,
+    Item.WingOfAYoungTerrorBird: 2
+})
+
+trade(1, {
+    Item.BoneFragments: -1750,
+    Item.NoduleOfWarmAmber: -25,
+    Item.CrateOfIncorruptibleBiscuits: -1,
+    Item.PlatedSkull: 1
 })
 
 # --- Sponsor a Dig
