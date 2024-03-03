@@ -3114,7 +3114,9 @@ trade(7, {
     Item.VolumeOfCollatedResearch: -8,
     Item.UnprovenancedArtefact: -4,
 
-    Item.SkeletonWithSevenNecks: 1
+    Item.SkeletonWithSevenNecks: 1,
+    Item.WingOfAYoungTerrorBird: 3,
+    Item.BoneFragments: 200
 })
 
 # --------------
