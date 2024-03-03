@@ -521,6 +521,10 @@ def card(name, freq, isGood, exchanges):
         for item, value in exchanges.items():
             LondonCardsByItem[item.value] += (value * freq.value)
 
+def railway_card(name, freq, isGood, exchanges):
+    # dummy alias for now
+    trade(1, exchanges)
+
 # hack
 var_buffer = 1000
 num_items = max(Item, key=lambda x: x.value).value
@@ -1888,63 +1892,87 @@ trade(6, {
 
 # ----- Human Ribcage
 
-# requires BaL
-# 6 antiquity, 3 menacing
-trade(7, {
+# # requires BaL
+
+# 6/3 split
+trade(8, {
     Item.HumanRibcage: -1,
     Item.BoneFragments: -6000, # vake skull
-    Item.FossilisedForelimb: -3,
-    Item.IvoryHumerus: -1, # can be any neutral limb
-    Item.HinterlandScrip: 355,
+    Item.FossilisedForelimb: -2,
+    Item.FemurOfAJurassicBeast: -2,
+    Item.HinterlandScrip: 310,
     Item.CarvedBallOfStygianIvory: 21
 })
 
-# 3 antiquity, 6 menacing
-trade(7, {
+# delcare a monkey
+trade(9, {
     Item.HumanRibcage: -1,
     Item.BoneFragments: -6000, # vake skull
-    Item.WingOfAYoungTerrorBird: -3,
-    Item.FinBonesCollected: -1, # can be any neutral limb
-    Item.HinterlandScrip: 176,
+    Item.FossilisedForelimb: -1,
+    Item.FemurOfAJurassicBeast: -3,
+    Item.TombLionsTail: -1,
+    Item.HinterlandScrip: 261,
     Item.CarvedBallOfStygianIvory: 21
 })
 
-# 4 antiquity, 4 menacing
-trade(7, {
-    Item.HumanRibcage: -1,
-    Item.SabreToothedSkull: -1,
-    Item.WingOfAYoungTerrorBird: -3,
-    Item.FinBonesCollected: -1, # can be any neutral limb
-    Item.HinterlandScrip: 171,
-    Item.CarvedBallOfStygianIvory: 18
-})
+# # 6 antiquity, 3 menacing
+# trade(8, {
+#     Item.HumanRibcage: -1,
+#     Item.BoneFragments: -6000, # vake skull
+#     Item.FossilisedForelimb: -3,
+#     Item.IvoryHumerus: -1, # can be any neutral limb
+#     Item.HinterlandScrip: 355,
+#     Item.CarvedBallOfStygianIvory: 21
+# })
 
-trade(7, {
-    Item.HumanRibcage: -1,
-    Item.BrightBrassSkull: -1,
-    Item.WingOfAYoungTerrorBird: -4,
-    Item.HinterlandScrip: 180,
-    Item.CarvedBallOfStygianIvory: 18
-})
+# # not practical
+# # 3 implausiblity needs 375 shadowy to 100%
+# # 3 antiquity, 6 menacing
+# trade(8, {
+#     Item.HumanRibcage: -1,
+#     Item.BoneFragments: -6000, # vake skull
+#     Item.WingOfAYoungTerrorBird: -3,
+#     Item.FinBonesCollected: -1, # can be any neutral limb
+#     Item.HinterlandScrip: 176,
+#     Item.CarvedBallOfStygianIvory: 21
+# })
 
-# 6 amalgamy, 3 menacing
-trade(7, {
-    Item.HumanRibcage: -1,
-    Item.BoneFragments: -6000, # vake skull
-    Item.HelicalThighbone: -3,
-    Item.FinBonesCollected: -1, # can be any neutral limb
-    Item.NightsoilOfTheBazaar: 179,
-    Item.BasketOfRubberyPies: 21
-})
+# # 4 antiquity, 4 menacing
+# trade(8, {
+#     Item.HumanRibcage: -1,
+#     Item.SabreToothedSkull: -1,
+#     Item.WingOfAYoungTerrorBird: -3,
+#     Item.FinBonesCollected: -1, # can be any neutral limb
+#     Item.HinterlandScrip: 171,
+#     Item.CarvedBallOfStygianIvory: 18
+# })
 
-trade(7, {
-    Item.HumanRibcage: -1,
-    Item.BrightBrassSkull: -1,
-    Item.KnottedHumerus: -2,
-    Item.HolyRelicOfTheThighOfStFiacre: -2,
-    Item.MemoryOfDistantShores: 244,
-    Item.FinalBreath: 17
-})
+# trade(8, {
+#     Item.HumanRibcage: -1,
+#     Item.BrightBrassSkull: -1,
+#     Item.WingOfAYoungTerrorBird: -4,
+#     Item.HinterlandScrip: 180,
+#     Item.CarvedBallOfStygianIvory: 18
+# })
+
+# # 6 amalgamy, 3 menacing
+# trade(8, {
+#     Item.HumanRibcage: -1,
+#     Item.BoneFragments: -6000, # vake skull
+#     Item.HelicalThighbone: -3,
+#     Item.FinBonesCollected: -1, # can be any neutral limb
+#     Item.NightsoilOfTheBazaar: 179,
+#     Item.BasketOfRubberyPies: 21
+# })
+
+# trade(8, {
+#     Item.HumanRibcage: -1,
+#     Item.BrightBrassSkull: -1,
+#     Item.KnottedHumerus: -2,
+#     Item.HolyRelicOfTheThighOfStFiacre: -2,
+#     Item.MemoryOfDistantShores: 244,
+#     Item.FinalBreath: 17
+# })
 
 # 3 + parts actions?
 
@@ -2106,6 +2134,7 @@ for i in range(0, 3):
         Item.NevercoldBrassSliver: -200 * brass_skulls,
         Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
         Item.SkullInCoral: -1,
+        Item.KnobOfScintillack: -1,
         Item.WingOfAYoungTerrorBird: -2,
         Item.MemoryOfDistantShores: 5 + (penny_value * (1 + zoo_bonus)/50),
         # amalgamy week
@@ -2919,11 +2948,11 @@ trade(1, {
     Item.EsteemOfTheGuild: 2
 })
 
-trade(1, {
-    Item.MemoryOfDistantShores: -40,
-    Item.SwornStatement: -2,
-    Item.EsteemOfTheGuild: 2
-})
+# trade(1, {
+#     Item.MemoryOfDistantShores: -40,
+#     Item.SwornStatement: -2,
+#     Item.EsteemOfTheGuild: 2
+# })
 
 trade(1, {
     Item.NightOnTheTown: -1,
@@ -2937,18 +2966,18 @@ trade(1, {
 })
 
 # assume ranges are evenly distributed
-trade(1, {
+trade(2, {
     Item.EsteemOfTheGuild: -3,
     Item.VitalIntelligence: 2.5,
     Item.ViennaOpening: 6.5
 })
 
-trade(1, {
+trade(2, {
     Item.EsteemOfTheGuild: -3,
     Item.MirrorcatchBox: 1
 })
 
-trade(1, {
+trade(2, {
     Item.EsteemOfTheGuild: -3,
     Item.MoonlightScales: 50,
     Item.FinBonesCollected: 5,
@@ -2956,53 +2985,30 @@ trade(1, {
     Item.UnprovenancedArtefact: 8.5
 })
 
-# TODO: randomness
-# trade(1, {
-#     Item.EsteemOfTheGuild: -6,
-#     Item.BrightBrassSkull: 1,
-#     Item.ExtraordinaryImplication: 5.5,
-#     Item.VerseOfCounterCreed: 2.5
-# })
-
-# trade(1, {
-#     Item.EsteemOfTheGuild: -6,
-#     Item.MovesInTheGreatGame: 18.5,
-#     Item.PrimaevalHint: 1,
-#     Item.UncannyIncunabulum: 2.5
-# })
-
-# trade(1, {
-#     Item.EsteemOfTheGuild: -6,
-#     Item.NightWhisper: 1,
-#     Item.TaleOfTerror: 3.5,
-#     Item.FinalBreath: 12,
-#     Item.HumanRibcage: 2
-# })
-
+# upper river destinations
 
 trade(2, {
-    Item.EsteemOfTheGuild: -12,
-    Item.NightWhisper: 1,
-    Item.TaleOfTerror: 3.5,
-    Item.FinalBreath: 12,
-    Item.HumanRibcage: 2,
-
-    Item.MovesInTheGreatGame: 18.5,
-    Item.PrimaevalHint: 1,
-    Item.UncannyIncunabulum: 2.5    
-})
-
-trade(2, {
-    Item.EsteemOfTheGuild: -12,
-    Item.NightWhisper: 1,
-    Item.TaleOfTerror: 3.5,
-    Item.FinalBreath: 12,
-    Item.HumanRibcage: 2,
-
+    Item.EsteemOfTheGuild: -6,
     Item.BrightBrassSkull: 1,
     Item.ExtraordinaryImplication: 5.5,
     Item.VerseOfCounterCreed: 2.5
 })
+
+trade(2, {
+    Item.EsteemOfTheGuild: -6,
+    Item.MovesInTheGreatGame: 18.5,
+    Item.PrimaevalHint: 1,
+    Item.UncannyIncunabulum: 2.5
+})
+
+trade(2, {
+    Item.EsteemOfTheGuild: -6,
+    Item.NightWhisper: 1,
+    Item.TaleOfTerror: 3.5,
+    Item.FinalBreath: 12,
+    Item.HumanRibcage: 2
+})
+
 
 # --------- Calling in Favours
 # hack to model dipping into jericho to trade favours
