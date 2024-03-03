@@ -75,8 +75,10 @@ long term
 '''
 
 # Important Parameters
-actions_per_day = 144.0
-cards_seen_per_day = 96.0
+# actions doesn't matter on its own until I add some weekly+ stuff
+actions_per_day = 120.0
+# cards_seen_per_day = 96.0
+cards_seen_per_day = 60
 
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
@@ -96,6 +98,8 @@ replacement_epa = 6.5
 # for modeling time spent outside london
 replacement_good_card_density = 0.33
 
+# Custom Player Stuff
+
 # class ZeeRegion(Enum):
 #     HomeWaters = auto()
 #     ShepherdsWash = auto()
@@ -110,6 +114,27 @@ class Rarity(Enum):
     Frequent = 200
     Abundant = 500
     Ubiquitous = 1000
+
+class Profession(Enum):
+    NoProfession = auto()
+    CrookedCross = auto()
+    Correspondent = auto()
+    Licentiate = auto()
+    Midnighter = auto()
+    MonsterHunter = auto()
+    Silverer = auto()
+    Notary = auto()
+    Doctor = auto()
+
+class Ambition(Enum):
+    BagALegend = auto()
+    HeartsDesire = auto()
+    LightFingers = auto()
+    Nemesis = auto()
+
+# Player Stuff
+    
+profession = Profession.NoProfession
 
 class Item(Enum):
     Echo = 0
@@ -151,6 +176,7 @@ class Item(Enum):
     LostResearchAssistant = auto()
 
     # Curiosity
+    StrongBackedLabour = auto()
     WhirringContraption = auto()
     OilOfCompanionship = auto()
     CracklingDevice = auto()
@@ -178,6 +204,7 @@ class Item(Enum):
     LondondStreetSign = auto()
     UseOfVillains = auto()
     ComprehensiveBribe = auto()
+    MirrorcatchBox = auto()
     Hillmover = auto()
 
     # Currency
@@ -231,8 +258,14 @@ class Item(Enum):
     QueerSoul = auto()
 
     # Influence
+    StolenCorrespondence = auto()
+    IntriguingSnippet = auto()
     CompromisingDocument = auto()
+    SecludedAddress = auto()
+    StolenKiss = auto()
     FavourInHighPlaces = auto()
+    PersonalRecommendation = auto()
+    ExigentNote = auto()
 
     # Legal
     SwornStatement = auto()
@@ -245,6 +278,10 @@ class Item(Enum):
     MemoryOfLight = auto()
     MourningCandle = auto()
     KhaganianLightbulb = auto()
+    TailfeatherBrilliantAsFlame = auto()
+    SnuffersGratitude = auto()
+    ElementOfDawn = auto()
+    MountainSherd = auto()
 
     # Mysteries
     WhisperedHint = auto()
@@ -272,27 +309,42 @@ class Item(Enum):
     # Osteology
     AlbatrossWing = auto()
     AmberCrustedFin = auto()
+    BatWing = auto()
     BoneFragments = auto()
+    CrustaceanPincer = auto()
+    DoubledSkull = auto()
     FemurOfAJurassicBeast = auto()
-    FinBoneCollected = auto()
+    FemurOfASurfaceDeer = auto()
+    FinBonesCollected = auto()
     FivePointedRibcage = auto()
     FlourishingRibcage = auto()
+    FossilisedForelimb = auto()
+    HeadlessSkeleton = auto()
+    HelicalThighbone = auto()
     HolyRelicOfTheThighOfStFiacre = auto()
     HornedSkull = auto()
     HumanArm = auto()
     HumanRibcage = auto()
+    IvoryFemur = auto()
+    IvoryHumerus = auto()
     JetBlackStinger = auto()
+    KnottedHumerus = auto()
     LeviathanFrame = auto()
     MammothRibcage = auto()
+    MoonlightScales = auto()
     PentagrammicSkull = auto()
     PlasterTailBones = auto()
+    PlatedSkull = auto()
     PrismaticFrame = auto()
     SabreToothedSkull = auto()
     SegmentedRibcage = auto()
     SkeletonWithSevenNecks = auto()
+    SkullInCoral = auto()
     SurveyOfTheNeathsBones = auto()
     ThornedRibcage = auto()
+    TombLionsTail = auto()
     UnidentifiedThighbone = auto()
+    WarblerSkeleton = auto()
     WingOfAYoungTerrorBird = auto()
     WitheredTentacle = auto()
 
@@ -329,13 +381,26 @@ class Item(Enum):
     IntriguersCompendium = auto()
 
     # Sustenance
+    ParabolanOrangeApple = auto()
     RemainsOfAPinewoodShark = auto()
-    BasketOfRubberyPies = auto()
     JasmineLeaves = auto()
+    PotOfVenisonMarrow = auto()
+    SolaceFruit = auto()
+    DarkDewedCherry = auto()
+    BasketOfRubberyPies = auto()
+    CrateOfIncorruptibleBiscuits = auto()
+    HellwormMilk = auto()
+    TinOfZzoup = auto()
+    SausageAboutWhichNoOneComplains = auto()
     TinnedHam = auto()
+    HandPickedPeppercaps = auto()
+    MagisterialLager = auto()
 
     # Theological
+    PalimpsestScrap = auto()
     ApostatesPsalm = auto()
+    VerseOfCounterCreed = auto()
+    FalseHagiotoponym = auto()
 
     # Wines
     BottleOfGreyfields1879 = auto()
@@ -378,10 +443,13 @@ class Item(Enum):
 
     # Companion
     SulkyBat = auto()
+    WinsomeDispossessedOrphan = auto()
 
     # -----
     # Qualities
     # -----
+
+    # TODO: organize this section somehow
 
     HeartsGameExploits = auto()
 
@@ -389,10 +457,8 @@ class Item(Enum):
     LaboratoryResearch = auto()
     ParabolanResearch = auto()
 
-
     Infiltrating = auto()
 
-    # BoardMemberTentacledEntrepreneu = auto()
     ResearchOnAMorbidFad = auto()
     
     Tribute = auto()
@@ -401,12 +467,17 @@ class Item(Enum):
     ChasingDownYourBounty = auto()
     StashedTreasure = auto()
 
+    # Upper River
+    PalaeontologicalDiscovery = auto()
+    EsteemOfTheGuild = auto()
+
     # ----- Psuedo Items
     PortCecilCycles = auto()
     TimeAtJerichoLocks = auto()
     TimeAtWakefulCourt  = auto() # tribute grind
     ZailingDraws = auto() # self-explanatory
     SlightedAcquaintance = auto() # newspaper
+    ParabolaRoundTrip = auto()
 
     # Zailing
     HomeWatersZeeDraw = auto()
@@ -451,7 +522,7 @@ def card(name, freq, isGood, exchanges):
             LondonCardsByItem[item.value] += (value * freq.value)
 
 # hack
-var_buffer = 500
+var_buffer = 1000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
@@ -575,11 +646,11 @@ card("A day out in your Clay Sedan Chair", Rarity.Standard, True, {
     Item.FavSociety: 1
 })
 
-# avoidable
-card("Riding your Velocipede", Rarity.Standard, False, {
-    Item.ManiacsPrayer: -5,
-    Item.FavConstables: 1
-})
+# # avoidable? A: yes, with watchful gains
+# card("Riding your Velocipede", Rarity.Standard, False, {
+#     Item.ManiacsPrayer: -5,
+#     Item.FavConstables: 1
+# })
 
 # -----------------------------------------------------
 # --- Cards: Clubs
@@ -634,13 +705,13 @@ card("Church Faction", Rarity.Standard, True, {
 })
 
 # Constables
-card("Constables Faction", Rarity.Standard, False, {
+card("Constables Faction", Rarity.Standard, True, {
     Item.Echo: -0.1,
     Item.FavConstables: 1
 })
 
 # Criminals
-card("Criminals Faction", Rarity.Standard, False, {
+card("Criminals Faction", Rarity.Standard, True, {
     Item.Suspicion: 1,
     Item.FavCriminals: 1,
 })
@@ -652,7 +723,7 @@ card("Docks Faction", Rarity.Standard, True, {
 })
 
 # GreatGame
-card("Great Game Faction", Rarity.Standard, False, {
+card("Great Game Faction", Rarity.Standard, True, {
     Item.Wounds: 1,
     Item.FavGreatGame: 1
 })
@@ -664,7 +735,7 @@ card("Burning Shadows: the Devils of London", Rarity.Standard, False, {
 })
 
 # Revolutionaries
-card("Rev Faction", Rarity.Standard, False, {
+card("Rev Faction", Rarity.Standard, True, {
     Item.Echo: -0.5,
     Item.FavRevolutionaries: 1 
 })
@@ -688,7 +759,7 @@ card("Tomb Colonies Faction", Rarity.Standard, True, {
 
 # # Urchins
 # card("Urchins Faction", Rarity.Standard, False, {
-#     Item.Echo: -0.1,
+#     Item.Echo: -0.4, # 1x lucky weasel
 #     Item.FavUrchins: 1
 # })
 
@@ -809,9 +880,9 @@ card("Bringing the revolution", Rarity.Standard, False, {
 
 # Time limited, also lots of good options?
 # Maybe just leave it out?
-card("The Calendrical Confusion of 1899", Rarity.Standard, True, {
-    Item.ScrapOfIncendiaryGossip: 14
-})
+# card("The Calendrical Confusion of 1899", Rarity.Standard, True, {
+#     Item.ScrapOfIncendiaryGossip: 14
+# })
 
 card("Mirrors and Clay", Rarity.Standard, False, {
     # TODO
@@ -970,6 +1041,11 @@ card("The OP Aunt card", Rarity.Standard, True, {
     Item.Echo: 10 * replacement_epa * 0.3
 })
 
+# # TODO: check the actual rarity of this
+# # also it adds that other rare card to the deck that clears all wounds
+# card("Slavering Dream Hound", Rarity.Unusual, True, {
+#     Item.DropOfPrisonersHoney: 200
+# })
 
 
 #  ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ██╗     
@@ -1022,15 +1098,41 @@ trade(1, {
     Item.Nightmares: 10
 })
 
+# --------------------------
+# --- Buying from Bazaar ---
+# --------------------------
+
+trade(0, {
+    Item.Echo: -64.80,
+    Item.WinsomeDispossessedOrphan: 1
+})
+
 ## -----------------------
 ## --- Selling to Bazaar
 ## ----------------------
 
+# # # Test
+# trade(0, {
+#     Item.HumanRibcage: -1,
+#     Item.Echo: 50
+# })
+
 # Academic
+trade(0, {
+    Item.MemoryOfDistantShores: -1,
+    Item.Echo: 0.5
+})
+
+trade(0, {
+    Item.IncisiveObservation: -1,
+    Item.Echo: 0.5
+})
+
 trade(0, {
     Item.UnprovenancedArtefact: -1,
     Item.Echo: 2.5
 })
+
 
 # Cartography ------
 
@@ -1349,59 +1451,6 @@ trade(3, {
     Item.ConnectedBenthic: 75
 })
 
-
-# # All favours in one visit?
-# trade(12, {
-#     Item.FavBohemians: -4,
-#     Item.HolyRelicOfTheThighOfStFiacre: 2,
-#     Item.WingOfAYoungTerrorBird: 1,
-
-#     Item.FavChurch: -4,
-#     Item.RattyReliquary: 2,
-#     Item.ApostatesPsalm: 1,
-
-#     Item.FavConstables: -4,
-#     Item.CaveAgedCodeOfHonour: 2,
-#     Item.SwornStatement: 1,
-
-#     Item.FavCriminals: -4,
-#     Item.HumanRibcage: 2,
-#     Item.HumanArm: 1,
-    
-#     Item.FavDocks: -4,
-#     Item.UncannyIncunabulum: 2,
-#     Item.KnobOfScintillack: 1,
-
-#     Item.FavGreatGame: -4,
-#     Item.ViennaOpening: 1,
-#     Item.QueenMate: 1,
-
-#     Item.FavHell: -4,
-#     Item.ThornedRibcage: 2,
-#     Item.QueerSoul: 1,
-
-#     Item.FavRevolutionaries: -4,
-#     Item.UnlawfulDevice: 2,
-#     Item.ThirstyBombazineScrap: 1,
-
-#     Item.FavRubberyMen: -4,
-#     Item.FlourishingRibcage: 2,
-#     Item.BasketOfRubberyPies: 1,
-
-#     Item.FavSociety: -4,
-#     Item.FavourInHighPlaces: 2,
-#     Item.NightOnTheTown: 1,
-
-#     Item.FavTombColonies: -4,
-#     Item.AntiqueMystery: 2,
-#     Item.UnprovenancedArtefact: 1,
-
-#     Item.FavUrchins: -4,
-#     Item.StormThrenody: 2,
-#     Item.AeolianScream: 1
-# })
-
-
 ## -------------------------
 ## Innate Item Conversions
 ## -------------------------
@@ -1438,6 +1487,26 @@ trade(1, {
     Item.UncannyIncunabulum: 5,
     Item.NevercoldBrassSliver: 200 * (0.6 - default_rare_success_rate),
     Item.Echo: 62.5 * default_rare_success_rate # Nodule of Pulsating Amber
+})
+
+# -----------------
+# --- Underclay
+# ----------------
+
+
+trade(2+20+1, {
+    Item.MountainSherd: 1,
+})
+# # with FATE clay arm, 19 * 33 => 627 confessions
+trade(2+19+1, {
+    Item.MountainSherd: 1,
+    Item.ShardOfGlim: 270
+})
+
+# with SotD 13, not currently achievable, 16 * 38 => 608 confessions
+trade(2+16+1, {
+    Item.MountainSherd: 1,
+    Item.ShardOfGlim: 80
 })
 
 ## ------------
@@ -1496,10 +1565,6 @@ trade(0, {
     Item.RatShilling: -1000,
     Item.BlackmailMaterial: 1
 })
-
-#
-
-
 
 # Tier 4
 
@@ -1665,7 +1730,7 @@ trade(13, {
 # - 13 actions base
 trade(6, {
     Item.CrypticClue: 100, # carpenter's granddaughter
-    Item.FinBoneCollected: 3, # palaeo companion
+    Item.FinBonesCollected: 3, # palaeo companion
     Item.WitheredTentacle: 3, # carnival
     Item.UnidentifiedThighbone: 2, # university
     Item.JetBlackStinger: 3, # ??? can also be tentacles?
@@ -1682,13 +1747,39 @@ trade(13, {
     Item.HolyRelicOfTheThighOfStFiacre: 2
 })
 
-# Revenge card, ignoring Opp Deck cost
-# various actual cards, ignores cost to acquaintance
+# Revenge cards -----------
+# Ignores cost to acquaintance
 trade(1, {
+    Item.CardDraws: -1,
     Item.SlightedAcquaintance: -1,
-    Item.Echo: 12.5
+    Item.PuzzleDamaskScrap: 1
 })
 
+trade(1, {
+    Item.CardDraws: -1,
+    Item.SlightedAcquaintance: -1,
+    Item.NoduleOfTremblingAmber: 1
+})
+
+trade(1, {
+    Item.CardDraws: -1,
+    Item.SlightedAcquaintance: -1,
+    Item.MagnificentDiamond: 1
+})
+
+# FATE Johnny Croak
+trade(1, {
+    Item.CardDraws: -1,
+    Item.SlightedAcquaintance: -1,
+    Item.PuzzlingMap: 1
+})
+
+# FATE Johnny Croak
+trade(1, {
+    Item.CardDraws: -1,
+    Item.SlightedAcquaintance: -1,
+    Item.AntiqueMystery: 1
+})
 
 # --------------
 # Laboratory
@@ -1703,7 +1794,7 @@ trade(1, {
 # estimated actions
 trade(4, {
     Item.RemainsOfAPinewoodShark: -1,
-    Item.FinBoneCollected: 38,
+    Item.FinBonesCollected: 38,
     Item.BoneFragments: 500,
     Item.IncisiveObservation: 2
 })
@@ -1712,17 +1803,41 @@ trade(4, {
 # Parabola
 # -------------
 
+trade(1, {
+    Item.DropOfPrisonersHoney: 0 if profession == Profession.Silverer else -100,
+    Item.ParabolaRoundTrip: 1
+})
+
 # Hunting Pinewood Shark
 # TODO: check actual length of carousel
+
+# just stay there, ignore travel cost
 trade(6, {
-    Item.FinBoneCollected: 2,
+    Item.CardDraws: -6,
+    Item.FinBonesCollected: 2,
     Item.FavDocks: 1,
     Item.RemainsOfAPinewoodShark: 1
 })
 
-# ----------
+# short trip, no cards missed
+trade(6, {
+    Item.ParabolaRoundTrip: -1,
+    Item.FinBonesCollected: 2,
+    Item.FavDocks: 1,
+    Item.RemainsOfAPinewoodShark: 1
+})
+
+
+# # ----------
+# ██████╗  ██████╗ ███╗   ██╗███████╗    ███╗   ███╗ █████╗ ██████╗ ██╗  ██╗███████╗████████╗
+# ██╔══██╗██╔═══██╗████╗  ██║██╔════╝    ████╗ ████║██╔══██╗██╔══██╗██║ ██╔╝██╔════╝╚══██╔══╝
+# ██████╔╝██║   ██║██╔██╗ ██║█████╗      ██╔████╔██║███████║██████╔╝█████╔╝ █████╗     ██║   
+# ██╔══██╗██║   ██║██║╚██╗██║██╔══╝      ██║╚██╔╝██║██╔══██║██╔══██╗██╔═██╗ ██╔══╝     ██║   
+# ██████╔╝╚██████╔╝██║ ╚████║███████╗    ██║ ╚═╝ ██║██║  ██║██║  ██║██║  ██╗███████╗   ██║   
+# ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   
+#                                                                                            
+
 # Bone Market
-# -----------
 
 trade(0, {
     Item.HinterlandScrip: -2,
@@ -1746,6 +1861,89 @@ trade(0, {
 trade(1, {
     Item.HinterlandScrip: -120,
     Item.SabreToothedSkull: 1
+})
+
+# -----------------
+# Sell To Patrons
+# ----------------
+
+trade(1, {
+    Item.HumanRibcage: -1,
+    Item.IncisiveObservation: 30
+})
+
+# -----------------
+# Recipes
+# ----------------
+# TODO: Verify all outputs
+
+trade(6, {
+    Item.LeviathanFrame: -1,
+    Item.BrightBrassSkull: -1,
+    Item.AmberCrustedFin: -2,
+    Item.HinterlandScrip: 948,
+    Item.CarvedBallOfStygianIvory: 3
+})
+
+
+# ----- Human Ribcage
+
+# requires BaL
+# 6 antiquity, 3 menacing
+trade(7, {
+    Item.HumanRibcage: -1,
+    Item.BoneFragments: -6000, # vake skull
+    Item.FossilisedForelimb: -3,
+    Item.IvoryHumerus: -1, # can be any neutral limb
+    Item.HinterlandScrip: 355,
+    Item.CarvedBallOfStygianIvory: 21
+})
+
+# 3 antiquity, 6 menacing
+trade(7, {
+    Item.HumanRibcage: -1,
+    Item.BoneFragments: -6000, # vake skull
+    Item.WingOfAYoungTerrorBird: -3,
+    Item.FinBonesCollected: -1, # can be any neutral limb
+    Item.HinterlandScrip: 176,
+    Item.CarvedBallOfStygianIvory: 21
+})
+
+# 4 antiquity, 4 menacing
+trade(7, {
+    Item.HumanRibcage: -1,
+    Item.SabreToothedSkull: -1,
+    Item.WingOfAYoungTerrorBird: -3,
+    Item.FinBonesCollected: -1, # can be any neutral limb
+    Item.HinterlandScrip: 171,
+    Item.CarvedBallOfStygianIvory: 18
+})
+
+trade(7, {
+    Item.HumanRibcage: -1,
+    Item.BrightBrassSkull: -1,
+    Item.WingOfAYoungTerrorBird: -4,
+    Item.HinterlandScrip: 180,
+    Item.CarvedBallOfStygianIvory: 18
+})
+
+# 6 amalgamy, 3 menacing
+trade(7, {
+    Item.HumanRibcage: -1,
+    Item.BoneFragments: -6000, # vake skull
+    Item.HelicalThighbone: -3,
+    Item.FinBonesCollected: -1, # can be any neutral limb
+    Item.NightsoilOfTheBazaar: 179,
+    Item.BasketOfRubberyPies: 21
+})
+
+trade(7, {
+    Item.HumanRibcage: -1,
+    Item.BrightBrassSkull: -1,
+    Item.KnottedHumerus: -2,
+    Item.HolyRelicOfTheThighOfStFiacre: -2,
+    Item.MemoryOfDistantShores: 244,
+    Item.FinalBreath: 17
 })
 
 # 3 + parts actions?
@@ -1789,7 +1987,7 @@ trade(10, {
     Item.MammothRibcage: -1,
     Item.SabreToothedSkull: -1,
     Item.AmberCrustedFin: -3,
-    Item.FinBoneCollected: -1,
+    Item.FinBonesCollected: -1,
     Item.JetBlackStinger: -1,
 })
 
@@ -1808,11 +2006,13 @@ trade(14, {
 })
 
 # new figures per calculator
-trade(1, {
-    Item.SpiderPope: -1,
-    Item.PreservedSurfaceBlooms: 55,
-    Item.RumourOfTheUpperRiver: 24
-})
+
+# # pre-nerf
+# trade(1, {
+#     Item.SpiderPope: -1,
+#     Item.PreservedSurfaceBlooms: 55,
+#     Item.RumourOfTheUpperRiver: 88
+# })
 
 # Prismatic Walrus
 trade(9, {
@@ -1873,8 +2073,10 @@ trade(13, {
     Item.AlbatrossWing: -2,
 
     Item.MemoryOfDistantShores: 1171,
-    Item.FinalBreath: 64
+    Item.FinalBreath: 74
 })
+
+
 
 # Naive Collector
 trade(13, {
@@ -2019,9 +2221,10 @@ trade(2, {
 
 # Dissect the Pinewood Shark
 trade(2, {
+    Item.RemainsOfAPinewoodShark: -1,
     Item.LaboratoryResearch: -100,
     Item.IncisiveObservation: 2,
-    Item.FinBoneCollected: 38,
+    Item.FinBonesCollected: 38,
     Item.BoneFragments: 500
 })
 
@@ -2238,21 +2441,41 @@ trade(0, {
 ## Court of the Wakeful Eye Grind
 ## ------------
 
-# Round trip between London and CotWE
-# with zub or yacht
+# Just make it one big blob
+# Can't be arsed to figure out the 240/260 leftovers thing
+# 14 actions = 2x the following
+# - 1 action to dock
+# - 2 actions in home waters
+# - 4 actions in shephers wash
 
-trade(14, {
-    # Item.ZailingDraws: 12,
+trade(14 + 50.6, {
     Item.HomeWatersZeeDraw: 4,
     Item.ShephersWashZeeDraw: 8,
     # Psuedo item represents tribute cap of 260
-    Item.TimeAtWakefulCourt: 13
+    Item.Tribute: -253,
+    Item.NightWhisper: 12.65
 })
 
-trade(4, {
-    Item.Tribute: -20,
-    Item.TimeAtWakefulCourt: -1,
-    Item.NightWhisper: 1
+# Gaining tribute
+
+trade(1, {
+    Item.Echo: -25,
+    Item.Tribute: 10
+})
+
+trade(1, {
+    Item.MagnificentDiamond: -1,
+    Item.Tribute: 5
+})
+
+trade(1, {
+    Item.PuzzleDamaskScrap: -1,
+    Item.Tribute: 5
+})
+
+trade(1, {
+    Item.CellarOfWine: -1,
+    Item.Tribute: 5
 })
 
 trade(1, {
@@ -2280,6 +2503,38 @@ trade(1, {
     Item.Tribute: 23
 })
 
+trade(1, {
+    Item.MemoryOfLight: -50,
+    Item.Tribute: 10
+})
+
+trade(1, {
+    Item.MountainSherd: -1,
+    Item.Tribute: 35
+})
+
+trade(1, {
+    Item.RoyalBlueFeather: -16,
+    Item.Tribute: 4
+})
+
+trade(1, {
+    Item.CorrespondencePlaque: -50,
+    Item.Tribute: 10
+})
+
+trade(1, {
+    Item.StrongBackedLabour: -1,
+    Item.Tribute: 2
+})
+
+# trade(1, {
+#     # throwing this random penalty in there arbitrarily
+#     # to represent the fact that you're no longer bounded by cards
+#     Item.CardDraws: -1,
+#     Item.WinsomeDispossessedOrphan: -1,
+#     Item.Tribute: 25
+# })
 
 # --------------
 # Port Cecil
@@ -2454,20 +2709,203 @@ trade(7, {
 })
 
 # --------------
+# Shops
+# -------------
+
+trade(0, {
+    Item.HinterlandScrip: -2,
+    Item.UnidentifiedThighbone: 1,
+})
+
+trade(0, {
+    Item.HinterlandScrip: -85,
+    Item.FossilisedForelimb: 1
+})
+
+# --------------
 # Ealing & Helicon
 # -------------
 
 # TODO: fix total carousel stuff here
 trade(1, {
-    Item.FinBoneCollected: -10,
+    Item.FinBonesCollected: -10,
     Item.AmberCrustedFin: 1
 })
 
+# --- Sponsor a Dig
+# NB: Wiki is uncertain about some ranges
+
+trade(1, {
+    Item.StrongBackedLabour: -1,
+    Item.SurveyOfTheNeathsBones: -50,
+    Item.HelicalThighbone: 3,
+    Item.KnottedHumerus: 2.5,
+    Item.HumanRibcage: 1,
+    Item.BoneFragments: 385.5
+})
+
+trade(1, {
+    Item.StrongBackedLabour: -1,
+    Item.SurveyOfTheNeathsBones: -75,
+    Item.ThornedRibcage: 1,
+    Item.HornedSkull: 1,
+    Item.FemurOfAJurassicBeast: 4,
+    Item.JetBlackStinger: 4,
+    Item.FinBonesCollected: 12.5
+})
+
+
+trade(1, {
+    Item.StrongBackedLabour: -1,
+    Item.SurveyOfTheNeathsBones: -163,
+    Item.PalaeontologicalDiscovery: 7
+})
+
+
+trade(1, {
+    Item.StrongBackedLabour: -1,
+    Item.SurveyOfTheNeathsBones: 175,
+    Item.MagisterialLager: -10,
+    Item.PalaeontologicalDiscovery: 7,
+    Item.Echo: 6.3 # estimated Rusted Stirrup value
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -25,
+    Item.LeviathanFrame: 1
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -5,
+    Item.MammothRibcage: 1
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -5,
+    Item.SabreToothedSkull: 1
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -4,
+    Item.FossilisedForelimb: 2
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -3,
+    Item.HumanRibcage: 2,
+    Item.HumanArm: 4
+    # Item.TraceOfTheFirstCity: 5
+})
 
 # -----------------------------------
-# ---- Calling in Favours in Jericho
+# ---- Jericho
 # -----------------------------------
 
+# --------- Canal Cruising
+
+if profession == Profession.CrookedCross:
+    trade(1, {
+        Item.UnprovenancedArtefact: -4,
+        Item.EsteemOfTheGuild: 1
+    })
+
+trade(1, {
+    Item.VolumeOfCollatedResearch: -10,
+    Item.EsteemOfTheGuild: 2
+})
+
+trade(1, {
+    Item.PartialMap: -6,
+    Item.AnIdentityUncovered: -4,
+    Item.EsteemOfTheGuild: 2
+})
+
+trade(1, {
+    Item.MemoryOfDistantShores: -40,
+    Item.SwornStatement: -2,
+    Item.EsteemOfTheGuild: 2
+})
+
+trade(1, {
+    Item.NightOnTheTown: -1,
+    Item.ScrapOfIncendiaryGossip: -45,
+    Item.EsteemOfTheGuild: 2
+})
+
+trade(1, {
+    Item.FavDocks: -5,
+    Item.EsteemOfTheGuild: 2
+})
+
+# assume ranges are evenly distributed
+trade(1, {
+    Item.EsteemOfTheGuild: -3,
+    Item.VitalIntelligence: 2.5,
+    Item.ViennaOpening: 6.5
+})
+
+trade(1, {
+    Item.EsteemOfTheGuild: -3,
+    Item.MirrorcatchBox: 1
+})
+
+trade(1, {
+    Item.EsteemOfTheGuild: -3,
+    Item.MoonlightScales: 50,
+    Item.FinBonesCollected: 5,
+    Item.SkullInCoral: 1.5,
+    Item.UnprovenancedArtefact: 8.5
+})
+
+# TODO: randomness
+# trade(1, {
+#     Item.EsteemOfTheGuild: -6,
+#     Item.BrightBrassSkull: 1,
+#     Item.ExtraordinaryImplication: 5.5,
+#     Item.VerseOfCounterCreed: 2.5
+# })
+
+# trade(1, {
+#     Item.EsteemOfTheGuild: -6,
+#     Item.MovesInTheGreatGame: 18.5,
+#     Item.PrimaevalHint: 1,
+#     Item.UncannyIncunabulum: 2.5
+# })
+
+# trade(1, {
+#     Item.EsteemOfTheGuild: -6,
+#     Item.NightWhisper: 1,
+#     Item.TaleOfTerror: 3.5,
+#     Item.FinalBreath: 12,
+#     Item.HumanRibcage: 2
+# })
+
+
+trade(2, {
+    Item.EsteemOfTheGuild: -12,
+    Item.NightWhisper: 1,
+    Item.TaleOfTerror: 3.5,
+    Item.FinalBreath: 12,
+    Item.HumanRibcage: 2,
+
+    Item.MovesInTheGreatGame: 18.5,
+    Item.PrimaevalHint: 1,
+    Item.UncannyIncunabulum: 2.5    
+})
+
+trade(2, {
+    Item.EsteemOfTheGuild: -12,
+    Item.NightWhisper: 1,
+    Item.TaleOfTerror: 3.5,
+    Item.FinalBreath: 12,
+    Item.HumanRibcage: 2,
+
+    Item.BrightBrassSkull: 1,
+    Item.ExtraordinaryImplication: 5.5,
+    Item.VerseOfCounterCreed: 2.5
+})
+
+# --------- Calling in Favours
 # hack to model dipping into jericho to trade favours
 # when you would otherwise not go there
 
@@ -2600,6 +3038,35 @@ trade(2, {
 })
 
 
+# ----------------
+# --- The Hurlers
+# ----------------
+
+
+# Licensed by Mr Stones
+
+trade(1, {
+    Item.FlawedDiamond: -100,
+    Item.HinterlandScrip: 30
+})
+
+trade(1, {
+    Item.OstentatiousDiamond: -25,
+    Item.CrateOfIncorruptibleBiscuits: 6
+})
+
+trade(1, {
+    Item.MagnificentDiamond: -1,
+    Item.TouchingLoveStory: 5.5 # assumes uniform 5 or 6
+})
+
+trade(1, {
+    Item.FabulousDiamond: -1,
+    Item.HinterlandScrip: 625,
+    Item.StolenKiss: 2
+})
+
+
 # -------------------------------
 # ---- Opportunity Deck Math ----
 # -------------------------------
@@ -2617,7 +3084,7 @@ for item in Item:
 card_exchange[Item.CardDraws] = -1 * cards_seen_per_day
 # card_exchange[Item.Action] = -1 * good_cards_per_day
 
-print(card_exchange)
+# print(card_exchange)
 trade(good_cards_per_day, card_exchange)
 # per_day(card_exchange)
 
@@ -2659,27 +3126,27 @@ c[optimize_for.value] = -1
 opt_result = linprog(c, A_ub=A.toarray(), b_ub=b, bounds=bounds, method='highs')
 print(opt_result)
 
-print("Opp Deck")
+# print("Opp Deck")
 
-print(f"{'Item Name':^30}")
+# print(f"{'Item Name':^30}")
+# # for item, quantity in zip(Item, opt_result.x):
+# #     item_name = f"{item.name:30}"
+# #     per_action = f"{(1.0/(quantity * actions_per_day) if quantity != 0 else 0.0):10.3f}"
+# #     per_card = LondonCardsByItem[item.value] / LondonDeckSize
+# #     per_day_of_draws = per_card * cards_seen_per_day
+# #     print(item_name + per_action + ((f"{per_card:10.2f}" + f"{per_day_of_draws:10.2f}") if per_card != 0 else ""))
+
+
 # for item, quantity in zip(Item, opt_result.x):
 #     item_name = f"{item.name:30}"
-#     per_action = f"{(1.0/(quantity * actions_per_day) if quantity != 0 else 0.0):10.3f}"
-#     per_card = LondonCardsByItem[item.value] / LondonDeckSize
-#     per_day_of_draws = per_card * cards_seen_per_day
-#     print(item_name + per_action + ((f"{per_card:10.2f}" + f"{per_day_of_draws:10.2f}") if per_card != 0 else ""))
-
-
-for item, quantity in zip(Item, opt_result.x):
-    item_name = f"{item.name:30}"
-    index = item.value
-    print(item_name
-        + f"{quantity:10.3}"
-        # + f"{opt_result.lower.residual[index]:10.3}"
-        # + f"{opt_result.lower.marginals[index]:10.3}"
-        # + f"{opt_result.upper.residual[index]:10.3}"
-        # + f"{opt_result.upper.marginals[index]:10.3}"
-        )
+#     index = item.value
+#     print(item_name
+#         + f"{quantity:10.3}"
+#         # + f"{opt_result.lower.residual[index]:10.3}"
+#         # + f"{opt_result.lower.marginals[index]:10.3}"
+#         # + f"{opt_result.upper.residual[index]:10.3}"
+#         # + f"{opt_result.upper.marginals[index]:10.3}"
+#         )
 
 
 
@@ -2728,6 +3195,7 @@ for i in range(0, len(opt_result.slack)):
                 gain_items += str(Item(ii)) + ":" + str(quantity) + "; "
         trade_items = lose_items + " => " + gain_items            
         trade_items = trade_items.replace("Item.","");
-        print(f"Slack: {slack:3.3} & {marginal:10.3}       " + trade_items)
+        # print(trade_items)
+        print(f"{marginal:.3}       " + trade_items)
 
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
