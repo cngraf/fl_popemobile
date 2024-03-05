@@ -11,7 +11,7 @@ import pprint
 
 '''
 TODO
-
+cut up the monolith somehow
 
 London
 - location-specific opp deck cards
@@ -23,6 +23,7 @@ London
 - remaining hearts' game payouts
 - all the MYN locations
 - forgotten quarter expeditions
+- model Airs somehow
 
 Laboratory
 - model the actual deck & bonus payoffs
@@ -108,6 +109,22 @@ replacement_good_card_density = 0.33
 #     HomeWaters = auto()
 #     ShepherdsWash = auto()
 
+class Location(Enum):
+    # London
+    BazaarSideStreet = auto()
+    LadybonesRoad = auto()
+    YourLodgings = auto()
+    MahoganyHall = auto()
+    MolochStreet = auto()
+    MrsPlentysCarnival = auto()
+    Spite = auto()
+    TheFlit = auto()
+    TheShutteredPalace = auto()
+    TheUniversity = auto()
+    Veilgarden = auto()
+    WatchmakersHill = auto()
+    WilmotsEnd = auto()
+    WolfstackDocks = auto()
 
 class Rarity(Enum):
     Rare = 10
@@ -156,11 +173,6 @@ class Treasure(Enum):
     YourLovedOneReturned = auto() # any differences?
     BloodiedTravellingCoatOfMrCups = auto()
 
-# Player Stuff
-    
-profession = Profession.NoProfession
-treasure = Treasure.NoTreasure
-
 class Item(Enum):
     Echo = 0
 
@@ -194,6 +206,8 @@ class Item(Enum):
     ConnectedBenthic = auto()
 
     # Academic
+    FoxfireCandleStub = auto()
+    FlaskOfAbominableSalts = auto()
     MemoryOfDistantShores = auto()
     IncisiveObservation = auto()
     UnprovenancedArtefact = auto()
@@ -205,6 +219,7 @@ class Item(Enum):
     WhirringContraption = auto()
     OilOfCompanionship = auto()
     CracklingDevice = auto()
+    ConcentrateOfSelf = auto()
 
     # Cartography
     ShardOfGlim = auto()
@@ -220,6 +235,7 @@ class Item(Enum):
     OneiromanticRevelation = auto()
     ParabolanParable = auto()
     CartographersHoard = auto()
+    WaswoodAlmanac = auto()
 
     # Contraband
     FlawedDiamond = auto()
@@ -297,6 +313,7 @@ class Item(Enum):
     CaveAgedCodeOfHonour = auto()
     LegalDocument = auto()
     FragmentOfTheTragedyProcedures = auto()
+    EdictsOfTheFirstCity = auto()
 
     # Luminosity
     LumpOfLamplighterBeeswax = auto()
@@ -308,6 +325,7 @@ class Item(Enum):
     SnuffersGratitude = auto()
     ElementOfDawn = auto()
     MountainSherd = auto()
+    RayDrenchedCinder = auto()
 
     # Mysteries
     WhisperedHint = auto()
@@ -612,6 +630,14 @@ LondonDeckSize = 0
 GoodCardsInDeck = 0
 LondonCardsByItem = [0] * num_vars
 
+
+# Player Stuff
+    
+profession = Profession.NoProfession
+treasure = Treasure.NoTreasure
+player_location = Location.MolochStreet
+
+
 # ---------------- Trades ----------------------------
 
 # Plug in the basic economic contraints
@@ -626,71 +652,97 @@ per_day({
 # Time-gated stuff
 # Lots missing
 
-def rewards_of_ambition(treasure):
-    if treasure == Treasure.NoTreasure:
-        return {}
-    # Bag a Legend
-    elif treasure == Treasure.VastNetworkOfConnections:
-        return {
-            Item.ParabolaLinenScrap: 1,
-            Item.HinterlandScrip: 5,
-            Item.Nightmares: -5,
-            Item.BraggingRightsAtTheMedusasHead: 5
-        }
-    elif treasure == Treasure.SocietyOfTheThreeFingeredHand:
-        return {
-            Item.SearingEnigma: 1,
-            Item.Nightmares: -5,
-            Item.BraggingRightsAtTheMedusasHead: 5
-        }
-    elif treasure == Treasure.WingedAndTalonedSteed:
-        return {
-            Item.NightWhisper: 1,
-            Item.Wounds: -5,
-            Item.BraggingRightsAtTheMedusasHead: 5
-        }
-    elif treasure == Treasure.LongDeadPriestsOfTheRedBird:
-        return {
-            Item.PrimaevalHint: 1,
-            Item.Wounds: -5,
-            Item.BraggingRightsAtTheMedusasHead: 5
-        }
-    # Hearts Desire
-    elif treasure == Treasure.TheRobeOfMrCards:
-        return {
-            Item.FragmentOfTheTragedyProcedures: 1,
-            Item.Suspicion: -5
-        }
-    elif treasure == Treasure.NewlyCastCrownOfTheCityOfLondon:
-        return {
-            Item.BottleOfFourthCityAirag: 1,
-            Item.Scandal: -5
-        }
-    elif treasure == Treasure.LeaseholdOnAllOfLondon:
-        return {
-            Item.SearingEnigma: 1,
-            Item.Wounds: -5
-        }    
-    elif treasure == Treasure.PalatialHomeInTheArcticCircle:
-        return {
-            Item.NightWhisper: 1,
-            Item.Nightmares: -5
-        }
-    elif treasure == Treasure.TheRobeOfMrCards:
-        return {
-            Item.PrimaevalHint: 1,
-            Item.Nightmares: -5
-        }
-    # TODO
+# # Just gonna comment this out for now
+# # it will only confuse things until the non-exlusive options are settled
+
+# def rewards_of_ambition(treasure):
+#     if treasure == Treasure.NoTreasure:
+#         return {}
+#     # Bag a Legend
+#     elif treasure == Treasure.VastNetworkOfConnections:
+#         return {
+#             Item.ParabolaLinenScrap: 1,
+#             Item.HinterlandScrip: 5,
+#             Item.Nightmares: -5,
+#             Item.BraggingRightsAtTheMedusasHead: 5
+#         }
+#     elif treasure == Treasure.SocietyOfTheThreeFingeredHand:
+#         return {
+#             Item.SearingEnigma: 1,
+#             Item.Nightmares: -5,
+#             Item.BraggingRightsAtTheMedusasHead: 5
+#         }
+#     elif treasure == Treasure.WingedAndTalonedSteed:
+#         return {
+#             Item.NightWhisper: 1,
+#             Item.Wounds: -5,
+#             Item.BraggingRightsAtTheMedusasHead: 5
+#         }
+#     elif treasure == Treasure.LongDeadPriestsOfTheRedBird:
+#         return {
+#             Item.PrimaevalHint: 1,
+#             Item.Wounds: -5,
+#             Item.BraggingRightsAtTheMedusasHead: 5
+#         }
+#     # Hearts Desire
+#     elif treasure == Treasure.TheRobeOfMrCards:
+#         return {
+#             Item.FragmentOfTheTragedyProcedures: 1,
+#             Item.Suspicion: -5
+#         }
+#     elif treasure == Treasure.NewlyCastCrownOfTheCityOfLondon:
+#         return {
+#             Item.BottleOfFourthCityAirag: 1,
+#             Item.Scandal: -5
+#         }
+#     elif treasure == Treasure.LeaseholdOnAllOfLondon:
+#         return {
+#             Item.SearingEnigma: 1,
+#             Item.Wounds: -5
+#         }    
+#     elif treasure == Treasure.PalatialHomeInTheArcticCircle:
+#         return {
+#             Item.NightWhisper: 1,
+#             Item.Nightmares: -5
+#         }
+#     elif treasure == Treasure.TheRobeOfMrCards:
+#         return {
+#             Item.PrimaevalHint: 1,
+#             Item.Nightmares: -5
+#         }
+#     elif treasure == Treasure.FalseStartOfYourOwn:
+#         return {
+#             Item.SearingEnigma: 1,
+#             Item.Nightmares: -5
+#         }
+#     elif treasure == Treasure.KittenSizedDiamond:
+#         return {
+#             Item.PrimaevalHint: 1,
+#             Item.Wounds: -5,
+#             # ???
+#             Item.OstentatiousDiamond: -1,
+#             Item.MagnificentDiamond: 1
+#         }
+#     elif treasure == Treasure.BloodiedTravellingCoatOfMrCups:
+#         return {
+#             Item.BlackmailMaterial: 1,
+#             Item.Nightmares: -5
+#         }
+#     elif treasure == Treasure.YourLovedOneReturned:
+#         return {
+#             Item.PrimaevalHint: 1,
+#             Item.Nightmares: -5
+#         }
+
 
 trade(0, {
     Item.VisitFromTimeTheHealer: -1,
-    Item.AConsequenceOfYourAmbition: 1
+    # Item.AConsequenceOfYourAmbition: 1
 })
 
-ambition_reward = rewards_of_ambition(treasure)
-ambition_reward[Item.AConsequenceOfYourAmbition] = -4
-trade(1, ambition_reward)
+# ambition_reward = rewards_of_ambition(treasure)
+# ambition_reward[Item.AConsequenceOfYourAmbition] = -4
+# trade(1, ambition_reward)
 
 #  ██████╗ ██████╗ ██████╗     ██████╗ ███████╗ ██████╗██╗  ██╗
 # ██╔═══██╗██╔══██╗██╔══██╗    ██╔══██╗██╔════╝██╔════╝██║ ██╔╝
@@ -1147,6 +1199,67 @@ card("The OP Aunt card", Rarity.Standard, True, {
     # 0.3 success
     Item.Echo: 10 * replacement_epa * 0.3
 })
+
+
+# ----------------------
+# --- Cards: Location-specific
+# ----------------------
+
+# so far no special location is positive EPA
+# but these have potential 
+
+# if (player_location == Location.BazaarSideStreet):
+#     card("The Skin of the Bazaar", Rarity.Rare, False, {
+
+#     })
+
+if (player_location == Location.LadybonesRoad):
+    card("1000 Nevercold Brass Silver Wanted!", Rarity.Standard, True, {
+        Item.NevercoldBrassSliver: -1000,
+        Item.CrypticClue: 500,
+        Item.AppallingSecret: 10,
+        Item.FavGreatGame: 1
+    })
+
+if (player_location == Location.Spite):
+    card("2000 Foxfire Candles Wanted!", Rarity.Standard, True, {
+        Item.FoxfireCandleStub: -2000,
+        Item.PieceOfRostygold: 2000,
+        Item.MysteryOfTheElderContinent: 1,
+        Item.FavChurch: 1
+    })
+
+if (player_location == Location.TheUniversity):
+    card("A peculiar practice", Rarity.Standard, True, {
+        # Item.ConnectedSummerset: -5 # ignoring for now
+        Item.FavTombColonies: 1,
+        Item.Echo: 0.6 # bundle of oddities
+    })
+
+    card("Stone by stone", Rarity.Standard, False, {
+
+    })
+
+if (player_location == Location.YourLodgings):
+    card("A commotion above", Rarity.Rare, False, {
+        
+    })    
+
+    card("The Neath's Mysteries", Rarity.Standard, False, {
+        
+    })
+
+    card("The Urchin and the Monkey", Rarity.VeryInfrequent, True, {
+        Item.CompromisingDocument: -2,
+        Item.FavUrchins: 1
+    })
+
+    card("Your Grubby Urchin is becoming troublesome", Rarity.VeryInfrequent, True, {
+        Item.TaleOfTerror: -2,
+        Item.FavUrchins: 1
+    })    
+
+
 
 # # TODO: check the actual rarity of this
 # # also it adds that other rare card to the deck that clears all wounds
@@ -1726,6 +1839,26 @@ trade(1, {
 
 # Tier 7
 
+trade(1, {
+    Item.CorrespondingSounder: -1,
+    Item.RatShilling: 4000
+})
+
+trade(1, {
+    Item.ScrapOfIvoryOrganza: -1,
+    Item.RatShilling: 4000
+})
+
+trade(1, {
+    Item.CartographersHoard: -1,
+    Item.RatShilling: 4000
+})
+
+trade(1, {
+    Item.ParabolanParable: -1,
+    Item.RatShilling: 4000
+})
+
 ## ------------
 ## Various London Carousels?
 ## ------------
@@ -1906,9 +2039,13 @@ trade(4, {
     Item.IncisiveObservation: 2
 })
 
-# --------------
+# ██████╗  █████╗ ██████╗  █████╗ ██████╗  ██████╗ ██╗      █████╗ 
+# ██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔═══██╗██║     ██╔══██╗
+# ██████╔╝███████║██████╔╝███████║██████╔╝██║   ██║██║     ███████║
+# ██╔═══╝ ██╔══██║██╔══██╗██╔══██║██╔══██╗██║   ██║██║     ██╔══██║
+# ██║     ██║  ██║██║  ██║██║  ██║██████╔╝╚██████╔╝███████╗██║  ██║
+# ╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝                                           
 # Parabola
-# -------------
 
 trade(1, {
     Item.DropOfPrisonersHoney: 0 if profession == Profession.Silverer else -100,
@@ -1934,6 +2071,31 @@ trade(6, {
     Item.RemainsOfAPinewoodShark: 1
 })
 
+# ------------------
+# Parabolan War
+# ------------------
+
+# Ballparked via wiki calculator @ 320 base stats and default values
+
+trade(72, {
+    Item.ParabolanParable: 1
+})
+
+trade(72, {
+    Item.RayDrenchedCinder: 1
+})
+
+trade(72, {
+    Item.EdictsOfTheFirstCity: 1
+})
+
+trade(72, {
+    Item.WaswoodAlmanac: 1
+})
+
+trade(72, {
+    Item.ConcentrateOfSelf: 1
+})
 
 # # ----------
 # ██████╗  ██████╗ ███╗   ██╗███████╗    ███╗   ███╗ █████╗ ██████╗ ██╗  ██╗███████╗████████╗
