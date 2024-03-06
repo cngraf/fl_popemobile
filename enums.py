@@ -430,6 +430,7 @@ class Item(Enum):
     # TODO: organize this section somehow
 
     # Quriks
+    Austere = auto()
     Hedonist = auto()
 
     # Laboratory

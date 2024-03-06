@@ -110,10 +110,10 @@ replacement_epa = 6.5
 replacement_good_card_density = 0.33
 
 # 0.85, 0.74, 0.65
-wounds_multiplier = 1.0
-scandal_multiplier = 1.0
-suspicion_multiplier = 1.0
-nightmares_multiplier = 1.0
+wounds_multiplier = 0.85
+scandal_multiplier = 0.85
+suspicion_multiplier = 0.85
+nightmares_multiplier = 0.85
 
 # --------------------------------------------
 # -------------- Player Config ---------------
@@ -1565,6 +1565,55 @@ trade(1, {
 trade(1, {
     Item.WhisperSatinScrap: -50,
     Item.JournalOfInfamy: 51
+})
+
+## ------------
+## Shuttered Palace
+## ------------
+
+# Inspired
+# ignoring rare successes
+
+trade(1, {
+    Item.Inspired: 15
+})
+
+trade(1, {
+    Item.FavBohemians: -1,
+    Item.Inspired: 30
+})
+
+trade(1, {
+    Item.FavSociety: -1,
+    Item.Inspired: 30
+})
+
+trade(1, {
+    Item.FavRevolutionaries: -1,
+    Item.SuspicionCredit: -1 * suspicion_multiplier,
+    Item.Inspired: 35,
+})
+
+trade(1, {
+    Item.FavHell: -1,
+    Item.Inspired: 25
+})
+
+trade(1, {
+    Item.FavChurch: -1,
+    Item.Inspired: 35
+})
+
+# need 11 Austere to 100%
+trade(1, {
+    Item.JadeFragment: -10,
+    Item.Austere: -3,
+    Item.Inspired: 20
+})
+
+trade(1, {
+    Item.DropOfPrisonersHoney: -25,
+    Item.Inspired: 20
 })
 
 ## ------------
@@ -3107,11 +3156,14 @@ trade(0, {
 # if you happen to be a Silverer with LDPotRB
 
 # 1) Enter with pendant
-# 2) Offer yourself escort and guide
+# 2) Offer yourself as escort and guide
 # 3) nightmare on elm street
+# looks like this becomes profitable when you can cash out for 36+ Echoes
+# which means lesser self + discordance needs to pull about 30
+# seems unlikely to get there
 trade(3, {
     Item.IntriguingSnippet: 3,
-    
+
     Item.Inspired: -55 + 6,
     Item.MemoryOfLight: 6,
     Item.MemoryOfDistantShores: 6,
