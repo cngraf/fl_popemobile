@@ -46,6 +46,7 @@ nightmares_multiplier = 1.0
 #     ShepherdsWash = auto()
 
 class Location(Enum):
+    NoLocation = auto()
     # London
     BazaarSideStreet = auto()
     LadybonesRoad = auto()
@@ -84,6 +85,7 @@ class Profession(Enum):
     Doctor = auto()
 
 class Ambition(Enum):
+    NoAmbition = auto()
     BagALegend = auto()
     HeartsDesire = auto()
     LightFingers = auto()
@@ -584,7 +586,6 @@ bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
 LondonDeckSize = 0
 GoodCardsInDeck = 0
 LondonCardsByItem = [0] * num_vars
-
 
 # Player Stuff
     
@@ -1818,14 +1819,14 @@ def actions_to_sell_skelly(shadowy, implausibility):
     suspicion_penalty = 0.2 * expected_failures
     return 1 + expected_failures + suspicion_penalty
 
-trade(7 + actions_to_sell_skelly(player_shadowy, 3), {
-    Item.HumanRibcage: -1,
-    Item.BoneFragments: -6000, # vake skull
-    Item.WingOfAYoungTerrorBird: -3,
-    Item.UnidentifiedThighbone: -1,
-    Item.HinterlandScrip: 192, # 194 minus 2 for buying the thigh bone
-    Item.CarvedBallOfStygianIvory: 21,
-})
+# trade(7 + actions_to_sell_skelly(player_shadowy, 3), {
+#     Item.HumanRibcage: -1,
+#     Item.BoneFragments: -6000, # vake skull
+#     Item.WingOfAYoungTerrorBird: -3,
+#     Item.UnidentifiedThighbone: -1,
+#     Item.HinterlandScrip: 192, # 194 minus 2 for buying the thigh bone
+#     Item.CarvedBallOfStygianIvory: 21,
+# })
 
 # # non-BaL
 
@@ -1846,10 +1847,6 @@ trade(7 + actions_to_sell_skelly(player_shadowy, 3), {
     Item.HinterlandScrip: 137,
     Item.CarvedBallOfStygianIvory: 21,
 })
-
-# trade(8, {
-    
-# })
 
 # Generator Skeleton, various
 

@@ -119,6 +119,7 @@ nightmares_multiplier = 1.0
 #     ShepherdsWash = auto()
 
 class Location(Enum):
+    NoLocation = auto()
     # London
     BazaarSideStreet = auto()
     LadybonesRoad = auto()
@@ -157,6 +158,7 @@ class Profession(Enum):
     Doctor = auto()
 
 class Ambition(Enum):
+    NoAmbition = auto()
     BagALegend = auto()
     HeartsDesire = auto()
     LightFingers = auto()
@@ -534,6 +536,8 @@ class Item(Enum):
     # Qualities
     # -----
 
+    Hedonist = auto()
+    
     # TODO: organize this section somehow
 
     AConsequenceOfYourAmbition = auto()
@@ -621,12 +625,21 @@ def railway_card(name, freq, isGood, exchanges):
 
 def broad_challenge_success_rate(stat, difficulty): return clamp(0.6 * stat/difficulty, 0.0, 1.0)
 
+def narrow_challenge_success_rate(stat, difficulty): return clamp(0.5 + (stat - difficulty)/10, 0.1, 1.0)
+
+def expected_failures(success_rate): return 1.0/success_rate - 1 if success_rate < 1.0 else 0
+
 def challenge_ev(player_stat, difficulty, success, failure):
     success_rate = broad_challenge_success_rate(player_stat, difficulty)
     return success_rate * success + (1.0 - success_rate) * failure
 
+def skelly_value_in_items(skelly_value, item_value, zoo_bonus_active):
+    zoo_multiplier = 1.1 if zoo_bonus_active else 1.0
+    return skelly_value * zoo_multiplier / item_value
+    
+
 # hack
-var_buffer = 1000
+var_buffer = 3000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
@@ -651,6 +664,8 @@ bounds[Item.Wounds.value] = (0, 36)
 bounds[Item.Scandal.value] = (0, 36)
 bounds[Item.Suspicion.value] = (0, 36)
 bounds[Item.Nightmares.value] = (0, 36)
+bounds[Item.Hedonist.value] = (0, 55)
+
 bounds[Item.SeeingBanditryInTheUpperRiver.value] = (0, 36)
 
 bounds[Item.ConnectedBenthic.value] = (0, 800)
@@ -686,7 +701,7 @@ LondonCardsByItem = [0] * num_vars
 
 player_profession = Profession.NoProfession
 player_treasure = Treasure.NoTreasure
-player_location = Location.MolochStreet
+player_location = Location.NoLocation
 player_ambition = Ambition.BagALegend
 
 player_stats = {
@@ -842,6 +857,7 @@ card("The Tower of Knives", Rarity.Standard, True, {
 card("The Tower of Eyes", Rarity.Frequent, True, {
   Item.FavBohemians: 0.5,
   Item.FavSociety: 0.5,
+  Item.Hedonist: 3,
   Item.Scandal: 2 * scandal_multiplier
 })
 
@@ -869,7 +885,8 @@ card("Attend to your spouses", Rarity.VeryInfrequent, True, {
 
 # avoidable
 card("A day out in your Clay Sedan Chair", Rarity.Standard, True, {
-    Item.FavSociety: 1
+    Item.FavSociety: 1,
+    Item.Hedonist: -3
 })
 
 # # avoidable? A: yes, with watchful gains
@@ -1952,10 +1969,10 @@ trade(1, {
 ## Various London Carousels?
 ## ------------
 
-# optimistic size
-trade(20, {
+# overnight trip
+trade(40, {
     Item.ApostatesPsalm: 3,
-    Item.NevercoldBrassSliver: ((38 * 20) - 50) * 10
+    Item.NevercoldBrassSliver: ((38 * 40) - 50) * 10
 })
 
 # 50:51 Cross-Conversion Carousel
@@ -2033,6 +2050,7 @@ trade(13, {
     Item.WhirringContraption: -1,
     Item.ScrapOfIncendiaryGossip: -5,
 
+    Item.Hedonist: 1,
     Item.JournalOfInfamy: 148,
     Item.SlightedAcquaintance: 1,
     Item.SulkyBat: 2
@@ -2141,6 +2159,23 @@ trade(1, {
     Item.ParabolaRoundTrip: 1
 })
 
+trade(2, {
+    Item.BoneFragments: -1100,
+    Item.ParabolanOrangeApple: 1
+})
+
+# with specific BaL ending
+# trade(2, {
+#     Item.BoneFragments: -500,
+#     Item.ParabolanOrangeApple: 1
+# })
+
+trade(2, {
+    Item.BoneFragments: -100,
+    Item.Hedonist: -21,
+    Item.ParabolanOrangeApple: 2
+})
+
 # Hunting Pinewood Shark
 # TODO: check actual length of carousel
 
@@ -2195,14 +2230,6 @@ trade(72, {
 # ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝   
 #                                                                                            
 
-
-def actions_to_sell_chimera(shadowy, mithridacy):
-    declaration_success_rate = min(1.0, max(0.1, 0.5 + 0.1 * (mithridacy - 10)))
-    actions_on_success = actions_to_sell_skelly(shadowy, 3)
-    actions_on_failure = actions_to_sell_skelly(shadowy, 6)
-    return actions_on_success * declaration_success_rate + actions_on_failure * (1.0 - declaration_success_rate)
-
-
 def actions_to_sell_skelly(shadowy, implausibility):
     if (implausibility < 1): return 1
     difficulty = 75 * implausibility
@@ -2213,6 +2240,10 @@ def actions_to_sell_skelly(shadowy, implausibility):
     suspicion_penalty = 0.2 * expected_failures
     return 1 + expected_failures + suspicion_penalty
 
+chimera_success_rate = narrow_challenge_success_rate(player_stats[Stat.Mithridacy], 10)
+actions_on_success = actions_to_sell_skelly(player_stats[Stat.Shadowy], 3)
+actions_on_failure = actions_to_sell_skelly(player_stats[Stat.Shadowy], 6)
+actions_to_sell_chimera = (actions_on_success * chimera_success_rate) + (actions_on_failure * (1.0 - chimera_success_rate))
 
 # out of curiosity, what happens if we could cash out everything for free
 # Suggests the following items can be acquired profitably:
@@ -2304,7 +2335,6 @@ def actions_to_sell_skelly(shadowy, implausibility):
 #     Item.HumanRibcage: -1, 
 #     Item.Echo: 12.50
 # })
-
 
 # trade(0, {
 #     Item.IvoryFemur: -1, 
@@ -2417,6 +2447,12 @@ trade(1, {
     Item.SabreToothedSkull: 1
 })
 
+trade(1 + expected_failures(broad_challenge_success_rate(player_stats[Stat.Persuasive], 210)), {
+    Item.ParabolanOrangeApple: -1,
+    Item.IvoryHumerus: 1
+})
+
+
 # -----------------
 # Sell To Patrons
 # ----------------
@@ -2438,7 +2474,11 @@ trade(1, {
 '''
 
 if (player_ambition == Ambition.BagALegend):
-    trade(0, {
+    # min 1 action is baked into recipes, this only adds for failure
+    # ignores other failure costs bc lazy
+    success_rate = narrow_challenge_success_rate(player_stats[Stat.ArtisanOfTheRedScience], 5)
+    expected_failures = 1.0/success_rate - 1 if success_rate < 1.0 else 0
+    trade(expected_failures, {
         Item.BoneFragments: -6000,
         Item.DuplicatedVakeSkull: 1
     })
@@ -2447,7 +2487,7 @@ if (player_ambition == Ambition.BagALegend):
 # ------ Leviathan Frame
 
 # 3/0/6/0/3 chimera => gothic
-trade(5 + actions_to_sell_chimera(player_stats[Stat.Shadowy], player_stats[Stat.Mithridacy]), {
+trade(5 + actions_to_sell_chimera, {
     Item.LeviathanFrame: -1,
     Item.DuplicatedVakeSkull: -1,
     Item.WingOfAYoungTerrorBird: -2,
@@ -2491,127 +2531,162 @@ trade(8, {
     Item.DuplicatedVakeSkull: -1,
     Item.KnottedHumerus: -2,
     Item.HelicalThighbone: -2,
-    Item.NightsoilOfTheBazaar: 211,
+    Item.NightsoilOfTheBazaar: 184,
     Item.BasketOfRubberyPies: 21,
+})
+
+trade(8, {
+    Item.HumanRibcage: -1,
+    Item.DuplicatedVakeSkull: -1,
+    Item.FossilisedForelimb: -2,
+    Item.FemurOfAJurassicBeast: -2,
+    Item.NightsoilOfTheBazaar: skelly_value_in_items(12.5 + 65 + (27.5 * 2) + (3 * 2), 0.5, False),
+    Item.CarvedBallOfStygianIvory: 21,
 })
 
 '''
 "Biblically Inaccurate Angel"
 AKA the reject ribcage recycler
 
-the thighbone is relatively inefficient, can be any limb with 0 antiquity & menace
-
-with A/B testing, the BaL version is ahead by like 0.1 EPA, the other two are tied 
+the filler limb can be any limb with 0 antiquity & menace
 '''
 
-# trade(7 + actions_to_sell_chimera(player_shadowy, player_mithridacy), {
-#     Item.HumanRibcage: -1,
-#     Item.DuplicatedVakeSkull: -1,
-#     Item.WingOfAYoungTerrorBird: -3,
-#     Item.UnidentifiedThighbone: -1,
-#     Item.HinterlandScrip: 192, # 194 minus 2 for buying the thigh bone
-#     Item.CarvedBallOfStygianIvory: 21,
-# })
+filler_limb = Item.UnidentifiedThighbone
+filler_limb_echo_value = -1 # net -1 scrip buying it from
 
-# trade(7 + actions_to_sell_chimera(player_shadowy, player_mithridacy), {
-#     Item.HumanRibcage: -1,
-#     Item.SabreToothedSkull: -1,
-#     Item.WingOfAYoungTerrorBird: -3,
-#     Item.UnidentifiedThighbone: -1,
-#     Item.HinterlandScrip: 189,
-#     Item.CarvedBallOfStygianIvory: 18,
-# })
-
-# trade(7 + actions_to_sell_chimera(player_shadowy, player_mithridacy), {
-#     Item.HumanRibcage: -1,
-#     Item.HornedSkull: -1,
-#     Item.WingOfAYoungTerrorBird: -2,
-#     Item.AmberCrustedFin: -2,
-#     Item.HinterlandScrip: 143,
-#     Item.CarvedBallOfStygianIvory: 21,
-# })
-
-# ------- Spider-Pope Stuff
-# Three Legged Mammoth
-# Sell as Lizard to Gothic Tales during Antiq/Menace Week
-trade(9, {
-    Item.MammothRibcage: -1,
-    Item.SabreToothedSkull: -1,
-    Item.FemurOfAJurassicBeast: -3,
-    Item.UnidentifiedThighbone: -1,
-    Item.JetBlackStinger: -1,
-    Item.ThreeLeggedMammoth: 1
+# 3/?/6
+trade(7 + actions_to_sell_chimera, {
+    Item.HumanRibcage: -1,
+    Item.DuplicatedVakeSkull: -1,
+    Item.WingOfAYoungTerrorBird: -3,
+    filler_limb: -1,
+    Item.HinterlandScrip: skelly_value_in_items(12.5 + 65 + (3 * 2.5) + filler_limb_echo_value, 0.5, False),
+    Item.CarvedBallOfStygianIvory: 21, # 20/18/21
 })
 
-trade(1, {
-    Item.ThreeLeggedMammoth: -1,
-    Item.HinterlandScrip: 303,
-    Item.CarvedBallOfStygianIvory: 21
-})
-
-# Mammoth of the Sky
-# Sell to Gothic as Bird during A/M week
-trade(9, {
-    Item.MammothRibcage: -1,
-    Item.SabreToothedSkull: -1,
+# 3/1/6
+trade(7 + actions_to_sell_chimera, {
+    Item.HumanRibcage: -1,
+    Item.DuplicatedVakeSkull: -1,
+    Item.FemurOfAJurassicBeast: -1,
     Item.WingOfAYoungTerrorBird: -2,
-    Item.FemurOfAJurassicBeast: -2,
-    Item.WitheredTentacle: -1,
+    Item.AmberCrustedFin: -1,
+    Item.HinterlandScrip: skelly_value_in_items(12.5 + 65 + 3 + (2 * 2.5) + 15, 0.5, False),
+    Item.CarvedBallOfStygianIvory: 21, # 20/18/21
 })
 
-trade(1, {
-    Item.MammothOfTheSky: -1,
-    Item.HinterlandScrip: 310,
-    Item.CarvedBallOfStygianIvory: 21
-})
-
-# Mammoth of the Deep
-# Fish, Gothic
-trade(10, {
-    Item.MammothRibcage: -1,
+# 4/?/4
+trade(7 + actions_to_sell_chimera, {
+    Item.HumanRibcage: -1,
     Item.SabreToothedSkull: -1,
-    Item.AmberCrustedFin: -3,
-    Item.FinBonesCollected: -1,
-    Item.JetBlackStinger: -1,
+    Item.WingOfAYoungTerrorBird: -3,
+    filler_limb: -1,
+    Item.HinterlandScrip: skelly_value_in_items(12.5 + 62.5 + (3 * 2.5) + filler_limb_echo_value, 0.5, False),
+    Item.CarvedBallOfStygianIvory: 18, # 18/16/18
 })
 
-trade(1, {
-    Item.MammothOfTheDeep: -1,
-    Item.HinterlandScrip: 381,
-    Item.CarvedBallOfStygianIvory: 20
+# 3/2/6
+trade(7 + actions_to_sell_chimera, {
+    Item.HumanRibcage: -1,
+    Item.HornedSkull: -1,
+    Item.WingOfAYoungTerrorBird: -2,
+    Item.AmberCrustedFin: -2,
+    Item.HinterlandScrip: skelly_value_in_items(12.5 + 12.5 + (2 * 2.5) + (2 * 15), 0.5, False),
+    Item.CarvedBallOfStygianIvory: 21 # 20/18/21,
 })
 
-# Spider Pope
-trade(14, {
-    Item.SegmentedRibcage: -3,
-    Item.HolyRelicOfTheThighOfStFiacre: -8,
-    Item.WitheredTentacle: -1,
-    Item.SpiderPope: 1
+# 4/0/4
+trade(7 + actions_to_sell_chimera, {
+    Item.HumanRibcage: -1,
+    Item.HornedSkull: -1,
+    Item.WingOfAYoungTerrorBird: -3,
+    Item.HumanArm: -1,
+    Item.HinterlandScrip: skelly_value_in_items(12.5 + 12.5 + (3 * 2.5) + 2.5, 0.5, False),
+    Item.CarvedBallOfStygianIvory: 18 # 18/16/18,
 })
 
-# new figures per calculator
-
-# # pre-nerf
-# trade(1, {
-#     Item.SpiderPope: -1,
-#     Item.PreservedSurfaceBlooms: 55,
-#     Item.RumourOfTheUpperRiver: 88
+# # ------- Spider-Pope Stuff
+# # Three Legged Mammoth
+# # Sell as Lizard to Gothic Tales during Antiq/Menace Week
+# trade(9, {
+#     Item.MammothRibcage: -1,
+#     Item.SabreToothedSkull: -1,
+#     Item.FemurOfAJurassicBeast: -3,
+#     Item.UnidentifiedThighbone: -1,
+#     Item.JetBlackStinger: -1,
+#     Item.ThreeLeggedMammoth: 1
 # })
 
-# Prismatic Walrus
-trade(11, {
-    Item.PrismaticFrame: -1,
-    Item.SabreToothedSkull: -1,
-    Item.CarvedBallOfStygianIvory: -2,
-    Item.AmberCrustedFin: -3,
-    Item.JetBlackStinger: -1,
-    Item.HinterlandScrip: 984,
-    Item.CarvedBallOfStygianIvory: 21
-})
+# trade(1, {
+#     Item.ThreeLeggedMammoth: -1,
+#     Item.HinterlandScrip: 303,
+#     Item.CarvedBallOfStygianIvory: 21
+# })
+
+# # Mammoth of the Sky
+# # Sell to Gothic as Bird during A/M week
+# trade(9, {
+#     Item.MammothRibcage: -1,
+#     Item.SabreToothedSkull: -1,
+#     Item.WingOfAYoungTerrorBird: -2,
+#     Item.FemurOfAJurassicBeast: -2,
+#     Item.WitheredTentacle: -1,
+# })
+
+# trade(1, {
+#     Item.MammothOfTheSky: -1,
+#     Item.HinterlandScrip: 310,
+#     Item.CarvedBallOfStygianIvory: 21
+# })
+
+# # Mammoth of the Deep
+# # Fish, Gothic
+# trade(10, {
+#     Item.MammothRibcage: -1,
+#     Item.SabreToothedSkull: -1,
+#     Item.AmberCrustedFin: -3,
+#     Item.FinBonesCollected: -1,
+#     Item.JetBlackStinger: -1,
+# })
+
+# trade(1, {
+#     Item.MammothOfTheDeep: -1,
+#     Item.HinterlandScrip: 381,
+#     Item.CarvedBallOfStygianIvory: 20
+# })
+
+# # Spider Pope
+# trade(14, {
+#     Item.SegmentedRibcage: -3,
+#     Item.HolyRelicOfTheThighOfStFiacre: -8,
+#     Item.WitheredTentacle: -1,
+#     Item.SpiderPope: 1
+# })
+
+# # new figures per calculator
+
+# # # pre-nerf
+# # trade(1, {
+# #     Item.SpiderPope: -1,
+# #     Item.PreservedSurfaceBlooms: 55,
+# #     Item.RumourOfTheUpperRiver: 88
+# # })
+
+# # Prismatic Walrus
+# trade(11, {
+#     Item.PrismaticFrame: -1,
+#     Item.SabreToothedSkull: -1,
+#     Item.CarvedBallOfStygianIvory: -2,
+#     Item.AmberCrustedFin: -3,
+#     Item.JetBlackStinger: -1,
+#     Item.HinterlandScrip: 984,
+#     Item.CarvedBallOfStygianIvory: 21
+# })
 
 # Generator Skeleton, various
-
 # testing various balances of brass vs. sabre-toothed skull
+
+
 for i in range(0, 4):
     zoo_bonus = 0.1
 
@@ -2629,7 +2704,6 @@ for i in range(0, 4):
         Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
         Item.AlbatrossWing: -2,
         Item.MemoryOfDistantShores: 5 + (penny_value * (1 + zoo_bonus)/50),
-        # amalgamy week
         Item.FinalBreath: 74
     })
 
@@ -3447,7 +3521,7 @@ trade(0, {
 # -------------
 
 # TODO: fix total carousel stuff here
-trade(1, {
+trade(1.2, {
     Item.FinBonesCollected: -10,
     Item.AmberCrustedFin: 1
 })
@@ -3568,6 +3642,33 @@ trade(0, {
     Item.HumanArm: 4
     # Item.TraceOfTheFirstCity: 5
 })
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -2,
+    Item.HelicalThighbone: 6,
+    Item.KnottedHumerus: 4
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -2,
+    Item.ThornedRibcage: 2,
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -1,
+    Item.HornedSkull: 1
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -1,
+    Item.FemurOfAJurassicBeast: 6,
+})
+
+trade(0, {
+    Item.PalaeontologicalDiscovery: -1,
+    Item.BoneFragments: 1250,
+})
+
 
 # -----------------------------------
 # ---- Jericho
@@ -3851,6 +3952,7 @@ trade(1, {
 # ---- Opportunity Deck Math ----
 # -------------------------------
 
+# London Deck
 # subtract 400 for holding 4 bad standard freq cards in hand
 deck_size = LondonDeckSize - 400;
 good_card_density = GoodCardsInDeck / deck_size
@@ -3937,7 +4039,6 @@ print(f"Optimize For:                     {optimize_for}")
 print(f"-Player Stats-")
 pp.pprint(player_stats)
 
-
 print("------Summary-------")
 print(f"Good Card Density:                {good_card_density:10.3f}")
 print(f"Actions spent on Cards per Day:   {good_cards_per_day:10.3f}")
@@ -3978,7 +4079,7 @@ for i in range(0, len(opt_result.slack)):
                 gain_items += str(Item(ii)) + ":" + str(quantity) + "; "
         trade_items = lose_items + " => " + gain_items            
         trade_items = trade_items.replace("Item.","");
-        # print(trade_items)
+        # print("* " + trade_items)
         print(f"{marginal:.3}       " + trade_items)
 
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
