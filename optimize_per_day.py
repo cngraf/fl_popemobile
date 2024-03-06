@@ -6,6 +6,8 @@ from scipy.optimize import linprog
 from enum import Enum, auto
 from itertools import count
 
+from enums import *
+
 import numpy as np
 import pprint
 
@@ -113,491 +115,36 @@ scandal_multiplier = 1.0
 suspicion_multiplier = 1.0
 nightmares_multiplier = 1.0
 
+# --------------------------------------------
+# -------------- Player Config ---------------
+# --------------------------------------------    
+# TODO: separate class?
 
-# Custom Player Stuff
-# class ZeeRegion(Enum):
-#     HomeWaters = auto()
-#     ShepherdsWash = auto()
+player_profession = Profession.NoProfession
+player_treasure = Treasure.NoTreasure
+player_location = Location.NoLocation
+player_ambition = Ambition.BagALegend
 
-class Location(Enum):
-    NoLocation = auto()
-    # London
-    BazaarSideStreet = auto()
-    LadybonesRoad = auto()
-    YourLodgings = auto()
-    MahoganyHall = auto()
-    MolochStreet = auto()
-    MrsPlentysCarnival = auto()
-    Spite = auto()
-    TheFlit = auto()
-    TheShutteredPalace = auto()
-    TheUniversity = auto()
-    Veilgarden = auto()
-    WatchmakersHill = auto()
-    WilmotsEnd = auto()
-    WolfstackDocks = auto()
-
-class Rarity(Enum):
-    Rare = 10
-    Unusual = 20
-    VeryInfrequent = 50
-    Infrequent = 80
-    Standard = 100
-    Frequent = 200
-    Abundant = 500
-    Ubiquitous = 1000
-
-class Profession(Enum):
-    NoProfession = auto()
-    CrookedCross = auto()
-    Correspondent = auto()
-    Licentiate = auto()
-    Midnighter = auto()
-    MonsterHunter = auto()
-    Silverer = auto()
-    Notary = auto()
-    Doctor = auto()
-
-class Ambition(Enum):
-    NoAmbition = auto()
-    BagALegend = auto()
-    HeartsDesire = auto()
-    LightFingers = auto()
-    Nemesis = auto()
-
-class Stat(Enum):
-    Watchful = auto()
-    Shadowy = auto()
-    Dangerous = auto()
-    Persuasive = auto()
-    KatalepticToxicology = auto()
-    MonstrousAnatomy = auto()
-    APlayerOfChess = auto()
-    Glasswork = auto()
-    ShapelingArts = auto()
-    ArtisanOfTheRedScience = auto()
-    Mithridacy = auto()
-    StewardOfTheDiscordance = auto()
-    Zeefaring = auto()
-
-class Treasure(Enum):
-    NoTreasure = auto()
-
-    VastNetworkOfConnections = auto()
-    WingedAndTalonedSteed = auto()
-    SocietyOfTheThreeFingeredHand = auto()
-    LongDeadPriestsOfTheRedBird = auto()
-
-    TheRobeOfMrCards = auto()
-    NewlyCastCrownOfTheCityOfLondon = auto()
-    LeaseholdOnAllOfLondon = auto()
-    PalatialHomeInTheArcticCircle = auto()
-    TheMarvellous = auto()
-
-    KittenSizedDiamond = auto()
-    FalseStartOfYourOwn = auto()
-
-    YourLovedOneReturned = auto() # any differences?
-    BloodiedTravellingCoatOfMrCups = auto()
-
-class Item(Enum):
-    Echo = 0
-
-    Action = 1
-    CardDraws = 2 # Fake item
-    # DayOfCardDraws = 3 # Fake item
-
-    # Menaces
-    # treats them as a currency which has to be zeroed
-    # gaining credits is good (menace clear), losing them is bad (menace gain)
-    # otherwise system will ignore menace costs if they don't hit the cap in a single loop
-    WoundsCredit = auto()
-    ScandalCredit = auto()
-    SuspicionCredit = auto()
-    NightmaresCredit = auto()
-
-    SeeingBanditryInTheUpperRiver = auto()
-    InCorporateDebt = auto()
-
-    # Favours
-    FavBohemians = auto()
-    FavChurch = auto()
-    FavConstables = auto()
-    FavCriminals = auto()
-    FavDocks = auto()
-    FavGreatGame = auto()
-    FavHell = auto()
-    FavRevolutionaries = auto()
-    FavRubberyMen = auto()
-    FavSociety = auto()
-    FavTombColonies = auto()
-    FavUrchins = auto()
-
-    # Connected
-    ConnectedBenthic = auto()
-
-    # Academic
-    FoxfireCandleStub = auto()
-    FlaskOfAbominableSalts = auto()
-    MemoryOfDistantShores = auto()
-    IncisiveObservation = auto()
-    UnprovenancedArtefact = auto()
-    VolumeOfCollatedResearch = auto()
-    LostResearchAssistant = auto()
-
-    # Curiosity
-    StrongBackedLabour = auto()
-    WhirringContraption = auto()
-    OilOfCompanionship = auto()
-    CracklingDevice = auto()
-    ConcentrateOfSelf = auto()
-    CounterfeitHeadOfJohnTheBaptist = auto()
-
-    # Cartography
-    ShardOfGlim = auto()
-    MapScrap = auto()
-    ZeeZtory = auto()
-    PartialMap = auto()
-    PuzzlingMap = auto()
-    SaltSteppeAtlas = auto()
-    RelativelySafeZeeLane = auto()
-    SightingOfAParabolanLandmark = auto()
-    GlassGazette = auto()
-    VitreousAlmanac = auto()
-    OneiromanticRevelation = auto()
-    ParabolanParable = auto()
-    CartographersHoard = auto()
-    WaswoodAlmanac = auto()
-
-    # Contraband
-    FlawedDiamond = auto()
-    OstentatiousDiamond = auto()
-    MagnificentDiamond = auto()
-    FabulousDiamond = auto()
-    LondondStreetSign = auto()
-    UseOfVillains = auto()
-    ComprehensiveBribe = auto()
-    MirrorcatchBox = auto()
-    Hillmover = auto()
-
-    # Currency
-    HinterlandScrip = auto()
-    RatShilling = auto()
-    AssortmentOfKhaganianCoinage = auto()
-    FourthCityEcho = auto()
-
-    # Elder
-    JadeFragment = auto()
-    RelicOfTheThirdCity = auto()
-    MysteryOfTheElderContinent = auto()
-    PresbyteratePassphrase = auto()
-    AntiqueMystery = auto()
-    PrimaevalHint = auto()
-    ElementalSecret = auto()
-
-    # Goods
-    CertifiableScrap = auto()
-    NevercoldBrassSliver = auto()
-    PreservedSurfaceBlooms = auto()
-    KnobOfScintillack = auto()
-    PieceOfRostygold = auto()
-    BessemerSteelIngot = auto()
-    NightsoilOfTheBazaar = auto()
-    PerfumedGunpowder = auto()
-    RailwaySteel = auto()
-
-    # Great Game
-    WellPlacedPawn = auto()
-    FinalBreath = auto()
-    MovesInTheGreatGame = auto()
-    VitalIntelligence = auto()
-    CopperCipherRing = auto()
-    CorrespondingSounder = auto()
-
-    ViennaOpening = auto()
-    EpauletteMate = auto()
-    QueenMate = auto()
-    Stalemate = auto()
-    MuchNeededGap = auto()
-    InterceptedCablegram = auto()
-
-    # Historical
-    RelicOfTheFourthCity = auto()
-    RustedStirrup = auto()
-    SilveredCatsClaw = auto()
-    RelicOfTheSecondCity = auto()
-    TraceOfViric = auto()
-    TraceOfTheFirstCity = auto()
-    NicatoreanRelic = auto()
-    UnlawfulDevice = auto()
-    FlaskOfWaswoodSpringWater = auto()
-    ChimericalArchive = auto()
-
-    # Infernal
-    BrilliantSoul = auto()
-    BrightBrassSkull = auto()
-    QueerSoul = auto()
-
-    # Influence
-    StolenCorrespondence = auto()
-    IntriguingSnippet = auto()
-    CompromisingDocument = auto()
-    SecludedAddress = auto()
-    StolenKiss = auto()
-    FavourInHighPlaces = auto()
-    PersonalRecommendation = auto()
-    ExigentNote = auto()
-
-    # Legal
-    SwornStatement = auto()
-    CaveAgedCodeOfHonour = auto()
-    LegalDocument = auto()
-    FragmentOfTheTragedyProcedures = auto()
-    SapOfTheCedarAtTheCrossroads = auto()
-    EdictsOfTheFirstCity = auto()
-
-    # Luminosity
-    LumpOfLamplighterBeeswax = auto()
-    PhosphorescentScarab = auto()
-    MemoryOfLight = auto()
-    MourningCandle = auto()
-    KhaganianLightbulb = auto()
-    ChrysalisCandle = auto()
-    TailfeatherBrilliantAsFlame = auto()
-    SnuffersGratitude = auto()
-    BejewelledLens = auto()
-    EyelessSkull = auto()
-    ElementOfDawn = auto()
-    MountainSherd = auto()
-    RayDrenchedCinder = auto()
-
-    # Mysteries
-    WhisperedHint = auto()
-    CrypticClue = auto()
-    AppallingSecret = auto()
-    JournalOfInfamy = auto()
-    TaleOfTerror = auto()
-    ExtraordinaryImplication = auto()
-    UncannyIncunabulum = auto()
-    DirefulReflection = auto()
-    SearingEnigma = auto()
-    DreadfulSurmise = auto()
-    ImpossibleTheorem = auto()
-    MemoryOfALesserSelf = auto()
-
-    # Nostalgia
-    DropOfPrisonersHoney = auto()
-    RomanticNotion = auto()
-    VisionOfTheSurface = auto()
-    TouchingLoveStory = auto()
-    BazaarPermit = auto()
-    EmeticRevelation = auto()
-    CaptivatingBallad = auto()
-
-    # Osteology
-    AlbatrossWing = auto()
-    AmberCrustedFin = auto()
-    BatWing = auto()
-    BoneFragments = auto()
-    CrustaceanPincer = auto()
-    DoubledSkull = auto()
-    FemurOfAJurassicBeast = auto()
-    FemurOfASurfaceDeer = auto()
-    FinBonesCollected = auto()
-    FivePointedRibcage = auto()
-    FlourishingRibcage = auto()
-    FossilisedForelimb = auto()
-    HeadlessSkeleton = auto()
-    HelicalThighbone = auto()
-    HolyRelicOfTheThighOfStFiacre = auto()
-    HornedSkull = auto()
-    HumanArm = auto()
-    HumanRibcage = auto()
-    IvoryFemur = auto()
-    IvoryHumerus = auto()
-    JetBlackStinger = auto()
-    KnottedHumerus = auto()
-    LeviathanFrame = auto()
-    MammothRibcage = auto()
-    MoonlightScales = auto()
-    PentagrammicSkull = auto()
-    PlasterTailBones = auto()
-    PlatedSkull = auto()
-    PrismaticFrame = auto()
-    RibcageWithABoutiqueOfEightSpines = auto()
-    SabreToothedSkull = auto()
-    SegmentedRibcage = auto()
-    SkeletonWithSevenNecks = auto()
-    SkullInCoral = auto()
-    SurveyOfTheNeathsBones = auto()
-    ThornedRibcage = auto()
-    TombLionsTail = auto()
-    UnidentifiedThighbone = auto()
-    WarblerSkeleton = auto()
-    WingOfAYoungTerrorBird = auto()
-    WitheredTentacle = auto()
-
-    # Rag Trade
-    SilkScrap = auto()
-    SurfaceSilkScrap = auto()
-    WhisperSatinScrap = auto()
-    ThirstyBombazineScrap = auto()
-    PuzzleDamaskScrap = auto()
-    ParabolaLinenScrap = auto()
-    ScrapOfIvoryOrganza = auto()
-    VeilsVelvetScrap = auto()
-
-    # Ratness
-    RatOnAString = auto()
-    RattyReliquary = auto()
-
-    # Rubbery
-    NoduleOfDeepAmber = auto()
-    NoduleOfWarmAmber = auto()
-    UnearthlyFossil = auto()
-    NoduleOfTremblingAmber = auto()
-    NoduleOfPulsatingAmber = auto()
-    NoduleOfFecundAmber = auto()
-    FlukeCore = auto()
-    RubberySkull = auto()
-
-    # Rumour
-    InklingOfIdentity = auto()
-    ScrapOfIncendiaryGossip = auto()
-    AnIdentityUncovered = auto()
-    BlackmailMaterial = auto()
-    NightOnTheTown = auto()
-    RumourOfTheUpperRiver = auto()
-    DiaryOfTheDead = auto()
-    MortificationOfAGreatPower = auto()
-    IntriguersCompendium = auto()
-
-    # Sustenance
-    ParabolanOrangeApple = auto()
-    RemainsOfAPinewoodShark = auto()
-    JasmineLeaves = auto()
-    PotOfVenisonMarrow = auto()
-    SolaceFruit = auto()
-    DarkDewedCherry = auto()
-    BasketOfRubberyPies = auto()
-    CrateOfIncorruptibleBiscuits = auto()
-    HellwormMilk = auto()
-    TinOfZzoup = auto()
-    SausageAboutWhichNoOneComplains = auto()
-    TinnedHam = auto()
-    HandPickedPeppercaps = auto()
-    MagisterialLager = auto()
-
-    # Theological
-    PalimpsestScrap = auto()
-    ApostatesPsalm = auto()
-    VerseOfCounterCreed = auto()
-    FalseHagiotoponym = auto()
-
-    # Wines
-    BottleOfGreyfields1879 = auto()
-    BottleOfGreyfields1882 = auto()
-    BottelofMorelways1872 = auto()
-    BottleOfStranglingWillowAbsinthe = auto()
-    BottleOfBrokenGiant1844 = auto()
-    CellarOfWine = auto()
-    BottleOfFourthCityAirag = auto()
-    TearsOfTheBazaar = auto()
-    VialOfMastersBlood = auto()
-
-    # Wild Words
-    PrimordialShriek = auto()
-    ManiacsPrayer = auto()
-    CorrespondencePlaque = auto()
-    AeolianScream = auto( )
-    StormThrenody = auto()
-    NightWhisper = auto()
-    StarstoneDemark = auto()
-    BreathOfTheVoid = auto()
+player_stats = {
+    Stat.Watchful: 315,
+    Stat.Shadowy: 315,
+    Stat.Dangerous: 315,
+    Stat.Persuasive: 315,
+    Stat.KatalepticToxicology: 15,
+    Stat.MonstrousAnatomy: 15,
+    Stat.APlayerOfChess: 15,
+    Stat.Glasswork: 15,
+    Stat.ShapelingArts: 15,
+    Stat.ArtisanOfTheRedScience: 15,
+    Stat.Mithridacy: 15,
+    Stat.StewardOfTheDiscordance: 8,
+    Stat.Zeefaring: 15
+}
 
 
-    # Zee-Treasures
-    MoonPearl = auto()
-    DeepZeeCatch = auto()
-    RoyalBlueFeather = auto()
-    AmbiguousEolith = auto()
-    CarvedBallOfStygianIvory = auto()
-    LiveSpecimen = auto()
-    MemoryOfAShadowInVarchas = auto()
-    OneiricPearl = auto()
-
-    # -----
-    # Equipment
-    # -----
-
-    # Weapon
-    ConsignmentOfScintillackSnuff = auto()
-
-    # Companion
-    SulkyBat = auto()
-    WinsomeDispossessedOrphan = auto()
-
-    # -----
-    # Qualities
-    # -----
-
-    Hedonist = auto()
-    
-    # TODO: organize this section somehow
-
-    AConsequenceOfYourAmbition = auto()
-    BraggingRightsAtTheMedusasHead = auto()
-
-    HeartsGameExploits = auto()
-
-    # Laboratory
-    LaboratoryResearch = auto()
-    ParabolanResearch = auto()
-
-    Infiltrating = auto()
-
-    ResearchOnAMorbidFad = auto()
-    
-    Tribute = auto()
-
-    # Piracy
-    ChasingDownYourBounty = auto()
-    StashedTreasure = auto()
-
-    # Upper River
-    PalaeontologicalDiscovery = auto()
-    EsteemOfTheGuild = auto()
-
-    # ----- Psuedo Items
-    VisitFromTimeTheHealer = auto()
-    PortCecilCycles = auto()
-    TimeAtJerichoLocks = auto()
-    TimeAtWakefulCourt  = auto() # tribute grind
-    ZailingDraws = auto() # self-explanatory
-    SlightedAcquaintance = auto() # newspaper
-    ParabolaRoundTrip = auto()
-    DuplicatedVakeSkull = auto()
-
-    # Zailing
-    HomeWatersZeeDraw = auto()
-    ShephersWashZeeDraw = auto()
-    StormbonesZeeDraw = auto()
-    SeaOfVoicesZeeDraw = auto()
-    SaltSteppesZeeDraw = auto()
-    PillaredSeaZeeDraw = auto()
-    SnaresZeeDraw = auto()
-
-    # Upper River
-    DigsInEvenlode = auto()
-
-    # --- Bone Market Recipes
-    ThreeLeggedMammoth = auto()
-    MammothOfTheSky = auto()
-    MammothOfTheDeep = auto()
-    SpiderPope = auto()
-    PrismaticWalrus = auto()
-    MammothTheHedgehog = auto()
-    WoolyGothmother = auto()
+# --------------------------------------------
+# -------------- Player Config ---------------
+# --------------------------------------------  
 
 def pyramid(n): return n * (n+1) / 2
 def clamp(n, floor, ceiling): return min(ceiling, max(floor, n))
@@ -698,32 +245,6 @@ bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
 LondonDeckSize = 0
 GoodCardsInDeck = 0
 LondonCardsByItem = [0] * num_vars
-
-# --------------------------------------------
-# -------------- Player Config ---------------
-# --------------------------------------------    
-# TODO: separate class?
-
-player_profession = Profession.NoProfession
-player_treasure = Treasure.NoTreasure
-player_location = Location.NoLocation
-player_ambition = Ambition.BagALegend
-
-player_stats = {
-    Stat.Watchful: 315,
-    Stat.Shadowy: 315,
-    Stat.Dangerous: 315,
-    Stat.Persuasive: 315,
-    Stat.KatalepticToxicology: 15,
-    Stat.MonstrousAnatomy: 15,
-    Stat.APlayerOfChess: 15,
-    Stat.Glasswork: 15,
-    Stat.ShapelingArts: 15,
-    Stat.ArtisanOfTheRedScience: 15,
-    Stat.Mithridacy: 15,
-    Stat.StewardOfTheDiscordance: 8,
-    Stat.Zeefaring: 15
-}
 
 # ---------------- Trades ----------------------------
 
@@ -2610,87 +2131,8 @@ trade(7 + actions_to_sell_chimera, {
     Item.CarvedBallOfStygianIvory: 18 # 18/16/18,
 })
 
-# # ------- Spider-Pope Stuff
-# # Three Legged Mammoth
-# # Sell as Lizard to Gothic Tales during Antiq/Menace Week
-# trade(9, {
-#     Item.MammothRibcage: -1,
-#     Item.SabreToothedSkull: -1,
-#     Item.FemurOfAJurassicBeast: -3,
-#     Item.UnidentifiedThighbone: -1,
-#     Item.JetBlackStinger: -1,
-#     Item.ThreeLeggedMammoth: 1
-# })
-
-# trade(1, {
-#     Item.ThreeLeggedMammoth: -1,
-#     Item.HinterlandScrip: 303,
-#     Item.CarvedBallOfStygianIvory: 21
-# })
-
-# # Mammoth of the Sky
-# # Sell to Gothic as Bird during A/M week
-# trade(9, {
-#     Item.MammothRibcage: -1,
-#     Item.SabreToothedSkull: -1,
-#     Item.WingOfAYoungTerrorBird: -2,
-#     Item.FemurOfAJurassicBeast: -2,
-#     Item.WitheredTentacle: -1,
-# })
-
-# trade(1, {
-#     Item.MammothOfTheSky: -1,
-#     Item.HinterlandScrip: 310,
-#     Item.CarvedBallOfStygianIvory: 21
-# })
-
-# # Mammoth of the Deep
-# # Fish, Gothic
-# trade(10, {
-#     Item.MammothRibcage: -1,
-#     Item.SabreToothedSkull: -1,
-#     Item.AmberCrustedFin: -3,
-#     Item.FinBonesCollected: -1,
-#     Item.JetBlackStinger: -1,
-# })
-
-# trade(1, {
-#     Item.MammothOfTheDeep: -1,
-#     Item.HinterlandScrip: 381,
-#     Item.CarvedBallOfStygianIvory: 20
-# })
-
-# # Spider Pope
-# trade(14, {
-#     Item.SegmentedRibcage: -3,
-#     Item.HolyRelicOfTheThighOfStFiacre: -8,
-#     Item.WitheredTentacle: -1,
-#     Item.SpiderPope: 1
-# })
-
-# # new figures per calculator
-
-# # # pre-nerf
-# # trade(1, {
-# #     Item.SpiderPope: -1,
-# #     Item.PreservedSurfaceBlooms: 55,
-# #     Item.RumourOfTheUpperRiver: 88
-# # })
-
-# # Prismatic Walrus
-# trade(11, {
-#     Item.PrismaticFrame: -1,
-#     Item.SabreToothedSkull: -1,
-#     Item.CarvedBallOfStygianIvory: -2,
-#     Item.AmberCrustedFin: -3,
-#     Item.JetBlackStinger: -1,
-#     Item.HinterlandScrip: 984,
-#     Item.CarvedBallOfStygianIvory: 21
-# })
-
 # Generator Skeleton, various
 # testing various balances of brass vs. sabre-toothed skull
-
 
 for i in range(0, 4):
     zoo_bonus = 0.1
@@ -3522,9 +2964,10 @@ trade(0, {
 
 
 # --------------
-# Ealing & Helicon
+# Ealing
 # -------------
 
+# Helicon House
 # TODO: fix total carousel stuff here
 trade(1.2, {
     Item.FinBonesCollected: -10,
