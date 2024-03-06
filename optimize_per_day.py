@@ -86,7 +86,7 @@ long term
 # actions doesn't matter on its own until I add some weekly+ stuff
 # but it does matter relative to cards seen per day
 actions_per_day = 120.0
-cards_seen_per_day = 0
+cards_seen_per_day = 40
 
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
@@ -3956,18 +3956,16 @@ trade(1, {
 # subtract 400 for holding 4 bad standard freq cards in hand
 deck_size = LondonDeckSize - 400;
 good_card_density = GoodCardsInDeck / deck_size
-good_cards_per_day = good_card_density * cards_seen_per_day
 card_exchange = {}
 
 for item in Item:
     if LondonCardsByItem[item.value] != 0:
-        card_exchange[item] = cards_seen_per_day * (LondonCardsByItem[item.value] / deck_size)
+        card_exchange[item] = (LondonCardsByItem[item.value] / deck_size)
 
-card_exchange[Item.CardDraws] = -1 * cards_seen_per_day
-# card_exchange[Item.Action] = -1 * good_cards_per_day
+card_exchange[Item.CardDraws] = -1
 
 # print(card_exchange)
-trade(good_cards_per_day, card_exchange)
+trade(good_card_density, card_exchange)
 # per_day(card_exchange)
 
 # trade(20.42, {
@@ -4019,29 +4017,28 @@ print(opt_result)
 # #     print(item_name + per_action + ((f"{per_card:10.2f}" + f"{per_day_of_draws:10.2f}") if per_card != 0 else ""))
 
 
-# for item, quantity in zip(Item, opt_result.x):
-#     item_name = f"{item.name:30}"
-#     index = item.value
-#     print(item_name
-#         + f"{quantity:10.3}"
-#         # + f"{opt_result.lower.residual[index]:10.3}"
-#         # + f"{opt_result.lower.marginals[index]:10.3}"
-#         # + f"{opt_result.upper.residual[index]:10.3}"
-#         # + f"{opt_result.upper.marginals[index]:10.3}"
-#         )
+results = sorted(zip(Item, opt_result.x), key=lambda x: x[1])
+for item, quantity in results:
+    item_name = f"{item.name:40}"
+    if quantity > 0:
+        print(item_name
+        + f"{1/(quantity * actions_per_day):10.5}")
+    else:
+        print(item_name + f"{'unsourced':10}")
+    
 pp = pprint.PrettyPrinter(indent=4)
 
 
 print("------Assumptions-------")
 print(f"Total Actions per Day:            {actions_per_day:10}")
 print(f"Cards Drawn per Day:              {cards_seen_per_day:10}")
+print(f"Good Card Density:                {good_card_density:10.3f}")
+
 print(f"Optimize For:                     {optimize_for}")
 print(f"-Player Stats-")
 pp.pprint(player_stats)
 
 print("------Summary-------")
-print(f"Good Card Density:                {good_card_density:10.3f}")
-print(f"Actions spent on Cards per Day:   {good_cards_per_day:10.3f}")
 print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
