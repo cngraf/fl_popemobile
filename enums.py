@@ -89,13 +89,10 @@ class Item(Enum):
     # DayOfCardDraws = 3 # Fake item
 
     # Menaces
-    # treats them as a currency which has to be zeroed
-    # gaining credits is good (menace clear), losing them is bad (menace gain)
-    # otherwise system will ignore menace costs if they don't hit the cap in a single loop
-    WoundsCredit = auto()
-    ScandalCredit = auto()
-    SuspicionCredit = auto()
-    NightmaresCredit = auto()
+    Wounds = auto()
+    Scandal = auto()
+    Suspicion = auto()
+    Nightmares = auto()
 
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
