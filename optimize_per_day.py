@@ -15,6 +15,7 @@ TODO
 - don't think this is properly penalizing menace accumulations
     - maybe need to just convert those directly to action penalties.
     - or invert it somehow? treat it as an actual cost both ways
+- add railway stuff before more london stuff bc it's prob more relevant
 
 London
 - location-specific opp deck cards
@@ -207,10 +208,14 @@ class Item(Enum):
     # DayOfCardDraws = 3 # Fake item
 
     # Menaces
-    Wounds = auto()
-    Scandal = auto()
-    Suspicion = auto()
-    Nightmares = auto()
+    # treats them as a currency which has to be zeroed
+    # gaining credits is good (menace clear), losing them is bad (menace gain)
+    # otherwise system will ignore menace costs if they don't hit the cap in a single loop
+    WoundsCredit = auto()
+    ScandalCredit = auto()
+    SuspicionCredit = auto()
+    NightmaresCredit = auto()
+
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
 
@@ -660,10 +665,10 @@ bounds = [(0, None) for _ in range(num_vars)]
 # menace bounds actually a little higher since you can overflow
 # also should maybe have negative bound, since menace reduction is usually a side-effect rather than a cost
 # tried setting it to (-100, 36) and EPA went down slightly so who the heck knows
-bounds[Item.Wounds.value] = (0, 36)
-bounds[Item.Scandal.value] = (0, 36)
-bounds[Item.Suspicion.value] = (0, 36)
-bounds[Item.Nightmares.value] = (0, 36)
+bounds[Item.WoundsCredit.value] = (0, 36)
+bounds[Item.ScandalCredit.value] = (0, 36)
+bounds[Item.SuspicionCredit.value] = (0, 36)
+bounds[Item.NightmaresCredit.value] = (0, 36)
 bounds[Item.Hedonist.value] = (0, 55)
 
 bounds[Item.SeeingBanditryInTheUpperRiver.value] = (0, 36)
@@ -841,7 +846,7 @@ trade(0, {
 card("Lair in the Marshes", Rarity.Standard, True, {
     Item.FavSociety: 1,
     Item.CertifiableScrap: 1,
-    Item.Nightmares: 1 * nightmares_multiplier
+    Item.NightmaresCredit: -1 * nightmares_multiplier
 })
 
 # The Tower of Knives: Difficulties at a Smoky Flophouse
@@ -858,7 +863,7 @@ card("The Tower of Eyes", Rarity.Frequent, True, {
   Item.FavBohemians: 0.5,
   Item.FavSociety: 0.5,
   Item.Hedonist: 3,
-  Item.Scandal: 2 * scandal_multiplier
+  Item.ScandalCredit: -2 * scandal_multiplier
 })
 
 # The Tower of Sun and Moon: a Reservation at the Royal Bethlehem Hotel
@@ -955,7 +960,7 @@ card("Constables Faction", Rarity.Standard, False, {
 
 # Criminals
 card("Criminals Faction", Rarity.Standard, True, {
-    Item.Suspicion: 1 * suspicion_multiplier,
+    Item.SuspicionCredit: -1 * suspicion_multiplier,
     Item.FavCriminals: 1,
 })
 
@@ -967,13 +972,13 @@ card("Docks Faction", Rarity.Standard, True, {
 
 # GreatGame
 card("Great Game Faction", Rarity.Standard, False, {
-    Item.Wounds: 1 * wounds_multiplier,
+    Item.WoundsCredit: -1 * wounds_multiplier,
     Item.FavGreatGame: 1
 })
 
 # Hell
 card("Burning Shadows: the Devils of London", Rarity.Standard, False, {
-    Item.Scandal: 1 * scandal_multiplier,
+    Item.ScandalCredit: -1 * scandal_multiplier,
     Item.FavHell: 1
 })
 
@@ -1009,7 +1014,7 @@ card("Tomb Colonies Faction", Rarity.Standard, False, {
 # With HOJOTOHO ending
 card("Urchins Faction", Rarity.Standard, True, {
     Item.FavUrchins: 1,
-    Item.Nightmares: -2
+    Item.NightmaresCredit: 2
 })
 
 # ----------------------
@@ -1055,11 +1060,11 @@ card("A Moment's Peace", Rarity.VeryInfrequent, False, {
 # With testing, slightly lowers EPA
 card("The interpreter of dreams", Rarity.Unusual, False, {
     # Success
-    Item.Nightmares: -5 * 0.6,
+    Item.NightmaresCredit: 5 * 0.6,
     Item.FavGreatGame: 1 * 0.6,
 
     # Failure
-    Item.Scandal: 1 * 0.4 * scandal_multiplier
+    Item.ScandalCredit: -1 * 0.4 * scandal_multiplier
 })
 
 card("An implausible penance", Rarity.Standard, False, {
@@ -1278,7 +1283,7 @@ card("The OP Aunt card", Rarity.Standard, True, {
     Item.FavSociety: 1 * 0.7,
     Item.ScrapOfIncendiaryGossip: 3 * 0.7,
     Item.InklingOfIdentity: 5 * 0.7,
-    Item.Scandal: -2 * 0.7,
+    Item.ScandalCredit: 2 * 0.7,
     
     # 0.3 success
     Item.Echo: 10 * replacement_epa * 0.3
@@ -1368,38 +1373,38 @@ if (player_location == Location.YourLodgings):
 # Better options for Scandal and Suspicion exist @ -6 (dupe/betrayal) but those have a weekly limit
 
 trade(1, {
-    Item.Wounds: -6
+    Item.WoundsCredit: 6
 })
 
 trade(1, {
-    Item.Scandal: -5
+    Item.ScandalCredit: 5
 })
 
 trade(1, {
-    Item.Suspicion: -5
+    Item.SuspicionCredit: 5
 })
 
 trade(1, {
-    Item.Nightmares: -6
+    Item.NightmaresCredit: 6
 })
 
 # Not a real action, represents the fact that menace reduction is a side effect rather than a cost
 # otherwise we might miss a grind that's net negative on a given menace
 
 trade(1, {
-    Item.Wounds: 10
+    Item.WoundsCredit: -10
 })
 
 trade(1, {
-    Item.Scandal: 10
+    Item.ScandalCredit: -10
 })
 
 trade(1, {
-    Item.Suspicion: 10
+    Item.SuspicionCredit: -10
 })
 
 trade(1, {
-    Item.Nightmares: 10
+    Item.NightmaresCredit: -10
 })
 
 # --------------------------
@@ -3358,7 +3363,7 @@ trade(11, {
 # In practice probably slightly better w overcap
 trade(1, {
     Item.SeeingBanditryInTheUpperRiver: - (pyramid(8) - pyramid(3)),
-    Item.Scandal: 12
+    Item.ScandalCredit: -12
 })
 
 # Card: Intervene in an Attack
