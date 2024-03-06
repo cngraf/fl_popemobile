@@ -2967,14 +2967,175 @@ trade(0, {
 # Ealing
 # -------------
 
-# Helicon House
-# TODO: fix total carousel stuff here
-trade(1.2, {
+# ---- Helicon House
+
+'''
+there's gonna be some weird-looking stuff in this section
+these are hacks to accomodate:
+- zeroing out unspent qualities when you leave
+- certain options only being available at specific "times"
+- other things I don't know how to cleanly model
+'''
+
+initial_fitting_in = 3
+
+# action costs paid upfront to prevent dipping in and out
+trade(6, {
+    Item.TimeRemainingAtHeliconHouseTwoThruFive: 4,
+    Item.TimeRemainingAtHeliconHouseExactlyOne: 1,
+
+    # with spouse & FATE pendant
+    Item.FittingInAtHeliconHouse: initial_fitting_in,
+    Item.IntriguingSnippet: 3
+})
+
+trade(5, {
+    Item.TimeRemainingAtHeliconHouseTwoThruFive: 3,
+    Item.TimeRemainingAtHeliconHouseExactlyOne: 1,
+
+    # with spouse & FATE pendant
+    Item.FittingInAtHeliconHouse: initial_fitting_in,
+})
+
+# Entrance Hall
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
+    Item.HandPickedPeppercaps: -1,
+    Item.FittingInAtHeliconHouse: 2,
+    Item.Investigating: 20
+})
+
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
+    # stop FittingIn from carrying over 
+    Item.FittingInAtHeliconHouse: -1 * initial_fitting_in,
+    Item.CrateOfIncorruptibleBiscuits: 4,
+    Item.PotOfVenisonMarrow: 5.5
+})
+
+for i in range(0, 5):
+    fitting_in = initial_fitting_in + i * 2
+    trade(0, {
+        Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
+        Item.FittingInAtHeliconHouse: -1 * fitting_in,
+        Item.HandPickedPeppercaps: fitting_in,
+        Item.SolaceFruit: 20
+    })
+
+    trade(0, {
+        Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
+        Item.FittingInAtHeliconHouse: -1 * fitting_in,
+        Item.HandPickedPeppercaps: 15 + fitting_in,
+        Item.ThirstyBombazineScrap: 1
+    })
+
+# The Upstairs Honey Den
+# more variable but not gonna bother rn
+trade(0, {
+    Item.Casing: -15,
+    Item.FittingInAtHeliconHouse: -3,
+    Item.HinterlandScrip: 26,
+    Item.DropOfPrisonersHoney: 10.5,
+    Item.MoonPearl: 25.5,
+})
+
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
+    Item.FittingInAtHeliconHouse:
+        2 if player_profession == Profession.Silverer else 1,
+    Item.Inspired: 6
+})
+
+# Bellow Stairs
+
+# actually requires 4+ fitting in
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
+    Item.NoduleOfWarmAmber: -5,
+    Item.WitheredTentacle: 3,
+    Item.FittingInAtHeliconHouse: 2
+})
+
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
     Item.FinBonesCollected: -10,
     Item.AmberCrustedFin: 1
 })
 
-# -- Butcher
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
+    Item.FinBonesCollected: -10,
+    Item.AmberCrustedFin: 1
+})
+
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
+    Item.HumanRibcage: -1,
+    Item.ThornedRibcage: -1,
+    Item.FlourishingRibcage: 1
+})
+
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
+    Item.HumanRibcage: -1,
+    Item.ThornedRibcage: -1,
+    Item.FlourishingRibcage: 1
+})
+
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
+    Item.ThornedRibcage: -1,
+    Item.SkeletonWithSevenNecks: -1,
+    Item.NoduleOfTremblingAmber: -3,
+    Item.SearingEnigma: -3,
+    Item.RibcageWithABoutiqueOfEightSpines: 1
+})
+
+trade(0, {
+    Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
+    Item.ThornedRibcage: -1,
+    Item.SkeletonWithSevenNecks: -1,
+    Item.NoduleOfTremblingAmber: -3,
+    Item.SearingEnigma: -3,
+    Item.RibcageWithABoutiqueOfEightSpines: 1
+})
+
+# full carousel
+# how to model the variable time cost?
+# priests option needs 5 fitting in
+# not sure what the best way is to get the remaining 2
+# if you happen to be a Silverer with LDPotRB
+
+# 1) Enter with pendant
+# 2) Offer yourself escort and guide
+# 3) nightmare on elm street
+trade(3, {
+    Item.IntriguingSnippet: 3,
+    
+    Item.Inspired: -55 + 6,
+    Item.MemoryOfLight: 6,
+    Item.MemoryOfDistantShores: 6,
+    Item.MemoryOfALesserSelf: 1,
+    Item.MemoryOfDiscordance: 1
+})
+
+# ----- Butcher
+
+trade(1, {
+    Item.FemurOfASurfaceDeer: -5,
+    Item.PotOfVenisonMarrow: 5
+})
+
+trade(1, {
+    Item.RatOnAString: -1000,
+    Item.SausageAboutWhichNoOneComplains: 1
+})
+
+trade(1, {
+    Item.DeepZeeCatch: -1,
+    Item.CrustaceanPincer: 2
+})
+
 trade(1, {
     Item.BoneFragments: -130,
     Item.NoduleOfWarmAmber: -2,

@@ -124,6 +124,11 @@ class Item(Enum):
     IncisiveObservation = auto()
     UnprovenancedArtefact = auto()
     VolumeOfCollatedResearch = auto()
+    MirthlessCompendium = auto()
+    BreakthroughInCurrencyDesign = auto()
+    JudgementsEgg = auto()
+    SecretCollege = auto()
+    MemoryOfDiscordance = auto()
     LostResearchAssistant = auto()
 
     # Curiosity
@@ -432,7 +437,10 @@ class Item(Enum):
     ParabolanResearch = auto()
 
     # IDK what to call these
+    Casing = auto()
+    Inspired = auto()
     Infiltrating = auto()
+    Investigating = auto()
 
     # miscellaneous
     ResearchOnAMorbidFad = auto()
@@ -446,7 +454,10 @@ class Item(Enum):
     StashedTreasure = auto()
 
     # Upper River
-    TimeRemainingAtHeliconHouse = auto()
+    FittingInAtHeliconHouse = auto()
+    TimeRemainingAtHeliconHouseTwoThruFive = auto()
+    TimeRemainingAtHeliconHouseExactlyOne = auto()
+
     PalaeontologicalDiscovery = auto()
     EsteemOfTheGuild = auto()
 
