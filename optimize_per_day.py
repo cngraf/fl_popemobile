@@ -7,6 +7,7 @@ from enum import Enum, auto
 from itertools import count
 
 from enums import *
+from utils import *
 # from decks import *
 import decks as Decks
 
@@ -91,7 +92,7 @@ long term
 # actions doesn't matter on its own until I add some weekly+ stuff
 # but it does matter relative to cards seen per day
 actions_per_day = 120.0
-cards_seen_per_day = 40
+cards_seen_per_day = 500
 
 
 # placeholder for upconversions and stuff
@@ -153,8 +154,8 @@ player_stats = {
 # -------------- Player Config ---------------
 # --------------------------------------------  
 
-def pyramid(n): return n * (n+1) / 2
-def clamp(n, floor, ceiling): return min(ceiling, max(floor, n))
+# def pyramid(n): return n * (n+1) / 2
+# def clamp(n, floor, ceiling): return min(ceiling, max(floor, n))
 
 def per_day(exchanges):
     n = next(counter)
@@ -170,7 +171,7 @@ def trade(actionCost, exchanges):
         A[n, item.value] = value
 
 # def card(name, freq, isGood, exchanges):
-#     global LondonDeckSize
+#     global LondonSize
 #     global GoodCardsInDeck
 #     LondonDeckSize += freq.value
 #     if isGood:
@@ -182,19 +183,19 @@ def railway_card(name, freq, location, isGood, exchanges):
     # dummy alias for now
     trade(1, exchanges)
 
-def broad_challenge_success_rate(stat, difficulty): return clamp(0.6 * stat/difficulty, 0.0, 1.0)
+# def broad_challenge_success_rate(stat, difficulty): return clamp(0.6 * stat/difficulty, 0.0, 1.0)
 
-def narrow_challenge_success_rate(stat, difficulty): return clamp(0.5 + (stat - difficulty)/10, 0.1, 1.0)
+# def narrow_challenge_success_rate(stat, difficulty): return clamp(0.5 + (stat - difficulty)/10, 0.1, 1.0)
 
-def expected_failures(success_rate): return 1.0/success_rate - 1 if success_rate < 1.0 else 0
+# def expected_failures(success_rate): return 1.0/success_rate - 1 if success_rate < 1.0 else 0
 
-def challenge_ev(player_stat, difficulty, success, failure):
-    success_rate = broad_challenge_success_rate(player_stat, difficulty)
-    return success_rate * success + (1.0 - success_rate) * failure
+# def challenge_ev(player_stat, difficulty, success, failure):
+#     success_rate = broad_challenge_success_rate(player_stat, difficulty)
+#     return success_rate * success + (1.0 - success_rate) * failure
 
-def skelly_value_in_items(skelly_value, item_value, zoo_bonus_active):
-    zoo_multiplier = 1.1 if zoo_bonus_active else 1.0
-    return skelly_value * zoo_multiplier / item_value
+# def skelly_value_in_items(skelly_value, item_value, zoo_bonus_active):
+#     zoo_multiplier = 1.1 if zoo_bonus_active else 1.0
+#     return skelly_value * zoo_multiplier / item_value
     
 
 # hack
@@ -222,6 +223,8 @@ bounds[Item.Wounds.value] = (-36, 0)
 bounds[Item.Scandal.value] = (-36, 0)
 bounds[Item.Suspicion.value] = (-36, 0)
 bounds[Item.Nightmares.value] = (-36, 0)
+
+bounds[Item.TroubledWaters.value] = (-36, 35)
 
 bounds[Item.Hedonist.value] = (0, 55)
 
@@ -260,6 +263,12 @@ london_deck = Decks.create_london_deck(
     nightmares_multiplier = nightmares_multiplier,
     replacement_epa = 6.5 
 )
+
+zailing_deck = Decks.create_zailing_deck(
+    player_stats,
+    Location.TheSaltSteppes,
+    Profession.MonsterHunter,
+    Treasure.FalseStartOfYourOwn)
 
 # ---------------- Trades ----------------------------
 
@@ -497,10 +506,10 @@ trade(1, {
 })
 
 # if player_profession == Profession.Licentiate:
-trade(1, {
-    Item.PieceOfRostygold: 500,
-    Item.MovesInTheGreatGame: 2
-})
+# trade(1, {
+#     Item.PieceOfRostygold: 500,
+#     Item.MovesInTheGreatGame: 2
+# })
 
 # Ignnorng betrayal options w/ weekly cap
 
@@ -524,19 +533,23 @@ trade(1, {
 # just to allow any grind that's net negative on a given menace
 
 trade(1, {
-    Item.Wounds: 10
+    Item.Wounds: 30
 })
 
 trade(1, {
-    Item.Scandal: 10
+    Item.Scandal: 30
 })
 
 trade(1, {
-    Item.Suspicion: 10
+    Item.Suspicion: 30
 })
 
 trade(1, {
-    Item.Nightmares: 10
+    Item.Nightmares: 30
+})
+
+trade(1, {
+    Item.TroubledWaters: 30
 })
 
 # -----------------------------------
@@ -2096,10 +2109,10 @@ trade(1, {
     Item.IntriguersCompendium: 1
 })
 
-trade(1, {
-    Item.HeartsGameExploits: -65,
-    Item.LeviathanFrame: 1
-})
+# trade(1, {
+#     Item.HeartsGameExploits: -65,
+#     Item.LeviathanFrame: 1
+# })
 
 trade(1, {
     Item.HeartsGameExploits: -65,
@@ -3677,9 +3690,11 @@ railway_card("Grazing Goat Demons",
 # print(card_exchange)
 london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 
-normal_trade = london_deck.normalized_trade()
+# trade(london_good_card_density, london_deck.normalized_trade())
 
-trade(london_good_card_density, london_deck.normalized_trade())
+
+trade(1, zailing_deck.normalized_trade())
+
 # per_day(card_exchange)
 
 # trade(20.42, {
@@ -3794,3 +3809,6 @@ for i in range(0, len(opt_result.slack)):
         print(f"{marginal:.3}       " + trade_items)
 
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
+
+# print(london_deck.normalized_trade())
+print(zailing_deck.normalized_trade())

@@ -18,6 +18,16 @@ class Location(Enum):
     WilmotsEnd = auto()
     WolfstackDocks = auto()
 
+    # zailing
+    HomeWaters = auto()
+    ShepherdsWash = auto()
+    Stormbones = auto()
+    TheSeaOfVoices = auto()
+    TheSaltSteppes = auto()
+    ThePillaredSea = auto()
+    TheSnares = auto()
+    
+    # railway
     EalingGardens = auto()
     JerichoLocks = auto()
     TheMagistracyOfTheEvenlode = auto()
@@ -109,6 +119,8 @@ class Item(Enum):
     Scandal = auto()
     Suspicion = auto()
     Nightmares = auto()
+
+    TroubledWaters = auto()
 
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
