@@ -265,19 +265,20 @@ def create_london_deck(
         # TODO
     })
 
-    # > Rependant forger
+    # > Repentant forger
     london_deck.card("A visit", Rarity.Standard, True, {
         Item.CrypticClue: 230, # base shadowy,
         Item.FavBohemians: 1,
-        Item.FavCriminals: 1
+        Item.FavCriminals: 1,
     })
 
-    # > Entertain a curious crowd
-    london_deck.card("The seekers of the garden", Rarity.Standard, False, {
+    # with Evolution completed
+    london_deck.card("The seekers of the garden", Rarity.Standard, True, {
         Item.ZeeZtory: -7,
         Item.FavBohemians: 1,
         Item.FavDocks: 0.5,
-        Item.FavSociety: 0.5
+        Item.FavSociety: 0.5,
+        Item.Fascinating: 7
     })
 
     london_deck.card("devices and desires", Rarity.Standard, False, {
@@ -668,9 +669,9 @@ def plunder_ev(region, isAdvanced, player_stat, rare_success_rate = 0.1):
 
 def create_zailing_deck(player_stats, region, profession, treasure):
     # hold "Creaking above" card, and one other infrequent one
-    deck = Deck("Zailing", -180)
+    deck = Deck("Zailing", -200)
 
-    troubled_waters_multiplier = 0.76 # hat plus cruiser
+    troubled_waters_multiplier = 0.65 # hat plus cruiser
 
     # with FATE commodore companion
     # wiki does not have actual figures, just guessing
@@ -687,10 +688,16 @@ def create_zailing_deck(player_stats, region, profession, treasure):
         Item.TroubledWaters: 3 * troubled_waters_multiplier
     })    
 
+    # deck.card("A navigation error", Rarity.Infrequent, True, {
+    #     Item.NavigationErrorCard: 1
+    # })
+
     if treasure == Treasure.FalseStartOfYourOwn:
-        # TODO: make this optional with a dummy item for the card
+        # TODO: figure out how to allow the best split
+        rate_use_tw_reduction = 0.9
         deck.card("Navigation error - False-star", Rarity.Infrequent, True, {
-            Item.TroubledWaters: -5
+            Item.TroubledWaters: -5 * rate_use_tw_reduction + 2 * troubled_waters_multiplier * (1 - rate_use_tw_reduction),
+            Item.ChasingDownYourBounty: chasing_ev(region, True) * (1 - rate_use_tw_reduction)
         })
 
         deck.card("Your False-Star", Rarity.Standard, True, {
@@ -743,13 +750,14 @@ def create_zailing_deck(player_stats, region, profession, treasure):
         Item.ChasingDownYourBounty: chasing_ev(region, False)
     })
 
-    # TODO come back to this one. only appears with TW 4+
-    # with zub it's good, otherwise you never play it
+    # # TODO come back to this one. only appears with TW 4+
+    # # with zub it's good, otherwise you never play it
     # deck.card("The killing wind", Rarity.Standard, True, {
-
+    #     Item.TroubledWaters: -2,
+    #     Item.ZeeZtory: 4.5
     # })
 
-    # # with fruits of the Zee item
+    # with fruits of the Zee item
     # deck.card("What do the drownies sing", Rarity.Standard, True, {
     #     Item.TroubledWaters: -5
     # })
@@ -776,7 +784,7 @@ def create_zailing_deck(player_stats, region, profession, treasure):
             Item.TroubledWaters: 2 * troubled_waters_multiplier
         })
 
-        deck.card("A Khaganian patrol vessel", Rarity.Standard, True, {
+        deck.card("A Khaganian patrol vessel", Rarity.Standard, False, {
             Item.TroubledWaters: 4 * troubled_waters_multiplier,
             Item.ChasingDownYourBounty: chasing_ev(region, True)
         })

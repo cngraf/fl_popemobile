@@ -513,6 +513,7 @@ class Item(Enum):
     # IDK what to call these
     Casing = auto()
     Corresponding = auto()
+    Fascinating = auto()
     Inspired = auto()
     Infiltrating = auto()
     Investigating = auto()
@@ -545,7 +546,9 @@ class Item(Enum):
     SlightedAcquaintance = auto() # newspaper
     ParabolaRoundTrip = auto()
     DuplicatedVakeSkull = auto()
+
     ConnectedPetCard = auto()
+    NavigationErrorCard = auto()
 
     # Zailing
     HomeWatersZeeDraw = auto()

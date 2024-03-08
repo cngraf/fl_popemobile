@@ -92,8 +92,7 @@ long term
 # actions doesn't matter on its own until I add some weekly+ stuff
 # but it does matter relative to cards seen per day
 actions_per_day = 120.0
-cards_seen_per_day = 500
-
+cards_seen_per_day = 40
 
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
@@ -128,7 +127,7 @@ nightmares_multiplier = 0.85
 # TODO: separate class?
 
 player_profession = Profession.NoProfession
-player_treasure = Treasure.NoTreasure
+player_treasure = Treasure.FalseStartOfYourOwn
 player_location = Location.NoLocation
 player_ambition = Ambition.BagALegend
 
@@ -171,7 +170,7 @@ def trade(actionCost, exchanges):
         A[n, item.value] = value
 
 # def card(name, freq, isGood, exchanges):
-#     global LondonSize
+#     global LondonDeckSize
 #     global GoodCardsInDeck
 #     LondonDeckSize += freq.value
 #     if isGood:
@@ -219,12 +218,12 @@ bounds = [(0, None) for _ in range(num_vars)]
 
 # important that menace is capped at 0
 # ensures any gains are pre-paid for
-bounds[Item.Wounds.value] = (-36, 0)
-bounds[Item.Scandal.value] = (-36, 0)
-bounds[Item.Suspicion.value] = (-36, 0)
-bounds[Item.Nightmares.value] = (-36, 0)
+bounds[Item.Wounds.value] = (None, 0)
+bounds[Item.Scandal.value] = (None, 0)
+bounds[Item.Suspicion.value] = (None, 0)
+bounds[Item.Nightmares.value] = (None, 0)
 
-bounds[Item.TroubledWaters.value] = (-36, 35)
+bounds[Item.TroubledWaters.value] = (None, 35)
 
 bounds[Item.Hedonist.value] = (0, 55)
 
@@ -267,8 +266,10 @@ london_deck = Decks.create_london_deck(
 zailing_deck = Decks.create_zailing_deck(
     player_stats,
     Location.TheSaltSteppes,
+    # Profession.NoProfession,
     Profession.MonsterHunter,
-    Treasure.FalseStartOfYourOwn)
+    # Treasure.FalseStartOfYourOwn)
+    Treasure.NoTreasure)
 
 # ---------------- Trades ----------------------------
 
@@ -448,6 +449,13 @@ trade(0, {
     Item.FavUrchins: 1
 })
 
+# if player_treasure == Treasure.FalseStartOfYourOwn:
+#     trade(0, {
+#         Item.NavigationErrorCard: -1,
+#         Item.TroubledWaters: -5
+#     })
+
+
 #  ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ██╗     
 # ██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔══██╗██╔══██╗██║     
 # ██║  ███╗█████╗  ██╔██╗ ██║█████╗  ██████╔╝███████║██║     
@@ -505,7 +513,7 @@ trade(1, {
     Item.Inspired: 46 # 0.2 *
 })
 
-# if player_profession == Profession.Licentiate:
+# # if player_profession == Profession.Licentiate:
 # trade(1, {
 #     Item.PieceOfRostygold: 500,
 #     Item.MovesInTheGreatGame: 2
@@ -529,28 +537,28 @@ trade(1, {
     Item.Nightmares: -6
 })
 
-# Not a real action
-# just to allow any grind that's net negative on a given menace
+# # Not a real action
+# # just to allow any grind that's net negative on a given menace
 
-trade(1, {
-    Item.Wounds: 30
-})
+# trade(1, {
+#     Item.Wounds: 30
+# })
 
-trade(1, {
-    Item.Scandal: 30
-})
+# trade(1, {
+#     Item.Scandal: 30
+# })
 
-trade(1, {
-    Item.Suspicion: 30
-})
+# trade(1, {
+#     Item.Suspicion: 30
+# })
 
-trade(1, {
-    Item.Nightmares: 30
-})
+# trade(1, {
+#     Item.Nightmares: 30
+# })
 
-trade(1, {
-    Item.TroubledWaters: 30
-})
+# trade(1, {
+#     Item.TroubledWaters: 30
+# })
 
 # -----------------------------------
 # --- Buying & Selling at Bazaar ---
@@ -2109,10 +2117,10 @@ trade(1, {
     Item.IntriguersCompendium: 1
 })
 
-# trade(1, {
-#     Item.HeartsGameExploits: -65,
-#     Item.LeviathanFrame: 1
-# })
+trade(1, {
+    Item.HeartsGameExploits: -65,
+    Item.LeviathanFrame: 1
+})
 
 trade(1, {
     Item.HeartsGameExploits: -65,
@@ -2354,42 +2362,42 @@ trade(0, {
     Item.FabulousDiamond: 1
 })
 
-# optimistic 100% draw rate of chasing cards
-# pessimistic no rare success
-trade(0, {
-    Item.HomeWatersZeeDraw: -1,
-    Item.ChasingDownYourBounty: 8
-})
+# # optimistic 100% draw rate of chasing cards
+# # pessimistic no rare success
+# trade(0, {
+#     Item.HomeWatersZeeDraw: -1,
+#     Item.ChasingDownYourBounty: 8
+# })
 
-trade(0, {
-    Item.ShephersWashZeeDraw: -1,
-    Item.ChasingDownYourBounty: 8.5
-})
+# trade(0, {
+#     Item.ShephersWashZeeDraw: -1,
+#     Item.ChasingDownYourBounty: 8.5
+# })
 
-trade(0, {
-    Item.StormbonesZeeDraw: -1,
-    Item.ChasingDownYourBounty: 8.5
-})
+# trade(0, {
+#     Item.StormbonesZeeDraw: -1,
+#     Item.ChasingDownYourBounty: 8.5
+# })
 
-trade(0, {
-    Item.SeaOfVoicesZeeDraw: -1,
-    Item.ChasingDownYourBounty: 9
-})
+# trade(0, {
+#     Item.SeaOfVoicesZeeDraw: -1,
+#     Item.ChasingDownYourBounty: 9
+# })
 
-trade(0, {
-    Item.SaltSteppesZeeDraw: -1,
-    Item.ChasingDownYourBounty: 13.5
-})
+# trade(0, {
+#     Item.SaltSteppesZeeDraw: -1,
+#     Item.ChasingDownYourBounty: 13.5
+# })
 
-trade(0, {
-    Item.PillaredSeaZeeDraw: -1,
-    Item.ChasingDownYourBounty: 14.5
-})
+# trade(0, {
+#     Item.PillaredSeaZeeDraw: -1,
+#     Item.ChasingDownYourBounty: 14.5
+# })
 
-trade(0, {
-    Item.StormbonesZeeDraw: -1,
-    Item.ChasingDownYourBounty: 15.5
-})
+# trade(0, {
+#     Item.StormbonesZeeDraw: -1,
+#     Item.ChasingDownYourBounty: 15.5
+# })
 
 
 ## ------------
@@ -3691,7 +3699,6 @@ railway_card("Grazing Goat Demons",
 london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 
 # trade(london_good_card_density, london_deck.normalized_trade())
-
 
 trade(1, zailing_deck.normalized_trade())
 
