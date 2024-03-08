@@ -28,6 +28,11 @@ class Location(Enum):
     TheHurlers = auto()
     MarigoldStation = auto()
 
+class Deck(Enum):
+    London = auto()
+    UpperRiver = auto()
+    Zailing = auto()
+    Laboratory = auto()
 
 class Rarity(Enum):
     Rare = 10
