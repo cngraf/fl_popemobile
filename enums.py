@@ -18,6 +18,17 @@ class Location(Enum):
     WilmotsEnd = auto()
     WolfstackDocks = auto()
 
+    EalingGardens = auto()
+    JerichoLocks = auto()
+    TheMagistracyOfTheEvenlode = auto()
+    Balmoral = auto()
+    StationVIII = auto()
+    BurrowInfraMump = auto()
+    Moulin = auto()
+    TheHurlers = auto()
+    MarigoldStation = auto()
+
+
 class Rarity(Enum):
     Rare = 10
     Unusual = 20
@@ -113,6 +124,7 @@ class Item(Enum):
 
     # Connected
     ConnectedBenthic = auto()
+    ConnectedSummerset = auto()
 
     # Academic
     FoxfireCandleStub = auto()
@@ -129,12 +141,31 @@ class Item(Enum):
     LostResearchAssistant = auto()
 
     # Curiosity
+    VenomRuby = auto()
+    Sapphire = auto()
     StrongBackedLabour = auto()
     WhirringContraption = auto()
-    OilOfCompanionship = auto()
     CracklingDevice = auto()
-    ConcentrateOfSelf = auto()
     CounterfeitHeadOfJohnTheBaptist = auto()
+
+    # Curiosity - reagents
+    ObliviscereMori = auto()
+    ElationAtFelineOration = auto()
+    VindicationOfFaith = auto()
+    ExhilarationFromAchievingJustice= auto()
+    HorrifyingConfirmationThatYouWereRightAllAlong= auto()
+    UnthinkableHope = auto()
+    HalcyonicTonic = auto()
+    FillipOfEffervescence = auto()
+    HolySanguinarineOintment = auto()
+    DiscriminatingAconite = auto()
+
+    CrystallizedEuphoria = auto()
+    OilOfCompanionship = auto()
+    SalveOfRighteousness = auto()
+    DistillationOfRetribution = auto()
+    ConcentrateOfSelf = auto()
+    PowderOfRenewal = auto()
 
     # Cartography
     ShardOfGlim = auto()
@@ -217,9 +248,16 @@ class Item(Enum):
     ChimericalArchive = auto()
 
     # Infernal
+    Soul = auto()
+    AmanitaSherry = auto()
     BrilliantSoul = auto()
-    BrightBrassSkull = auto()
+    MuscariaBrandy = auto()
+    PortfolioOfSouls = auto()
     QueerSoul = auto()
+    SilentSoul = auto()
+    BrightBrassSkull = auto()
+    DiscordantSoul = auto()
+    CoruscatingSoul = auto()
 
     # Influence
     StolenCorrespondence = auto()
@@ -345,6 +383,7 @@ class Item(Enum):
     RubberySkull = auto()
 
     # Rumour
+    ProscibedMaterial = auto()
     InklingOfIdentity = auto()
     ScrapOfIncendiaryGossip = auto()
     AnIdentityUncovered = auto()
@@ -409,6 +448,26 @@ class Item(Enum):
     MemoryOfAShadowInVarchas = auto()
     OneiricPearl = auto()
 
+    # Culinary Concoction
+    SharplyFlavoredPickleAsYetUnpoisoned = auto()
+    JetBlackPickleRelishDosedWithHillchangerScorpionVenom = auto()
+    EnvenomedPicklesSuspendedInVenisonAspic = auto()    
+    AnEnticingFungalPate = auto()
+    APlatterOfMixedCharcuterie = auto()
+    ATowerOfFungalPateFlambe = auto()
+    VibrantPepperyFishBroth = auto()
+    CaduceanZzoupWithGunpowderAndSicklyRose = auto()
+    SharkBouillabaisseWithCroutons = auto()
+    CulinaryTributeToTheSeaOfSpines = auto()
+    DarkDewedCherryLiquer = auto()
+    SparklingSolacefruitRoyale = auto()
+    SolacefruitChampagneSorbet = auto()
+    SelfReflectiveTapenadeOfParabolanOrangeApple = auto()
+    SourPickleOfParabolanOrangeAppleAndVinegar = auto()
+    OrangeAppleJamSpikedWithMuscariaBrandy = auto()
+    MarmaladeOfParabolanOrangeAppleHoneyAndRoseateAttar = auto()
+    CuratorialCocktail = auto()
+
     # -----
     # Equipment
     # -----
@@ -436,6 +495,7 @@ class Item(Enum):
 
     # IDK what to call these
     Casing = auto()
+    Corresponding = auto()
     Inspired = auto()
     Infiltrating = auto()
     Investigating = auto()
@@ -468,6 +528,7 @@ class Item(Enum):
     SlightedAcquaintance = auto() # newspaper
     ParabolaRoundTrip = auto()
     DuplicatedVakeSkull = auto()
+    ConnectedPetCard = auto()
 
     # Zailing
     HomeWatersZeeDraw = auto()

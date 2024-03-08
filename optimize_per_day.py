@@ -91,6 +91,7 @@ long term
 actions_per_day = 120.0
 cards_seen_per_day = 40
 
+
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
 default_rare_success_rate = 0.05
@@ -109,6 +110,9 @@ replacement_epa = 6.5
 # for modeling time spent outside london
 replacement_good_card_density = 0.33
 
+# for long trips outside longon/upper river
+lost_draw_cost = 0
+
 # 0.85, 0.74, 0.65
 wounds_multiplier = 0.85
 scandal_multiplier = 0.85
@@ -125,6 +129,7 @@ player_treasure = Treasure.NoTreasure
 player_location = Location.NoLocation
 player_ambition = Ambition.BagALegend
 
+# assuming 230 & 7 base
 player_stats = {
     Stat.Watchful: 315,
     Stat.Shadowy: 315,
@@ -171,7 +176,7 @@ def card(name, freq, isGood, exchanges):
         for item, value in exchanges.items():
             LondonCardsByItem[item.value] += (value * freq.value)
 
-def railway_card(name, freq, isGood, exchanges):
+def railway_card(name, freq, location, isGood, exchanges):
     # dummy alias for now
     trade(1, exchanges)
 
@@ -397,7 +402,67 @@ card("Royal Beth lodings", Rarity.Frequent, False, {
 # ----------------------------------------------------
 
 card("What will you do with your [connected pet]?", Rarity.Standard, True, {
+    Item.ConnectedPetCard: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
     Item.FavBohemians: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavChurch: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavConstables: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavCriminals: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavDocks: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavGreatGame: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavHell: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavRevolutionaries: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavRubberyMen: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavSociety: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavTombColonies: 1
+})
+
+trade(0, {
+    Item.ConnectedPetCard: -1,
+    Item.FavUrchins: 1
 })
 
 # With Bewildering Procession
@@ -504,7 +569,7 @@ card("Burning Shadows: the Devils of London", Rarity.Standard, False, {
 })
 
 # Revolutionaries
-card("Rev Faction", Rarity.Standard, False, {
+card("Rev Faction", Rarity.Standard, True, {
     Item.Echo: -0.5,
     Item.FavRevolutionaries: 1 
 })
@@ -642,7 +707,7 @@ card("A Day with God's Editors", Rarity.Standard, False, {
 })
 
 # Avoidable? unsure
-card("Bringing the revolution", Rarity.Standard, False, {
+card("Bringing the revolution", Rarity.Standard, True, {
     Item.CompromisingDocument: -1,
     Item.FavRevolutionaries: 1
 })
@@ -887,11 +952,61 @@ if (player_location == Location.YourLodgings):
                                                            
 
 ## ------------------------------
-## -------- Menace Stuff --------
+## -------- Social Actions --
 ## ------------------------------
+# ignoring the cost to the other party
+    
+# Send Disquieting Missive
+# if player_profession == Profession.CrookedCross:
+trade(1, {
+    Item.VerseOfCounterCreed: -1,
+    Item.Corresponding: 3
+})
 
-# Social Actions, ignoring the cost to the other party
-# Better options for Scandal and Suspicion exist @ -6 (dupe/betrayal) but those have a weekly limit
+trade(1, {
+    Item.ExtraordinaryImplication: -2,
+    Item.VolumeOfCollatedResearch: -2,
+    Item.Echo: -3, # 0.6 x5 for the paper
+    Item.Corresponding: 3
+})
+
+trade(1, {
+    Item.Corresponding: -10,
+    Item.VitalIntelligence: 1,
+    Item.MovesInTheGreatGame: 46
+})
+
+# if player_profession == Profession.CrookedCross:
+trade(1, {
+    Item.Corresponding: -10,
+    Item.SilentSoul: 1,
+    Item.Soul: 1150
+})
+
+# requires recipient to be Licentiate
+# dang this is pretty good?
+trade(1, {
+    Item.PieceOfRostygold: -500,
+    Item.Suspicion: -6,
+    Item.Scandal: -6  
+})
+
+# poetic 
+trade(1, {
+    Item.Investigating: 46
+})    
+
+trade(1, {
+    Item.Inspired: 46 # 0.2 *
+})
+
+# if player_profession == Profession.Licentiate:
+trade(1, {
+    Item.PieceOfRostygold: 500,
+    Item.MovesInTheGreatGame: 2
+})
+
+# Ignnorng betrayal options w/ weekly cap
 
 trade(1, {
     Item.Wounds: -6
@@ -928,26 +1043,26 @@ trade(1, {
     Item.Nightmares: 10
 })
 
-# --------------------------
-# --- Buying from Bazaar ---
-# --------------------------
+# -----------------------------------
+# --- Buying & Selling at Bazaar ---
+# -----------------------------------
 
 trade(0, {
     Item.Echo: -64.80,
     Item.WinsomeDispossessedOrphan: 1
 })
 
-## -----------------------
-## --- Selling to Bazaar
-## ----------------------
-
-# # # Test
-# trade(0, {
-#     Item.HumanRibcage: -1,
-#     Item.Echo: 50
-# })
-
 # Academic
+trade(0, {
+    Item.Echo: -0.03,
+    Item.FoxfireCandleStub: 1
+})
+
+trade(0, {
+    Item.Echo: -0.2,
+    Item.FlaskOfAbominableSalts: 1
+})
+
 trade(0, {
     Item.MemoryOfDistantShores: -1,
     Item.Echo: 0.5
@@ -1281,10 +1396,34 @@ trade(0, {
 
 # Wines
 trade(0, {
+    Item.BottleOfGreyfields1879: 1,
+    Item.Echo: -0.02
+})
+
+trade(0, {
+    Item.BottleOfGreyfields1879: -1,
+    Item.Echo: 0.01
+})
+
+trade(0, {
     Item.Echo: -0.04,
     Item.BottleOfGreyfields1882: 1
 })
 
+trade(0, {
+    Item.BottleOfGreyfields1882: -1,
+    Item.Echo: 0.02
+})
+
+trade(0, {
+    Item.BottelofMorelways1872: -1,
+    Item.Echo: 0.1
+})
+
+trade(0, {
+    Item.BottleOfStranglingWillowAbsinthe: -1,
+    Item.Echo: -0.5
+})
 
 # Equipment
 trade(0, {
@@ -1296,40 +1435,75 @@ trade(0, {
 ## ----------- Connected
 ## --------------------------------------
 
-# Benthic
 trade(3, {
-    Item.Echo: -3,
+    Item.FlaskOfAbominableSalts: -15,
     Item.ConnectedBenthic: 75
+})
+
+trade(3, {
+    Item.FlaskOfAbominableSalts: -15,
+    Item.ConnectedSummerset: 75
 })
 
 ## -------------------------
 ## Innate Item Conversions
 ## -------------------------
 
+normal_upconvert_success_rate = 0.6 - default_rare_success_rate
+
 # ----- Academic
 trade(1, {
     Item.MemoryOfDistantShores: -50,
     Item.ConnectedBenthic: -5,
     Item.VolumeOfCollatedResearch: 10,
-    Item.CrypticClue: 50 * (0.6 - default_rare_success_rate),
+    Item.CrypticClue: 50 * normal_upconvert_success_rate,
     Item.UncannyIncunabulum: 2 * default_rare_success_rate
 })
 
-# requires urchin war active
-# also other items hard to model
+# # requires urchin war active
+# # also other items hard to model
+# trade(1, {
+#     Item.LostResearchAssistant: -1,
+#     Item.Echo: 12.5 # blackmail material x1
+# })
+
+# ----- Cartography
+
 trade(1, {
-    Item.LostResearchAssistant: -1,
-    Item.Echo: 12.5 # blackmail material x1
+    Item.ShardOfGlim: -1000,
+    Item.MapScrap: 105
 })
 
+trade(1, {
+    Item.MapScrap: -500,
+    Item.ZeeZtory: 105
+})
+
+trade(1, {
+    Item.ZeeZtory: -50,
+    Item.PartialMap: 10,
+    Item.MysteryOfTheElderContinent: 1 * normal_upconvert_success_rate,
+    Item.Echo: 25 * default_rare_success_rate # 2x Brass Ring
+})
+
+
 # ----- Mysteries
+
 # Journals to Implications @ 50:10
 trade(1,{
     Item.JournalOfInfamy: -50,
     Item.ConnectedBenthic: -5,
     Item.ExtraordinaryImplication: 10,
-    Item.ShardOfGlim: 100 * (0.6 - default_rare_success_rate),
+    Item.ShardOfGlim: 100 * normal_upconvert_success_rate,
     Item.StormThrenody: 2 * default_rare_success_rate
+})
+
+trade(1,{
+    Item.TaleOfTerror: -50,
+    Item.ConnectedSummerset: -5,
+    Item.ExtraordinaryImplication: 10,
+    Item.BottleOfStranglingWillowAbsinthe: 1 * normal_upconvert_success_rate,
+    Item.FavourInHighPlaces: 2 * default_rare_success_rate
 })
 
 # # Implications to Incunabula @ 25:5
@@ -1337,8 +1511,37 @@ trade(1, {
     Item.ExtraordinaryImplication: -25,
     Item.ConnectedBenthic: -20,
     Item.UncannyIncunabulum: 5,
-    Item.NevercoldBrassSliver: 200 * (0.6 - default_rare_success_rate),
+    Item.NevercoldBrassSliver: 200 * normal_upconvert_success_rate,
     Item.Echo: 62.5 * default_rare_success_rate # Nodule of Pulsating Amber
+})
+
+# ----- Rumor
+
+trade(1, {
+    Item.ProscibedMaterial: -250,
+    Item.InklingOfIdentity: 105
+})
+
+trade(1, {
+    Item.InklingOfIdentity: -500,
+    Item.ScrapOfIncendiaryGossip: 105
+})
+
+trade(1, {
+    Item.ScrapOfIncendiaryGossip: -50,
+    Item.AnIdentityUncovered: 10,
+    Item.ProscibedMaterial: 13 * normal_upconvert_success_rate,
+    Item.FavourInHighPlaces: 2 * default_rare_success_rate
+})
+
+# ----- Wines
+
+trade(1, {
+    Item.BottleOfStranglingWillowAbsinthe: -50,
+
+    Item.BottleOfBrokenGiant1844: 10,
+    Item.IntriguingSnippet: 3 * normal_upconvert_success_rate,
+    Item.UncannyIncunabulum: 2 * default_rare_success_rate
 })
 
 # -----------------
@@ -1416,6 +1619,77 @@ trade(0, {
 trade(0, {
     Item.RatShilling: -1000,
     Item.BlackmailMaterial: 1
+})
+
+# Extramurine Trading Company
+
+trade(0, {
+    Item.RatShilling: -8,
+    Item.RoyalBlueFeather: 1
+})
+
+trade(0, {
+    Item.RatShilling: -8,
+    Item.SolaceFruit: 1
+})
+
+trade(0, {
+    Item.RatShilling: -10,
+    Item.HandPickedPeppercaps: 1
+})
+
+trade(0, {
+    Item.RatShilling: -10,
+    Item.NightsoilOfTheBazaar: 1
+})
+
+trade(0, {
+    Item.RatShilling: -25,
+    Item.PreservedSurfaceBlooms: 1
+})
+
+trade(0, {
+    Item.RatShilling: -45,
+    Item.CarvedBallOfStygianIvory: 1
+})
+
+trade(0, {
+    Item.RatShilling: -60,
+    Item.CrateOfIncorruptibleBiscuits: 1
+})
+
+# Merru's Gun Exchange
+
+trade(0, {
+    Item.RatShilling: -1,
+    Item.AmanitaSherry: 1
+})
+
+trade(0, {
+    Item.RatShilling: -1,
+    Item.MapScrap: 1
+})
+
+trade(0, {
+    Item.RatShilling: -1,
+    Item.PhosphorescentScarab: 1
+})
+
+trade(0, {
+    Item.RatShilling: -2,
+    Item.FlawedDiamond: 1
+})
+
+trade(0, {
+    Item.RatShilling: -7,
+    Item.PalimpsestScrap: 1
+})
+
+# Nightclaw's Paw-Brokers
+
+trade(0, {
+    Item.RatShilling: -2,
+    Item.WellPlacedPawn: 1
 })
 
 # Tier 4
@@ -1568,6 +1842,12 @@ trade(1, {
 })
 
 ## ------------
+## Department of Menace Eradication
+## ------------
+
+# moonlight scales not even close to worth it
+
+## ------------
 ## Shuttered Palace
 ## ------------
 
@@ -1636,7 +1916,7 @@ trade(13, {
     Item.WhirringContraption: -1,
     Item.JournalOfInfamy: 118,
     Item.SulkyBat: 2,
-    Item.Echo: 10 # 4 broken giant
+    Item.BottleOfBrokenGiant1844: 4
 })
 
 # Outlandish edition
@@ -1672,33 +1952,33 @@ trade(13, {
 # Revenge cards -----------
 # Ignores cost to acquaintance
 trade(1, {
-    Item.CardDraws: -1,
+    Item.Echo: lost_draw_cost,
     Item.SlightedAcquaintance: -1,
     Item.PuzzleDamaskScrap: 1
 })
 
 trade(1, {
-    Item.CardDraws: -1,
+    Item.Echo: lost_draw_cost,
     Item.SlightedAcquaintance: -1,
     Item.NoduleOfTremblingAmber: 1
 })
 
 trade(1, {
-    Item.CardDraws: -1,
+    Item.Echo: lost_draw_cost,
     Item.SlightedAcquaintance: -1,
     Item.MagnificentDiamond: 1
 })
 
 # FATE Johnny Croak
 trade(1, {
-    Item.CardDraws: -1,
+    Item.Echo: lost_draw_cost,
     Item.SlightedAcquaintance: -1,
     Item.PuzzlingMap: 1
 })
 
 # FATE Johnny Croak
 trade(1, {
-    Item.CardDraws: -1,
+    Item.Echo: lost_draw_cost,
     Item.SlightedAcquaintance: -1,
     Item.AntiqueMystery: 1
 })
@@ -1756,7 +2036,7 @@ trade(2, {
 
 # just stay there, ignore travel cost
 trade(6, {
-    Item.CardDraws: -6,
+    Item.Echo: 6 * lost_draw_cost,
     Item.FinBonesCollected: 2,
     Item.FavDocks: 1,
     Item.RemainsOfAPinewoodShark: 1
@@ -2805,41 +3085,41 @@ trade(7, {
 # using wiki values
 
 trade(5, {
-    Item.CardDraws: -5,
+    Item.Echo: lost_draw_cost * 5,
     Item.BlackmailMaterial: 1,
     Item.AnIdentityUncovered: 3
 })
 
 trade(5, {
-    Item.CardDraws: -5,
+    Item.Echo: lost_draw_cost * 5,
     Item.AntiqueMystery: 1,
     Item.PresbyteratePassphrase: 3
 })
 
 trade(5, {
-    Item.CardDraws: -5,
+    Item.Echo: lost_draw_cost * 5,
     Item.UncannyIncunabulum: 1,
     Item.ExtraordinaryImplication: 3
 })
 
 trade(13, {
-    Item.CardDraws: -13,
+    Item.Echo: lost_draw_cost * 13,
     Item.ComprehensiveBribe: 4,
 })
 
 trade(10, {
-    Item.CardDraws: -10,
+    Item.Echo: lost_draw_cost * 10,
     Item.CorrespondencePlaque: 90,
 })
 
 trade(20, {
-    Item.CardDraws: -20,
+    Item.Echo: lost_draw_cost * 20,
     Item.BottleOfFourthCityAirag: 1,
     Item.CellarOfWine: 2
 })
 
 trade(11, {
-    Item.CardDraws: -11,
+    Item.Echo: lost_draw_cost * 11,
     Item.StormThrenody: 4
 })
 
@@ -3081,6 +3361,7 @@ for i in range(0, 5):
 # The Upstairs Honey Den
 # more variable but not gonna bother rn
 trade(0, {
+    Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
     Item.Casing: -15,
     Item.FittingInAtHeliconHouse: -3,
     Item.HinterlandScrip: 26,
@@ -3153,14 +3434,20 @@ trade(0, {
 # how to model the variable time cost?
 # priests option needs 5 fitting in
 # not sure what the best way is to get the remaining 2
-# if you happen to be a Silverer with LDPotRB
+# trades below consider various ways to do so
 
+# if it turns out the best filler source is one that gives 3 or more
+# then you can use a different spouse for entry
+
+# example:
+# if you happen to be a Silverer with LDPotRB
 # 1) Enter with pendant
 # 2) Offer yourself as escort and guide
 # 3) nightmare on elm street
-# looks like this becomes profitable when you can cash out for 36+ Echoes
-# which means lesser self + discordance needs to pull about 30
-# seems unlikely to get there
+# how much do you need to get from the lesser self + discordance?
+# if getting inspired from the palace, like 30 echoes
+# if social action, only 19. that might be doable?
+
 trade(3, {
     Item.IntriguingSnippet: 3,
 
@@ -3170,6 +3457,55 @@ trade(3, {
     Item.MemoryOfALesserSelf: 1,
     Item.MemoryOfDiscordance: 1
 })
+
+# Master Jewel Thief
+trade(3, {
+    Item.IntriguingSnippet: 3,
+
+    Item.Inspired: -55,
+    Item.Casing: -3,
+    Item.Echo: 3.36,
+    Item.MemoryOfLight: 6,
+    Item.MemoryOfDistantShores: 6,
+    Item.MemoryOfALesserSelf: 1,
+    Item.MemoryOfDiscordance: 1
+})
+
+# Rubbery Cat
+trade(3, {
+    Item.IntriguingSnippet: 3,
+
+    Item.Inspired: -55,
+    Item.Casing: 6,
+    Item.HandPickedPeppercaps: 3,
+    Item.MemoryOfLight: 6,
+    Item.MemoryOfDistantShores: 6,
+    Item.MemoryOfALesserSelf: 1,
+    Item.MemoryOfDiscordance: 1
+})
+
+# enter with secular missionary or firebrand
+trade(3, {
+    Item.IntriguingSnippet: 3,
+
+    Item.Inspired: -55 + 5,
+    Item.CulinaryTributeToTheSeaOfSpines: -1,
+
+    Item.HinterlandScrip: 56,
+    Item.MemoryOfLight: 6,
+    Item.MemoryOfDistantShores: 6,
+    Item.MemoryOfALesserSelf: 1,
+    Item.MemoryOfDiscordance: 1
+})
+
+# placeholder
+trade(0, {
+    Item.MemoryOfALesserSelf: -1,
+    # Item.MemoryOfDiscordance: -1,
+    Item.Echo: 2.5
+})
+
+# TODO: display your painting option
 
 # ----- Butcher
 
@@ -3502,7 +3838,10 @@ jericho_trade({
 # -------------
 
 
-railway_card("Digs in the Magistracy of the Evenlode", Rarity.Standard, True, {
+railway_card("Digs in the Magistracy of the Evenlode",
+    Rarity.Standard,
+    Location.TheMagistracyOfTheEvenlode,
+    True, {
     Item.DigsInEvenlode: 1
 })
 
@@ -3564,6 +3903,12 @@ trade(7, {
 # Station VIII
 # -------------
 
+trade(2, {
+    Item.ExtraordinaryImplication: -2,
+    Item.HalcyonicTonic: 1,
+    Item.FillipOfEffervescence: 1
+})
+
 trade(1, {
     Item.OilOfCompanionship: -1,
     Item.RumourOfTheUpperRiver: -98,
@@ -3571,12 +3916,159 @@ trade(1, {
     Item.PrismaticFrame: 1
 })
 
-# guessing how this works, havent unlocked  yet
-trade(2, {
+# Handwaving the UR/London transition
+trade(3, {
+    Item.CrystallizedEuphoria: 1
+})
+
+trade(3, {
     Item.AntiqueMystery: -2,
     Item.ConsignmentOfScintillackSnuff: -2,
 
     Item.OilOfCompanionship: 1
+})
+
+# Mr Wines
+trade(1, {
+    Item.SolacefruitChampagneSorbet: -1,
+
+    Item.BottleOfStranglingWillowAbsinthe: 66,
+    Item.BottelofMorelways1872: 328,
+    Item.HinterlandScrip: 5
+})
+
+# Fish broth
+trade(1, {
+    Item.HandPickedPeppercaps: -5,
+    Item.WitheredTentacle: -2,
+    Item.FinBonesCollected: -5,
+
+    Item.VibrantPepperyFishBroth: 1
+})
+
+trade(1, {
+    Item.VibrantPepperyFishBroth: -1,
+    Item.RemainsOfAPinewoodShark: -1,
+    Item.CrateOfIncorruptibleBiscuits: -1,
+
+    Item.SharkBouillabaisseWithCroutons: 1
+})
+
+trade(1, {
+    Item.VibrantPepperyFishBroth: -1,
+    Item.PerfumedGunpowder: -1,
+    Item.TinOfZzoup: -1,
+
+    Item.CaduceanZzoupWithGunpowderAndSicklyRose: 1
+})
+
+trade(1, {
+    Item.MemoryOfDistantShores: -2,
+    Item.AmberCrustedFin: -1,
+    Item.WitheredTentacle: -6,
+
+    Item.CulinaryTributeToTheSeaOfSpines: 1
+})
+
+# Liqueur
+
+# placeholder for costermonger
+trade(1, {
+    Item.Echo: -28,
+    Item.SolaceFruit: 28,
+    Item.DarkDewedCherry: 20
+})
+
+trade(1, {
+    Item.Echo: -12.5,
+    Item.MemoryOfDiscordance: 1
+})
+
+trade(1, {
+    Item.DarkDewedCherry: -3,
+    Item.BottleOfBrokenGiant1844: -1,
+
+    Item.DarkDewedCherryLiquer: 1
+})
+
+trade(1, {
+    Item.DarkDewedCherryLiquer: -1,
+    Item.FillipOfEffervescence: -1,
+    Item.CrystallizedEuphoria: -1,
+    Item.SolaceFruit: -5,
+
+    Item.SparklingSolacefruitRoyale: 1
+})
+
+trade(1, {
+    Item.SparklingSolacefruitRoyale: -1,
+    Item.ConcentrateOfSelf: -1,
+    Item.MemoryOfDistantShores: -100,
+    
+    Item.CuratorialCocktail: 1
+})
+
+trade(1, {
+    Item.SparklingSolacefruitRoyale: -1,
+    Item.MemoryOfDiscordance: -1,
+    # Item.SuddenInsight: -1,
+    # Item.Moonlit: -3,
+
+    Item.SolacefruitChampagneSorbet: 1
+})
+
+# Pate
+trade(1, {
+    Item.HandPickedPeppercaps: -5,
+    Item.PotOfVenisonMarrow: -2,
+    Item.PreservedSurfaceBlooms: -1,
+
+    Item.AnEnticingFungalPate: 1
+})
+
+trade(1, {
+    Item.AnEnticingFungalPate: -1,
+    Item.SausageAboutWhichNoOneComplains: -1,
+    Item.TinnedHam: -1,
+
+    Item.APlatterOfMixedCharcuterie: 1
+})
+
+trade(1, {
+    Item.AnEnticingFungalPate: -1,
+    Item.HandPickedPeppercaps: -1,
+    Item.BottleOfStranglingWillowAbsinthe: -1,
+
+    Item.ATowerOfFungalPateFlambe: 1
+})
+
+# Tapenade
+trade(1, {
+    Item.ParabolanOrangeApple: -2,
+
+    Item.SelfReflectiveTapenadeOfParabolanOrangeApple: 1
+})
+
+trade(1, {
+    Item.SelfReflectiveTapenadeOfParabolanOrangeApple: -1,
+    Item.DropOfPrisonersHoney: -1,
+
+    Item.MarmaladeOfParabolanOrangeAppleHoneyAndRoseateAttar: 1
+})
+
+trade(1, {
+    Item.SelfReflectiveTapenadeOfParabolanOrangeApple: -1,    
+    Item.JasmineLeaves: -15,
+    Item.MagisterialLager: -2,
+
+    Item.SourPickleOfParabolanOrangeAppleAndVinegar: 1
+})
+
+trade(1, {
+    Item.SelfReflectiveTapenadeOfParabolanOrangeApple: -1,    
+    Item.MuscariaBrandy: -1,
+
+    Item.OrangeAppleJamSpikedWithMuscariaBrandy: 1
 })
 
 
@@ -3607,6 +4099,69 @@ trade(1, {
     Item.HinterlandScrip: 625,
     Item.StolenKiss: 2
 })
+
+# Statues
+# TODO enable only one at a time
+
+railway_card("Under the Statue - Liberation",
+        Rarity.Standard,
+        Location.TheHurlers,
+        True, {
+    Item.FavRevolutionaries: -4,
+    Item.NightOnTheTown: 12
+})
+
+railway_card("Under the Statue - Anchoress",
+        Rarity.Standard,
+        Location.TheHurlers,
+        True, {
+    Item.FavChurch: -4,
+    Item.VolumeOfCollatedResearch: 12
+})
+
+railway_card("Under the Statue - Goat Demons",
+        Rarity.Standard,
+        Location.TheHurlers,
+        True, {
+    Item.FavHell: -4,
+    Item.NightsoilOfTheBazaar: 60
+})
+
+railway_card("Under the Statue - Overgoat",
+        Rarity.Standard,
+        Location.TheHurlers,
+        True, {
+    Item.FavHell: -4,
+    Item.AeolianScream: 12
+})
+
+railway_card("Under the Statue - Ubergoat",
+        Rarity.Standard,
+        Location.TheHurlers,
+        True, {
+    Item.FavHell: -4,
+    Item.VolumeOfCollatedResearch: 12
+})
+
+railway_card("Under the Statue - Discordance",
+        Rarity.Standard,
+        Location.TheHurlers,
+        True, {
+    Item.MemoryOfDiscordance: -2,
+    Item.CorrespondencePlaque: 60 
+})
+
+railway_card("Grazing Goat Demons",
+        Rarity.Standard,
+        Location.TheHurlers,
+        False, {
+    # TODO might be playable? looks complicated
+})
+
+
+# trade(5, {
+#     Item.NightOnTheTown: 12
+# })
 
 
 # -------------------------------
