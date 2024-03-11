@@ -34,6 +34,14 @@ import unterzee.port_cecil
 
 import upper_river.uncategorized
 import upper_river.ealing_gardens
+import upper_river.jericho
+import upper_river.evenlode
+import upper_river.balmoral
+import upper_river.burrow
+import upper_river.station_viii
+import upper_river.moulin
+import upper_river.hurlers
+import upper_river.marigold
 
 import fate.philosofruits
 import fate.upwards
@@ -248,13 +256,6 @@ london_deck = Decks.create_london_deck(
 
 zailing_deck = Decks.create_zailing_deck(active_player)
 
-#  ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ██╗     
-# ██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔══██╗██╔══██╗██║     
-# ██║  ███╗█████╗  ██╔██╗ ██║█████╗  ██████╔╝███████║██║     
-# ██║   ██║██╔══╝  ██║╚██╗██║██╔══╝  ██╔══██╗██╔══██║██║     
-# ╚██████╔╝███████╗██║ ╚████║███████╗██║  ██║██║  ██║███████╗
-#  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
-
 
 # ---------------- Trades ----------------------------
 
@@ -295,190 +296,24 @@ parabola.add_trades(active_player, trade)
 
 upper_river.uncategorized.add_trades(active_player, trade)
 upper_river.ealing_gardens.add_trades(active_player, trade)
+upper_river.jericho.add_trades(active_player, trade)
+upper_river.evenlode.add_trades(active_player, trade)
+upper_river.balmoral.add_trades(active_player, trade)
+upper_river.burrow.add_trades(active_player, trade)
+upper_river.station_viii.add_trades(active_player, trade)
+upper_river.moulin.add_trades(active_player, trade)
+upper_river.hurlers.add_trades(active_player, trade)
+upper_river.marigold.add_trades(active_player, trade)
 
 fate.philosofruits.add_trades(active_player, trade)
 fate.upwards.add_trades(active_player, trade)
 
 
-#  █████╗  █████╗ ██╗██╗     ██╗    ██╗ █████╗ ██╗   ██╗
-# ██╔══██╗██╔══██╗██║██║     ██║    ██║██╔══██╗╚██╗ ██╔╝
-# ██████╔╝███████║██║██║     ██║ █╗ ██║███████║ ╚████╔╝ 
-# ██╔══██╗██╔══██║██║██║     ██║███╗██║██╔══██║  ╚██╔╝  
-# ██║  ██║██║  ██║██║███████╗╚███╔███╔╝██║  ██║   ██║   
-# ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚══════╝ ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   
-
-
-# -----------------------------------
-# ---- Jericho
-# -----------------------------------
-
-# --------- Canal Cruising
-
-if active_player.profession == Profession.CrookedCross:
-    trade(1, {
-        Item.UnprovenancedArtefact: -4,
-        Item.EsteemOfTheGuild: 1
-    })
-
-trade(1, {
-    Item.VolumeOfCollatedResearch: -10,
-    Item.EsteemOfTheGuild: 2
-})
-
-trade(1, {
-    Item.PartialMap: -6,
-    Item.AnIdentityUncovered: -4,
-    Item.EsteemOfTheGuild: 2
-})
-
-trade(1, {
-    Item.MemoryOfDistantShores: -40,
-    Item.SwornStatement: -2,
-    Item.EsteemOfTheGuild: 2
-})
-
-trade(1, {
-    Item.NightOnTheTown: -1,
-    Item.ScrapOfIncendiaryGossip: -45,
-    Item.EsteemOfTheGuild: 2
-})
-
-trade(1, {
-    Item.FavDocks: -5,
-    Item.EsteemOfTheGuild: 2
-})
-
-# assume ranges are evenly distributed
-trade(2, {
-    Item.EsteemOfTheGuild: -3,
-    Item.VitalIntelligence: 2.5,
-    Item.ViennaOpening: 6.5
-})
-
-trade(2, {
-    Item.EsteemOfTheGuild: -3,
-    Item.MirrorcatchBox: 1
-})
-
-trade(2, {
-    Item.EsteemOfTheGuild: -3,
-    Item.MoonlightScales: 50,
-    Item.FinBonesCollected: 5,
-    Item.SkullInCoral: 1.5,
-    Item.UnprovenancedArtefact: 8.5
-})
-
-# upper river destinations
-
-trade(2, {
-    Item.EsteemOfTheGuild: -6,
-    Item.BrightBrassSkull: 1,
-    Item.ExtraordinaryImplication: 5.5,
-    Item.VerseOfCounterCreed: 2.5
-})
-
-trade(2, {
-    Item.EsteemOfTheGuild: -6,
-    Item.MovesInTheGreatGame: 18.5,
-    Item.PrimaevalHint: 1,
-    Item.UncannyIncunabulum: 2.5
-})
-
-trade(2, {
-    Item.EsteemOfTheGuild: -6,
-    Item.NightWhisper: 1,
-    Item.TaleOfTerror: 3.5,
-    Item.FinalBreath: 12,
-    Item.HumanRibcage: 2
-})
-
-
-# --------- Calling in Favours
-# hack to model dipping into jericho to trade favours
-# when you would otherwise not go there
-
-jericho_add = 0.0
-def jericho_trade(exchange):
-    exchange[Item.RumourOfTheUpperRiver] = jericho_add
-    trade(1 + jericho_add, exchange)
-
-jericho_trade({
-    Item.FavBohemians: -4,
-    Item.HolyRelicOfTheThighOfStFiacre: 2,
-    Item.WingOfAYoungTerrorBird: 1,
-})
-
-jericho_trade({
-    Item.FavChurch: -4,
-    Item.RattyReliquary: 2,
-    Item.ApostatesPsalm: 1,
-})
-
-jericho_trade({
-    Item.FavConstables: -4,
-    Item.CaveAgedCodeOfHonour: 2,
-    Item.SwornStatement: 1
-})
-
-jericho_trade({
-    Item.FavCriminals: -4,
-    Item.HumanRibcage: 2,
-    Item.HumanArm: 1
-})
-
-jericho_trade({
-    Item.FavDocks: -4,
-    Item.UncannyIncunabulum: 2,
-    Item.KnobOfScintillack: 1
-})
-
-jericho_trade({
-    Item.FavGreatGame: -4,
-    Item.ViennaOpening: 1,
-    Item.QueenMate: 1
-})
-
-jericho_trade({
-    Item.FavHell: -4,
-    Item.ThornedRibcage: 2,
-    Item.QueerSoul: 1
-})
-
-jericho_trade({
-    Item.FavRevolutionaries: -4,
-    Item.UnlawfulDevice: 2,
-    Item.ThirstyBombazineScrap: 1
-})
-
-jericho_trade({
-    Item.FavRubberyMen: -4,
-    Item.FlourishingRibcage: 2,
-    Item.BasketOfRubberyPies: 1,
-})
-
-jericho_trade({
-    Item.FavSociety: -4,
-    Item.FavourInHighPlaces: 2,
-    Item.NightOnTheTown: 1
-})
-
-jericho_trade({
-    Item.FavTombColonies: -4,
-    Item.AntiqueMystery: 2,
-    Item.UnprovenancedArtefact: 1,
-})
-
-jericho_trade({
-    Item.FavUrchins: -4,
-    Item.StormThrenody: 2,
-    Item.AeolianScream: 1
-})
-
 # --------------
-# Evenlode
+# Upper River Deck
 # -------------
 
-
+# TODO: upper river deck stuff
 railway_card("Digs in the Magistracy of the Evenlode",
     Rarity.Standard,
     Location.TheMagistracyOfTheEvenlode,
@@ -492,7 +327,6 @@ trade(0, {
     Item.PalaeontologicalDiscovery: 5
 })
 
-
 trade(0, {
     Item.DigsInEvenlode: -1,
     Item.SurveyOfTheNeathsBones: -140,
@@ -505,244 +339,6 @@ trade(0, {
     Item.SurveyOfTheNeathsBones: -240,
     Item.PalaeontologicalDiscovery: 10
 })
-
-
-# --------------
-# Balmoral
-# -------------
-
-# 2x (1 action, 4 research) to enter
-# 1 action to go to glade
-# 3x (1 action, 3 bombazine) to darken
-# 1 action wander
-# 1 action locate red deer
-# 1 action cash out with keeper
-
-# TODO: double check action counts for these
-# Mammoth Ribcage
-trade(9, {
-    Item.VolumeOfCollatedResearch: -8,
-    Item.ThirstyBombazineScrap: -9,
-
-    Item.MammothRibcage: 1,
-    Item.HolyRelicOfTheThighOfStFiacre: 1,
-    Item.FemurOfAJurassicBeast: 2,
-    Item.BoneFragments: 400
-})
-
-# Skeleton with 7 Necks
-trade(7, {
-    Item.VolumeOfCollatedResearch: -8,
-    Item.UnprovenancedArtefact: -4,
-
-    Item.SkeletonWithSevenNecks: 1,
-    Item.WingOfAYoungTerrorBird: 3,
-    Item.BoneFragments: 200
-})
-
-# --------------
-# Station VIII
-# -------------
-
-trade(2, {
-    Item.ExtraordinaryImplication: -2,
-    Item.HalcyonicTonic: 1,
-    Item.FillipOfEffervescence: 1
-})
-
-trade(1, {
-    Item.OilOfCompanionship: -1,
-    Item.RumourOfTheUpperRiver: -98,
-
-    Item.PrismaticFrame: 1
-})
-
-# Handwaving the UR/London transition
-trade(3, {
-    Item.CrystallizedEuphoria: 1
-})
-
-trade(3, {
-    Item.AntiqueMystery: -2,
-    Item.ConsignmentOfScintillackSnuff: -2,
-
-    Item.OilOfCompanionship: 1
-})
-
-# Mr Wines
-trade(1, {
-    Item.SolacefruitChampagneSorbet: -1,
-
-    Item.BottleOfStranglingWillowAbsinthe: 66,
-    Item.BottelofMorelways1872: 328,
-    Item.HinterlandScrip: 5
-})
-
-# Fish broth
-trade(1, {
-    Item.HandPickedPeppercaps: -5,
-    Item.WitheredTentacle: -2,
-    Item.FinBonesCollected: -5,
-
-    Item.VibrantPepperyFishBroth: 1
-})
-
-trade(1, {
-    Item.VibrantPepperyFishBroth: -1,
-    Item.RemainsOfAPinewoodShark: -1,
-    Item.CrateOfIncorruptibleBiscuits: -1,
-
-    Item.SharkBouillabaisseWithCroutons: 1
-})
-
-trade(1, {
-    Item.VibrantPepperyFishBroth: -1,
-    Item.PerfumedGunpowder: -1,
-    Item.TinOfZzoup: -1,
-
-    Item.CaduceanZzoupWithGunpowderAndSicklyRose: 1
-})
-
-trade(1, {
-    Item.MemoryOfDistantShores: -2,
-    Item.AmberCrustedFin: -1,
-    Item.WitheredTentacle: -6,
-
-    Item.CulinaryTributeToTheSeaOfSpines: 1
-})
-
-# Liqueur
-
-# placeholder for costermonger
-trade(1, {
-    Item.Echo: -28,
-    Item.SolaceFruit: 28,
-    Item.DarkDewedCherry: 20
-})
-
-trade(1, {
-    Item.Echo: -12.5,
-    Item.MemoryOfDiscordance: 1
-})
-
-trade(1, {
-    Item.DarkDewedCherry: -3,
-    Item.BottleOfBrokenGiant1844: -1,
-
-    Item.DarkDewedCherryLiquer: 1
-})
-
-trade(1, {
-    Item.DarkDewedCherryLiquer: -1,
-    Item.FillipOfEffervescence: -1,
-    Item.CrystallizedEuphoria: -1,
-    Item.SolaceFruit: -5,
-
-    Item.SparklingSolacefruitRoyale: 1
-})
-
-trade(1, {
-    Item.SparklingSolacefruitRoyale: -1,
-    Item.ConcentrateOfSelf: -1,
-    Item.MemoryOfDistantShores: -100,
-    
-    Item.CuratorialCocktail: 1
-})
-
-trade(1, {
-    Item.SparklingSolacefruitRoyale: -1,
-    Item.MemoryOfDiscordance: -1,
-    # Item.SuddenInsight: -1,
-    # Item.Moonlit: -3,
-
-    Item.SolacefruitChampagneSorbet: 1
-})
-
-# Pate
-trade(1, {
-    Item.HandPickedPeppercaps: -5,
-    Item.PotOfVenisonMarrow: -2,
-    Item.PreservedSurfaceBlooms: -1,
-
-    Item.AnEnticingFungalPate: 1
-})
-
-trade(1, {
-    Item.AnEnticingFungalPate: -1,
-    Item.SausageAboutWhichNoOneComplains: -1,
-    Item.TinnedHam: -1,
-
-    Item.APlatterOfMixedCharcuterie: 1
-})
-
-trade(1, {
-    Item.AnEnticingFungalPate: -1,
-    Item.HandPickedPeppercaps: -1,
-    Item.BottleOfStranglingWillowAbsinthe: -1,
-
-    Item.ATowerOfFungalPateFlambe: 1
-})
-
-# Tapenade
-trade(1, {
-    Item.ParabolanOrangeApple: -2,
-
-    Item.SelfReflectiveTapenadeOfParabolanOrangeApple: 1
-})
-
-trade(1, {
-    Item.SelfReflectiveTapenadeOfParabolanOrangeApple: -1,
-    Item.DropOfPrisonersHoney: -1,
-
-    Item.MarmaladeOfParabolanOrangeAppleHoneyAndRoseateAttar: 1
-})
-
-trade(1, {
-    Item.SelfReflectiveTapenadeOfParabolanOrangeApple: -1,    
-    Item.JasmineLeaves: -15,
-    Item.MagisterialLager: -2,
-
-    Item.SourPickleOfParabolanOrangeAppleAndVinegar: 1
-})
-
-trade(1, {
-    Item.SelfReflectiveTapenadeOfParabolanOrangeApple: -1,    
-    Item.MuscariaBrandy: -1,
-
-    Item.OrangeAppleJamSpikedWithMuscariaBrandy: 1
-})
-
-
-# ----------------
-# --- The Hurlers
-# ----------------
-
-
-# Licensed by Mr Stones
-
-trade(1, {
-    Item.FlawedDiamond: -100,
-    Item.HinterlandScrip: 30
-})
-
-trade(1, {
-    Item.OstentatiousDiamond: -25,
-    Item.CrateOfIncorruptibleBiscuits: 6
-})
-
-trade(1, {
-    Item.MagnificentDiamond: -1,
-    Item.TouchingLoveStory: 5.5 # assumes uniform 5 or 6
-})
-
-trade(1, {
-    Item.FabulousDiamond: -1,
-    Item.HinterlandScrip: 625,
-    Item.StolenKiss: 2
-})
-
-# Statues
-# TODO enable only one at a time
 
 railway_card("Under the Statue - Liberation",
         Rarity.Standard,
@@ -799,12 +395,6 @@ railway_card("Grazing Goat Demons",
     # TODO might be playable? looks complicated
 })
 
-
-# trade(5, {
-#     Item.NightOnTheTown: 12
-# })
-
-
 # -------------------------------
 # ---- Opportunity Deck Math ----
 # -------------------------------
@@ -823,36 +413,7 @@ railway_card("Grazing Goat Demons",
 london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 
 trade(london_good_card_density, london_deck.normalized_trade())
-
 trade(1, zailing_deck.normalized_trade())
-
-# per_day(card_exchange)
-
-# trade(20.42, {
-#     Item.Echo: -1.05,
-#     Item.Wounds: 0.84,
-#     Item.Scandal: 3.43,
-#     Item.Suspicion: 0.84,
-#     Item.FavBohemians: 3.78,
-#     Item.FavChurch: 2.52,
-#     Item.FavCriminals: 2.5,
-#     Item.FavDocks: 0.84,
-#     Item.FavGreatGame: 1.78,
-#     Item.FavRevolutionaries: 2.08,
-#     Item.FavSociety: 3.36,
-#     Item.FavTombColonies: 0.84,
-#     Item.FavUrchins: 0.84,
-#     Item.CertifiableScrap: 0.84,
-#     Item.PieceOfRostygold: 1260.50,
-#     Item.CompromisingDocument: -0.84,
-#     Item.CrypticClue: 193.28,
-#     Item.TaleOfTerror: -0.84,
-#     Item.VisionOfTheSurface: -0.84,
-#     Item.JetBlackStinger: 4.20,
-#     Item.ScrapOfIncendiaryGossip: 11.76,
-#     Item.RumourOfTheUpperRiver: -4.20,
-#     Item.AeolianScream: 0.04
-# })
 
 # ------------------------------------------
 # ---------------- Optimization ------------
