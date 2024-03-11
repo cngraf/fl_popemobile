@@ -23,6 +23,68 @@ class Deck:
             trade[item] = value / self.deck_size
         return trade
 
+def add_trades(trade):
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavBohemians: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavChurch: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavConstables: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavCriminals: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavDocks: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavGreatGame: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavHell: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavRevolutionaries: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavRubberyMen: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavSociety: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavTombColonies: 1
+    })
+
+    trade(0, {
+        Item.ConnectedPetCard: -1,
+        Item.FavUrchins: 1
+    })
+
+
 def create_london_deck(
         wounds_multiplier,
         scandal_multiplier,

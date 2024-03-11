@@ -8,8 +8,11 @@ from itertools import count
 
 from enums import *
 from utils import *
-# from decks import *
+from player import *
+
+import social_actions as SocialActions
 import decks as Decks
+import bazaar as Bazaar
 
 import numpy as np
 import pprint
@@ -126,28 +129,28 @@ nightmares_multiplier = 0.85
 # --------------------------------------------    
 # TODO: separate class?
 
+baseline_player = Player(stats = {
+    Stat.Watchful: 230 + 92,
+    Stat.Shadowy: 230 + 73,
+    Stat.Dangerous: 230 + 83,
+    Stat.Persuasive: 230 + 85,
+})
+
+player_third_city_silverer = Player(
+    ambition=Ambition.BagALegend,
+    treasure=Treasure.LongDeadPriestsOfTheRedBird,
+    profession=Profession.Silverer)
+
+
+active_player = baseline_player
+
 player_profession = Profession.NoProfession
 player_treasure = Treasure.FalseStartOfYourOwn
 player_location = Location.NoLocation
 player_ambition = Ambition.BagALegend
 
 # assuming 230 & 7 base
-player_stats = {
-    Stat.Watchful: 315,
-    Stat.Shadowy: 315,
-    Stat.Dangerous: 315,
-    Stat.Persuasive: 315,
-    Stat.KatalepticToxicology: 15,
-    Stat.MonstrousAnatomy: 15,
-    Stat.APlayerOfChess: 15,
-    Stat.Glasswork: 15,
-    Stat.ShapelingArts: 15,
-    Stat.ArtisanOfTheRedScience: 15,
-    Stat.Mithridacy: 15,
-    Stat.StewardOfTheDiscordance: 8,
-    Stat.Zeefaring: 15
-}
-
+player_stats = active_player.stats
 
 # --------------------------------------------
 # -------------- Player Config ---------------
@@ -281,180 +284,22 @@ per_day({
     Item.VisitFromTimeTheHealer: 1/7
 })
 
-
-# Time-gated stuff
-# Lots missing
-
-# # Just gonna comment this out for now
-# # it will only confuse things until the non-exlusive options are settled
-
-# def rewards_of_ambition(treasure):
-#     if treasure == Treasure.NoTreasure:
-#         return {}
-#     # Bag a Legend
-#     elif treasure == Treasure.VastNetworkOfConnections:
-#         return {
-#             Item.ParabolaLinenScrap: 1,
-#             Item.HinterlandScrip: 5,
-#             Item.Nightmares: -5,
-#             Item.BraggingRightsAtTheMedusasHead: 5
-#         }
-#     elif treasure == Treasure.SocietyOfTheThreeFingeredHand:
-#         return {
-#             Item.SearingEnigma: 1,
-#             Item.Nightmares: -5,
-#             Item.BraggingRightsAtTheMedusasHead: 5
-#         }
-#     elif treasure == Treasure.WingedAndTalonedSteed:
-#         return {
-#             Item.NightWhisper: 1,
-#             Item.Wounds: -5,
-#             Item.BraggingRightsAtTheMedusasHead: 5
-#         }
-#     elif treasure == Treasure.LongDeadPriestsOfTheRedBird:
-#         return {
-#             Item.PrimaevalHint: 1,
-#             Item.Wounds: -5,
-#             Item.BraggingRightsAtTheMedusasHead: 5
-#         }
-#     # Hearts Desire
-#     elif treasure == Treasure.TheRobeOfMrCards:
-#         return {
-#             Item.FragmentOfTheTragedyProcedures: 1,
-#             Item.Suspicion: -5
-#         }
-#     elif treasure == Treasure.NewlyCastCrownOfTheCityOfLondon:
-#         return {
-#             Item.BottleOfFourthCityAirag: 1,
-#             Item.Scandal: -5
-#         }
-#     elif treasure == Treasure.LeaseholdOnAllOfLondon:
-#         return {
-#             Item.SearingEnigma: 1,
-#             Item.Wounds: -5
-#         }    
-#     elif treasure == Treasure.PalatialHomeInTheArcticCircle:
-#         return {
-#             Item.NightWhisper: 1,
-#             Item.Nightmares: -5
-#         }
-#     elif treasure == Treasure.TheRobeOfMrCards:
-#         return {
-#             Item.PrimaevalHint: 1,
-#             Item.Nightmares: -5
-#         }
-#     elif treasure == Treasure.FalseStartOfYourOwn:
-#         return {
-#             Item.SearingEnigma: 1,
-#             Item.Nightmares: -5
-#         }
-#     elif treasure == Treasure.KittenSizedDiamond:
-#         return {
-#             Item.PrimaevalHint: 1,
-#             Item.Wounds: -5,
-#             # ???
-#             Item.OstentatiousDiamond: -1,
-#             Item.MagnificentDiamond: 1
-#         }
-#     elif treasure == Treasure.BloodiedTravellingCoatOfMrCups:
-#         return {
-#             Item.BlackmailMaterial: 1,
-#             Item.Nightmares: -5
-#         }
-#     elif treasure == Treasure.YourLovedOneReturned:
-#         return {
-#             Item.PrimaevalHint: 1,
-#             Item.Nightmares: -5
-#         }
-
-
 trade(0, {
     Item.VisitFromTimeTheHealer: -1,
     # Item.AConsequenceOfYourAmbition: 1
 })
 
-# ambition_reward = rewards_of_ambition(treasure)
-# ambition_reward[Item.AConsequenceOfYourAmbition] = -4
-# trade(1, ambition_reward)
-
-#  ██████╗ ██████╗ ██████╗     ██████╗ ███████╗ ██████╗██╗  ██╗
-# ██╔═══██╗██╔══██╗██╔══██╗    ██╔══██╗██╔════╝██╔════╝██║ ██╔╝
-# ██║   ██║██████╔╝██████╔╝    ██║  ██║█████╗  ██║     █████╔╝ 
-# ██║   ██║██╔═══╝ ██╔═══╝     ██║  ██║██╔══╝  ██║     ██╔═██╗ 
-# ╚██████╔╝██║     ██║         ██████╔╝███████╗╚██████╗██║  ██╗
-#  ╚═════╝ ╚═╝     ╚═╝         ╚═════╝ ╚══════╝ ╚═════╝╚═╝  ╚═╝
-
 
 # -----------------------------------------------------
-# --- Cards: Companions
+# --- Modules
 # ----------------------------------------------------
 
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavBohemians: 1
-})
 
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavChurch: 1
-})
+# doing some goofy inversion of control stuff here so that I can just copy paste everything
 
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavConstables: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavCriminals: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavDocks: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavGreatGame: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavHell: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavRevolutionaries: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavRubberyMen: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavSociety: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavTombColonies: 1
-})
-
-trade(0, {
-    Item.ConnectedPetCard: -1,
-    Item.FavUrchins: 1
-})
-
-# if player_treasure == Treasure.FalseStartOfYourOwn:
-#     trade(0, {
-#         Item.NavigationErrorCard: -1,
-#         Item.TroubledWaters: -5
-#     })
-
+SocialActions.add_trades(trade)
+Decks.add_trades(trade)
+Bazaar.add_trades(trade)
 
 #  ██████╗ ███████╗███╗   ██╗███████╗██████╗  █████╗ ██╗     
 # ██╔════╝ ██╔════╝████╗  ██║██╔════╝██╔══██╗██╔══██╗██║     
@@ -462,491 +307,7 @@ trade(0, {
 # ██║   ██║██╔══╝  ██║╚██╗██║██╔══╝  ██╔══██╗██╔══██║██║     
 # ╚██████╔╝███████╗██║ ╚████║███████╗██║  ██║██║  ██║███████╗
 #  ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝
-                                                           
 
-## ------------------------------
-## -------- Social Actions --
-## ------------------------------
-# ignoring the cost to the other party
-    
-# Send Disquieting Missive
-# if player_profession == Profession.CrookedCross:
-trade(1, {
-    Item.VerseOfCounterCreed: -1,
-    Item.Corresponding: 3
-})
-
-trade(1, {
-    Item.ExtraordinaryImplication: -2,
-    Item.VolumeOfCollatedResearch: -2,
-    Item.Echo: -3, # 0.6 x5 for the paper
-    Item.Corresponding: 3
-})
-
-trade(1, {
-    Item.Corresponding: -10,
-    Item.VitalIntelligence: 1,
-    Item.MovesInTheGreatGame: 46
-})
-
-# if player_profession == Profession.CrookedCross:
-trade(1, {
-    Item.Corresponding: -10,
-    Item.SilentSoul: 1,
-    Item.Soul: 1150
-})
-
-# requires recipient to be Licentiate
-# dang this is pretty good?
-trade(1, {
-    Item.PieceOfRostygold: -500,
-    Item.Suspicion: -6,
-    Item.Scandal: -6  
-})
-
-# poetic 
-trade(1, {
-    Item.Investigating: 46
-})    
-
-trade(1, {
-    Item.Inspired: 46 # 0.2 *
-})
-
-# # if player_profession == Profession.Licentiate:
-# trade(1, {
-#     Item.PieceOfRostygold: 500,
-#     Item.MovesInTheGreatGame: 2
-# })
-
-# Ignnorng betrayal options w/ weekly cap
-
-trade(1, {
-    Item.Wounds: -6
-})
-
-trade(1, {
-    Item.Scandal: -5
-})
-
-trade(1, {
-    Item.Suspicion: -5
-})
-
-trade(1, {
-    Item.Nightmares: -6
-})
-
-# # Not a real action
-# # just to allow any grind that's net negative on a given menace
-
-# trade(1, {
-#     Item.Wounds: 30
-# })
-
-# trade(1, {
-#     Item.Scandal: 30
-# })
-
-# trade(1, {
-#     Item.Suspicion: 30
-# })
-
-# trade(1, {
-#     Item.Nightmares: 30
-# })
-
-# trade(1, {
-#     Item.TroubledWaters: 30
-# })
-
-# -----------------------------------
-# --- Buying & Selling at Bazaar ---
-# -----------------------------------
-
-trade(0, {
-    Item.Echo: -64.80,
-    Item.WinsomeDispossessedOrphan: 1
-})
-
-# Academic
-trade(0, {
-    Item.Echo: -0.03,
-    Item.FoxfireCandleStub: 1
-})
-
-trade(0, {
-    Item.Echo: -0.2,
-    Item.FlaskOfAbominableSalts: 1
-})
-
-trade(0, {
-    Item.MemoryOfDistantShores: -1,
-    Item.Echo: 0.5
-})
-
-trade(0, {
-    Item.IncisiveObservation: -1,
-    Item.Echo: 0.5
-})
-
-trade(0, {
-    Item.UnprovenancedArtefact: -1,
-    Item.Echo: 2.5
-})
-
-
-# Cartography ------
-
-trade(0, {
-    Item.ShardOfGlim: -1,
-    Item.Echo: 0.01
-})
-
-trade(0, {
-    Item.MapScrap: -1,
-    Item.Echo: 0.10
-})
-
-trade(0, {
-    Item.ZeeZtory: -1,
-    Item.Echo: 0.5
-})
-
-trade(0, {
-    Item.PartialMap: -1,
-    Item.Echo: 2.5
-})
-
-trade(0, {
-    Item.PuzzlingMap: -1,
-    Item.Echo: 12.5
-})
-
-trade(0, {
-    Item.SaltSteppeAtlas: -1,
-    Item.Echo: 62.5
-})
-
-trade(0, {
-    Item.RelativelySafeZeeLane: -1,
-    Item.Echo: 62.5
-})
-
-trade(0, {
-    Item.SightingOfAParabolanLandmark: -1,
-    Item.Echo: 0.1
-})
-
-trade(0, {
-    Item.VitreousAlmanac: -1,
-    Item.Echo: 12.5
-})
-
-trade(0, {
-    Item.OneiromanticRevelation: -1,
-    Item.Echo: 62.5
-})
-
-trade(0, {
-    Item.ParabolanParable: -1,
-    Item.Echo: 312.5
-})
-
-trade(0, {
-    Item.CartographersHoard: -1,
-    Item.Echo: 312.5
-})
-
-# Currency ------
-trade(0, {
-    Item.HinterlandScrip: -1,
-    Item.Echo: 0.5
-})
-
-# Elder ---------
-trade(0, {
-    Item.AntiqueMystery: -1,
-    Item.Echo: 12.5
-})
-
-# Goods ----------
-
-trade(0, {
-    Item.NevercoldBrassSliver: -1,
-    Item.Echo: 0.01
-})
-
-trade(0, {
-    Item.PieceOfRostygold: -1,
-    Item.Echo: 0.01
-})
-
-trade(0, {
-    Item.PreservedSurfaceBlooms: -1,
-    Item.Echo: 2.5
-})
-
-trade(0, {
-    Item.KnobOfScintillack: -1,
-    Item.Echo: 2.5
-})
-
-# ----- Great Game
-trade(0, {
-    Item.FinalBreath: -1,
-    Item.HinterlandScrip: 1
-})
-
-trade(0, {
-    Item.ViennaOpening: -1,
-    Item.HinterlandScrip: 5
-})
-
-trade(0, {
-    Item.QueenMate: -1,
-    Item.HinterlandScrip: 50
-})
-
-
-# Historical -----
-
-trade(0, {
-    Item.SilveredCatsClaw: -1,
-    Item.Echo: 0.10
-})
-
-trade(0, {
-    Item.UnlawfulDevice: -1,
-    Item.Echo: 12.5
-})
-
-trade(0, {
-    Item.UnlawfulDevice: -1,
-    Item.HinterlandScrip: 25
-})
-
-# Infernal
-trade(0, {
-    Item.QueerSoul: -1,
-    Item.Echo: 2.5
-})
-
-# Influence
-trade(0, {
-    Item.CompromisingDocument: -1,
-    Item.Echo: 0.5
-})
-
-trade(0, {
-    Item.FavourInHighPlaces: -1,
-    Item.Echo: 1
-})
-
-# Legal
-trade(0, {
-    Item.CaveAgedCodeOfHonour: -1,
-    Item.LegalDocument: 1,
-})
-
-trade(0, {
-    Item.LegalDocument: -1,
-    Item.Echo: 12.5
-})
-
-# Luminosity ---------
-
-trade(0, {
-    Item.LumpOfLamplighterBeeswax: -1,
-    Item.Echo: 0.01
-})
-
-trade(0, {
-    Item.PhosphorescentScarab: -1,
-    Item.Echo: 0.10
-})
-
-trade(0, {
-    Item.MemoryOfLight: -1,
-    Item.CrypticClue: 25
-})
-
-trade(0, {
-    Item.LumpOfLamplighterBeeswax: -1,
-    Item.Echo: 0.01
-})
-
-trade(0, {
-    Item.MourningCandle: -1,
-    Item.Echo: 2.5
-})
-
-# Mysteries ---------
-
-trade(0, {
-    Item.WhisperedHint: -1,
-    Item.Echo: 0.01
-})
-
-trade(0, {
-    Item.CrypticClue: -1,
-    Item.Echo: 0.02
-})
-
-trade(0, {
-    Item.CrypticClue: -1,
-    Item.AppallingSecret: 0.02
-})
-
-trade(0, {
-    Item.JournalOfInfamy: -1,
-    Item.Echo: 0.5
-})
-
-trade(0, {
-    Item.TaleOfTerror: -1,
-    Item.Echo: 0.5
-})
-
-trade(0, {
-    Item.ExtraordinaryImplication: -1,
-    Item.Echo: 2.5
-})
-
-trade(0, {
-    Item.UncannyIncunabulum: -1,
-    Item.Echo: 12.50
-})
-
-
-# Nostalgia
-trade(0, {
-    Item.Echo: -0.04,
-    Item.DropOfPrisonersHoney: 1
-})
-
-trade(0, {
-    Item.RomanticNotion: -1,
-    Item.Echo: 0.10
-})
-
-# Osteology
-
-# worth ~3.05 echoes with horsebitrage
-trade(0, {
-    Item.CarvedBallOfStygianIvory: -1,
-    Item.Echo: 2.5
-})
-
-# Rag Trade
-trade(0, {
-    Item.ThirstyBombazineScrap: -1,
-    Item.RatShilling: 2.5
-})
-
-# Ratness
-trade(1, {
-    Item.RattyReliquary: -5,
-    Item.RatShilling: 850
-})
-
-# Rumour ---------------------
-
-trade(0, {
-    Item.ScrapOfIncendiaryGossip: -1,
-    Item.Echo: 0.5
-})
-
-trade(0, {
-    Item.RumourOfTheUpperRiver: -1,
-    Item.Echo: 2.5
-})
-
-trade(0, {
-    Item.NightOnTheTown: -1,
-    Item.Echo: 2.5
-})
-
-# Sustenance ----------------
-trade(0, {
-    Item.JasmineLeaves: -1,
-    Item.Echo: 0.1
-})
-
-trade(0, {
-    Item.BasketOfRubberyPies: -1,
-    Item.Echo: 2.5
-})
-
-trade(0, {
-    Item.HinterlandScrip: -125,
-    Item.TinnedHam: 1
-})
-
-trade(0, {
-    Item.TinnedHam: -1,
-    Item.Echo: 63.5
-})
-
-# Theological
-trade(0, {
-    Item.ApostatesPsalm: -1,
-    Item.Echo: 2.5
-})
-
-# Wild Words ----------
-
-trade(0, {
-    Item.AeolianScream: -1,
-    Item.Echo: 2.5
-})
-
-trade(0, {
-    Item.StormThrenody: -1,
-    Item.Echo: 12.50
-})
-
-trade(0, {
-    Item.NightWhisper: -1,
-    Item.Echo: 62.5
-})
-
-# Wines
-trade(0, {
-    Item.BottleOfGreyfields1879: 1,
-    Item.Echo: -0.02
-})
-
-trade(0, {
-    Item.BottleOfGreyfields1879: -1,
-    Item.Echo: 0.01
-})
-
-trade(0, {
-    Item.Echo: -0.04,
-    Item.BottleOfGreyfields1882: 1
-})
-
-trade(0, {
-    Item.BottleOfGreyfields1882: -1,
-    Item.Echo: 0.02
-})
-
-trade(0, {
-    Item.BottelofMorelways1872: -1,
-    Item.Echo: 0.1
-})
-
-trade(0, {
-    Item.BottleOfStranglingWillowAbsinthe: -1,
-    Item.Echo: -0.5
-})
-
-# Equipment
-trade(0, {
-    Item.SulkyBat: -1,
-    Item.Echo: 0.2
-})
 
 ## --------------------------------------
 ## ----------- Connected
@@ -3698,7 +3059,7 @@ railway_card("Grazing Goat Demons",
 # print(card_exchange)
 london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 
-# trade(london_good_card_density, london_deck.normalized_trade())
+trade(london_good_card_density, london_deck.normalized_trade())
 
 trade(1, zailing_deck.normalized_trade())
 
