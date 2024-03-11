@@ -91,3 +91,9 @@ class Player:
 
         for key, value in stats.items():
             self.stats[key] = value
+
+        self.wounds_reduction = 2
+        self.scandal_reduction = 2
+        self.suspicion_reduction = 2
+        self.nightmares_reduction = 2
+        self.troubled_waters_reduction = 2

@@ -86,13 +86,14 @@ def add_trades(trade):
 
 
 def create_london_deck(
-        wounds_multiplier,
-        scandal_multiplier,
-        suspicion_multiplier,
-        nightmares_multiplier,
+        player,
         replacement_epa
         ):
 
+    wounds_multiplier = menace_multiplier(player.wounds_reduction)
+    suspicion_multiplier = menace_multiplier(player.suspicion_reduction)
+    scandal_multiplier = menace_multiplier(player.scandal_reduction)    
+    nightmares_multiplier = menace_multiplier(player.nightmares_reduction)
 
     london_deck = Deck("London", -400)
 
@@ -729,11 +730,16 @@ def plunder_ev(region, isAdvanced, player_stat, rare_success_rate = 0.1):
     # why did we add a plunder var
     return success_rate * (gain_on_success + (50 * rare_success_rate))
 
-def create_zailing_deck(player_stats, region, profession, treasure):
+def create_zailing_deck(player):
     # hold "Creaking above" card, and one other infrequent one
     deck = Deck("Zailing", -200)
 
-    troubled_waters_multiplier = 0.65 # hat plus cruiser
+    player_stats = player.stats
+    region = player.location
+    profession = player.profession
+    treasure = player.treasure
+
+    troubled_waters_multiplier = menace_multiplier(player.troubled_waters_reduction)
 
     # with FATE commodore companion
     # wiki does not have actual figures, just guessing

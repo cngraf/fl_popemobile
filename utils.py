@@ -7,6 +7,10 @@ def narrow_challenge_success_rate(stat, difficulty): return clamp(0.5 + (stat - 
 
 def expected_failures(success_rate): return 1.0/success_rate - 1 if success_rate < 1.0 else 0
 
+def menace_multiplier(reduction_points):
+    # formula per wiki
+    return 1 - (0.6 * (1 - 0.75**reduction_points)) 
+
 def challenge_ev(player_stat, difficulty, success, failure):
     success_rate = broad_challenge_success_rate(player_stat, difficulty)
     return success_rate * success + (1.0 - success_rate) * failure
