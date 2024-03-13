@@ -97,11 +97,36 @@ def add_trades(trade):
 
     # Currency ------
     trade(0, {
+        Item.FirstCityCoin: -1,
+        Item.Echo: 0.25
+    })
+
+    trade(0, {
+        Item.FistfulOfSurfaceCurrency: -1,
+        Item.Echo: 0.03
+    })
+
+    trade(0, {
         Item.HinterlandScrip: -1,
         Item.Echo: 0.5
     })
 
     # Elder ---------
+    trade(0, {
+        Item.RelicOfTheThirdCity: -1,
+        Item.Echo: 0.1
+    })
+
+    trade(0, {
+        Item.MysteryOfTheElderContinent: -1,
+        Item.Echo: 0.5
+    })
+
+    trade(0, {
+        Item.PresbyteratePassphrase: -1,
+        Item.Echo: 2.5
+    })
+
     trade(0, {
         Item.AntiqueMystery: -1,
         Item.Echo: 12.5
@@ -149,8 +174,33 @@ def add_trades(trade):
     # Historical -----
 
     trade(0, {
+        Item.RelicOfTheFourthCity: -1,
+        Item.Echo: 0.05
+    })
+
+    trade(0, {
+        Item.RustedStirrup: -1,
+        Item.Echo: 0.10
+    })
+
+    trade(0, {
         Item.SilveredCatsClaw: -1,
         Item.Echo: 0.10
+    })
+
+    trade(0, {
+        Item.TraceOfViric: -1,
+        Item.Echo: 0.5
+    })
+
+    trade(0, {
+        Item.RelicOfTheSecondCity: -1,
+        Item.Echo: 0.15
+    })
+
+    trade(0, {
+        Item.NicatoreanRelic: -1,
+        Item.Echo: 2.5
     })
 
     trade(0, {
@@ -288,11 +338,30 @@ def add_trades(trade):
     })
 
     # Rumour ---------------------
+    trade(0, {
+        Item.ProscibedMaterial: -1,
+        Item.Echo: 0.04
+    })
+
+    trade(0, {
+        Item.InklingOfIdentity: -1,
+        Item.Echo: 0.10
+    })
 
     trade(0, {
         Item.ScrapOfIncendiaryGossip: -1,
         Item.Echo: 0.5
     })
+
+    trade(0, {
+        Item.AnIdentityUncovered: -1,
+        Item.Echo: 2.5
+    })
+
+    trade(0, {
+        Item.BlackmailMaterial: -1,
+        Item.Echo: 12.5
+    }) 
 
     trade(0, {
         Item.RumourOfTheUpperRiver: -1,

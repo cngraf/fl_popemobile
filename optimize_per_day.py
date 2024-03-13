@@ -112,12 +112,18 @@ long term
 - incorporate a given character's capabilities
     - what are your stats, what various options do you have unlocked
     - in general more fine-grained control over the various base assumptions
+
+crackpot idea
+- normalize all trades to 1 echo where possible?
+- get a better idea of weights/marginals
+- prob make it much more difficult to read
+- maybe go halfway and do this for the buy/sell actions and that's it
 '''
 
-class Config:
-    def __init__(self):
-        self.actions_per_day = 120.0
-        self.cards_seen_per_day = 40
+# class Config:
+#     def __init__(self):
+#         self.actions_per_day = 120.0
+#         self.cards_seen_per_day = 40
 
 # Important Parameters
 # actions doesn't matter on its own until I add some weekly+ stuff
@@ -286,6 +292,7 @@ london.newspaper.add_trades(active_player, trade)
 london.bone_market.add_trades(active_player, trade)
 london.uncategorized.add_trades(active_player, trade)
 london.laboratory.add_trades(active_player, lab_rpa, trade)
+london.hearts_game.add_trades(active_player, trade)
 
 unterzee.khanate.add_trades(active_player, trade)
 unterzee.wakeful_eye.add_trades(active_player, trade)
@@ -495,12 +502,17 @@ for i in range(0, len(opt_result.slack)):
                 lose_items += str(Item(ii)) + ":" + str(quantity) + "; "
             if quantity > 0:
                 gain_items += str(Item(ii)) + ":" + str(quantity) + "; "
-        trade_items = lose_items + " => " + gain_items            
-        trade_items = trade_items.replace("Item.","");
+        # trade_items = lose_items + " => " + gain_items            
+        # trade_items = trade_items.replace("Item.","")
+
+        lose_items = lose_items.replace("Item.","")
+        gain_items = gain_items.replace("Item.","")
         # print("* " + trade_items)
-        print(f"{marginal:.3}       " + trade_items)
+        print(f"{marginal:.3}       " + lose_items + " => " + gain_items)
+        # print(f"")
+
 
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
 
 # print(london_deck.normalized_trade())
-print(zailing_deck.normalized_trade())
+# print(zailing_deck.normalized_trade())

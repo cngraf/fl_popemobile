@@ -212,6 +212,8 @@ class Item(Enum):
     Hillmover = auto()
 
     # Currency
+    FirstCityCoin = auto()
+    FistfulOfSurfaceCurrency = auto()
     HinterlandScrip = auto()
     RatShilling = auto()
     AssortmentOfKhaganianCoinage = auto()
@@ -536,6 +538,11 @@ class Item(Enum):
 
     PalaeontologicalDiscovery = auto()
     EsteemOfTheGuild = auto()
+    WagesOfADig = auto()
+
+    MonographCautionary = auto()
+    MonographTragic = auto()
+    MonographIronic = auto()
 
     # ----- Psuedo Items
     VisitFromTimeTheHealer = auto()
