@@ -18,6 +18,8 @@ def add_trades(player, trade):
     actions_on_failure = actions_to_sell_skelly(player.stats[Stat.Shadowy], 6)
     actions_to_sell_chimera = (actions_on_success * chimera_success_rate) + (actions_on_failure * (1.0 - chimera_success_rate))
 
+    shadowy = player.stats[Stat.Shadowy]
+
     # out of curiosity, what happens if we could cash out everything for free
     # Suggests the following items can be acquired profitably:
     # - AmberCrustedFin
@@ -295,6 +297,22 @@ def add_trades(player, trade):
         Item.CarvedBallOfStygianIvory: 5
     })
 
+    # chimera => grandmother
+    trade(5 + actions_to_sell_skelly(shadowy, 3), {
+        Item.LeviathanFrame: -1,
+        Item.SabreToothedSkull: -1,
+        Item.HumanArm: -2,
+        Item.IncisiveObservation: 780
+    })
+
+    # fish => grandmother
+    trade(5 + actions_to_sell_skelly(shadowy, 3), {
+        Item.MammothRibcage: -1,
+        Item.BrightBrassSkull: -1,
+        Item.FinBonesCollected: -2,
+        Item.IncisiveObservation: 316
+    })
+
     # -------------------------------
     # ----- Human Ribcage
 
@@ -475,4 +493,24 @@ def add_trades(player, trade):
             Item.NoduleOfWarmAmber: 25 + (penny_value * (1 + zoo_bonus))/10,
             Item.KnobOfScintillack: ((antiquity + amalgamy_bonus) * (amalgamy + antiquity_bonus))
         })    
+
+    for i in range(0, 8):
+        zoo_bonus = 0.1
+
+        brass_skulls = i
+        sabre_toothed_skulls = 7 - i
+
+        penny_value = 6250 + 2500
+        penny_value += 6500 * brass_skulls
+        penny_value += 6250 * sabre_toothed_skulls
+
+        trade(11 + actions_to_sell_skelly(player.stats[Stat.Shadowy], (brass_skulls * 2)/3), {
+            Item.SkeletonWithSevenNecks: -1,
+            Item.BrightBrassSkull: -1 * brass_skulls,
+            Item.NevercoldBrassSliver: -200 * brass_skulls,
+            Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
+            Item.AlbatrossWing: -2,
+
+            Item.ThirstyBombazineScrap: (penny_value * (1 + zoo_bonus)/250),
+        })
         

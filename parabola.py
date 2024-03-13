@@ -68,3 +68,17 @@ def add_trades(active_player, trade):
     trade(72, {
         Item.ConcentrateOfSelf: 1
     })
+
+    # --- The Waswood
+
+    trade(0, {
+        Item.AnIdentityUncovered: -4,
+        Item.IncisiveObservation: -1,
+        Item.CorrectiveHistorialNarrative: 1
+    })
+
+    trade(0, {
+        Item.ExtraordinaryImplication: -4,
+        Item.IncisiveObservation: -1,
+        Item.RevisionistHistoricalNarrative: 1
+    })

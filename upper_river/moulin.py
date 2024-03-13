@@ -3,6 +3,20 @@ from utils import *
 
 def add_trades(active_player, trade):
 
+    # Antiquarian's Shop
+
+    trade(1, {
+        Item.AnIdentityUncovered: -4,
+        Item.IncisiveObservation: -1,
+        Item.CorrectiveHistorialNarrative: 1
+    })
+
+    trade(1, {
+        Item.NicatoreanRelic: -4,
+        Item.IncisiveObservation: -1,
+        Item.RevisionistHistoricalNarrative: 1
+    })
+
     # --- Expeditions
     '''
     how many actions is the whole thing?

@@ -164,3 +164,57 @@ def add_trades(active_player, trade):
         Item.HinterlandScrip: 625
     })
 
+    # Palaeontological Discoveries
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -25,
+        Item.LeviathanFrame: 1
+    })
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -5,
+        Item.MammothRibcage: 1
+    })
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -5,
+        Item.SabreToothedSkull: 1
+    })
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -4,
+        Item.FossilisedForelimb: 2
+    })
+    
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -3,
+        Item.HumanRibcage: 2,
+        Item.HumanArm: 4,
+        Item.TraceOfTheFirstCity: 5
+    })
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -2,
+        Item.HelicalThighbone: 6,
+        Item.KnottedHumerus: 4
+    })
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -2,
+        Item.ThornedRibcage: 2,
+    })
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -1,
+        Item.HornedSkull: 1
+    })
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -1,
+        Item.FemurOfAJurassicBeast: 5,
+    })
+
+    trade(0, {
+        Item.PalaeontologicalDiscovery: -1,
+        Item.BoneFragments: 1250,
+    })

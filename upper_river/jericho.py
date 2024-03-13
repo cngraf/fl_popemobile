@@ -163,3 +163,20 @@ def add_trades(active_player, trade):
         Item.StormThrenody: 2,
         Item.AeolianScream: 1
     })
+
+    # Library
+    trade(1, {
+        Item.RevisionistHistoricalNarrative: -1,
+        Item.HinterlandScrip: 30
+    })
+    
+    trade(1, {
+        Item.CorrectiveHistorialNarrative: -1,
+        Item.HinterlandScrip: 30
+    })
+
+    trade(1, {
+        Item.CorrectiveHistorialNarrative: -2,
+        Item.RevisionistHistoricalNarrative: -3,
+        Item.NightWhisper: 1
+    })

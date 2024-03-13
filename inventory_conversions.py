@@ -24,6 +24,16 @@ def add_trades(player, trade, default_rare_success_rate = 0.05):
 
     # ----- Academic
     trade(1, {
+        Item.FoxfireCandleStub: -1000,
+        Item.FlaskOfAbominableSalts: 105
+    })
+
+    trade(1, {
+        Item.FlaskOfAbominableSalts: -500,
+        Item.MemoryOfDistantShores: 105
+    })
+
+    trade(1, {
         Item.MemoryOfDistantShores: -50,
         Item.ConnectedBenthic: -5,
         Item.VolumeOfCollatedResearch: 10,
@@ -103,6 +113,14 @@ def add_trades(player, trade, default_rare_success_rate = 0.05):
         Item.AnIdentityUncovered: 10,
         Item.ProscibedMaterial: 13 * normal_upconvert_success_rate,
         Item.FavourInHighPlaces: 2 * default_rare_success_rate
+    })
+
+    trade(1, {
+        Item.AnIdentityUncovered: -25,
+        Item.FavSociety: -1,
+        Item.BlackmailMaterial: 5,
+        Item.RatOnAString: 400 * normal_upconvert_success_rate,
+        Item.BottleOfFourthCityAirag: 1 * default_rare_success_rate
     })
 
     # ----- Wines

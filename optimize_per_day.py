@@ -96,9 +96,6 @@ Railway
 
 short term
 - Check out Red (free) cards esp. Discordance stuff
-- check location-specific London cards
-    - skin of the bazaar?
-    - that university one for TC favours
 - bone market exhaustion
     - model it as just 4/7ths of a point per day?
     - fuck maybe we have to move to a per-week basis blergh

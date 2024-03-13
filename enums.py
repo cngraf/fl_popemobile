@@ -157,6 +157,10 @@ class Item(Enum):
     MemoryOfDiscordance = auto()
     LostResearchAssistant = auto()
 
+    # Book
+    RevisionistHistoricalNarrative = auto()
+    CorrectiveHistorialNarrative = auto()
+
     # Curiosity
     VenomRuby = auto()
     Sapphire = auto()

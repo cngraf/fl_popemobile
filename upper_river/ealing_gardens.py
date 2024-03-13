@@ -5,6 +5,14 @@ def add_trades(active_player, trade):
     # ---- Helicon House
 
     '''
+    Progress: mostly done
+    - butcher: done
+    - helicon house: major grinds done
+    - spa: done
+    - digs: done
+
+    - deck: TODO
+    
     there's gonna be some weird-looking stuff in this section
     these are hacks to accomodate:
     - zeroing out unspent qualities when you leave
@@ -310,64 +318,40 @@ def add_trades(active_player, trade):
         Item.PalaeontologicalDiscovery: 7
     })
 
-
     trade(1, {
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: 175,
         Item.MagisterialLager: -10,
         Item.PalaeontologicalDiscovery: 7,
-        Item.Echo: 6.3 # estimated Rusted Stirrup value
+        Item.RustedStirrup: 63
     })
 
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -25,
-        Item.LeviathanFrame: 1
+    # --- Spa
+    
+    # wild guess
+    spa_rare_success_rate = 0.1
+    spa_normal_success_rate = 1 - spa_rare_success_rate
+
+    trade(1, {
+        Item.BrilliantSoul: 1.5 * spa_normal_success_rate,
+        Item.Soul: 100 * spa_normal_success_rate,
+        Item.CompromisingDocument: 6 * spa_rare_success_rate
     })
 
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -5,
-        Item.MammothRibcage: 1
+    trade(1, {
+        Item.BrilliantSoul: 5 * spa_normal_success_rate,
+        Item.SilentSoul: 1 * spa_rare_success_rate,
+        Item.FavHell: 1 * spa_rare_success_rate
     })
 
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -5,
-        Item.SabreToothedSkull: 1
+    # --- Rubbery Pie Stand
+    
+    trade(1, {
+        Item.BasketOfRubberyPies: -5,
+        Item.InCorporateDebt: -3
     })
 
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -4,
-        Item.FossilisedForelimb: 2
-    })
-
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -3,
-        Item.HumanRibcage: 2,
-        Item.HumanArm: 4
-        # Item.TraceOfTheFirstCity: 5
-    })
-
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -2,
-        Item.HelicalThighbone: 6,
-        Item.KnottedHumerus: 4
-    })
-
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -2,
-        Item.ThornedRibcage: 2,
-    })
-
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -1,
-        Item.HornedSkull: 1
-    })
-
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -1,
-        Item.FemurOfAJurassicBeast: 6,
-    })
-
-    trade(0, {
-        Item.PalaeontologicalDiscovery: -1,
-        Item.BoneFragments: 1250,
+    trade(1, {
+        Item.BasketOfRubberyPies: -5,
+        Item.HinterlandScrip: 32
     })
