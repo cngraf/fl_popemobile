@@ -104,55 +104,55 @@ def add_trades(active_player, config):
         Item.AirsOfIndustry91to100: 1,
     })
 
+    airs_list = [
+        Item.AirsOfIndustry1to10,   # 0
+        Item.AirsOfIndustry11to20,  # 1
+        Item.AirsOfIndustry21to30,
+        Item.AirsOfIndustry31to40,
+        Item.AirsOfIndustry41to50,
+        Item.AirsOfIndustry51to60,
+        Item.AirsOfIndustry61to70,
+        Item.AirsOfIndustry71to80,
+        Item.AirsOfIndustry81to90,
+        Item.AirsOfIndustry91to100
+        ]
+
+
     if (profession == Profession.Silverer):
-        for airs in (Item.AirsOfIndustry1to10,
-                     Item.AirsOfIndustry11to20,
-                     Item.AirsOfIndustry21to30):
+        for airs in airs_list[0:4]:
             trade(0, {
                 airs: -1,
                 Item.ApproximateValueOfOutstandingInvoicesInPennies: 410
             })
 
-        for airs in (Item.AirsOfIndustry1to10,
-                     Item.AirsOfIndustry11to20,
-                     Item.AirsOfIndustry21to30,
-                     Item.AirsOfIndustry31to40):
+        for airs in airs_list[0:5]:
             trade(0, {
                 airs: -1,
                 Item.ApproximateValueOfOutstandingInvoicesInPennies: 320,
                 Item.ServicesBohemians: 1
             })
 
-        for airs in (Item.AirsOfIndustry31to40,
-                     Item.AirsOfIndustry41to50,
-                     Item.AirsOfIndustry51to60,
-                     Item.AirsOfIndustry61to70):
+        for airs in airs_list[3:7]:
             trade(0, {
                 airs: -1,
                 Item.ApproximateValueOfOutstandingInvoicesInPennies: 320,
                 Item.ServicesTombColonists: 1
             })
 
-        for airs in (Item.AirsOfIndustry41to50,
-                     Item.AirsOfIndustry51to60):
+        for airs in airs_list[4:6]:
             trade(0, {
                 airs: -1,
                 Item.ApproximateValueOfOutstandingInvoicesInPennies: 410,
-                Item.ServicesTombColonists: 1
             })
 
-        for airs in (Item.AirsOfIndustry51to60,
-                     Item.AirsOfIndustry61to70):
+        for airs in airs_list[5:7]:
             trade(0, {
                 airs: -1,
                 Item.ApproximateValueOfOutstandingInvoicesInPennies: 410,
                 Item.ServicesHell: 1
             })
 
-        for airs in (Item.AirsOfIndustry61to70,
-                    Item.AirsOfIndustry71to80,
-                    Item.AirsOfIndustry81to90,
-                    Item.AirsOfIndustry91to100):
+        for airs in airs_list[6:]:
             trade(0, {
                 airs: -1,
                 Item.ApproximateValueOfOutstandingInvoicesInPennies: 320
@@ -166,21 +166,14 @@ def add_trades(active_player, config):
             })            
 
         if spec == Specialization.OntologicalCartographer:
-            for airs in (Item.AirsOfIndustry1to10,
-                        Item.AirsOfIndustry11to20,
-                        Item.AirsOfIndustry21to30,
-                        Item.AirsOfIndustry31to40,
-                        Item.AirsOfIndustry41to50):
+            for airs in airs_list[:5]:
                 trade(0, {
                     airs: -1,
                     Item.ApproximateValueOfOutstandingInvoicesInPennies: 450,
                     Item.ServicesBohemians: 1
                 })
 
-            for airs in (Item.AirsOfIndustry1to10,
-                        Item.AirsOfIndustry11to20,
-                        Item.AirsOfIndustry21to30,
-                        Item.AirsOfIndustry31to40):
+            for airs in airs_list[:4]:
                 trade(0, {
                     airs: -1,
                     Item.ApproximateValueOfOutstandingInvoicesInPennies: 410,
@@ -188,25 +181,20 @@ def add_trades(active_player, config):
                 })
 
         if spec == Specialization.Oneirotect:
-            for airs in (Item.AirsOfIndustry51to60,
-                        Item.AirsOfIndustry61to70,
-                        Item.AirsOfIndustry71to80,
-                        Item.AirsOfIndustry81to90,
-                        Item.AirsOfIndustry91to100):
+            for airs in airs_list[5:]:
                 trade(0, {
                     airs: -1,
                     Item.ApproximateValueOfOutstandingInvoicesInPennies: 450
                 })
 
-            for airs in (Item.AirsOfIndustry71to80,
-                        Item.AirsOfIndustry81to90,
-                        Item.AirsOfIndustry91to100):
+            for airs in airs_list[7:]:
                 trade(0, {
                     airs: -1,
                     Item.ApproximateValueOfOutstandingInvoicesInPennies: 410,
                     Item.ServicesTheGreatGame: 1
                 })    
                 
+    # if profession == Profession.MonsterHunter:
 
 
     # if (spec == Specialization.HeirarchOfTheHunt):
