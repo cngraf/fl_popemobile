@@ -1,7 +1,8 @@
 from enums import *
 from utils import *
 
-def add_trades(active_player, trade):
+def add_trades(active_player, config):
+    trade = config.trade
     trade(2, {
         Item.ExtraordinaryImplication: -2,
         Item.HalcyonicTonic: 1,

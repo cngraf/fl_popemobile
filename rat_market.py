@@ -3,7 +3,9 @@ from enums import *
 ## ------------
 ## Rat Market
 ## ------------
-def add_trades(trade):
+def add_trades(config):
+    trade = config.trade
+    
     trade(0, {
         Item.RatShilling: -10,
         Item.Echo: 1

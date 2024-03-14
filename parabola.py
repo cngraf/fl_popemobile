@@ -1,7 +1,8 @@
 from enums import *
 from utils import *
 
-def add_trades(active_player, trade):
+def add_trades(active_player, config):
+    trade = config.trade
     trade(1, {
         Item.DropOfPrisonersHoney: 0 if active_player.profession == Profession.Silverer else -100,
         Item.ParabolaRoundTrip: 1

@@ -1,7 +1,9 @@
 from enums import *
 from utils import *
 
-def add_trades(active_player, lab_rpa, trade):
+def add_trades(active_player, lab_rpa, config):
+    trade = config.trade
+
     trade(1, {
         Item.LaboratoryResearch: lab_rpa
     })

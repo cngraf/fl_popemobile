@@ -1,7 +1,9 @@
 from enums import *
 from utils import *
+# from optimize import *
 
-def add_trades(active_player, trade):
+def add_trades(active_player, config):
+    trade = config.trade
     # --------- Canal Cruising
 
     if active_player.profession == Profession.CrookedCross:

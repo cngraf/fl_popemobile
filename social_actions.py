@@ -1,8 +1,10 @@
 from enums import *
 
-def add_trades(trade):
+def add_trades(config):
     # Send Disquieting Missive
     # if player_profession == Profession.CrookedCross:
+    trade = config.trade
+
     trade(1, {
         Item.VerseOfCounterCreed: -1,
         Item.Corresponding: 3

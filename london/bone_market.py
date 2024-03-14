@@ -11,7 +11,8 @@ def actions_to_sell_skelly(shadowy, implausibility):
     suspicion_penalty = 0.2 * fails
     return 1 + fails + suspicion_penalty
 
-def add_trades(player, trade):
+def add_trades(player, config):
+    trade = config.trade
 
     chimera_success_rate = narrow_challenge_success_rate(player.stats[Stat.Mithridacy], 10)
     actions_on_success = actions_to_sell_skelly(player.stats[Stat.Shadowy], 3)

@@ -1,6 +1,8 @@
 from enums import *
 
-def add_trades(trade):
+def add_trades(config):
+    trade = config.trade
+
     trade(0, {
         Item.Echo: -64.80,
         Item.WinsomeDispossessedOrphan: 1

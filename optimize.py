@@ -6,17 +6,18 @@ from scipy.optimize import linprog
 from enum import Enum, auto
 from itertools import count
 
+from setup import *
+
 from enums import *
 from utils import *
 from player import *
+
 
 import social_actions as SocialActions
 import decks as Decks
 import bazaar as Bazaar
 import inventory_conversions as InventoryConversions
 import rat_market as RatMarket
-
-
 
 import london.uncategorized
 
@@ -176,79 +177,16 @@ player_third_city_silverer = Player(
         Stat.Persuasive: 330
     })
 
-
 active_player = player_third_city_silverer
-
-
-def per_day(exchanges):
-    n = next(counter)
-    b[n] = 1
-    for item, value in exchanges.items():
-        A[n, item.value] = value
-
-def trade(actionCost, exchanges):
-    n = next(counter)
-    b[n] = 0
-    A[n, Item.Action.value] = -1 * actionCost
-    for item, value in exchanges.items():
-        A[n, item.value] = value
-
-def railway_card(name, freq, location, isGood, exchanges):
-    # dummy alias for now
-    trade(1, exchanges)
 
 # hack
 var_buffer = 3000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
-A = lil_matrix((num_vars, num_vars))
+config = Config(num_vars)
 
-b = [1]*num_vars
-counter = count(start=-1)
-
-bounds = [(0, None) for _ in range(num_vars)]
-
-# in practice it seems this rarely affects the output, but it makes me feel better
-# I don't know if this even works the way I think it does as far as modeling long-term stockpiling
-# but if you set it too low, you will lock out certain trades
-# eg setting the upper bound of Bohemian favours to 3 will lock out the Jericho option
-# so really it's a source of bugs more than anything else
-# still keeping it in
-
-# important that menace is capped at 0
-# ensures any gains are pre-paid for
-bounds[Item.Wounds.value] = (None, 0)
-bounds[Item.Scandal.value] = (None, 0)
-bounds[Item.Suspicion.value] = (None, 0)
-bounds[Item.Nightmares.value] = (None, 0)
-
-bounds[Item.TroubledWaters.value] = (None, 35)
-
-bounds[Item.Hedonist.value] = (0, 55)
-
-bounds[Item.SeeingBanditryInTheUpperRiver.value] = (0, 36)
-
-bounds[Item.ConnectedBenthic.value] = (0, 800)
-
-bounds[Item.Tribute.value] = (0, 260)
-bounds[Item.TimeAtWakefulCourt.value] = (0, 13)
-bounds[Item.TimeAtJerichoLocks.value] = (0, 5)
-
-bounds[Item.FavBohemians.value] = (0, 7)
-bounds[Item.FavChurch.value] = (0, 7)
-bounds[Item.FavConstables.value] = (0, 7)
-bounds[Item.FavCriminals.value] = (0, 7)
-bounds[Item.FavDocks.value] = (0, 7)
-bounds[Item.FavGreatGame.value] = (0, 7)
-bounds[Item.FavHell.value] = (0, 7)
-bounds[Item.FavRevolutionaries.value] = (0, 7)
-bounds[Item.FavRubberyMen.value] = (0, 7)
-bounds[Item.FavSociety.value] = (0, 7)
-bounds[Item.FavTombColonies.value] = (0, 7)
-bounds[Item.FavUrchins.value] = (0, 7)
-
-bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
+trade = config.trade
 
 
 # ---------------- Decks ----------------------------
@@ -259,12 +197,11 @@ london_deck = Decks.create_london_deck(
 
 zailing_deck = Decks.create_zailing_deck(active_player)
 
-
 # ---------------- Trades ----------------------------
 
 # Plug in the basic economic contraints
 
-per_day({
+config.per_day({
     Item.Action: actions_per_day,
     Item.CardDraws: cards_seen_per_day
 })
@@ -276,41 +213,39 @@ per_day({
 
 # doing some goofy inversion of control stuff here so that I can just copy paste everything
 
-SocialActions.add_trades(trade)
+SocialActions.add_trades(config)
+Decks.add_trades(config)
+Bazaar.add_trades(config)
+RatMarket.add_trades(config)
 
-Decks.add_trades(trade)
+InventoryConversions.add_trades(active_player, config)
 
-Bazaar.add_trades(trade)
-RatMarket.add_trades(trade)
+london.newspaper.add_trades(active_player, config)
+london.bone_market.add_trades(active_player, config)
+london.uncategorized.add_trades(active_player, config)
+london.laboratory.add_trades(active_player, lab_rpa, config)
+london.hearts_game.add_trades(active_player, config)
 
-InventoryConversions.add_trades(active_player, trade)
+unterzee.khanate.add_trades(active_player, config)
+unterzee.wakeful_eye.add_trades(active_player, config)
+unterzee.port_cecil.add_trades(active_player, config)
+unterzee.zailing.add_trades(active_player, zailing_epa, config)
 
-london.newspaper.add_trades(active_player, trade)
-london.bone_market.add_trades(active_player, trade)
-london.uncategorized.add_trades(active_player, trade)
-london.laboratory.add_trades(active_player, lab_rpa, trade)
-london.hearts_game.add_trades(active_player, trade)
+parabola.add_trades(active_player, config)
 
-unterzee.khanate.add_trades(active_player, trade)
-unterzee.wakeful_eye.add_trades(active_player, trade)
-unterzee.port_cecil.add_trades(active_player, trade)
-unterzee.zailing.add_trades(active_player, zailing_epa, trade)
+upper_river.uncategorized.add_trades(active_player, config)
+upper_river.ealing_gardens.add_trades(active_player, config)
+upper_river.jericho.add_trades(active_player, config)
+upper_river.evenlode.add_trades(active_player, config)
+upper_river.balmoral.add_trades(active_player, config)
+upper_river.burrow.add_trades(active_player, config)
+upper_river.station_viii.add_trades(active_player, config)
+upper_river.moulin.add_trades(active_player, config)
+upper_river.hurlers.add_trades(active_player, config)
+upper_river.marigold.add_trades(active_player, config)
 
-parabola.add_trades(active_player, trade)
-
-upper_river.uncategorized.add_trades(active_player, trade)
-upper_river.ealing_gardens.add_trades(active_player, trade)
-upper_river.jericho.add_trades(active_player, trade)
-upper_river.evenlode.add_trades(active_player, trade)
-upper_river.balmoral.add_trades(active_player, trade)
-upper_river.burrow.add_trades(active_player, trade)
-upper_river.station_viii.add_trades(active_player, trade)
-upper_river.moulin.add_trades(active_player, trade)
-upper_river.hurlers.add_trades(active_player, trade)
-upper_river.marigold.add_trades(active_player, trade)
-
-fate.philosofruits.add_trades(active_player, trade)
-fate.upwards.add_trades(active_player, trade)
+fate.philosofruits.add_trades(active_player, config)
+fate.upwards.add_trades(active_player, config)
 
 
 # --------------
@@ -318,7 +253,7 @@ fate.upwards.add_trades(active_player, trade)
 # -------------
 
 # TODO: upper river deck stuff
-railway_card("Digs in the Magistracy of the Evenlode",
+config.railway_card("Digs in the Magistracy of the Evenlode",
     Rarity.Standard,
     Location.TheMagistracyOfTheEvenlode,
     True, {
@@ -344,7 +279,7 @@ trade(0, {
     Item.PalaeontologicalDiscovery: 10
 })
 
-railway_card("Under the Statue - Liberation",
+config.railway_card("Under the Statue - Liberation",
         Rarity.Standard,
         Location.TheHurlers,
         True, {
@@ -352,7 +287,7 @@ railway_card("Under the Statue - Liberation",
     Item.NightOnTheTown: 12
 })
 
-railway_card("Under the Statue - Anchoress",
+config.railway_card("Under the Statue - Anchoress",
         Rarity.Standard,
         Location.TheHurlers,
         True, {
@@ -360,7 +295,7 @@ railway_card("Under the Statue - Anchoress",
     Item.VolumeOfCollatedResearch: 12
 })
 
-railway_card("Under the Statue - Goat Demons",
+config.railway_card("Under the Statue - Goat Demons",
         Rarity.Standard,
         Location.TheHurlers,
         True, {
@@ -368,7 +303,7 @@ railway_card("Under the Statue - Goat Demons",
     Item.NightsoilOfTheBazaar: 60
 })
 
-railway_card("Under the Statue - Overgoat",
+config.railway_card("Under the Statue - Overgoat",
         Rarity.Standard,
         Location.TheHurlers,
         True, {
@@ -376,7 +311,7 @@ railway_card("Under the Statue - Overgoat",
     Item.AeolianScream: 12
 })
 
-railway_card("Under the Statue - Ubergoat",
+config.railway_card("Under the Statue - Ubergoat",
         Rarity.Standard,
         Location.TheHurlers,
         True, {
@@ -384,7 +319,7 @@ railway_card("Under the Statue - Ubergoat",
     Item.VolumeOfCollatedResearch: 12
 })
 
-railway_card("Under the Statue - Discordance",
+config.railway_card("Under the Statue - Discordance",
         Rarity.Standard,
         Location.TheHurlers,
         True, {
@@ -392,7 +327,7 @@ railway_card("Under the Statue - Discordance",
     Item.CorrespondencePlaque: 60 
 })
 
-railway_card("Grazing Goat Demons",
+config.railway_card("Grazing Goat Demons",
         Rarity.Standard,
         Location.TheHurlers,
         False, {
@@ -428,7 +363,7 @@ optimize_for = Item.Echo
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1
 
-opt_result = linprog(c, A_ub=A.toarray(), b_ub=b, bounds=bounds, method='highs')
+opt_result = linprog(c, A_ub=config.A.toarray(), b_ub=config.b, bounds=config.bounds, method='highs')
 print(opt_result)
 
 # print("Opp Deck")
@@ -441,7 +376,6 @@ print(opt_result)
 # #     per_day_of_draws = per_card * cards_seen_per_day
 # #     print(item_name + per_action + ((f"{per_card:10.2f}" + f"{per_day_of_draws:10.2f}") if per_card != 0 else ""))
 
-
 results = sorted(zip(Item, opt_result.x), key=lambda x: x[1])
 for item, quantity in results:
     item_name = f"{item.name:40}"
@@ -452,7 +386,6 @@ for item, quantity in results:
         print(item_name + f"{'unsourced':10}")
     
 pp = pprint.PrettyPrinter(indent=4)
-
 
 print("------Assumptions-------")
 print(f"Total Actions per Day:            {actions_per_day:10}")
@@ -467,23 +400,6 @@ print("------Summary-------")
 print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
-# pp = pprint.PrettyPrinter(indent=4)
-# pp.pprint(A)
-# pp.pprint(A[0])
-# pp.pprint(A[100, 0])
-
-# print("-----Trades NOT USED-------")
-# for i in range(0, len(opt_result.slack)):
-#     slack = opt_result.slack[i]
-#     marginal = opt_result.ineqlin.marginals[i]
-#     if (slack != 1.0 and (slack > 1.0 or  marginal == 0)):
-#         trade_items = ""
-#         for ii in range(0, num_items):
-#             if A[i, ii] != 0:
-#                 trade_items += str(Item(ii)) + ":" + str(A[i, ii]) + "; "
-#         print(f"Slack: {slack:3.3} " + trade_items)
-
-
 print("-----Trades In Grind-------")
 for i in range(0, len(opt_result.slack)):
     slack = opt_result.slack[i]
@@ -492,7 +408,7 @@ for i in range(0, len(opt_result.slack)):
         lose_items = ""
         gain_items = ""
         for ii in range(0, num_items):
-            quantity = round(A[i, ii],2)
+            quantity = round(config.A[i, ii],2)
             if int(quantity) == quantity:
                 quantity = int(quantity)
             if quantity < 0:

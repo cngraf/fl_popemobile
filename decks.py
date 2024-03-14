@@ -23,7 +23,9 @@ class Deck:
             trade[item] = value / self.deck_size
         return trade
 
-def add_trades(trade):
+def add_trades(config):
+    trade = config.trade
+
     trade(0, {
         Item.ConnectedPetCard: -1,
         Item.FavBohemians: 1

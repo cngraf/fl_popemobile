@@ -1,7 +1,9 @@
 from enums import *
 from utils import *
 
-def add_trades(active_player, zailing_epa, trade):
+def add_trades(active_player, zailing_epa, config):
+    trade = config.trade
+
     # ballparking EPA for zailing with piracy
     trade(0, {
         Item.ZailingDraws: -1,
