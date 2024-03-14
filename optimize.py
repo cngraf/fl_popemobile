@@ -19,12 +19,15 @@ import bazaar as Bazaar
 import inventory_conversions as InventoryConversions
 import rat_market as RatMarket
 
+import professional_activities
+
 import london.uncategorized
 
 import london.laboratory
 import london.newspaper
 import london.bone_market
 import london.hearts_game
+
 
 import parabola
 
@@ -71,13 +74,15 @@ Laboratory
 - sounds like a lot of work payoff so putting this off unless something looks esp. promising
 
 Parabola
-- parabolan war
 - most parabolan hunts
 - waswood shores?
     - figure out the odds
 - basically everything else
 
 Zailing
+- BETTER model of the deck, current one is a little too dumb
+    - worse estimate for shorter trips
+    - need to incorporate benefit of choosing from multiple good cards
 - godfall
 - polythreme
 - irem
@@ -217,6 +222,8 @@ SocialActions.add_trades(config)
 Decks.add_trades(config)
 Bazaar.add_trades(config)
 RatMarket.add_trades(config)
+
+professional_activities.add_trades(active_player, config)
 
 InventoryConversions.add_trades(active_player, config)
 
@@ -400,6 +407,8 @@ print("------Summary-------")
 print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
+trades_used = []
+
 print("-----Trades In Grind-------")
 for i in range(0, len(opt_result.slack)):
     slack = opt_result.slack[i]
@@ -420,11 +429,18 @@ for i in range(0, len(opt_result.slack)):
 
         lose_items = lose_items.replace("Item.","")
         gain_items = gain_items.replace("Item.","")
+
+        trades_used.append([marginal, lose_items + " => " + gain_items])
         # print("* " + trade_items)
-        print(f"{marginal:.3}       " + lose_items + " => " + gain_items)
+        # print(f"{marginal:.3}       " + lose_items + " => " + gain_items)
         # print(f"")
 
+trades_used.sort()
 
+for i in trades_used:
+    print(f"{i[0]:.3}       " + i[1])
+
+    
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
 
 # print(london_deck.normalized_trade())

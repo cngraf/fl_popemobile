@@ -65,6 +65,22 @@ class Profession(Enum):
     Notary = auto()
     Doctor = auto()
 
+class Specialization(Enum):
+    NoSpecializaiton = auto()
+    Epistolant = auto()
+    CrimsonEngineer = auto()
+    Fractionist = auto()
+    Siopian = auto()
+    HeirarchOfTheHunt = auto()
+    Teratomancer = auto()
+    Iniquitor = auto()
+    Letheologist = auto()
+    Oneirotect = auto()
+    OntologicalCartographer = auto()
+    Beatificator = auto()
+    Schismatic = auto()
+
+
 class Ambition(Enum):
     NoAmbition = auto()
     BagALegend = auto()
@@ -460,7 +476,6 @@ class Item(Enum):
     StarstoneDemark = auto()
     BreathOfTheVoid = auto()
 
-
     # Zee-Treasures
     MoonPearl = auto()
     DeepZeeCatch = auto()
@@ -524,12 +539,27 @@ class Item(Enum):
     Infiltrating = auto()
     Investigating = auto()
 
+    # Professional Activities
+    ServicesHell = auto()
+    ServicesZailors = auto()
+    ServicesTheGreatGame = auto()
+    ServicesBohemians = auto()
+    ServicesSociety = auto()
+    ServicesTheGraciousWidow = auto()
+    ServicesTheHoneyAddledDetective = auto()
+    ServicesTombColonists = auto()
+    ServicesBenthic = auto()
+    ServicesTheChurch = auto()
+    ServicesConstables = auto()
+    ServicesClay = auto()    
+
     # miscellaneous
     ResearchOnAMorbidFad = auto()
     Tribute = auto()
     AConsequenceOfYourAmbition = auto()
     BraggingRightsAtTheMedusasHead = auto()
-    HeartsGameExploits = auto()    
+    HeartsGameExploits = auto()
+    ApproximateValueOfOutstandingInvoicesInPennies = auto()
 
     # Piracy
     ChasingDownYourBounty = auto()
@@ -550,6 +580,19 @@ class Item(Enum):
 
     # ----- Psuedo Items
     VisitFromTimeTheHealer = auto()
+
+    AirsOfIndustry1to10 = auto()
+    AirsOfIndustry11to20 = auto() # should be 10-20?
+    AirsOfIndustry21to30 = auto()
+    AirsOfIndustry31to40 = auto()
+    AirsOfIndustry41to50 = auto()
+    AirsOfIndustry51to60 = auto()
+    AirsOfIndustry61to70 = auto()
+    AirsOfIndustry71to80 = auto()
+    AirsOfIndustry81to90 = auto()
+    AirsOfIndustry91to100 = auto()
+
+
     PortCecilCycles = auto()
     TimeAtJerichoLocks = auto()
     TimeAtWakefulCourt  = auto() # tribute grind

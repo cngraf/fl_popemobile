@@ -1,3 +1,5 @@
+from enums import *
+
 def pyramid(n): return n * (n+1) / 2
 def clamp(n, floor, ceiling): return min(ceiling, max(floor, n))
 
@@ -9,7 +11,14 @@ def expected_failures(success_rate): return 1.0/success_rate - 1 if success_rate
 
 def menace_multiplier(reduction_points):
     # formula per wiki
-    return 1 - (0.6 * (1 - 0.75**reduction_points)) 
+    return 1 - (0.6 * (1 - 0.75**reduction_points))
+
+def pass_rate(player, stat, difficulty):
+    player_level = player.stats[stat]
+    if stat in (Stat.Watchful, Stat.Shadowy, Stat.Dangerous, Stat.Persuasive):
+        return broad_challenge_success_rate(player_level, difficulty)
+    else:
+        return narrow_challenge_success_rate(player_level, difficulty)
 
 def challenge_ev(player_stat, difficulty, success, failure):
     success_rate = broad_challenge_success_rate(player_stat, difficulty)

@@ -68,6 +68,7 @@ class Player:
         self.location = location
         self.ambition = ambition
         self.profession = profession
+        self.specialization = Specialization.NoSpecializaiton
         self.treasure = treasure
 
         advanced_value = 17

@@ -11,6 +11,11 @@ def add_trades(config):
         Item.Echo: 1
     })
 
+    trade(0, {
+        Item.RatShilling: -1,
+        Item.PieceOfRostygold: 10
+    })
+
     # Crow-Crease Cryptics
 
     trade(0, {

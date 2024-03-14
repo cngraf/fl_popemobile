@@ -732,6 +732,7 @@ def plunder_ev(region, isAdvanced, player_stat, rare_success_rate = 0.1):
     # why did we add a plunder var
     return success_rate * (gain_on_success + (50 * rare_success_rate))
 
+
 def create_zailing_deck(player):
     # hold "Creaking above" card, and one other infrequent one
     deck = Deck("Zailing", -200)

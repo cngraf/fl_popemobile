@@ -78,4 +78,17 @@ class Config:
         # dummy alias for now
         self.trade(1, exchanges)
 
+    def challenge(self, success_odds, success, failure):
+        failure_odds = 1.0 - success_odds
+        net_trade = {}
+
+        for key, val in success.items():
+            net_trade[key] = net_trade.get(key, 0) + val * success_odds
+
+        for key, val in failure.items():
+            net_trade[key] = net_trade.get(key, 0) + val * failure_odds
+
+        self.trade(1, net_trade)
+
+
    
