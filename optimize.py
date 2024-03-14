@@ -6,7 +6,7 @@ from scipy.optimize import linprog
 from enum import Enum, auto
 from itertools import count
 
-from setup import *
+from config import *
 
 from enums import *
 from utils import *
