@@ -1,5 +1,6 @@
 from enums import *
 from utils import *
+from config import Config
 
 class Deck:
     def __init__(self, name, size_handicap):
@@ -22,6 +23,13 @@ class Deck:
         for item, value in self.total_items.items():
             trade[item] = value / self.deck_size
         return trade
+
+
+class Card:
+    def __init__(self, name: str, freq: Rarity, exchange):
+        self.name = name
+        self.rarity = freq
+        self.exchange = exchange
 
 def add_trades(config):
     trade = config.trade
@@ -89,7 +97,8 @@ def add_trades(config):
 
 def create_london_deck(
         player,
-        replacement_epa
+        replacement_epa,
+        config: Config
         ):
 
     wounds_multiplier = menace_multiplier(player.wounds_reduction)
@@ -98,6 +107,20 @@ def create_london_deck(
     nightmares_multiplier = menace_multiplier(player.nightmares_reduction)
 
     london_deck = Deck("London", -400)
+    good_cards = []
+    bad_cards = []
+
+    good_cards.append(Card("Lair in the Marshes", Rarity.Standard, config.challenge_ev(
+        Stat.Dangerous, 60,
+        {
+            Item.CertifiableScrap: 1,
+            Item.FavSociety: 1,
+            Item.Nightmares: 1 * nightmares_multiplier
+        },
+        {
+            Item.Wounds: 1 * wounds_multiplier
+        }
+    )))
 
     # Lair in the Marshes
     london_deck.card("Lair in the Marshes", Rarity.Standard, True, {
@@ -733,21 +756,26 @@ def plunder_ev(region, isAdvanced, player_stat, rare_success_rate = 0.1):
     return success_rate * (gain_on_success + (50 * rare_success_rate))
 
 
-def create_zailing_deck(player):
+def create_zailing_deck(player, region):
     # hold "Creaking above" card, and one other infrequent one
     deck = Deck("Zailing", -200)
 
     player_stats = player.stats
-    region = player.location
     profession = player.profession
     treasure = player.treasure
 
     troubled_waters_multiplier = menace_multiplier(player.troubled_waters_reduction)
 
-    # with FATE commodore companion
-    # wiki does not have actual figures, just guessing
-    deck.card("A Corvette", Rarity.Standard, True, {
-        Item.Suspicion: -2,
+    # # non-piracy version
+    # # with FATE commodore companion
+    # # wiki does not have actual figures, just guessing
+    # deck.card("A Corvette (no piracy)", Rarity.Standard, True, {
+    #     Item.Suspicion: -2,
+    #     Item.TroubledWaters: -2
+    # })
+
+    deck.card("A Corvette (piracy)", Rarity.Standard, True, {
+        Item.ChasingDownYourBounty: 8,
         Item.TroubledWaters: -2
     })
 

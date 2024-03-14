@@ -189,18 +189,16 @@ var_buffer = 3000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
-config = Config(num_vars)
+config = Config(num_vars, active_player)
 
 trade = config.trade
 
 
 # ---------------- Decks ----------------------------
 
-london_deck = Decks.create_london_deck(
-    active_player,
-    replacement_epa = 6.5)
+london_deck = Decks.create_london_deck(active_player, 6.5, config)
 
-zailing_deck = Decks.create_zailing_deck(active_player)
+zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
 
 # ---------------- Trades ----------------------------
 

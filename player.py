@@ -1,5 +1,5 @@
 from enums import *
-
+from utils import *
 
 '''
 Defining the baseline endgame player
@@ -98,3 +98,13 @@ class Player:
         self.suspicion_reduction = 2
         self.nightmares_reduction = 2
         self.troubled_waters_reduction = 2
+
+    # TOOD: add a threshold to auto-use a second chance item?
+    def pass_rate(self, stat, difficulty):
+        player_level = self.stats[stat]
+        if stat in (Stat.Watchful, Stat.Shadowy, Stat.Dangerous, Stat.Persuasive):
+            return broad_challenge_success_rate(player_level, difficulty)
+        else:
+            return narrow_challenge_success_rate(player_level, difficulty)
+        
+    # def challenge_ev(self, stat, difficulty, on)

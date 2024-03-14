@@ -24,6 +24,18 @@ def challenge_ev(player_stat, difficulty, success, failure):
     success_rate = broad_challenge_success_rate(player_stat, difficulty)
     return success_rate * success + (1.0 - success_rate) * failure
 
+def weighted_exchange(weighted_trades):
+    net_trade = {}
+
+    for elem in weighted_trades:
+        weight = elem[0]
+        trade = elem[1]
+
+    for key, val in trade.items():
+        net_trade[key] = net_trade.get(key, 0) + val * weight
+    
+    return net_trade
+
 def skelly_value_in_items(skelly_value, item_value, zoo_bonus_active):
     zoo_multiplier = 1.1 if zoo_bonus_active else 1.0
     return skelly_value * zoo_multiplier / item_value

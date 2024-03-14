@@ -7,14 +7,15 @@ from enum import Enum, auto
 from itertools import count
 
 from enums import *
+import utils as utils
 
 class Config:
 
-    def __init__(self, num_vars):
-
+    def __init__(self, num_vars, player):
+        self.player = player
         self.A = lil_matrix((num_vars, num_vars))
-
         self.b = [1]*num_vars
+        
         self.counter = count(start=-1)
 
         self.bounds = [(0, None) for _ in range(num_vars)]
@@ -78,17 +79,30 @@ class Config:
         # dummy alias for now
         self.trade(1, exchanges)
 
-    def challenge(self, success_odds, success, failure):
-        failure_odds = 1.0 - success_odds
+    def add_weighted_trade(self, actions, weighted_trades):
         net_trade = {}
 
-        for key, val in success.items():
-            net_trade[key] = net_trade.get(key, 0) + val * success_odds
+        for elem in weighted_trades:
+            weight = elem[0]
+            trade = elem[1]
 
-        for key, val in failure.items():
-            net_trade[key] = net_trade.get(key, 0) + val * failure_odds
+        for key, val in trade.items():
+            net_trade[key] = net_trade.get(key, 0) + val * weight
 
-        self.trade(1, net_trade)
+        self.trade(actions, net_trade)
 
+    def challenge_ev(self, stat: Stat, dc: int, on_pass, on_fail):
+        pass_rate = self.player.pass_rate(stat, dc)
 
-   
+        return utils.weighted_exchange([
+            [pass_rate, on_pass],
+            [1.0 - pass_rate, on_fail]
+        ])
+
+    def add_challenge(self, actions: int, stat: Stat, dc: int, on_pass, on_fail):
+        pass_rate = self.player.pass_rate(self.player.stats[stat], dc)
+
+        self.add_weighted_trade(actions, [
+            [pass_rate, on_pass],
+            [1.0 - pass_rate, on_fail]
+        ])
