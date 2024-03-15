@@ -136,6 +136,7 @@ class Item(Enum):
     Suspicion = auto()
     Nightmares = auto()
 
+    Irrigo = auto()
     TroubledWaters = auto()
 
     SeeingBanditryInTheUpperRiver = auto()
@@ -538,6 +539,8 @@ class Item(Enum):
     Inspired = auto()
     Infiltrating = auto()
     Investigating = auto()
+    
+    DramaticTension = auto()
 
     # Professional Activities
     ServicesHell = auto()
@@ -577,6 +580,8 @@ class Item(Enum):
     MonographCautionary = auto()
     MonographTragic = auto()
     MonographIronic = auto()
+
+    DiscordantLaw = auto()
 
     # ----- Psuedo Items
     VisitFromTimeTheHealer = auto()

@@ -22,6 +22,7 @@ import professional_activities
 
 import decks.deck as Decks
 import decks.london_deck
+import decks.nadir
 
 import london.uncategorized
 
@@ -134,7 +135,7 @@ crackpot idea
 # actions doesn't matter on its own until I add some weekly+ stuff
 # but it does matter relative to cards seen per day
 actions_per_day = 120.0
-cards_seen_per_day = 40
+cards_seen_per_day = 0
 
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
@@ -198,7 +199,8 @@ trade = config.trade
 
 # ---------------- Decks ----------------------------
 
-london_deck = Decks.create_london_deck(active_player, 6.5, config)
+# london_deck = Decks.create_london_deck(active_player, 6.5, config)
+london_deck = decks.london_deck.create_london_deck(active_player, 6.5, config)
 
 # should just have one deck for each region and dummy "card draws in X" item for each one
 zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
@@ -228,9 +230,10 @@ professional_activities.add_trades(active_player, config)
 
 InventoryConversions.add_trades(active_player, config)
 
+london.uncategorized.add_trades(active_player, config)
+
 london.newspaper.add_trades(active_player, config)
 london.bone_market.add_trades(active_player, config)
-london.uncategorized.add_trades(active_player, config)
 london.laboratory.add_trades(active_player, lab_rpa, config)
 london.hearts_game.add_trades(active_player, config)
 
@@ -345,6 +348,13 @@ config.railway_card("Grazing Goat Demons",
 # -------------------------------
 # ---- Opportunity Deck Math ----
 # -------------------------------
+
+print("")
+print("Starting Nadir simulation....")
+print("")
+nadir_average = decks.nadir.simulate_full(config, 1000)
+
+config.trade(0, nadir_average)
 
 # London Deck
 # deck_size = lon

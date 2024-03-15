@@ -37,3 +37,7 @@ def weighted_exchange(*weighted_trades: Tuple[float, Dict]):
 def skelly_value_in_items(skelly_value, item_value, zoo_bonus_active):
     zoo_multiplier = 1.1 if zoo_bonus_active else 1.0
     return skelly_value * zoo_multiplier / item_value
+
+def add_items(base_dict: dict, add_dict: dict, weight: float = 1.0):
+    for key, val in add_dict.items():
+        base_dict[key] = base_dict.get(key, 0) + val * weight
