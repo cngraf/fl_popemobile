@@ -1,6 +1,7 @@
 from enums import *
 from utils import *
 from config import Config
+from player import Player
 
 class Deck:
     def __init__(self, name, size_handicap):
@@ -94,9 +95,8 @@ def add_trades(config):
         Item.FavUrchins: 1
     })
 
-
 def create_london_deck(
-        player,
+        player: Player,
         replacement_epa,
         config: Config
         ):
@@ -110,16 +110,21 @@ def create_london_deck(
     good_cards = []
     bad_cards = []
 
-    good_cards.append(Card("Lair in the Marshes", Rarity.Standard, config.challenge_ev(
-        Stat.Dangerous, 60,
-        {
-            Item.CertifiableScrap: 1,
-            Item.FavSociety: 1,
-            Item.Nightmares: 1 * nightmares_multiplier
-        },
-        {
-            Item.Wounds: 1 * wounds_multiplier
-        }
+    good_cards.append(
+        Card(
+            name= "Lair in the Marshes: Peril and pyjamas",
+            freq= Rarity.Standard,
+            exchange= config.challenge_ev(
+                Stat.Dangerous,
+                60,
+                {
+                    Item.CertifiableScrap: 1,
+                    Item.FavSociety: 1,
+                    Item.Nightmares: 1 * nightmares_multiplier
+                },
+                {
+                    Item.Wounds: 1 * wounds_multiplier
+                }
     )))
 
     # Lair in the Marshes
@@ -129,9 +134,23 @@ def create_london_deck(
         Item.Nightmares: 1 * nightmares_multiplier
     })
 
+    knives_rare_success_rate = 0.05
+    good_cards.append(Card("Smoky Flophouse", Rarity.Standard, config.challenge_ev(
+        Stat.Shadowy, 40,
+        on_pass = weighted_exchange(
+            (knives_rare_success_rate, {
+                Item.AeolianScream: 1
+            }),
+            (1.0 - knives_rare_success_rate, {
+                Item.FavCriminals: 0.5,
+                Item.FavRevolutionaries: 0.5
+            }),
+        ),
+        on_fail = {}
+    )))
+
     # The Tower of Knives: Difficulties at a Smoky Flophouse
     # The next victim?
-    knives_rare_success_rate = 0.05
     london_deck.card("The Tower of Knives", Rarity.Standard, True, {
         Item.FavCriminals: 0.5 - knives_rare_success_rate / 2.0,
         Item.FavRevolutionaries: 0.5 - knives_rare_success_rate / 2.0,
@@ -147,10 +166,36 @@ def create_london_deck(
     Item.Scandal: 2 * scandal_multiplier
     })
 
+    good_cards.append(
+        Card(
+            name = "Handsome Townhouse: Scandalous Party",
+            freq = Rarity.Frequent,
+            exchange = config.challenge_ev(
+                stat = Stat.Persuasive,
+                dc = 80,
+                on_pass = {
+                    Item.Scandal: 2 * scandal_multiplier,
+                    Item.Hedonist: 3,
+                    Item.FavBohemians: 0.5,
+                    Item.FavSociety: 0.5
+                },
+                on_fail = {
+                    Item.Scandal: 1 * scandal_multiplier
+                }
+            )
+    ))
+
     # The Tower of Sun and Moon: a Reservation at the Royal Bethlehem Hotel
     london_deck.card("Royal Beth lodings", Rarity.Frequent, False, {
         Item.CertifiableScrap: 3
     })
+
+    # # TODO: check if this is actually worthwile
+    # good_cards.append(
+    #     Card(
+    #         name
+    #     )
+    # )
 
     # -----------------------------------------------------
     # --- Cards: Companions
@@ -545,7 +590,28 @@ def create_london_deck(
         Rarity.VeryInfrequent, False, {
             # TODO
         })
+    
+    # --- Cheesemonger
+    # slight loss over finishing the story
 
+    # london_deck.card("A task from the cheesemonger", Rarity.Standard, True, {
+    #     Item.FavUrchins: 1
+    # })
+
+    # london_deck.card("A commission from the cheesemonger", Rarity.Standard, False, {
+    #     Item.FavRubberyMen: 0.5,
+    #     Item.NoduleOfDeepAmber: 50
+    # })
+
+    # london_deck.card("A job from the cheesemonger", Rarity.Standard, True, {
+    #     Item.CrypticClue: 24,
+    #     Item.FavTombColonies: 1
+    # })
+
+    # london_deck.card("An assignment from the cheesemonger", Rarity.Standard, True, {
+    #   Item.FavChurch: 1  
+    # })
+    
     # ----------------------
     # --- Cards: Location-specific
     # ----------------------

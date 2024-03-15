@@ -1,5 +1,5 @@
 from enums import *
-from utils import *
+import utils
 
 '''
 Defining the baseline endgame player
@@ -103,8 +103,23 @@ class Player:
     def pass_rate(self, stat, difficulty):
         player_level = self.stats[stat]
         if stat in (Stat.Watchful, Stat.Shadowy, Stat.Dangerous, Stat.Persuasive):
-            return broad_challenge_success_rate(player_level, difficulty)
+            return utils.broad_challenge_success_rate(player_level, difficulty)
         else:
-            return narrow_challenge_success_rate(player_level, difficulty)
+            return utils.narrow_challenge_success_rate(player_level, difficulty)
         
     # def challenge_ev(self, stat, difficulty, on)
+
+
+
+class Challenge:
+    def __init__(self, stat: Stat, dc: int, on_pass: dict, on_fail: dict):
+        self.stat = stat
+        self.dc = dc
+        self.on_pass = on_pass
+        self.on_fail = on_fail
+
+    # def get_trade(self, player: Player):
+    #     pass_rate = player.pass_rate(self.stat, self.dc)
+    #     return utils.weighted_exchange(
+    #         ()
+    #     )

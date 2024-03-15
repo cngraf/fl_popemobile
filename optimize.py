@@ -14,12 +14,14 @@ from player import *
 
 
 import social_actions as SocialActions
-import decks as Decks
 import bazaar as Bazaar
 import inventory_conversions as InventoryConversions
 import rat_market as RatMarket
 
 import professional_activities
+
+import decks.deck as Decks
+import decks.london_deck
 
 import london.uncategorized
 
@@ -198,6 +200,7 @@ trade = config.trade
 
 london_deck = Decks.create_london_deck(active_player, 6.5, config)
 
+# should just have one deck for each region and dummy "card draws in X" item for each one
 zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
 
 # ---------------- Trades ----------------------------

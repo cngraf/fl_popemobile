@@ -123,16 +123,16 @@ def add_trades(active_player: Player, config: config.Config):
     if (profession == Profession.Silverer):
         for airs in airs_list[0:4]:
             pass_rate = active_player.pass_rate(Stat.Dangerous, 90) * active_player.pass_rate(Stat.Glasswork, 0)
-            config.add_weighted_trade(0, [
-                [pass_rate, {
+            config.add_weighted_trade(0, 
+                (pass_rate, {
                     airs: -1,
                     Item.ApproximateValueOfOutstandingInvoicesInPennies: 410
-                }],
-                [1.0 - pass_rate, {
+                }),
+                (1.0 - pass_rate, {
                     airs: -1,
                     Item.ApproximateValueOfOutstandingInvoicesInPennies: 200
-                }]
-            ])
+                })
+            )
         for airs in airs_list[0:5]:
             trade(0, {
                 airs: -1,
