@@ -1,6 +1,18 @@
 from enums import *
+from config import *
 
-def add_trades(config):
+def buy_sell(config: Config, item: Item, buy: float, sell: float):
+    config.trade(0, {
+        Item.Echo: buy,
+        item: 1
+    })
+
+    config.trade(0, {
+        item: -1,
+        Item.Echo: sell 
+    })
+
+def add_trades(config: Config):
     trade = config.trade
 
     trade(0, {
@@ -451,7 +463,8 @@ def add_trades(config):
     })
 
     # Equipment
-    trade(0, {
-        Item.SulkyBat: -1,
-        Item.Echo: 0.2
-    })
+
+
+    buy_sell(config, Item.SulkyBat, -0.4, 0.2)
+
+    buy_sell(config, Item.LuckyWeasel, -0.4, 0.2)

@@ -12,6 +12,10 @@ from enums import *
 from utils import *
 from player import *
 
+import decks.deck as Decks
+
+import decks.london_deck
+import decks.nadir
 
 import social_actions as SocialActions
 import bazaar as Bazaar
@@ -19,10 +23,6 @@ import inventory_conversions as InventoryConversions
 import rat_market as RatMarket
 
 import professional_activities
-
-import decks.deck as Decks
-import decks.london_deck
-import decks.nadir
 
 import london.uncategorized
 
@@ -222,7 +222,6 @@ config.per_day({
 # doing some goofy inversion of control stuff here so that I can just copy paste everything
 
 SocialActions.add_trades(config)
-Decks.add_trades(config)
 Bazaar.add_trades(config)
 RatMarket.add_trades(config)
 
@@ -230,8 +229,9 @@ professional_activities.add_trades(active_player, config)
 
 InventoryConversions.add_trades(active_player, config)
 
-london.uncategorized.add_trades(active_player, config)
+decks.london_deck.add_trades(config)
 
+london.uncategorized.add_trades(active_player, config)
 london.newspaper.add_trades(active_player, config)
 london.bone_market.add_trades(active_player, config)
 london.laboratory.add_trades(active_player, lab_rpa, config)
@@ -349,12 +349,18 @@ config.railway_card("Grazing Goat Demons",
 # ---- Opportunity Deck Math ----
 # -------------------------------
 
-print("")
-print("Starting Nadir simulation....")
-print("")
-nadir_average = decks.nadir.simulate_full(config, 1000)
+# print("")
+# print("Starting Nadir simulation....")
+# print("")
+# nadir_average = decks.nadir.simulate_full(config, 10000)
 
-config.trade(0, nadir_average)
+# config.trade(0, nadir_average)
+
+# # hack
+# config.trade(1, {
+#     Item.DiscordantSoul: -1,
+#     Item.Echo: 62.5
+# })
 
 # London Deck
 # deck_size = lon

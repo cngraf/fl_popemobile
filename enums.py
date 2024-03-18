@@ -54,6 +54,14 @@ class Rarity(Enum):
     Abundant = 500
     Ubiquitous = 1000
 
+class Score(Enum):
+    NeverPlay = -100
+    Bad = -50
+    Zero = 0
+    Okay = 50
+    Good = 100
+    Amazing = 200
+
 class Profession(Enum):
     NoProfession = auto()
     CrookedCross = auto()
@@ -515,6 +523,7 @@ class Item(Enum):
     ConsignmentOfScintillackSnuff = auto()
 
     # Companion
+    LuckyWeasel = auto()
     SulkyBat = auto()
     WinsomeDispossessedOrphan = auto()
 
@@ -585,6 +594,8 @@ class Item(Enum):
 
     # ----- Psuedo Items
     VisitFromTimeTheHealer = auto()
+
+    AirsOfLondonChange = auto()
 
     AirsOfIndustry1to10 = auto()
     AirsOfIndustry11to20 = auto() # should be 10-20?

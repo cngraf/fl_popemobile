@@ -27,75 +27,12 @@ class Deck:
 
 
 class Card:
-    def __init__(self, name: str, freq: Rarity, exchange):
+    def __init__(self, name: str, freq: Rarity, score: int = 0, exchange = {}):
         self.name = name
         self.rarity = freq
+        self.score = score
         self.exchange = exchange
-
-def add_trades(config):
-    trade = config.trade
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavBohemians: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavChurch: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavConstables: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavCriminals: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavDocks: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavGreatGame: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavHell: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavRevolutionaries: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavRubberyMen: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavSociety: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavTombColonies: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavUrchins: 1
-    })
-
-
+        
 def chasing_ev(region, isAdvanced, pass_rate = 1.0, rare_success_rate = 0.1):
     gain_from_basic = 0
     gain_from_advanced = 0

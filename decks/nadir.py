@@ -191,20 +191,17 @@ def create_deck(config: Config):
         card_dream_of_water
     ]
 
-def simulate_single_visit(config: Config):
+def simulate_single_visit(config: Config, cards_by_play_count):
     card_priority = create_deck(config)
+
 
     # all standard, ignoring rarity for now
     draw_pile = card_priority.copy()
     hand = []
     total_trade = {
-        # Item.Action: -4,
-        # Item.Irrigo: 2,
-        # Item.DiscordantSoul: 1
-
-        Item.Action: -5,
+        Item.Action: -4,
         Item.Irrigo: 2,
-        Item.Echo: 62.5
+        Item.DiscordantSoul: 1
     }
 
     def draw_card():
@@ -220,6 +217,9 @@ def simulate_single_visit(config: Config):
 
     def play_best_card():
         hand.sort(key= lambda x : card_priority.index(x))
+
+        cards_by_play_count[card_priority.index(hand[0])] += 1
+
         play_card(hand[0])
         
     draw_card()
@@ -237,8 +237,10 @@ def simulate_full(config: Config, runs: int):
     cummulative_trades = {}
     normalized_trade = {}
 
+    card_count = [0] * 20
+
     for i in range(0, runs + 1):
-        result = simulate_single_visit(config)
+        result = simulate_single_visit(config, card_count)
         utils.add_items(cummulative_trades, result)
 
     total_actions = abs(cummulative_trades[Item.Action])
@@ -248,5 +250,6 @@ def simulate_full(config: Config, runs: int):
 
     print(f"Cave of the Nadir average after {runs} runs: ")
     print(normalized_trade)
+    print(card_count)
 
     return normalized_trade

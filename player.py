@@ -58,6 +58,14 @@ Zee:    +5
 '''
 
 class Player:
+    '''
+    TODO
+    - get rid of Location prop
+    - add Spouse
+    - add Ship
+    - add Destiny
+    - add Club
+    '''
 
     def __init__(self,
                 location = Location.NoLocation,
@@ -65,6 +73,7 @@ class Player:
                 profession = Profession.NoProfession,
                 treasure = Treasure.NoTreasure,
                 stats = {}):
+        
         self.location = location
         self.ambition = ambition
         self.profession = profession
