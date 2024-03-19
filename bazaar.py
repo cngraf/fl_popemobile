@@ -21,93 +21,34 @@ def add_trades(config: Config):
     })
 
     # Academic
-    trade(0, {
-        Item.Echo: -0.03,
-        Item.FoxfireCandleStub: 1
-    })
+    buy_sell(config, Item.FoxfireCandleStub, -0.03, 0.01)
+    buy_sell(config, Item.FlaskOfAbominableSalts, -0.2, 0.1)
 
-    trade(0, {
-        Item.Echo: -0.2,
-        Item.FlaskOfAbominableSalts: 1
-    })
-
-    trade(0, {
-        Item.MemoryOfDistantShores: -1,
-        Item.Echo: 0.5
-    })
-
-    trade(0, {
-        Item.IncisiveObservation: -1,
-        Item.Echo: 0.5
-    })
-
-    trade(0, {
-        Item.UnprovenancedArtefact: -1,
-        Item.Echo: 2.5
-    })
-
+    trade(0, { Item.MemoryOfDistantShores: -1, Item.Echo: 0.5 })
+    trade(0, { Item.MemoryOfDistantShores: -1, Item.Echo: 0.5 })
+    trade(0, { Item.IncisiveObservation: -1, Item.Echo: 0.5 })
+    trade(0, { Item.UnprovenancedArtefact: -1, Item.Echo: 2.5 })
+    trade(0, { Item.VolumeOfCollatedResearch: -1, Item.Echo: 2.5 })
+    trade(0, { Item.MirthlessCompendium: -1, Item.Echo: 12.5 })
+    trade(0, { Item.JudgementsEgg: -1, Item.Echo: 12.5 })
+    trade(0, { Item.SecretCollege: -1, Item.SearingEnigma: 25 })
 
     # Cartography ------
+    buy_sell(config, Item.ShardOfGlim, -0.03, 0.01)
 
-    trade(0, {
-        Item.ShardOfGlim: -1,
-        Item.Echo: 0.01
-    })
+    trade(0, { Item.MapScrap: -1, Item.Echo: 0.1 })
+    trade(0, { Item.ZeeZtory: -1, Item.Echo: 0.5 })
+    trade(0, { Item.PartialMap: -1, Item.Echo: 2.5 })
+    trade(0, { Item.PuzzlingMap: -1, Item.Echo: 12.5 })
+    trade(0, { Item.SaltSteppeAtlas: -1, Item.Echo: 62.5 })
+    trade(0, { Item.RelativelySafeZeeLane: -1, Item.Echo: 62.5 })
 
-    trade(0, {
-        Item.MapScrap: -1,
-        Item.Echo: 0.10
-    })
-
-    trade(0, {
-        Item.ZeeZtory: -1,
-        Item.Echo: 0.5
-    })
-
-    trade(0, {
-        Item.PartialMap: -1,
-        Item.Echo: 2.5
-    })
-
-    trade(0, {
-        Item.PuzzlingMap: -1,
-        Item.Echo: 12.5
-    })
-
-    trade(0, {
-        Item.SaltSteppeAtlas: -1,
-        Item.Echo: 62.5
-    })
-
-    trade(0, {
-        Item.RelativelySafeZeeLane: -1,
-        Item.Echo: 62.5
-    })
-
-    trade(0, {
-        Item.SightingOfAParabolanLandmark: -1,
-        Item.Echo: 0.1
-    })
-
-    trade(0, {
-        Item.VitreousAlmanac: -1,
-        Item.Echo: 12.5
-    })
-
-    trade(0, {
-        Item.OneiromanticRevelation: -1,
-        Item.Echo: 62.5
-    })
-
-    trade(0, {
-        Item.ParabolanParable: -1,
-        Item.Echo: 312.5
-    })
-
-    trade(0, {
-        Item.CartographersHoard: -1,
-        Item.Echo: 312.5
-    })
+    trade(0, { Item.SightingOfAParabolanLandmark: -1, Item.Echo: 0.1 })
+    trade(0, { Item.VitreousAlmanac: -1, Item.Echo: 12.5 })
+    trade(0, { Item.OneiromanticRevelation: -1, Item.Echo: 62.5 })
+    trade(0, { Item.ParabolanParable: -1, Item.Echo: 312.5 })
+    trade(0, { Item.CartographersHoard: -1, Item.Echo: 312.5 })
+    trade(0, { Item.WaswoodAlmanac: -1, Item.Echo: 312.5 })
 
     # Currency ------
     trade(0, {
@@ -255,69 +196,33 @@ def add_trades(config: Config):
     })
 
     # Luminosity ---------
+    buy_sell(config, Item.LumpOfLamplighterBeeswax, -0.02, 0.01)
 
-    trade(0, {
-        Item.LumpOfLamplighterBeeswax: -1,
-        Item.Echo: 0.01
-    })
+    trade(0, { Item.PhosphorescentScarab: -1, Item.Echo: 0.1})
+    trade(0, { Item.MemoryOfLight: -1, Item.CrypticClue: 25})
+    trade(0, { Item.MourningCandle: -1, Item.Echo: 2.5})
 
-    trade(0, {
-        Item.PhosphorescentScarab: -1,
-        Item.Echo: 0.10
-    })
+    trade(0, { Item.TailfeatherBrilliantAsFlame: -1, Item.Echo: 2.5 })
+    trade(0, { Item.EyelessSkull: -1, Item.Echo: 30 })
+    trade(0, { Item.ElementOfDawn: -1, Item.Echo: 62.5 })
+    trade(0, { Item.MountainSherd: -1, Item.Echo: 62.5 })
+    trade(0, { Item.RayDrenchedCinder: -1, Item.Echo: 312.5 })
 
-    trade(0, {
-        Item.MemoryOfLight: -1,
-        Item.CrypticClue: 25
-    })
-
-    trade(0, {
-        Item.LumpOfLamplighterBeeswax: -1,
-        Item.Echo: 0.01
-    })
-
-    trade(0, {
-        Item.MourningCandle: -1,
-        Item.Echo: 2.5
-    })
 
     # Mysteries ---------
 
-    trade(0, {
-        Item.WhisperedHint: -1,
-        Item.Echo: 0.01
-    })
+    buy_sell(config, Item.WhisperedHint, -0.02, 0.01)
 
-    trade(0, {
-        Item.CrypticClue: -1,
-        Item.Echo: 0.02
-    })
-
-    trade(0, {
-        Item.CrypticClue: -1,
-        Item.AppallingSecret: 0.02
-    })
-
-    trade(0, {
-        Item.JournalOfInfamy: -1,
-        Item.Echo: 0.5
-    })
-
-    trade(0, {
-        Item.TaleOfTerror: -1,
-        Item.Echo: 0.5
-    })
-
-    trade(0, {
-        Item.ExtraordinaryImplication: -1,
-        Item.Echo: 2.5
-    })
-
-    trade(0, {
-        Item.UncannyIncunabulum: -1,
-        Item.Echo: 12.50
-    })
-
+    trade(0, { Item.CrypticClue: -1,            Item.Echo: 0.02 })
+    trade(0, { Item.AppallingSecret: -1,        Item.Echo: 0.15 })
+    trade(0, { Item.JournalOfInfamy: -1,        Item.Echo: 0.5 })
+    trade(0, { Item.TaleOfTerror: -1,           Item.Echo: 0.5 })
+    trade(0, { Item.ExtraordinaryImplication: -1, Item.Echo: 2.5 })
+    trade(0, { Item.UncannyIncunabulum: -1,     Item.Echo: 12.5 })
+    trade(0, { Item.DirefulReflection: -1,      Item.Echo: 12.5 })
+    trade(0, { Item.SearingEnigma: -1,          Item.Echo: 62.5 })
+    trade(0, { Item.DreadfulSurmise: -1,        Item.Echo: 312.5 })
+    trade(0, { Item.ImpossibleTheorem: -1,      Item.Echo: 1562.60 })
 
     # Nostalgia
     buy_sell(config, Item.DropOfPrisonersHoney, -0.04, 0.02)
@@ -348,6 +253,18 @@ def add_trades(config: Config):
         Item.RattyReliquary: -5,
         Item.RatShilling: 850
     })
+
+    # --- Rubbery
+    buy_sell(config, Item.NoduleOfDeepAmber, -0.03, 0.01)
+
+    trade(0, { Item.UnearthlyFossil: -1,            Item.Echo: 2.5 })
+    trade(0, { Item.NoduleOfTremblingAmber: -1,     Item.Echo: 12.5 })
+    trade(0, { Item.NoduleOfPulsatingAmber: -1,     Item.Echo: 62.5 })
+    trade(0, { Item.NoduleOfFecundAmber: -1,        Item.Echo: 312.5 })
+    trade(0, { Item.FlukeCore: -1,                  Item.Echo: 1560 })
+
+
+
 
     # Rumour ---------------------
     trade(0, {

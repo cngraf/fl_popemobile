@@ -381,10 +381,10 @@ london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 
 trade(1, zailing_deck.normalized_trade())
 
-london_sim_result = decks.london_deck.monte_carlo(config, 1000, 400)
-trade(0.41, london_sim_result) # overwrites action cost
-
-print(london_sim_result)
+if cards_seen_per_day > 0:
+    london_sim_result = decks.london_deck.monte_carlo(config, 1000, 200)
+    trade(0.41, london_sim_result) # overwrites action cost
+    print(london_sim_result)
 
 # ------------------------------------------
 # ---------------- Optimization ------------
@@ -456,6 +456,7 @@ for i in trades_used:
     print(f"{i[0]:.3}       " + i[1])
 
     
+print(london_sim_result[Item.Action])
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
 
 # print(london_deck.normalized_trade())

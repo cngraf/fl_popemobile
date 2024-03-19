@@ -617,8 +617,10 @@ class Item(Enum):
     ParabolaRoundTrip = auto()
     DuplicatedVakeSkull = auto()
 
-    ConnectedPetCard = auto()
-    NavigationErrorCard = auto()
+    # Cards
+    Card_AVisit = auto()
+    Card_ConnectedPet = auto()
+    Card_NavigationError = auto()
 
     # Zailing
     HomeWatersZeeDraw = auto()

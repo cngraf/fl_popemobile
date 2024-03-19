@@ -11,65 +11,61 @@ import random
 def add_trades(config):
     trade = config.trade
 
+    base_watchful = 230
+    base_shadowy = 230
+    base_dangerous = 230
+    base_persuasive = 230
+
+    for favour in (
+        Item.FavBohemians,
+        Item.FavChurch,
+        Item.FavConstables,
+        Item.FavCriminals,
+        Item.FavDocks,
+        Item.FavGreatGame,
+        Item.FavHell,
+        Item.FavRevolutionaries,
+        Item.FavRubberyMen,
+        Item.FavSociety,
+        Item.FavTombColonies,
+        Item.FavUrchins):
+        trade(0, { Item.Card_ConnectedPet: -1, favour: 1})
+
+    # lloyd forger
     trade(0, {
-        Item.ConnectedPetCard: -1,
+        Item.Card_AVisit: -1,
+        Item.CrypticClue: base_shadowy,
+        Item.FavCriminals: 1,
         Item.FavBohemians: 1
     })
 
+    # sad walrus
     trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavChurch: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
+        Item.Card_AVisit: -1,
+        Item.WhisperedHint: 50 + base_dangerous,
+        Item.RatOnAString: 50 + base_dangerous,
+        
+        Item.FavDocks: 1,
         Item.FavConstables: 1
     })
 
+    # musical sardine
     trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavCriminals: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavDocks: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavGreatGame: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavHell: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavRevolutionaries: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavRubberyMen: 1
-    })
-
-    trade(0, {
-        Item.ConnectedPetCard: -1,
+        Item.Card_AVisit: -1,
+        Item.WhisperedHint: base_persuasive * 1.5,
+        Item.FavBohemians: 1,
         Item.FavSociety: 1
     })
 
+    # rye funzo
     trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavTombColonies: 1
-    })
+        Item.Card_AVisit: -1,
+        Item.CrypticClue: base_watchful,
+        Item.FavGreatGame: 1,
+        Item.FavSociety: 1
+    })    
 
-    trade(0, {
-        Item.ConnectedPetCard: -1,
-        Item.FavUrchins: 1
-    })
+
 
 def create_deck_old(config: Config):
     replacement_epa = 6.5
@@ -112,7 +108,7 @@ def create_deck_old(config: Config):
     })
 
     london_deck.card("What will you do with your [connected pet]?", Rarity.Standard, True, {
-        Item.ConnectedPetCard: 1
+        Item.Card_ConnectedPet: 1
     })    
 
     # With Bewildering Procession
@@ -550,6 +546,10 @@ def create_london_deck(config: Config):
     good_cards = []
     bad_cards = []
 
+    # card worth calculated with baseline of 120/40 w 3rd city silverer
+    # and ~6.46 EPA
+
+    # borderline? minimal difference good vs. bad
     good_cards.append(
         Card(
             name= "Lair in the Marshes: Peril and pyjamas",
@@ -568,18 +568,22 @@ def create_london_deck(config: Config):
     )))
 
     knives_rare_success_rate = 0.05
-    good_cards.append(Card("Smoky Flophouse", Rarity.Standard, config.challenge_ev(
-        Stat.Shadowy,40,
-        on_pass = weighted_exchange(
-            (knives_rare_success_rate, {
-                Item.AeolianScream: 1
-            }),
-            (1.0 - knives_rare_success_rate, {
-                Item.FavCriminals: 0.5,
-                Item.FavRevolutionaries: 0.5
-            }),
-        ),
-        on_fail = {}
+    good_cards.append(Card(
+        "Smoky Flophouse",
+        Rarity.Standard,
+        exchange=config.challenge_ev(
+            Stat.Shadowy,
+            40,
+            on_pass = weighted_exchange(
+                (knives_rare_success_rate, {
+                    Item.AeolianScream: 1
+                }),
+                (1.0 - knives_rare_success_rate, {
+                    Item.FavCriminals: 0.5,
+                    Item.FavRevolutionaries: 0.5
+                }),
+            ),
+            on_fail = {}
     )))
 
     good_cards.append(
@@ -601,7 +605,7 @@ def create_london_deck(config: Config):
             )
     ))
 
-    # TODO: check if this is actually worthwile
+    # adds ~0.02 EPA
     good_cards.append(
         Card(
             name= "Premises at the Bazaar w/ Kraken",
@@ -630,8 +634,8 @@ def create_london_deck(config: Config):
         Card(
             "What will you do with your [connected pet]?",
             Rarity.Standard,
-            {
-                Item.ConnectedPetCard: 1
+            exchange={
+                Item.Card_ConnectedPet: 1
             }))
 
     good_cards.append(
@@ -821,7 +825,7 @@ def create_london_deck(config: Config):
             Item.FavSociety: 1,
         }))        
 
-    bad_cards.append(Card(
+    good_cards.append(Card(
         name="Tomb-Colonies faction card",
         freq=Rarity.Standard,
         exchange={
@@ -907,9 +911,7 @@ def create_london_deck(config: Config):
         name="A visit",
         freq=Rarity.Standard,
         exchange={
-            Item.CrypticClue: 230,
-            Item.FavBohemians: 1,
-            Item.FavCriminals: 1
+            Item.Card_AVisit: 1
         }
     ))
 
@@ -1283,9 +1285,10 @@ def simulate_run(config, good_cards, bad_cards, draws):
         hand.append(card)
 
     def play_card(card: Card):
+        # print("Playing " + card.name)
         totals[Item.Action] -= 1
         utils.add_items(totals, card.exchange)
-
+        # print(totals)
         hand.remove(card)
         deck.append(card)
     
