@@ -200,7 +200,7 @@ trade = config.trade
 # ---------------- Decks ----------------------------
 
 # london_deck = Decks.create_london_deck(active_player, 6.5, config)
-london_deck = decks.london_deck.create_london_deck(active_player, 6.5, config)[0]
+london_deck = decks.london_deck.create_deck_old(config)
 
 # should just have one deck for each region and dummy "card draws in X" item for each one
 zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
@@ -375,15 +375,16 @@ config.railway_card("Grazing Goat Demons",
 # print(card_exchange)
 london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 
-trade(london_good_card_density, london_deck.normalized_trade())
+# trade(london_good_card_density, london_deck.normalized_trade())
+# print(london_good_card_density)
+# print(london_deck.normalized_trade())
+
 trade(1, zailing_deck.normalized_trade())
 
+london_sim_result = decks.london_deck.monte_carlo(config, 1000, 400)
+trade(0.41, london_sim_result) # overwrites action cost
 
-london_sim_result = decks.london_deck.monte_carlo(config, 100, 400)
 print(london_sim_result)
-print(london_good_card_density)
-print(london_deck.normalized_trade())
-# trade(0.41, london_sim_result) # overwrites action cost
 
 # ------------------------------------------
 # ---------------- Optimization ------------
@@ -397,25 +398,14 @@ c[optimize_for.value] = -1
 opt_result = linprog(c, A_ub=config.A.toarray(), b_ub=config.b, bounds=config.bounds, method='highs')
 print(opt_result)
 
-
-# print("Opp Deck")
-
-# print(f"{'Item Name':^30}")
-# # for item, quantity in zip(Item, opt_result.x):
-# #     item_name = f"{item.name:30}"
-# #     per_action = f"{(1.0/(quantity * actions_per_day) if quantity != 0 else 0.0):10.3f}"
-# #     per_card = LondonCardsByItem[item.value] / LondonDeckSize
-# #     per_day_of_draws = per_card * cards_seen_per_day
-# #     print(item_name + per_action + ((f"{per_card:10.2f}" + f"{per_day_of_draws:10.2f}") if per_card != 0 else ""))
-
-results = sorted(zip(Item, opt_result.x), key=lambda x: x[1])
-for item, quantity in results:
-    item_name = f"{item.name:40}"
-    if quantity > 0:
-        print(item_name
-        + f"{1/(quantity * actions_per_day):10.5}")
-    else:
-        print(item_name + f"{'unsourced':10}")
+# results = sorted(zip(Item, opt_result.x), key=lambda x: x[1])
+# for item, quantity in results:
+#     item_name = f"{item.name:40}"
+#     if quantity > 0:
+#         print(item_name
+#         + f"{1/(quantity * actions_per_day):10.5}")
+#     else:
+#         print(item_name + f"{'unsourced':10}")
     
 pp = pprint.PrettyPrinter(indent=4)
 

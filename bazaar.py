@@ -234,16 +234,15 @@ def add_trades(config: Config):
     })
 
     # Influence
-    trade(0, {
-        Item.CompromisingDocument: -1,
-        Item.Echo: 0.5
-    })
+    buy_sell(config, Item.StolenCorrespondence, -0.10, 0.05)
 
-    trade(0, {
-        Item.FavourInHighPlaces: -1,
-        Item.Echo: 1
-    })
-
+    trade(0, { Item.IntriguingSnippet: -1,      Item.Echo: 0.2 })
+    trade(0, { Item.CompromisingDocument: -1,   Item.Echo: 0.5 })
+    trade(0, { Item.SecludedAddress: -1,        Item.Echo: 0.5 })
+    trade(0, { Item.StolenKiss: -1,             Item.Echo: 2.5 })
+    trade(0, { Item.FavourInHighPlaces: -1,     Item.Echo: 12.5 })
+    trade(0, { Item.PersonalRecommendation: -1, Item.Echo: 6 })
+    
     # Legal
     trade(0, {
         Item.CaveAgedCodeOfHonour: -1,
@@ -321,15 +320,14 @@ def add_trades(config: Config):
 
 
     # Nostalgia
-    trade(0, {
-        Item.Echo: -0.04,
-        Item.DropOfPrisonersHoney: 1
-    })
+    buy_sell(config, Item.DropOfPrisonersHoney, -0.04, 0.02)
 
-    trade(0, {
-        Item.RomanticNotion: -1,
-        Item.Echo: 0.10
-    })
+    trade(0, { Item.RomanticNotion: -1,         Item.Echo: 0.10 })
+    trade(0, { Item.VisionOfTheSurface: -1,     Item.Echo: 0.50 })
+    trade(0, { Item.TouchingLoveStory: -1,      Item.Echo: 2.5 })
+    trade(0, { Item.BazaarPermit: -1,           Item.Echo: 12.5 })
+    trade(0, { Item.EmeticRevelation: -1, Item.CrypticClue: 625 })
+    trade(0, { Item.CaptivatingBallad: -1,      Item.Echo: 62.5 })
 
     # Osteology
 

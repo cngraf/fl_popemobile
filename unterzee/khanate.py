@@ -69,7 +69,7 @@ def add_trades(active_player, config):
     })
 
     trade(0, {
-        Item.TouchingLoveStory: -10,
+        Item.AssortmentOfKhaganianCoinage: -10,
         Item.TouchingLoveStory: 1
     })
 
