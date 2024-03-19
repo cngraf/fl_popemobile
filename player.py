@@ -55,6 +55,9 @@ Mith:   +3
 SotD:   +1
 Zee:    +5
 
+so to really get into the nitty gritty, are we gonna need some concept of outfits?
+thinking of scandal multiplier
+
 '''
 
 class Player:

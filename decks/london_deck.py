@@ -1,9 +1,11 @@
 from enums import *
-from utils import *
+# from utils import *
+import utils
 from config import Config
 from player import Player
 from decks.deck import *
 
+import random
 
 
 def add_trades(config):
@@ -68,6 +70,13 @@ def add_trades(config):
         Item.ConnectedPetCard: -1,
         Item.FavUrchins: 1
     })
+
+def assign_cards(config: Config):
+    player = config.player
+    wounds_multiplier = menace_multiplier(player.wounds_reduction)
+    suspicion_multiplier = menace_multiplier(player.suspicion_reduction)
+    scandal_multiplier = menace_multiplier(player.scandal_reduction)    
+    nightmares_multiplier = menace_multiplier(player.nightmares_reduction)
 
 
 def create_london_deck(
@@ -291,10 +300,35 @@ def create_london_deck(
     })
 
     bad_cards.append(Card(
-        name="dreams placeholder card",
-        freq=Rarity.Standard,
+        name="dreams placeholder card 1",
+        freq=Rarity.Unusual,
         exchange={}
     ))
+
+    bad_cards.append(Card(
+        name="dreams placeholder card 2",
+        freq=Rarity.Unusual,
+        exchange={}
+    ))
+
+    bad_cards.append(Card(
+        name="dreams placeholder card 3",
+        freq=Rarity.Unusual,
+        exchange={}
+    ))
+
+    bad_cards.append(Card(
+        name="dreams placeholder card 4",
+        freq=Rarity.Unusual,
+        exchange={}
+    ))
+
+    bad_cards.append(Card(
+        name="dreams placeholder card 5",
+        freq=Rarity.Unusual,
+        exchange={}
+    ))
+
 
     # -----------------------------------------------------
     # --- Cards: Factions
@@ -1201,7 +1235,10 @@ def create_london_deck(
         }
     ))
 
-    return london_deck
+    # mega HACK
+    return [london_deck, good_cards, bad_cards]
+
+# why the fuck did i do this again?
 
 # hmm this is gonna be harder to model since you can't discard cards
 # start by just making everying Play=true
@@ -1216,3 +1253,89 @@ def create_london_deck(
 # - just rewrite the whole cards function to have success & failure inputs
 
 # first past, everything as if it's 100% pass rate
+
+def monte_carlo(config, runs, draws_per_run):
+    print("Simulating London deck...")
+    cummulative = {}
+    _, good_cards, bad_cards = create_london_deck(config.player, 6.5, config)
+
+    for i in range(0, runs):
+        result = simulate_run(config, good_cards, bad_cards, draws_per_run)
+        utils.add_items(cummulative, result)
+    
+    # total_actions = abs(cummulative[Item.Action])
+    total_draws = runs * draws_per_run
+
+    per_draw = {}
+    for key, value in cummulative.items():
+        per_draw[key] = value / total_draws
+
+    per_draw[Item.CardDraws] = -1
+    return per_draw
+
+
+
+def simulate_run(config, good_cards, bad_cards, draws):
+    deck = []
+    deck += good_cards
+    deck += bad_cards
+    
+    hand = []
+    totals = {
+        Item.Action: 0
+    }
+
+    # deck = all_cards.copy()
+    # total = sum(i.freq for i in all_cards)
+
+    def draw_card():
+        weights = [card.freq.value for card in deck]
+        card = random.choices(deck, weights, k=1)[0]
+        deck.remove(card)
+        hand.append(card)
+
+    def play_card(card: Card):
+        totals[Item.Action] -= 1
+        utils.add_items(totals, card.exchange)
+
+        hand.remove(card)
+        deck.append(card)
+    
+    def good_cards_in_hand():
+        return [card for card in hand if card in good_cards]
+    
+    def bad_cards_in_hand():
+        return [card for card in hand if card in bad_cards]
+
+    def discard_rarest_bad_card():
+        bads = bad_cards_in_hand()
+        if len(bads) > 0:
+                bads.sort(key= lambda card : card.freq.value)
+                card = bads[0]
+                hand.remove(card)
+                deck.append(card)
+
+    # def refill_hand():
+
+    while draws > 0:
+
+        # there is a slightly smarter way to do this
+        # requires setting EV of every card
+        # and playing cards as long as they increase EV of next draw
+        # but that sounds like a lot more work
+        for card in good_cards_in_hand():
+            play_card(card)
+
+        while len(hand) < 5 and draws > 0:
+            draw_card()
+            draws -= 1
+            
+        if not good_cards_in_hand():
+            discard_rarest_bad_card()
+            # refill_hand()
+            while len(hand) < 5 and draws > 0:
+                draw_card()
+                draws -= 1
+
+    return totals
+

@@ -135,7 +135,7 @@ crackpot idea
 # actions doesn't matter on its own until I add some weekly+ stuff
 # but it does matter relative to cards seen per day
 actions_per_day = 120.0
-cards_seen_per_day = 0
+cards_seen_per_day = 40
 
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
@@ -200,7 +200,7 @@ trade = config.trade
 # ---------------- Decks ----------------------------
 
 # london_deck = Decks.create_london_deck(active_player, 6.5, config)
-london_deck = decks.london_deck.create_london_deck(active_player, 6.5, config)
+london_deck = decks.london_deck.create_london_deck(active_player, 6.5, config)[0]
 
 # should just have one deck for each region and dummy "card draws in X" item for each one
 zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
@@ -378,6 +378,13 @@ london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 trade(london_good_card_density, london_deck.normalized_trade())
 trade(1, zailing_deck.normalized_trade())
 
+
+london_sim_result = decks.london_deck.monte_carlo(config, 100, 400)
+print(london_sim_result)
+print(london_good_card_density)
+print(london_deck.normalized_trade())
+# trade(0.41, london_sim_result) # overwrites action cost
+
 # ------------------------------------------
 # ---------------- Optimization ------------
 # ------------------------------------------
@@ -389,6 +396,7 @@ c[optimize_for.value] = -1
 
 opt_result = linprog(c, A_ub=config.A.toarray(), b_ub=config.b, bounds=config.bounds, method='highs')
 print(opt_result)
+
 
 # print("Opp Deck")
 

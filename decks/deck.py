@@ -29,7 +29,7 @@ class Deck:
 class Card:
     def __init__(self, name: str, freq: Rarity, score: int = 0, exchange = {}):
         self.name = name
-        self.rarity = freq
+        self.freq = freq
         self.score = score
         self.exchange = exchange
         
