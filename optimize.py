@@ -168,32 +168,48 @@ nightmares_multiplier = 0.85
 # --------------------------------------------    
 # TODO: separate class?
 
-baseline_player = Player(stats = {
+player_baseline = Player(stats = {
     Stat.Watchful: 230 + 92,
     Stat.Shadowy: 230 + 73,
     Stat.Dangerous: 230 + 83,
     Stat.Persuasive: 230 + 85,
 })
 
+# aka "cosmogone silvererhand"
 player_third_city_silverer = Player(
     ambition=Ambition.BagALegend,
     treasure=Treasure.LongDeadPriestsOfTheRedBird,
     profession=Profession.Silverer,
     stats={
-        Stat.Watchful: 330,
-        Stat.Shadowy: 330,
-        Stat.Dangerous: 330,
-        Stat.Persuasive: 330
+        Stat.Watchful: Player.baseline_watchful + 13,
+        Stat.Shadowy: Player.baseline_shadowy + 6,
+        Stat.Dangerous: Player.baseline_dangerous,
+        Stat.Persuasive: Player.baseline_persuasive,
     })
 
-active_player = player_third_city_silverer
+player_bal_licentiate = Player(
+    ambition=Ambition.BagALegend,
+    treasure=Treasure.WingedAndTalonedSteed,
+    profession=Profession.Licentiate,
+        stats={
+        Stat.Watchful: Player.baseline_watchful,
+        Stat.Shadowy: Player.baseline_shadowy + 6 + 6,
+        Stat.Dangerous: Player.baseline_dangerous + 6 + 13,
+        Stat.Persuasive: Player.baseline_persuasive
+    })
+
+active_player = player_bal_licentiate
 
 # hack
-var_buffer = 7000
+var_buffer = 10_000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
 config = Config(num_vars, active_player)
+
+# Toggles
+config.enable_all_rat_market_moons = False
+
 
 trade = config.trade
 

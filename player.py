@@ -24,10 +24,10 @@ TODO:
     - allow Ubergoat, other 1 FATE items
 
 with FATE & Seasonal:
-Watchful:   +92
-Shadowy:    +73
-Dangerous:  +83
-Persuasive: +85
+Watchful:   +92 => 322
+Shadowy:    +73 => 303
+Dangerous:  +83 => 313
+Persuasive: +85 => 315
 
 KT:     +10
 MA:     +10
@@ -69,6 +69,11 @@ class Player:
     - add Destiny
     - add Club
     '''
+
+    baseline_watchful = 230 + 92
+    baseline_shadowy = 230 + 73
+    baseline_dangerous = 230 + 83
+    baseline_persuasive = 230 + 85
 
     def __init__(self,
                 location = Location.NoLocation,

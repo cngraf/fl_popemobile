@@ -1,9 +1,10 @@
 from enums import *
+import config
 
 ## ------------
 ## Rat Market
 ## ------------
-def add_trades(config):
+def add_trades(config: config.Config):
     trade = config.trade
     
     for tier5 in (Item.UncannyIncunabulum,
@@ -26,21 +27,22 @@ def add_trades(config):
         trade(1, { tier7: -1, Item.RatShilling: 4000 })
 
 
-    for item, price in (
-        (Item.RayDrenchedCinder, -3125),
-        (Item.EyelessSkull, -625),
-        (Item.StarstoneDemark, -3125),
-        (Item.IntriguersCompendium, -3125),
-        (Item.ElementalSecret, -3125),
-        (Item.CoruscatingSoul, -3125),
-        (Item.EdictsOfTheFirstCity, -3125),
-        (Item.ReportedLocationOfAOneTimePrinceOfHell, -15625),
-        # (Item.LegendaCosmogone, -3125),
-        (Item.TearsOfTheBazaar, -3125),
-        (Item.FabulousDiamond, -3125),
-        (Item.NoduleOfFecundAmber, -3125)
-    ):
-        trade(0, { item: 1, Item.RatShilling: price})
+    if config.enable_all_rat_market_moons:
+        for item, price in (
+            (Item.RayDrenchedCinder, -3125),
+            (Item.EyelessSkull, -625),
+            (Item.StarstoneDemark, -3125),
+            (Item.IntriguersCompendium, -3125),
+            (Item.ElementalSecret, -3125),
+            (Item.CoruscatingSoul, -3125),
+            (Item.EdictsOfTheFirstCity, -3125),
+            (Item.ReportedLocationOfAOneTimePrinceOfHell, -15625),
+            # (Item.LegendaCosmogone, -3125),
+            (Item.TearsOfTheBazaar, -3125),
+            (Item.FabulousDiamond, -3125),
+            (Item.NoduleOfFecundAmber, -3125)
+        ):
+            trade(0, { item: 1, Item.RatShilling: price})
 
     trade(0, { Item.RatShilling: -1, Item.PieceOfRostygold: 10 })
 

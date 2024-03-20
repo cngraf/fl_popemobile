@@ -61,6 +61,8 @@ class Config:
 
         self.bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
 
+        self.enable_all_rat_market_moons = True
+
 
     def per_day(self, exchanges):
         n = next(self.counter)
