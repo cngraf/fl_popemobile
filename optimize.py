@@ -209,7 +209,7 @@ player_generic_licentiate = Player(
         Stat.Persuasive: Player.baseline_persuasive
     })
 
-active_player = player_bal_licentiate
+active_player = player_generic
 
 # hack
 var_buffer = 10_000

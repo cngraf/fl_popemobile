@@ -410,6 +410,10 @@ def add_trades(player, config: config.Config):
             Item.CarvedBallOfStygianIvory: 18 # 18/16/18,
         })
 
+        # trade(8, {
+        #     Item.ThornedRibcage
+        # })
+
     # segmented ribcage
         
     # 3/0/6/0/3 chimera => gothic w/ menace
@@ -447,6 +451,17 @@ def add_trades(player, config: config.Config):
         Item.HinterlandScrip: 199,
         Item.CarvedBallOfStygianIvory: 21
     })
+
+    trade(8, {
+        Item.ThornedRibcage: -1,
+        Item.DuplicatedVakeSkull: -1,
+        Item.FemurOfAJurassicBeast: -3,
+        Item.UnidentifiedThighbone: -1,
+        Item.JetBlackStinger: -1,
+
+        Item.HinterlandScrip: 199,
+        Item.CarvedBallOfStygianIvory: 21
+    })    
 
     # Generator Skeleton, various
     # testing various balances of brass vs. sabre-toothed skull

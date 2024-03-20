@@ -69,6 +69,15 @@ def add_trades(player, config, default_rare_success_rate = 0.05):
         Item.Echo: 25 * default_rare_success_rate # 2x Brass Ring
     })
 
+    trade(1, {
+        Item.SaltSteppeAtlas: -1,
+        Item.PuzzlingMap: -5,
+        Item.PartialMap: -25,
+        Item.VitreousAlmanac: -5,
+        Item.GlassGazette: -25,
+        # Item.ZeeLegs: -25, # TODO
+        Item.CartographersHoard: 1
+    })
 
     # ----- Mysteries
 
