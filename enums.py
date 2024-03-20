@@ -300,12 +300,15 @@ class Item(Enum):
     AmanitaSherry = auto()
     BrilliantSoul = auto()
     MuscariaBrandy = auto()
+    BrassRing = auto()
+    DevilboneDice = auto()
     PortfolioOfSouls = auto()
     QueerSoul = auto()
     SilentSoul = auto()
     BrightBrassSkull = auto()
     DiscordantSoul = auto()
     CoruscatingSoul = auto()
+    ReportedLocationOfAOneTimePrinceOfHell = auto()
 
     # Influence
     StolenCorrespondence = auto()
@@ -318,6 +321,8 @@ class Item(Enum):
     ExigentNote = auto()
 
     # Legal
+    InfernalContract = auto()
+    DubiousTestimony = auto()
     SwornStatement = auto()
     CaveAgedCodeOfHonour = auto()
     LegalDocument = auto()
@@ -418,6 +423,8 @@ class Item(Enum):
 
     # Ratness
     RatOnAString = auto()
+    VengeRatCorpse = auto()
+    BaptisedRattusFaberCorpse = auto()
     RattyReliquary = auto()
 
     # Rubbery
@@ -474,6 +481,8 @@ class Item(Enum):
     BottleOfFourthCityAirag = auto()
     TearsOfTheBazaar = auto()
     VialOfMastersBlood = auto()
+    BottledOblivion = auto()
+    BottleOfGreyfields1868FirstSporing = auto()
 
     # Wild Words
     PrimordialShriek = auto()

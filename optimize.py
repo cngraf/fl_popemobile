@@ -40,6 +40,7 @@ import unterzee.wakeful_eye
 import unterzee.port_cecil
 
 import upper_river.uncategorized
+import upper_river.upper_river_exchange
 import upper_river.ealing_gardens
 import upper_river.jericho
 import upper_river.evenlode
@@ -135,7 +136,7 @@ crackpot idea
 # actions doesn't matter on its own until I add some weekly+ stuff
 # but it does matter relative to cards seen per day
 actions_per_day = 120.0
-cards_seen_per_day = 40
+cards_seen_per_day = 0
 
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
@@ -188,7 +189,7 @@ player_third_city_silverer = Player(
 active_player = player_third_city_silverer
 
 # hack
-var_buffer = 3000
+var_buffer = 7000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
@@ -244,6 +245,7 @@ unterzee.zailing.add_trades(active_player, zailing_epa, config)
 
 parabola.add_trades(active_player, config)
 
+upper_river.upper_river_exchange.add_trades(config)
 upper_river.uncategorized.add_trades(active_player, config)
 upper_river.ealing_gardens.add_trades(active_player, config)
 upper_river.jericho.add_trades(active_player, config)
@@ -456,7 +458,6 @@ for i in trades_used:
     print(f"{i[0]:.3}       " + i[1])
 
     
-print(london_sim_result[Item.Action])
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
 
 # print(london_deck.normalized_trade())

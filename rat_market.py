@@ -6,15 +6,43 @@ from enums import *
 def add_trades(config):
     trade = config.trade
     
-    trade(0, {
-        Item.RatShilling: -10,
-        Item.Echo: 1
-    })
+    for tier5 in (Item.UncannyIncunabulum,
+                  Item.StormThrenody,
+                  Item.RattyReliquary,
+                  Item.UnlawfulDevice):
+        trade(1, { tier5: -1, Item.RatShilling: 200 })
+        trade(5, { tier5: -5, Item.RatShilling: 850 })
 
-    trade(0, {
-        Item.RatShilling: -1,
-        Item.PieceOfRostygold: 10
-    })
+    for tier6 in (Item.NightWhisper,
+                  Item.ParabolaLinenScrap,
+                  Item.CracklingDevice,
+                  Item.CaptivatingBallad):
+        trade(1, { tier6: -1, Item.RatShilling: 850 })
+
+    for tier7 in (Item.CorrespondingSounder,
+                  Item.ScrapOfIvoryOrganza,
+                  Item.CartographersHoard,
+                  Item.ParabolanParable):
+        trade(1, { tier7: -1, Item.RatShilling: 4000 })
+
+
+    for item, price in (
+        (Item.RayDrenchedCinder, -3125),
+        (Item.EyelessSkull, -625),
+        (Item.StarstoneDemark, -3125),
+        (Item.IntriguersCompendium, -3125),
+        (Item.ElementalSecret, -3125),
+        (Item.CoruscatingSoul, -3125),
+        (Item.EdictsOfTheFirstCity, -3125),
+        (Item.ReportedLocationOfAOneTimePrinceOfHell, -15625),
+        # (Item.LegendaCosmogone, -3125),
+        (Item.TearsOfTheBazaar, -3125),
+        (Item.FabulousDiamond, -3125),
+        (Item.NoduleOfFecundAmber, -3125)
+    ):
+        trade(0, { item: 1, Item.RatShilling: price})
+
+    trade(0, { Item.RatShilling: -1, Item.PieceOfRostygold: 10 })
 
     # Crow-Crease Cryptics
 
@@ -59,7 +87,7 @@ def add_trades(config):
     })
 
     trade(0, {
-        Item.RatShilling: -1000,
+        Item.RatShilling: -250,
         Item.BlackmailMaterial: 1
     })
 
@@ -139,70 +167,4 @@ def add_trades(config):
     trade(0, {
         Item.FourthCityEcho: -1,
         Item.RatShilling: 125
-    })
-
-    # Tier 5
-
-    trade(1, {
-        Item.UncannyIncunabulum: -5,
-        Item.RatShilling: 850
-    })
-
-    trade(1, {
-        Item.StormThrenody: -5,
-        Item.RatShilling: 850
-    })
-
-    trade(1, {
-        Item.RattyReliquary: -5,
-        Item.RatShilling: 850
-    })
-
-    trade(1, {
-        Item.UnlawfulDevice: -5,
-        Item.RatShilling: 850
-    })
-
-    # Tier 6
-
-    trade(1, {
-        Item.NightWhisper: -1,
-        Item.RatShilling: 850
-    })
-
-    trade(1, {
-        Item.ParabolaLinenScrap: -1,
-        Item.RatShilling: 850
-    })
-
-    trade(1, {
-        Item.CracklingDevice: -1,
-        Item.RatShilling: 850
-    })
-
-    trade(1, {
-        Item.CaptivatingBallad: -1,
-        Item.RatShilling: 850
-    })
-
-    # Tier 7
-
-    trade(1, {
-        Item.CorrespondingSounder: -1,
-        Item.RatShilling: 4000
-    })
-
-    trade(1, {
-        Item.ScrapOfIvoryOrganza: -1,
-        Item.RatShilling: 4000
-    })
-
-    trade(1, {
-        Item.CartographersHoard: -1,
-        Item.RatShilling: 4000
-    })
-
-    trade(1, {
-        Item.ParabolanParable: -1,
-        Item.RatShilling: 4000
     })
