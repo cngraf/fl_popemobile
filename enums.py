@@ -150,6 +150,12 @@ class Item(Enum):
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
 
+    # Second Chances
+    SuddenInsight = auto()
+    HastilyScrawledWarningNote = auto()
+    HardEarnedLesson = auto()
+    ConfidentSmile = auto()
+
     # Favours
     FavBohemians = auto()
     FavChurch = auto()

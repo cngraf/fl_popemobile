@@ -74,21 +74,35 @@ def create_deck(config: Config):
                         ))
     
     # TODO: second chance is pretty valuable here
+    garden_pass_rate = utils.pass_rate(config.player, Stat.Persuasive, 1000)
+    garden_pass_rate_with_second_chance = 1.0 - (1.0 - garden_pass_rate) ** 2
     card_unlikely_garden = Card(
-        name= "An Unlikely Gardfen",
+        name= "An Unlikely Garden",
         freq= Rarity.Standard,
-        exchange= config.challenge_ev(
-            stat= Stat.Persuasive,
-            dc = 1000, # not a typo!
-            on_pass= {
+        exchange=config.add_weighted_trade(1, (
+            (garden_pass_rate_with_second_chance, {
+                Item.ConfidentSmile: -1,
                 Item.Irrigo: 2,
-                Item.SearingEnigma: 1
-            },
-            on_fail= {
+                Item.SearingEnigma: 1,
+            }),
+            (1.0 - garden_pass_rate_with_second_chance, {
                 Item.Irrigo: 2,
                 Item.CrypticClue: 50,
                 Item.Nightmares: 1
-            }))
+            })
+        )))
+        # exchange= config.challenge_ev(
+        #     stat= Stat.Persuasive,
+        #     dc = 1000, # not a typo!
+        #     on_pass= {
+        #         Item.Irrigo: 2,
+        #         Item.SearingEnigma: 1
+        #     },
+        #     on_fail= {
+        #         Item.Irrigo: 2,
+        #         Item.CrypticClue: 50,
+        #         Item.Nightmares: 1
+        #     }))
 
     # anything better on this card?
     card_recall = Card(

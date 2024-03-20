@@ -168,11 +168,11 @@ nightmares_multiplier = 0.85
 # --------------------------------------------    
 # TODO: separate class?
 
-player_baseline = Player(stats = {
-    Stat.Watchful: 230 + 92,
-    Stat.Shadowy: 230 + 73,
-    Stat.Dangerous: 230 + 83,
-    Stat.Persuasive: 230 + 85,
+player_generic = Player(stats = {
+    Stat.Watchful: Player.baseline_watchful,
+    Stat.Shadowy: Player.baseline_shadowy,
+    Stat.Dangerous: Player.baseline_dangerous,
+    Stat.Persuasive: Player.baseline_persuasive
 })
 
 # aka "cosmogone silvererhand"
@@ -184,7 +184,7 @@ player_third_city_silverer = Player(
         Stat.Watchful: Player.baseline_watchful + 13,
         Stat.Shadowy: Player.baseline_shadowy + 6,
         Stat.Dangerous: Player.baseline_dangerous,
-        Stat.Persuasive: Player.baseline_persuasive,
+        Stat.Persuasive: Player.baseline_persuasive
     })
 
 player_bal_licentiate = Player(
@@ -193,8 +193,19 @@ player_bal_licentiate = Player(
     profession=Profession.Licentiate,
         stats={
         Stat.Watchful: Player.baseline_watchful,
-        Stat.Shadowy: Player.baseline_shadowy + 6 + 6,
+        Stat.Shadowy: 230 + 97,
         Stat.Dangerous: Player.baseline_dangerous + 6 + 13,
+        Stat.Persuasive: Player.baseline_persuasive
+    })
+
+player_generic_licentiate = Player(
+    ambition=Ambition.NoAmbition,
+    treasure=Treasure.NoTreasure,
+    profession=Profession.Licentiate,
+        stats={
+        Stat.Watchful: Player.baseline_watchful,
+        Stat.Shadowy: Player.baseline_shadowy + 6,
+        Stat.Dangerous: Player.baseline_dangerous,
         Stat.Persuasive: Player.baseline_persuasive
     })
 
@@ -208,7 +219,7 @@ num_vars = num_items + 1 + var_buffer
 config = Config(num_vars, active_player)
 
 # Toggles
-config.enable_all_rat_market_moons = False
+config.enable_all_rat_market_moons = True
 
 
 trade = config.trade
@@ -425,6 +436,13 @@ print(opt_result)
 #     else:
 #         print(item_name + f"{'unsourced':10}")
     
+'''
+591 fragments per action
+1.28 wings per action
+
+6000 fragments => 10.15 actions
+3 wings => 2.34 actions
+'''
 pp = pprint.PrettyPrinter(indent=4)
 
 print("------Assumptions-------")

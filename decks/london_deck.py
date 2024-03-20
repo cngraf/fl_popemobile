@@ -644,9 +644,25 @@ def create_london_deck(config: Config):
             Rarity.VeryInfrequent,
             exchange= {
                 Item.FavBohemians: 1
-            }
-        )
-    )
+            }))
+
+    # good_cards.append(
+    #     Card(
+    #         name="Slavering Dream-Hound standard card",
+    #         freq=Rarity.Standard,
+    #         exchange= {
+    #             Item.DropOfPrisonersHoney: 200
+    #         }))
+    
+    # # can't encode "all" of anything so just picking level 5
+    # good_cards.append(
+    #     Card(
+    #         name="Slavering Dream-Hound rare card",
+    #         freq=Rarity.Rare,
+    #         exchange= {
+    #             Item.Wounds: -15,
+    #             Item.PieceOfRostygold: 100
+    #         }))    
 
     # -----------------------------------------------------
     # --- Cards: Other Equipment

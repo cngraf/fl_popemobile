@@ -2,10 +2,12 @@ from enums import *
 from utils import *
 import config
 
-def actions_to_sell_skelly(shadowy, implausibility):
+def actions_to_sell_skelly(shadowy, implausibility, second_chance = False):
     if (implausibility < 1): return 1
     difficulty = 75 * implausibility
     success_rate = min(0.6 * shadowy/difficulty, 1.0)
+    if second_chance:
+        success_rate =  1.0 - ((1.0 - success_rate) ** 2)
     fails = 1.0/success_rate - 1
 
     # assumes 5 clear per action
@@ -359,68 +361,6 @@ def add_trades(player, config: config.Config):
     ):
         # 3/?/6
         trade(7 + actions_to_sell_chimera, {
-            Item.ASkeletonOfYourOwn: -1,
-            Item.DuplicatedVakeSkull: -1,
-            Item.WingOfAYoungTerrorBird: -3,
-            filler_limb: -1,
-            Item.HinterlandScrip: 5 + skelly_value_in_items(2.5 + 65 + (3 * 2.5) + filler_limb_echo_value, 0.5, False),
-            Item.CarvedBallOfStygianIvory: 21, # 20/18/21
-        })
-
-        # 3/1/6
-        trade(7 + actions_to_sell_chimera, {
-            Item.ASkeletonOfYourOwn: -1,
-            Item.DuplicatedVakeSkull: -1,
-            Item.FemurOfAJurassicBeast: -1,
-            Item.WingOfAYoungTerrorBird: -2,
-            Item.AmberCrustedFin: -1,
-            Item.HinterlandScrip: 5+ skelly_value_in_items(2.5 + 65 + 3 + (2 * 2.5) + 15, 0.5, False),
-            Item.CarvedBallOfStygianIvory: 21, # 20/18/21
-        })
-
-        # 4/?/4
-        trade(7 + actions_to_sell_chimera, {
-            Item.ASkeletonOfYourOwn: -1,
-            Item.SabreToothedSkull: -1,
-            Item.WingOfAYoungTerrorBird: -3,
-            filler_limb: -1,
-            Item.HinterlandScrip: 5 + skelly_value_in_items(2.5 + 62.5 + (3 * 2.5) + filler_limb_echo_value, 0.5, False),
-            Item.CarvedBallOfStygianIvory: 18, # 18/16/18
-        })
-
-        # 3/2/6
-        trade(7 + actions_to_sell_chimera, {
-            Item.ASkeletonOfYourOwn: -1,
-            Item.HornedSkull: -1,
-            Item.WingOfAYoungTerrorBird: -2,
-            Item.AmberCrustedFin: -2,
-            Item.HinterlandScrip: 5 + skelly_value_in_items(2.5 + 12.5 + (2 * 2.5) + (2 * 15), 0.5, False),
-            Item.CarvedBallOfStygianIvory: 21 # 20/18/21,
-        })
-
-        # 4/0/4
-        trade(7 + actions_to_sell_chimera, {
-            Item.ASkeletonOfYourOwn: -1,
-            Item.HornedSkull: -1,
-            Item.WingOfAYoungTerrorBird: -3,
-            Item.HumanArm: -1,
-            Item.HinterlandScrip: 5 + skelly_value_in_items(2.5 + 12.5 + (3 * 2.5) + 2.5, 0.5, False),
-            Item.CarvedBallOfStygianIvory: 18 # 18/16/18,
-        })
-
-
-    for filler_limb, filler_limb_echo_value in (
-        (Item.KnottedHumerus, 3),
-        (Item.IvoryHumerus, 15),
-        (Item.UnidentifiedThighbone, 1),
-        (Item.HelicalThighbone, 2),
-        (Item.HolyRelicOfTheThighOfStFiacre, 12.5),
-        (Item.IvoryFemur, 65),
-        (Item.AlbatrossWing, 12.5),
-        (Item.FinBonesCollected, 0.5)
-    ):
-        # 3/?/6
-        trade(7 + actions_to_sell_chimera, {
             Item.HumanRibcage: -1,
             Item.DuplicatedVakeSkull: -1,
             Item.WingOfAYoungTerrorBird: -3,
@@ -469,6 +409,44 @@ def add_trades(player, config: config.Config):
             Item.HinterlandScrip: 5 + skelly_value_in_items(12.5 + 12.5 + (3 * 2.5) + 2.5, 0.5, False),
             Item.CarvedBallOfStygianIvory: 18 # 18/16/18,
         })
+
+    # segmented ribcage
+        
+    # 3/0/6/0/3 chimera => gothic w/ menace
+    trade(5 + actions_to_sell_chimera, {
+        Item.SegmentedRibcage: -1,
+        Item.DuplicatedVakeSkull: -1,
+        Item.FossilisedForelimb: -1,
+        Item.WingOfAYoungTerrorBird: -1,
+        Item.JetBlackStinger: -1,
+
+        Item.HinterlandScrip: 201,
+        Item.CarvedBallOfStygianIvory: 21
+    })
+
+    # 3/0/5/0/3 chimera => gothic w/ menace
+    trade(5 + actions_to_sell_chimera, {
+        Item.SegmentedRibcage: -1,
+        Item.DuplicatedVakeSkull: -1,
+        Item.WingOfAYoungTerrorBird: -2,
+        Item.TombLionsTail: -1,
+
+        Item.HinterlandScrip: 155,
+        Item.CarvedBallOfStygianIvory: 18
+    })
+
+    # thorned ribcage
+    # 3/1/6/0/0 => gothic w/ reptiles + menace
+    trade(8, {
+        Item.ThornedRibcage: -1,
+        Item.DuplicatedVakeSkull: -1,
+        Item.FemurOfAJurassicBeast: -3,
+        Item.UnidentifiedThighbone: -1,
+        Item.JetBlackStinger: -1,
+
+        Item.HinterlandScrip: 199,
+        Item.CarvedBallOfStygianIvory: 21
+    })
 
     # Generator Skeleton, various
     # testing various balances of brass vs. sabre-toothed skull

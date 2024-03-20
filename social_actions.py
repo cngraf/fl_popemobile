@@ -1,6 +1,7 @@
 from enums import *
+import config
 
-def add_trades(config):
+def add_trades(config: config.Config):
     # Send Disquieting Missive
     # if player_profession == Profession.CrookedCross:
     trade = config.trade
@@ -60,6 +61,11 @@ def add_trades(config):
     })
 
     trade(1, {
+        Item.Wounds: -4,
+        Item.HardEarnedLesson: 1
+    })
+
+    trade(1, {
         Item.Scandal: -5
     })
 
@@ -70,4 +76,19 @@ def add_trades(config):
     trade(1, {
         Item.Nightmares: -6
     })
+
+    trade(1, {
+        Item.Nightmares: -4,
+        Item.SuddenInsight: 1
+    })
+
+    trade(1, {
+        Item.HastilyScrawledWarningNote: 3
+    })
+
+    # house of chimes? think this works, some other stuff too
+    trade(1, {
+        Item.ConfidentSmile: 3
+    })
+
 
