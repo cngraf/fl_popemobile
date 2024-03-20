@@ -16,7 +16,9 @@ def menace_multiplier(reduction_points):
 
 def pass_rate(player, stat, difficulty):
     player_level = player.stats[stat]
-    if stat in (Stat.Watchful, Stat.Shadowy, Stat.Dangerous, Stat.Persuasive):
+    if difficulty <= 0:
+        return 1.0
+    elif stat in (Stat.Watchful, Stat.Shadowy, Stat.Dangerous, Stat.Persuasive):
         return broad_challenge_success_rate(player_level, difficulty)
     else:
         return narrow_challenge_success_rate(player_level, difficulty)
@@ -41,3 +43,12 @@ def skelly_value_in_items(skelly_value, item_value, zoo_bonus_active):
 def add_items(base_dict: dict, add_dict: dict, weight: float = 1.0):
     for key, val in add_dict.items():
         base_dict[key] = base_dict.get(key, 0) + val * weight
+    return base_dict
+
+def sum_dicts(*dicts):
+    result = {}
+    for i in dicts:
+        for key, val in i.items():
+            result[key] = result.get(key, 0) + val
+
+    return result

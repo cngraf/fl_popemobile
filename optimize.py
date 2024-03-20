@@ -212,7 +212,7 @@ player_generic_licentiate = Player(
 active_player = player_generic
 
 # hack
-var_buffer = 10_000
+var_buffer = 5_000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 

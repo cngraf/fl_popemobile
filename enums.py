@@ -147,6 +147,7 @@ class Item(Enum):
     Irrigo = auto()
     TroubledWaters = auto()
 
+    BoneMarketExhaustion = auto()
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
 
@@ -400,6 +401,7 @@ class Item(Enum):
     LeviathanFrame = auto()
     MammothRibcage = auto()
     MoonlightScales = auto()
+    ObsidianChitinTail = auto()
     PentagrammicSkull = auto()
     PlasterTailBones = auto()
     PlatedSkull = auto()
@@ -632,7 +634,10 @@ class Item(Enum):
     ParabolaRoundTrip = auto()
 
     DuplicatedVakeSkull = auto()
+    DuplicatedCounterfeitHeadOfJohnTheBaptist = auto()
     ASkeletonOfYourOwn = auto()
+
+    Placeholder = auto()
 
     # Cards
     Card_AVisit = auto()
