@@ -624,7 +624,9 @@ class Item(Enum):
     ZailingDraws = auto() # self-explanatory
     SlightedAcquaintance = auto() # newspaper
     ParabolaRoundTrip = auto()
+
     DuplicatedVakeSkull = auto()
+    ASkeletonOfYourOwn = auto()
 
     # Cards
     Card_AVisit = auto()
