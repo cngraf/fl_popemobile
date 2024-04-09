@@ -70,6 +70,12 @@ class Player:
     - add Club
     '''
 
+    location: Location
+    ambition: Ambition
+    treasure: Treasure
+    profession: Profession
+    specialization: Specialization
+
     baseline_watchful = 230 + 92
     baseline_shadowy = 230 + 73
     baseline_dangerous = 230 + 83

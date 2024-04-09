@@ -95,5 +95,176 @@ the_snares = ZeeRegion(Location.TheSnares, 250, 12,
                         bounty=5659)   
 
 def create_deck(config: Config, location: Location):
-    # quick and dirty version
-    pass
+    '''
+    Probably don't need the grades here?
+    Can just have an algo check the exchanges on each card
+    1. TW reduction when TW is high
+    2. chasing gain
+    3. plunder gain
+    4. minimize TW
+    '''
+
+
+    # TODO
+    # - one for each region
+    # - depends on ship type
+
+    region = the_salt_steppe
+
+    cards = [
+        Card(
+            name="A Corvette (Piracy)",
+            freq=Rarity.Standard,
+            grade=Grade.Good,
+            discardable=False,
+            exchange=config.challenge_ev(
+                stat=Stat.Persuasive,
+                dc=160,
+                on_pass={
+                    Item.TroubledWaters: -2,
+                    Item.ZailingProgress: 1
+                },
+                on_fail={
+                    Item.TroubledWaters: 6,
+                    Item.Suspicion: 2,
+                    Item.ZailingProgress: 0.5
+                }
+            )
+        ),
+
+        Card(
+            name="Giant Enemy Crab",
+            freq=Rarity.Infrequent,
+            grade=Grade.Good,
+            discardable=False,
+            exchange=config.challenge_ev(
+                stat=Stat.MonstrousAnatomy,
+                dc=3,
+                on_pass={
+                    Item.TroubledWaters: -2,
+                    Item.ZailingProgress: 1
+                },
+                on_fail={
+                    Item.TroubledWaters: 8
+                }
+            )
+        ),
+
+        Card(
+            name="A Huge Terrible Beast",
+            freq=Rarity.Infrequent,
+            grade=Grade.Bad,
+            discardable=False,
+            exchange={
+                Item.TroubledWaters: 3,
+                Item.ZailingProgress: 1
+            }
+        ),
+
+        # TODO: Add False-Star treasure option for -5 TW and no chasing
+        # needs token card item
+        Card(
+            name="A Navigation Error",
+            freq=Rarity.Infrequent,
+            grade=Grade.Excellent,
+            discardable=False,
+            exchange=config.challenge_ev(
+                stat=Stat.Zeefaring,
+                dc=5,
+                on_pass={
+                    Item.TroubledWaters: 2,
+                    Item.ChasingDownYourBounty: region.chasing_gain_advanced,
+                    Item.ZailingProgress: 1
+                }
+            )
+        ),
+
+        Card(
+            name="A Spit of Land",
+            freq=Rarity.Infrequent,
+            grade=Grade.Bad,
+            discardable=False,
+            exchange={
+                Item.TroubledWaters: 1,
+                Item.ZailingProgress: 1
+            }
+        ),
+
+        Card(
+            name="Passing a Lightship",
+            freq=Rarity.Infrequent,
+            grade=Grade.Excellent,
+            discardable=False,
+            exchange=config.challenge_ev(
+                stat=Stat.Shadowy,
+                dc=260,
+                on_pass={
+                    Item.ChasingDownYourBounty: region.chasing_gain_basic,
+                    Item.ZailingProgress: 1
+                },
+                on_fail={
+                    Item.TroubledWaters: 7,
+                    Item.ZailingProgress: 0.5,
+                }
+            )
+        ),
+
+        # add rare success? eh
+        Card(
+            name="Rats in the hold",
+            freq=Rarity.Infrequent,
+            grade=Grade.Good,
+            discardable=False,
+            exchange=config.challenge_ev(
+                stat=Stat.Dangerous,
+                dc=160,
+                on_pass={
+                    Item.TroubledWaters: 2,
+                    Item.ChasingDownYourBounty: region.chasing_gain_basic,
+                    Item.ZailingProgress: 1
+                }
+            )
+        ),
+
+        # only TW 4-7 so fudging the frequency from Standard to lower
+        Card(
+            name="The Killing Wind",
+            freq=Rarity.VeryInfrequent,
+            grade=Grade.Good,
+            discardable=False,
+            exchange={
+                    Item.TroubledWaters: 2,
+                    Item.ZeeZtory: 4.5,
+                    Item.ZailingProgress: 1
+                }
+        ),
+
+        Card(
+            name="What do the Drownies sing?",
+            freq=Rarity.Standard,
+            grade=Grade.Good,
+            discardable=False,
+            exchange=config.challenge_ev(
+                stat=Stat.MonstrousAnatomy,
+                dc=13,
+                on_pass={
+                    Item.TroubledWaters: 2,
+                    Item.ChasingDownYourBounty: region.chasing_gain_advanced,
+                    Item.ZailingProgress: 1
+                }
+            )
+        ),
+    ]
+
+    if (config.player.treasure == Treasure.FalseStartOfYourOwn):
+        cards.append(
+            Card(
+                name="Your False-Star",
+                freq=Rarity.Standard,
+                grade=Grade.Good,
+                exchange={
+                    Item.TroubledWaters: -5,
+                    Item.ZailingProgress: 1
+                }
+            )
+        )

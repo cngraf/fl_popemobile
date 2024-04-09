@@ -141,7 +141,7 @@ crackpot idea
 core_constraint = {
     Item.Constraint: 1,
     Item.Action: 1,
-    Item.CardDraws: 0.33
+    Item.CardDraws: 0.25
     # Item.Echo: 1
 }
 

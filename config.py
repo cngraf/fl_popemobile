@@ -1,4 +1,5 @@
 import numbers
+import player as Player
 from scipy.sparse import lil_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.sparse import csc_matrix
@@ -10,6 +11,7 @@ from enums import *
 import utils as utils
 
 class Config:
+    player: Player.Player
 
     def __init__(self, num_vars, player):
         self.player = player

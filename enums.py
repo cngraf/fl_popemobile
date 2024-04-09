@@ -647,6 +647,7 @@ class Item(Enum):
     Card_NavigationError = auto()
 
     # Zailing
+    ZailingProgress = auto()
     HomeWatersZeeDraw = auto()
     ShephersWashZeeDraw = auto()
     StormbonesZeeDraw = auto()
