@@ -54,13 +54,11 @@ class Rarity(Enum):
     Abundant = 500
     Ubiquitous = 1000
 
-class Score(Enum):
-    NeverPlay = -100
-    Bad = -50
-    Zero = 0
-    Okay = 50
+class Grade(Enum):
+    Avoid = -100
+    Bad = 0
     Good = 100
-    Amazing = 200
+    Excellent = 200
 
 class Profession(Enum):
     NoProfession = auto()
@@ -132,10 +130,11 @@ class Treasure(Enum):
     BloodiedTravellingCoatOfMrCups = auto()
 
 class Item(Enum):
-    Echo = 0
+    Constraint = 0
+    Echo = auto()
 
-    Action = 1
-    CardDraws = 2 # Fake item
+    Action = auto()
+    CardDraws = auto() # Fake item
     # DayOfCardDraws = 3 # Fake item
 
     # Menaces
@@ -456,6 +455,7 @@ class Item(Enum):
     DiaryOfTheDead = auto()
     MortificationOfAGreatPower = auto()
     IntriguersCompendium = auto()
+    RumourmongersNetwork = auto()
 
     # Sustenance
     ParabolanOrangeApple = auto()
@@ -589,6 +589,8 @@ class Item(Enum):
     BraggingRightsAtTheMedusasHead = auto()
     HeartsGameExploits = auto()
     ApproximateValueOfOutstandingInvoicesInPennies = auto()
+
+    HinterlandProsperity = auto()
 
     # Piracy
     ChasingDownYourBounty = auto()

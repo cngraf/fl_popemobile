@@ -1,4 +1,6 @@
 import numbers
+import pickle
+import json
 from scipy.sparse import lil_matrix
 from scipy.sparse.linalg import spsolve
 from scipy.sparse import csc_matrix
@@ -50,6 +52,7 @@ import upper_river.station_viii
 import upper_river.moulin
 import upper_river.hurlers
 import upper_river.marigold
+import upper_river.tracklayers_city
 
 import fate.philosofruits
 import fate.upwards
@@ -135,8 +138,15 @@ crackpot idea
 # Important Parameters
 # actions doesn't matter on its own until I add some weekly+ stuff
 # but it does matter relative to cards seen per day
-actions_per_day = 120.0
-cards_seen_per_day = 0
+core_constraint = {
+    Item.Constraint: 1,
+    Item.Action: 1,
+    Item.CardDraws: 0.33
+    # Item.Echo: 1
+}
+
+# actions_per_day = 120.0
+# cards_seen_per_day = 0
 
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
@@ -237,10 +247,18 @@ zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
 
 # Plug in the basic economic contraints
 
-config.per_day({
-    Item.Action: actions_per_day,
-    Item.CardDraws: cards_seen_per_day
-})
+# config.per_day({
+#     Item.Action: actions_per_day,
+#     Item.CardDraws: cards_seen_per_day
+# })
+
+# config.add({
+#     Item.Constraint: 1,
+#     Item.Action: actions_per_day,
+#     Item.CardDraws: cards_seen_per_day
+# })
+
+config.add(core_constraint)
 
 # -----------------------------------------------------
 # --- Modules
@@ -283,6 +301,7 @@ upper_river.station_viii.add_trades(active_player, config)
 upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
+upper_river.tracklayers_city.add_trades(config)
 
 fate.philosofruits.add_trades(active_player, config)
 fate.upwards.add_trades(active_player, config)
@@ -410,10 +429,34 @@ london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 
 trade(1, zailing_deck.normalized_trade())
 
-if cards_seen_per_day > 0:
-    london_sim_result = decks.london_deck.monte_carlo(config, 1000, 200)
-    trade(0.41, london_sim_result) # overwrites action cost
-    print(london_sim_result)
+# trade(1, {
+#     Item.Echo: 100
+# })
+
+run_london_sim = False
+london_sim_file_location = "simulated/london_deck.pkl"
+if run_london_sim:
+    with open(london_sim_file_location, "w") as file:
+        runs = 1000
+        draws_per_run = 200
+        print(f"Simulating London deck {runs} times with {draws_per_run} draws per run...")
+        london_sim_result = decks.london_deck.monte_carlo(config, runs, draws_per_run)
+        print(london_sim_result)
+
+        trade(0, london_sim_result)
+        pickle.dump(london_sim_result, file)
+        print("London Deck result saved to " + london_sim_file_location)
+else:
+    print("Loading London deck sim from " + london_sim_file_location)
+    with open(london_sim_file_location, "rb") as file:
+        london_sim_result = pickle.load(file)
+        print(london_sim_result)
+        trade(0, london_sim_result)
+
+
+# with open(london_sim_file_location, )
+
+
 
 # ------------------------------------------
 # ---------------- Optimization ------------
@@ -446,8 +489,10 @@ print(opt_result)
 pp = pprint.PrettyPrinter(indent=4)
 
 print("------Assumptions-------")
-print(f"Total Actions per Day:            {actions_per_day:10}")
-print(f"Cards Drawn per Day:              {cards_seen_per_day:10}")
+# print(f"Core Constraint:"  {})
+print(f"Core Constraint:                  {core_constraint}")
+# print(f"Total Actions per Day:            {actions_per_day:10}")
+# print(f"Cards Drawn per Day:              {cards_seen_per_day:10}")
 print(f"Good Card Density:                {london_good_card_density:10.3f}")
 
 print(f"Optimize For:                     {optimize_for}")
@@ -456,7 +501,7 @@ pp.pprint(active_player.stats)
 
 print("------Summary-------")
 print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
-print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
+# print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
 trades_used = []
 
@@ -480,8 +525,10 @@ for i in range(0, len(opt_result.slack)):
 
         lose_items = lose_items.replace("Item.","")
         gain_items = gain_items.replace("Item.","")
+        
+        action_cost = config.A[i, Item.Action.value]
 
-        trades_used.append([marginal, lose_items + " => " + gain_items])
+        trades_used.append([marginal * action_cost * -1, lose_items + " => " + gain_items])
         # print("* " + trade_items)
         # print(f"{marginal:.3}       " + lose_items + " => " + gain_items)
         # print(f"")
@@ -492,7 +539,8 @@ for i in trades_used:
     print(f"{i[0]:.3}       " + i[1])
 
     
-print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
+# print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
+print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun):10.5f}")
 
 # print(london_deck.normalized_trade())
 # print(zailing_deck.normalized_trade())

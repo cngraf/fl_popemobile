@@ -554,6 +554,7 @@ def create_london_deck(config: Config):
         Card(
             name= "Lair in the Marshes: Peril and pyjamas",
             freq= Rarity.Standard,
+            grade= Grade.Good,
             exchange= config.challenge_ev(
                 Stat.Dangerous,
                 60,
@@ -569,8 +570,9 @@ def create_london_deck(config: Config):
 
     knives_rare_success_rate = 0.05
     good_cards.append(Card(
-        "Smoky Flophouse",
-        Rarity.Standard,
+        name="Smoky Flophouse",
+        freq=Rarity.Standard,
+        grade= Grade.Good,        
         exchange=config.challenge_ev(
             Stat.Shadowy,
             40,
@@ -590,6 +592,7 @@ def create_london_deck(config: Config):
         Card(
             name = "Handsome Townhouse: Scandalous Party",
             freq = Rarity.Frequent,
+            grade= Grade.Good,
             exchange = config.challenge_ev(
                 stat = Stat.Persuasive,
                 dc = 80,
@@ -610,6 +613,7 @@ def create_london_deck(config: Config):
         Card(
             name= "Premises at the Bazaar w/ Kraken",
             freq= Rarity.Standard,
+            grade= Grade.Good,
             exchange= config.challenge_ev(
                 stat=Stat.APlayerOfChess,
                 dc=9,
@@ -634,6 +638,7 @@ def create_london_deck(config: Config):
         Card(
             "What will you do with your [connected pet]?",
             Rarity.Standard,
+            grade= Grade.Good,
             exchange={
                 Item.Card_ConnectedPet: 1
             }))
@@ -642,6 +647,7 @@ def create_london_deck(config: Config):
         Card(
             "Attend to your spouses",
             Rarity.VeryInfrequent,
+            grade= Grade.Good,
             exchange= {
                 Item.FavBohemians: 1
             }))
@@ -672,7 +678,8 @@ def create_london_deck(config: Config):
         Card(
             "A day out in your Clay Sedan Chair",
             Rarity.Standard,
-            {
+            grade= Grade.Good,
+            exchange={
                 Item.FavSociety: 1,
                 Item.Hedonist: -3
             }
@@ -694,6 +701,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="Young Stags",
         freq=Rarity.Standard,
+        grade= Grade.Excellent,
         exchange={
             Item.PieceOfRostygold: -500,
             Item.FavSociety: 2,
@@ -715,30 +723,35 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="dreams placeholder card 1",
         freq=Rarity.Unusual,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="dreams placeholder card 2",
         freq=Rarity.Unusual,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="dreams placeholder card 3",
         freq=Rarity.Unusual,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="dreams placeholder card 4",
         freq=Rarity.Unusual,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="dreams placeholder card 5",
         freq=Rarity.Unusual,
+        grade= Grade.Bad,
         exchange={}
     ))
 
@@ -749,6 +762,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="Bohemians faction card",
         freq=Rarity.Standard,
+        grade=Grade.Good,
         exchange={
             Item.FoxfireCandleStub: -20,
             Item.BottleOfGreyfields1882: -15,
@@ -769,6 +783,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Constables faction card",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={
             Item.PieceOfRostygold: -10,
             Item.FavConstables: 1,
@@ -794,6 +809,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Great Game faction card",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={
             Item.Wounds: 1 * suspicion_multiplier,
             Item.FavGreatGame: 1,
@@ -802,6 +818,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Hell faction card",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={
             Item.Scandal: 1 * suspicion_multiplier,
             Item.FavHell: 1,
@@ -820,6 +837,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Rubbery Men faction card",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         # exchange={
         #     Item.NoduleOfWarmAmber: -1,
         #     Item.NoduleOfDeepAmber: 50,
@@ -835,6 +853,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="Society faction card",
         freq=Rarity.Standard,
+        grade= Grade.Good,
         exchange={
             Item.ScrapOfIncendiaryGossip: -1,
             Item.Suspicion: 1 * suspicion_multiplier,
@@ -844,6 +863,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="Tomb-Colonies faction card",
         freq=Rarity.Standard,
+        grade= Grade.Good,
         exchange={
             Item.FavTombColonies: 1,
         }))    
@@ -859,6 +879,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="Urchins faction card",
         freq=Rarity.Standard,
+        grade= Grade.Good,
         # exchange={
         #     Item.LuckyWeasel: -1,
         #     Item.FavUrchins: 1,
@@ -876,42 +897,49 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="a tournament of weasels",
         freq=Rarity.Unusual,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="Orthographic Infection",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="City Vices: a rather decadent evening",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="A restorative",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="An afternoon of good deeds",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={}
     ))    
 
     bad_cards.append(Card(
         name="A moment's peace",
         freq=Rarity.VeryInfrequent,
+        grade= Grade.Bad,
         exchange={}
     ))
 
     bad_cards.append(Card(
         name="The interpreter of dreams",
         freq=Rarity.Unusual,
+        grade= Grade.Bad,
         exchange={}
     ))
 
@@ -919,6 +947,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="An implausible penance",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={}
     ))
 
@@ -926,6 +955,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="A visit",
         freq=Rarity.Standard,
+        grade= Grade.Excellent,
         exchange={
             Item.Card_AVisit: 1
         }
@@ -934,6 +964,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="The seekers of the garden",
         freq=Rarity.Standard,
+        grade= Grade.Excellent,
         exchange={
             Item.ZeeZtory: -7,
             Item.FavBohemians: 1,
@@ -947,6 +978,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Devices and desires",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={
         }
     ))
@@ -955,6 +987,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="A polite invitation",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={
         }
     ))
@@ -963,15 +996,15 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Give a gift!",
         freq=Rarity.Standard,
+        grade= Grade.Bad,
         exchange={
         }
     ))
 
-
-
     good_cards.append(Card(
         name="A day at the races",
         freq=Rarity.Standard,
+        grade= Grade.Good,
         exchange={
             Item.FavChurch: 1
         }
@@ -988,13 +1021,28 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="One's public",
         freq=Rarity.Standard,
-        exchange={
-        }
+        grade= Grade.Bad,
+        exchange=config.challenge_ev(
+            stat=Stat.Persuasive,
+            dc=220,
+            on_pass={
+                Item.PieceOfRostygold: 20,
+                Item.JadeFragment: 20,
+                Item.ConfidentSmile: 2,
+                Item.PrimordialShriek: 30,
+                Item.Echo: 1,
+                Item.BottleOfGreyfields1879: 100
+            },
+            on_fail={
+                Item.Scandal: 1
+            }
+        )
     ))
 
     good_cards.append(Card(
         name="God's Editors",
         freq=Rarity.Standard,
+        grade=Grade.Good,        
         exchange={
             Item.TaleOfTerror: -1,
             Item.FavChurch: 1
@@ -1004,6 +1052,8 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="Bringing the revolution",
         freq=Rarity.Standard,
+        grade=Grade.Good,        
+
         exchange={
             Item.CompromisingDocument: -1,
             Item.FavRevolutionaries: 1
@@ -1019,6 +1069,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Mirrors and clay",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1026,6 +1077,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The cities that fell",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1033,13 +1085,16 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The soft hearted widow",
         freq=Rarity.Standard,
+        grade=Grade.Bad,        
         exchange={
         }
     ))
 
+    # Becomes good/excellent when you have the Overgoat
     bad_cards.append(Card(
         name="all fear the overgoat",
         freq=Rarity.Standard,
+        grade=Grade.Bad,        
         exchange={
         }
     ))
@@ -1047,13 +1102,17 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The northbound parliamentarian",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
 
+    # Double check, might still be good long-term
+    # but very boring
     bad_cards.append(Card(
         name="A dream of roses",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1061,6 +1120,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Weather at last",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1068,6 +1128,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="An unusual wager",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1075,6 +1136,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Mr wines is holding a sale!",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1082,6 +1144,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The awful temptation of money",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1089,6 +1152,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="investigating the affluent photographer",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1096,13 +1160,16 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="the geology of winewound",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
 
+    # borderline? depends on if publishing the boney paper is good
     bad_cards.append(Card(
         name="A public lecture",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))    
@@ -1116,6 +1183,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="Wanted: reminders of brighter days",
         freq=Rarity.Standard,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1123,13 +1191,16 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="An unsigned message",
         freq=Rarity.VeryInfrequent,
+        grade=Grade.Bad,
         exchange={
         }
     ))
 
+    # might be good sometimes
     bad_cards.append(Card(
         name="A presumptuous little opportunity",
         freq=Rarity.VeryInfrequent,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1137,6 +1208,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="A visit from slowcake's amanuensis",
         freq=Rarity.Infrequent,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1144,6 +1216,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="A merry sort of crime",
         freq=Rarity.VeryInfrequent,
+        grade=Grade.Good,
         exchange={
             Item.FavCriminals: 1
         }
@@ -1152,6 +1225,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="A dusty bookshop",
         freq=Rarity.Rare,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1159,6 +1233,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="A little omen",
         freq=Rarity.Rare,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1166,6 +1241,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="A disgraceful spectable",
         freq=Rarity.Rare,
+        grade=Grade.Excellent,
         exchange={
             Item.Echo: 12.5
         }
@@ -1174,6 +1250,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="A voice from a well",
         freq=Rarity.Rare,
+        grade=Grade.Avoid,
         exchange={
         }
     ))
@@ -1182,6 +1259,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="A fine day in the flit",
         freq=Rarity.Unusual,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1189,6 +1267,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The paranomastic newshound",
         freq=Rarity.Unusual,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1200,6 +1279,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The curt relicker",
         freq=Rarity.VeryInfrequent,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1207,6 +1287,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The capering relicker",
         freq=Rarity.VeryInfrequent,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1214,6 +1295,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The shivering relicker",
         freq=Rarity.VeryInfrequent,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1221,6 +1303,7 @@ def create_london_deck(config: Config):
     bad_cards.append(Card(
         name="The coquettish relicker",
         freq=Rarity.VeryInfrequent,
+        grade=Grade.Bad,
         exchange={
         }
     ))
@@ -1233,6 +1316,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="A trade in souls",
         freq=Rarity.Standard,
+        grade=Grade.Excellent,
         exchange={
             Item.Echo: -4,
             Item.FavConstables: 1,
@@ -1244,6 +1328,7 @@ def create_london_deck(config: Config):
     good_cards.append(Card(
         name="The OP Aunt card",
         freq=Rarity.Standard,
+        grade=Grade.Excellent,
         exchange={
             Item.BottleOfGreyfields1882: -50,
 
@@ -1260,12 +1345,13 @@ def create_london_deck(config: Config):
 
     return [good_cards, bad_cards]
 
+# TODO rewrite algo to use Grade attr instead of split lists
 def monte_carlo(config, runs, draws_per_run):
-    print("Simulating London deck...")
     cummulative = {}
     good_cards, bad_cards = create_london_deck(config)
 
     for i in range(0, runs):
+        print(f"Simulation progress: {i}/{runs} ", end="\r")
         result = simulate_run(config, good_cards, bad_cards, draws_per_run)
         utils.add_items(cummulative, result)
     

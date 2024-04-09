@@ -27,10 +27,21 @@ class Deck:
 
 
 class Card:
-    def __init__(self, name: str, freq: Rarity, exchange = {}):
+    name: str
+    freq: Rarity
+    exchange: dict
+    discardable: bool
+    grade: Grade
+
+    def __init__(self, name: str,
+                 freq: Rarity,
+                 grade: Grade = Grade.Good,
+                 discardable: bool = True,
+                 exchange = {}):
         self.name = name
         self.freq = freq
-        # self.score = score
+        self.score = grade
+        self.discardable: discardable
         self.exchange = exchange
         
 def chasing_ev(region, isAdvanced, pass_rate = 1.0, rare_success_rate = 0.1):

@@ -63,12 +63,18 @@ class Config:
 
         self.enable_all_rat_market_moons = True
 
-
-    def per_day(self, exchanges):
+    def add(self, exchanges: dict):
         n = next(self.counter)
-        self.b[n] = 1
-        for item, value in exchanges.items():
-            self.A[n, item.value] = value
+        self.b[n] = exchanges.get(Item.Constraint, 0)
+        for key, value in exchanges.items():
+            if key != Item.Constraint:
+                self.A[n, key.value] = value
+
+    # def per_day(self, exchanges):
+    #     n = next(self.counter)
+    #     self.b[n] = 1
+    #     for item, value in exchanges.items():
+    #         self.A[n, item.value] = value
 
     def trade(self, actionCost, exchanges):
         n = next(self.counter)

@@ -261,10 +261,10 @@ def actions_to_sell_skelly(shadowy, implausibility, second_chance = False):
     if second_chance:
         success_rate =  1.0 - ((1.0 - success_rate) ** 2)
     fails = 1.0/success_rate - 1
-
+    second_chance_penalty = 0.33 * (fails + 1) if second_chance else 0
     # assumes 5 clear per action
     suspicion_penalty = 0.2 * fails
-    return 1 + fails + suspicion_penalty
+    return 1 + fails + suspicion_penalty + second_chance_penalty
 
 
 
@@ -508,6 +508,44 @@ def add_trades(player, config: Config):
     
     print(foo_recipe)
     print(skelly_exchange)
+
+    brass_vake_bird = {
+        Item.SkeletonWithSevenNecks: -1,
+        Item.BrightBrassSkull: -5,
+        Item.DuplicatedVakeSkull: -2,
+        Item.WingOfAYoungTerrorBird: -2
+    }
+
+    trade(
+        actionCost= 12 + actions_to_sell_skelly(315, 10, True),
+        exchanges= utils.sum_dicts(
+            brass_vake_bird,
+            author_of_gothic_tales_payout(
+                create_skeleton(brass_vake_bird),
+                1.15,
+                fluctuations=Fluctuations.Menace
+            )
+    ))
+
+    for i in range(0,8):
+
+        brass_bird = {
+            Item.SkeletonWithSevenNecks: -1,
+            Item.BrightBrassSkull: -1 * i,
+            Item.SabreToothedSkull: -1 * (7 - i),
+            Item.WingOfAYoungTerrorBird: -2
+        }
+
+        trade(
+            actionCost= 12 + actions_to_sell_skelly(315, 2 * i, True),
+            exchanges= utils.sum_dicts(
+                brass_bird,
+                author_of_gothic_tales_payout(
+                    create_skeleton(brass_bird),
+                    1.15,
+                    fluctuations=Fluctuations.Menace
+                )
+        ))
 
     # 4/0/4
     trade(7 + actions_to_sell_chimera, {

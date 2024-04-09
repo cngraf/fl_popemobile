@@ -73,11 +73,11 @@ def add_trades(active_player, config):
     # Liqueur
 
     # placeholder for costermonger
-    trade(1, {
-        Item.Echo: -28,
-        Item.SolaceFruit: 28,
-        Item.DarkDewedCherry: 20
-    })
+    # trade(1, {
+    #     Item.Echo: -28,
+    #     Item.SolaceFruit: 28,
+    #     Item.DarkDewedCherry: 20
+    # })
 
     trade(1, {
         Item.Echo: -12.5,
