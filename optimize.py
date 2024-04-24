@@ -54,6 +54,8 @@ import upper_river.hurlers
 import upper_river.marigold
 import upper_river.tracklayers_city
 
+import firmament.hallows_throat
+
 import fate.philosofruits
 import fate.upwards
 
@@ -302,6 +304,8 @@ upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
 upper_river.tracklayers_city.add_trades(config)
+
+firmament.hallows_throat.add_trades(config)
 
 fate.philosofruits.add_trades(active_player, config)
 fate.upwards.add_trades(active_player, config)

@@ -532,6 +532,17 @@ class Item(Enum):
     MarmaladeOfParabolanOrangeAppleHoneyAndRoseateAttar = auto()
     CuratorialCocktail = auto()
 
+    # Firmament Stuff
+    Stuiver = auto()
+    AscendedAmbergris = auto()
+    CausticApocryphon = auto()
+    MemoryOfAMuchStrangerSelf = auto()
+    RoofChart = auto()
+    SampleOfRoofDrip = auto()
+    StarvedExpression = auto()
+    TempestuousTale = auto()
+    GlimEncrustedCarapace = auto()
+
     # -----
     # Equipment
     # -----
