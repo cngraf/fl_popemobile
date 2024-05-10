@@ -397,12 +397,26 @@ def add_trades(player, config: Config):
         Item.IncisiveObservation: 780
     })
 
-    # fish => grandmother
-    trade(5 + actions_to_sell_skelly(shadowy, 3), {
+    # TODO: wrong recipe, fix this
+    # # fish => grandmother
+    # trade(5 + actions_to_sell_skelly(shadowy, 3), {
+    #     Item.MammothRibcage: -1,
+    #     Item.BrightBrassSkull: -1,
+    #     Item.FinBonesCollected: -2,
+    #     Item.IncisiveObservation: 316
+    # })
+
+    # ----------------------
+    # ---- Mammoth Ribcage
+
+    trade(9, {
         Item.MammothRibcage: -1,
-        Item.BrightBrassSkull: -1,
-        Item.FinBonesCollected: -2,
-        Item.IncisiveObservation: 316
+        Item.SabreToothedSkull: -1,
+        Item.FemurOfAJurassicBeast: -3,
+        Item.HolyRelicOfTheThighOfStFiacre: -1,
+        Item.JetBlackStinger: -1,
+        Item.HinterlandScrip: 299,
+        Item.CarvedBallOfStygianIvory: 21
     })
 
     # -------------------------------

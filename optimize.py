@@ -143,7 +143,7 @@ crackpot idea
 core_constraint = {
     Item.Constraint: 1,
     Item.Action: 1,
-    Item.CardDraws: 0.25
+    # Item.CardDraws: 0.25
     # Item.Echo: 1
 }
 
@@ -532,7 +532,7 @@ for i in range(0, len(opt_result.slack)):
         
         action_cost = config.A[i, Item.Action.value]
 
-        trades_used.append([marginal * action_cost * -1, lose_items + " => " + gain_items])
+        trades_used.append([marginal * min(action_cost * -1, -0.01), lose_items + " => " + gain_items])
         # print("* " + trade_items)
         # print(f"{marginal:.3}       " + lose_items + " => " + gain_items)
         # print(f"")

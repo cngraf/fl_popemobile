@@ -1,7 +1,9 @@
 from enums import *
 from utils import *
+from player import *
+from config import *
 
-def add_trades(active_player, config):
+def add_trades(active_player: Player, config):
     trade = config.trade
     # ---- Helicon House
 
@@ -163,55 +165,56 @@ def add_trades(active_player, config):
     # if getting inspired from the palace, like 30 echoes
     # if social action, only 19. that might be doable?
 
-    trade(3, {
-        Item.IntriguingSnippet: 3,
+    if (active_player.treasure == Treasure.LongDeadPriestsOfTheRedBird):
+        trade(3, {
+            Item.IntriguingSnippet: 3,
 
-        Item.Inspired: -55 + 6,
-        Item.MemoryOfLight: 6,
-        Item.MemoryOfDistantShores: 6,
-        Item.MemoryOfALesserSelf: 1,
-        Item.MemoryOfDiscordance: 1
-    })
+            Item.Inspired: -55 + 6,
+            Item.MemoryOfLight: 6,
+            Item.MemoryOfDistantShores: 6,
+            Item.MemoryOfALesserSelf: 1,
+            Item.MemoryOfDiscordance: 1
+        })
 
-    # Master Jewel Thief
-    trade(3, {
-        Item.IntriguingSnippet: 3,
+        # Master Jewel Thief
+        trade(3, {
+            Item.IntriguingSnippet: 3,
 
-        Item.Inspired: -55,
-        Item.Casing: -3,
-        Item.Echo: 3.36,
-        Item.MemoryOfLight: 6,
-        Item.MemoryOfDistantShores: 6,
-        Item.MemoryOfALesserSelf: 1,
-        Item.MemoryOfDiscordance: 1
-    })
+            Item.Inspired: -55,
+            Item.Casing: -3,
+            Item.Echo: 3.36,
+            Item.MemoryOfLight: 6,
+            Item.MemoryOfDistantShores: 6,
+            Item.MemoryOfALesserSelf: 1,
+            Item.MemoryOfDiscordance: 1
+        })
 
-    # Rubbery Cat
-    trade(3, {
-        Item.IntriguingSnippet: 3,
+        # Rubbery Cat
+        trade(3, {
+            Item.IntriguingSnippet: 3,
 
-        Item.Inspired: -55,
-        Item.Casing: 6,
-        Item.HandPickedPeppercaps: 3,
-        Item.MemoryOfLight: 6,
-        Item.MemoryOfDistantShores: 6,
-        Item.MemoryOfALesserSelf: 1,
-        Item.MemoryOfDiscordance: 1
-    })
+            Item.Inspired: -55,
+            Item.Casing: 6,
+            Item.HandPickedPeppercaps: 3,
+            Item.MemoryOfLight: 6,
+            Item.MemoryOfDistantShores: 6,
+            Item.MemoryOfALesserSelf: 1,
+            Item.MemoryOfDiscordance: 1
+        })
 
-    # enter with secular missionary or firebrand
-    trade(3, {
-        Item.IntriguingSnippet: 3,
+        # enter with secular missionary or firebrand
+        trade(3, {
+            Item.IntriguingSnippet: 3,
 
-        Item.Inspired: -55 + 5,
-        Item.CulinaryTributeToTheSeaOfSpines: -1,
+            Item.Inspired: -55 + 5,
+            Item.CulinaryTributeToTheSeaOfSpines: -1,
 
-        Item.HinterlandScrip: 56,
-        Item.MemoryOfLight: 6,
-        Item.MemoryOfDistantShores: 6,
-        Item.MemoryOfALesserSelf: 1,
-        Item.MemoryOfDiscordance: 1
-    })
+            Item.HinterlandScrip: 56,
+            Item.MemoryOfLight: 6,
+            Item.MemoryOfDistantShores: 6,
+            Item.MemoryOfALesserSelf: 1,
+            Item.MemoryOfDiscordance: 1
+        })
 
     # placeholder
     trade(0, {
