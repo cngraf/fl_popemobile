@@ -147,6 +147,15 @@ def add_trades(active_player: Player, config):
         Item.RibcageWithABoutiqueOfEightSpines: 1
     })
 
+    '''
+    spouse options of interest
+    - +5 fascinating
+    - +5 investigating
+    - +5 inspired
+    - +2 each of casing, investigating, fascinating (PC spouse)
+    - Nemesis "Returned" treasures give -6 CP of menaces but obv are incompatible
+    '''
+
     # full carousel
     # how to model the variable time cost?
     # priests option needs 5 fitting in
@@ -164,6 +173,11 @@ def add_trades(active_player: Player, config):
     # how much do you need to get from the lesser self + discordance?
     # if getting inspired from the palace, like 30 echoes
     # if social action, only 19. that might be doable?
+
+    # TODO: implement "Entry" token for one of:
+    # 3x Intriguing Snippet
+    # 5x Romantic Notion
+    # 5x Warm Amber
 
     if (active_player.treasure == Treasure.LongDeadPriestsOfTheRedBird):
         trade(3, {
@@ -215,6 +229,30 @@ def add_trades(active_player: Player, config):
             Item.MemoryOfALesserSelf: 1,
             Item.MemoryOfDiscordance: 1
         })
+
+        if (active_player.profession == Profession.Silverer):
+            # 1) Enter with pendant & firebrand or missionary
+            #   +3 snippets, +3 Fitting In, +5 Inspired
+            # 2) Offer yourself as escort and guide
+            #   +2 Fitting In, +6 Inspired
+            # 3) Spooky scary skeletons
+
+            # counting one action to make up difference in inspired
+            # (end up with +2 Inspired per loop, so every 23rd loop is only 3 actions)
+            # gives 0.6 + 3 + 3 + 2.5 + 12.5 = 21.6 echoes
+            # about 5.46 EPA selling at price
+            # still not worth it
+            # maybe use the 2nd action to sell paintings instead
+            
+            trade(3, {
+                Item.IntriguingSnippet: 3,
+
+                Item.Inspired: -55 + 5 + 6,
+                Item.MemoryOfLight: 6,
+                Item.MemoryOfDistantShores: 6,
+                Item.MemoryOfALesserSelf: 1,
+                Item.MemoryOfDiscordance: 1
+            })
 
     # placeholder
     trade(0, {

@@ -63,6 +63,11 @@ class Config:
 
         self.bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
 
+        self.bounds[Item.CoverTiesGeneric.value] = (0, 1)
+        self.bounds[Item.CoverTiesSurface.value] = (0, 1)
+        self.bounds[Item.CoverTiesBazaar.value] = (0, 1)
+        self.bounds[Item.CoverTiesDispossessed.value] = (0, 1)
+
         self.enable_all_rat_market_moons = True
 
     def add(self, exchanges: dict):

@@ -77,8 +77,10 @@ def create_deck_old(config: Config):
 
     london_deck = Deck("London", -400)
 
+    single_favours_enabled = False
+
         # Lair in the Marshes
-    london_deck.card("Lair in the Marshes", Rarity.Standard, True, {
+    london_deck.card("Lair in the Marshes", Rarity.Standard, single_favours_enabled, {
         Item.FavSociety: 1,
         Item.CertifiableScrap: 1,
         Item.Nightmares: 1 * nightmares_multiplier
@@ -87,7 +89,7 @@ def create_deck_old(config: Config):
     # The Tower of Knives: Difficulties at a Smoky Flophouse
     # The next victim?
     knives_rare_success_rate = 0.05
-    london_deck.card("The Tower of Knives", Rarity.Standard, True, {
+    london_deck.card("The Tower of Knives", Rarity.Standard, single_favours_enabled, {
         Item.FavCriminals: 0.5 - knives_rare_success_rate / 2.0,
         Item.FavRevolutionaries: 0.5 - knives_rare_success_rate / 2.0,
         Item.AeolianScream: knives_rare_success_rate
@@ -95,7 +97,7 @@ def create_deck_old(config: Config):
 
     # The Tower of Eyes: Behind Closed Doors at a Handsome Townhouse
     # scandalous party
-    london_deck.card("The Tower of Eyes", Rarity.Frequent, True, {
+    london_deck.card("The Tower of Eyes", Rarity.Frequent, single_favours_enabled, {
         Item.FavBohemians: 0.5,
         Item.FavSociety: 0.5,
         Item.Hedonist: 3,
@@ -107,17 +109,17 @@ def create_deck_old(config: Config):
         Item.CertifiableScrap: 3
     })
 
-    london_deck.card("What will you do with your [connected pet]?", Rarity.Standard, True, {
+    london_deck.card("What will you do with your [connected pet]?", Rarity.Standard, single_favours_enabled, {
         Item.Card_ConnectedPet: 1
     })    
 
     # With Bewildering Procession
-    london_deck.card("Attend to your spouses", Rarity.VeryInfrequent, True, {
+    london_deck.card("Attend to your spouses", Rarity.VeryInfrequent, single_favours_enabled, {
         Item.FavBohemians: 1
     })
 
     # avoidable
-    london_deck.card("A day out in your Clay Sedan Chair", Rarity.Standard, True, {
+    london_deck.card("A day out in your Clay Sedan Chair", Rarity.Standard, single_favours_enabled, {
         Item.FavSociety: 1,
         Item.Hedonist: -3
     })
@@ -135,31 +137,31 @@ def create_deck_old(config: Config):
     })    
 
         # Bohemians
-    london_deck.card("Bohemians Faction", Rarity.Standard, True, {
+    london_deck.card("Bohemians Faction", Rarity.Standard, single_favours_enabled, {
         Item.Echo: -1.2,
         Item.FavBohemians: 1
     })
 
     # Church
-    london_deck.card("Church Faction", Rarity.Standard, True, {
+    london_deck.card("Church Faction", Rarity.Standard, single_favours_enabled, {
         Item.Echo: -0.1,
         Item.FavChurch: 1
     })
 
     # Constables
-    london_deck.card("Constables Faction", Rarity.Standard, False, {
+    london_deck.card("Constables Faction", Rarity.Standard, single_favours_enabled, {
         Item.Echo: -0.1,
         Item.FavConstables: 1
     })
     
     # Criminals
-    london_deck.card("Criminals Faction", Rarity.Standard, True, {
+    london_deck.card("Criminals Faction", Rarity.Standard, single_favours_enabled, {
         Item.Suspicion: 1 * suspicion_multiplier,
         Item.FavCriminals: 1,
     })
 
     # Docks
-    london_deck.card("Docks Faction", Rarity.Standard, True, {
+    london_deck.card("Docks Faction", Rarity.Standard, single_favours_enabled, {
         Item.Echo: -0.1,
         Item.FavDocks: 1
     })
@@ -177,7 +179,7 @@ def create_deck_old(config: Config):
     })
 
     # Revolutionaries
-    london_deck.card("Rev Faction", Rarity.Standard, True, {
+    london_deck.card("Rev Faction", Rarity.Standard, single_favours_enabled, {
         Item.Echo: -0.5,
         Item.FavRevolutionaries: 1 
     })
@@ -189,7 +191,7 @@ def create_deck_old(config: Config):
     })    
 
     # Society
-    london_deck.card("Society Faction", Rarity.Standard, True, {
+    london_deck.card("Society Faction", Rarity.Standard, single_favours_enabled, {
         Item.Echo: -0.5,
         Item.FavSociety: 1
     })
@@ -200,7 +202,7 @@ def create_deck_old(config: Config):
     })
 
     # With HOJOTOHO ending
-    london_deck.card("Urchins Faction", Rarity.Standard, True, {
+    london_deck.card("Urchins Faction", Rarity.Standard, single_favours_enabled, {
         Item.FavUrchins: 1,
         Item.Nightmares: -2
     })
@@ -281,7 +283,7 @@ def create_deck_old(config: Config):
     })
 
     # > A disgraceful spectacle
-    london_deck.card("A day at the races", Rarity.Standard, True, {
+    london_deck.card("A day at the races", Rarity.Standard, single_favours_enabled, {
         Item.FavChurch: 1
     })
 
@@ -295,7 +297,7 @@ def create_deck_old(config: Config):
     })    
 
     # Avoidable? unsure
-    london_deck.card("Bringing the revolution", Rarity.Standard, True, {
+    london_deck.card("Bringing the revolution", Rarity.Standard, single_favours_enabled, {
         Item.CompromisingDocument: -1,
         Item.FavRevolutionaries: 1
     })
@@ -374,7 +376,7 @@ def create_deck_old(config: Config):
     })
 
     # Shadowy >= 69, Renown Crims >= 20
-    london_deck.card("A merry sort of crime", Rarity.VeryInfrequent, True, {
+    london_deck.card("A merry sort of crime", Rarity.VeryInfrequent, single_favours_enabled, {
         Item.FavCriminals: 1
     })
 
@@ -546,11 +548,12 @@ def create_london_deck(config: Config):
     good_cards = []
     bad_cards = []
 
+    single_favour_cards_list = good_cards
     # card worth calculated with baseline of 120/40 w 3rd city silverer
     # and ~6.46 EPA
 
     # borderline? minimal difference good vs. bad
-    good_cards.append(
+    single_favour_cards_list.append(
         Card(
             name= "Lair in the Marshes: Peril and pyjamas",
             freq= Rarity.Standard,
@@ -569,7 +572,7 @@ def create_london_deck(config: Config):
     )))
 
     knives_rare_success_rate = 0.05
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Smoky Flophouse",
         freq=Rarity.Standard,
         grade= Grade.Good,        
@@ -588,7 +591,7 @@ def create_london_deck(config: Config):
             on_fail = {}
     )))
 
-    good_cards.append(
+    single_favour_cards_list.append(
         Card(
             name = "Handsome Townhouse: Scandalous Party",
             freq = Rarity.Frequent,
@@ -643,7 +646,7 @@ def create_london_deck(config: Config):
                 Item.Card_ConnectedPet: 1
             }))
 
-    good_cards.append(
+    single_favour_cards_list.append(
         Card(
             "Attend to your spouses",
             Rarity.VeryInfrequent,
@@ -674,7 +677,7 @@ def create_london_deck(config: Config):
     # --- Cards: Other Equipment
     # ----------------------------------------------------
 
-    good_cards.append(
+    single_favour_cards_list.append(
         Card(
             "A day out in your Clay Sedan Chair",
             Rarity.Standard,
@@ -759,7 +762,7 @@ def create_london_deck(config: Config):
     # --- Cards: Factions
     # ----------------------------------------------------
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Bohemians faction card",
         freq=Rarity.Standard,
         grade=Grade.Good,
@@ -771,7 +774,7 @@ def create_london_deck(config: Config):
         }
     ))
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Church faction card",
         freq=Rarity.Standard,
         exchange={
@@ -790,7 +793,7 @@ def create_london_deck(config: Config):
             Item.AirsOfLondonChange: 1
         }))
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Criminals faction card",
         freq=Rarity.Standard,
         exchange={
@@ -798,7 +801,7 @@ def create_london_deck(config: Config):
             Item.FavCriminals: 1,
         }))
     
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Docks faction card",
         freq=Rarity.Standard,
         exchange={
@@ -825,7 +828,7 @@ def create_london_deck(config: Config):
             Item.AirsOfLondonChange: 1
         }))    
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Revolutionaries faction card",
         freq=Rarity.Standard,
         exchange={
@@ -850,7 +853,7 @@ def create_london_deck(config: Config):
         }
     ))    
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Society faction card",
         freq=Rarity.Standard,
         grade= Grade.Good,
@@ -860,7 +863,7 @@ def create_london_deck(config: Config):
             Item.FavSociety: 1,
         }))        
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Tomb-Colonies faction card",
         freq=Rarity.Standard,
         grade= Grade.Good,
@@ -876,7 +879,7 @@ def create_london_deck(config: Config):
     # })
 
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Urchins faction card",
         freq=Rarity.Standard,
         grade= Grade.Good,
@@ -1039,7 +1042,7 @@ def create_london_deck(config: Config):
         )
     ))
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="God's Editors",
         freq=Rarity.Standard,
         grade=Grade.Good,        
@@ -1049,7 +1052,7 @@ def create_london_deck(config: Config):
         }
     ))
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="Bringing the revolution",
         freq=Rarity.Standard,
         grade=Grade.Good,        
@@ -1213,7 +1216,7 @@ def create_london_deck(config: Config):
         }
     ))
 
-    good_cards.append(Card(
+    single_favour_cards_list.append(Card(
         name="A merry sort of crime",
         freq=Rarity.VeryInfrequent,
         grade=Grade.Good,

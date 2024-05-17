@@ -143,7 +143,29 @@ crackpot idea
 core_constraint = {
     Item.Constraint: 1,
     Item.Action: 1,
-    # Item.CardDraws: 0.25
+    # Item.CardDraws: 0.25,
+
+    # bone inventory
+    # Item.BoneFragments: 51_000,
+    # Item.FinBonesCollected: 43,
+    # Item.JetBlackStinger: 68,
+    # Item.SurveyOfTheNeathsBones: 210,
+    # Item.UnidentifiedThighbone: 53,
+    # Item.WitheredTentacle: 62,
+    # Item.FemurOfAJurassicBeast: 6,
+    # Item.HeadlessSkeleton: 14,
+    # Item.HumanArm: 14,
+    # Item.KnottedHumerus: 13,
+    # Item.PlasterTailBones: 19,
+    # Item.WingOfAYoungTerrorBird: 21,
+    # Item.FlourishingRibcage: 12,
+    # Item.FossilisedForelimb: 1,
+    # Item.HolyRelicOfTheThighOfStFiacre: 29,
+    # Item.HumanRibcage: 22,
+    # Item.SkullInCoral: 4,
+    # Item.SabreToothedSkull: 1,
+    # Item.SkeletonWithSevenNecks: 4,
+    # Item.LeviathanFrame: 1
     # Item.Echo: 1
 }
 
@@ -221,7 +243,7 @@ player_generic_licentiate = Player(
         Stat.Persuasive: Player.baseline_persuasive
     })
 
-active_player = player_generic
+active_player = player_third_city_silverer
 
 # hack
 var_buffer = 5_000
@@ -271,7 +293,7 @@ config.add(core_constraint)
 
 SocialActions.add_trades(config)
 Bazaar.add_trades(config)
-RatMarket.add_trades(config)
+# RatMarket.add_trades(config)
 
 professional_activities.add_trades(active_player, config)
 
@@ -437,10 +459,17 @@ trade(1, zailing_deck.normalized_trade())
 #     Item.Echo: 100
 # })
 
+
+'''
+I might be an idiot?
+Instead of manually calibrating the cards as good or bad and running sims,
+just give each one a value of Item.CardDraw inverse of its rarity, add as a trade,
+and let the math do the rest.
+'''
 run_london_sim = False
 london_sim_file_location = "simulated/london_deck.pkl"
 if run_london_sim:
-    with open(london_sim_file_location, "w") as file:
+    with open(london_sim_file_location, "wb") as file:
         runs = 1000
         draws_per_run = 200
         print(f"Simulating London deck {runs} times with {draws_per_run} draws per run...")
@@ -508,6 +537,7 @@ print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
 # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
 trades_used = []
+actions_per_cycle = core_constraint[Item.Action]
 
 print("-----Trades In Grind-------")
 for i in range(0, len(opt_result.slack)):
@@ -532,7 +562,7 @@ for i in range(0, len(opt_result.slack)):
         
         action_cost = config.A[i, Item.Action.value]
 
-        trades_used.append([marginal * min(action_cost * -1, -0.01), lose_items + " => " + gain_items])
+        trades_used.append([marginal * min(action_cost * -1, -0.01) * actions_per_cycle, lose_items + " => " + gain_items])
         # print("* " + trade_items)
         # print(f"{marginal:.3}       " + lose_items + " => " + gain_items)
         # print(f"")
@@ -544,7 +574,7 @@ for i in trades_used:
 
     
 # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
-print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun):10.5f}")
+print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_cycle):10.5f}")
 
 # print(london_deck.normalized_trade())
 # print(zailing_deck.normalized_trade())

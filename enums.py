@@ -191,6 +191,7 @@ class Item(Enum):
     # Book
     RevisionistHistoricalNarrative = auto()
     CorrectiveHistorialNarrative = auto()
+    UnusualLoveStory = auto()
 
     # Curiosity
     VenomRuby = auto()
@@ -615,6 +616,17 @@ class Item(Enum):
     PalaeontologicalDiscovery = auto()
     EsteemOfTheGuild = auto()
     WagesOfADig = auto()
+
+    CoverTiesGeneric = auto()
+    CoverTiesSurface = auto()
+    CoverTiesBazaar = auto()
+    CoverTiesDispossessed = auto()
+
+    CoverElaboration = auto()
+    CoverNuance = auto()
+    CoverWitnessnes = auto()
+    CoverCredentials = auto()
+    CoverBackstory = auto()
 
     MonographCautionary = auto()
     MonographTragic = auto()

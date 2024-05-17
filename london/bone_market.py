@@ -339,6 +339,12 @@ def add_trades(player, config: Config):
             Item.DuplicatedVakeSkull: 1
         })
 
+    trade(0, {
+        Item.BoneFragments: -500,
+        Item.HandPickedPeppercaps: -10,
+        Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: 1
+    })
+
     # -------------------------------
     # ------ Leviathan Frame
 
@@ -575,8 +581,40 @@ def add_trades(player, config: Config):
         #     Item.ThornedRibcage
         # })
 
-    # segmented ribcage
-        
+    # counter-church
+    # not verified
+
+    trade(12, {
+        Item.FlourishingRibcage: -1,
+        Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: -2,
+        Item.HolyRelicOfTheThighOfStFiacre: -6,
+
+        Item.PreservedSurfaceBlooms: 49,
+        Item.RumourOfTheUpperRiver: 20
+    })
+
+    trade(14, {
+        Item.SegmentedRibcage: -3,
+        Item.HolyRelicOfTheThighOfStFiacre: -8,
+        Item.WitheredTentacle: -1,
+
+        Item.PreservedSurfaceBlooms: 52,
+        Item.RumourOfTheUpperRiver: 24
+    })
+
+    # trade(0, {
+    #     Item.Echo: -60,
+    #     Item.GlimEncrustedCarapace: 1
+    # })
+
+    trade(12, {
+        Item.GlimEncrustedCarapace: -1,
+        Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: -1,
+        Item.HolyRelicOfTheThighOfStFiacre: -8,
+
+        Item.PreservedSurfaceBlooms: 83,
+        Item.RumourOfTheUpperRiver: 41
+    })  
     # 3/0/6/0/3 chimera => gothic w/ menace
     trade(5 + actions_to_sell_chimera, {
         Item.SegmentedRibcage: -1,
