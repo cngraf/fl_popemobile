@@ -137,6 +137,39 @@ class Item(Enum):
     CardDraws = auto() # Fake item
     # DayOfCardDraws = 3 # Fake item
 
+    # Bone Market Hack
+    AntiquityReptileAction = auto()
+    AntiquityAmphibianAction = auto()    
+    AntiquityBirdAction = auto()
+    AntiquityFishAction = auto()
+    AntiquityArachnidAction = auto()
+    AntiquityInsectAction = auto()
+
+    AmalgamyReptileAction = auto()
+    AmalgamyAmphibianAction = auto()    
+    AmalgamyBirdAction = auto()
+    AmalgamyFishAction = auto()
+    AmalgamyArachnidAction = auto()
+    AmalgamyInsectAction = auto()
+
+    MenaceReptileAction = auto()
+    MenaceAmphibianAction = auto()    
+    MenaceBirdAction = auto()
+    MenaceFishAction = auto()
+    MenaceArachnidAction = auto()
+    MenaceInsectAction = auto()      
+
+    AntiquityGeneralAction = auto()
+    AmalgamyGeneralAction = auto()
+    MenaceGeneralAction = auto()
+
+    GeneralReptileAction = auto()
+    GeneralAmphibianAction = auto()    
+    GeneralBirdAction = auto()
+    GeneralFishAction = auto()
+    GeneralArachnidAction = auto()
+    GeneralInsectAction = auto()    
+
     # Menaces
     Wounds = auto()
     Scandal = auto()
@@ -580,6 +613,8 @@ class Item(Enum):
     
     DramaticTension = auto()
 
+    Attar = auto()
+    
     # Professional Activities
     ServicesHell = auto()
     ServicesZailors = auto()
@@ -668,6 +703,7 @@ class Item(Enum):
     Card_AVisit = auto()
     Card_ConnectedPet = auto()
     Card_NavigationError = auto()
+    C_Arbor = auto()
 
     # Zailing
     ZailingProgress = auto()
@@ -681,3 +717,10 @@ class Item(Enum):
 
     # Upper River
     DigsInEvenlode = auto()
+
+    # FATE
+    MythicPotential = auto()
+    MoralisingDevelopment = auto()
+    HeroicRally = auto()
+    InscrutableTwist = auto()
+    WhiskerwaysSecondaryPayout = auto()

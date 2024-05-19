@@ -38,6 +38,8 @@ class Config:
 
         self.bounds[Item.TroubledWaters.value] = (None, 35)
 
+        self.bounds[Item.BoneMarketExhaustion.value] = (-4, 0)
+
         self.bounds[Item.Hedonist.value] = (0, 55)
 
         self.bounds[Item.SeeingBanditryInTheUpperRiver.value] = (0, 36)

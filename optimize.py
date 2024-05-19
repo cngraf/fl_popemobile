@@ -11,6 +11,8 @@ from itertools import count
 from config import *
 
 from enums import *
+import fate.whiskerways
+import london.arbor
 from utils import *
 from player import *
 
@@ -58,6 +60,7 @@ import firmament.hallows_throat
 
 import fate.philosofruits
 import fate.upwards
+import fate.whiskerways
 
 import numpy as np
 import pprint
@@ -140,34 +143,35 @@ crackpot idea
 # Important Parameters
 # actions doesn't matter on its own until I add some weekly+ stuff
 # but it does matter relative to cards seen per day
-core_constraint = {
-    Item.Constraint: 1,
-    Item.Action: 1,
-    # Item.CardDraws: 0.25,
 
-    # bone inventory
-    # Item.BoneFragments: 51_000,
-    # Item.FinBonesCollected: 43,
-    # Item.JetBlackStinger: 68,
-    # Item.SurveyOfTheNeathsBones: 210,
-    # Item.UnidentifiedThighbone: 53,
-    # Item.WitheredTentacle: 62,
-    # Item.FemurOfAJurassicBeast: 6,
-    # Item.HeadlessSkeleton: 14,
-    # Item.HumanArm: 14,
-    # Item.KnottedHumerus: 13,
-    # Item.PlasterTailBones: 19,
-    # Item.WingOfAYoungTerrorBird: 21,
-    # Item.FlourishingRibcage: 12,
-    # Item.FossilisedForelimb: 1,
-    # Item.HolyRelicOfTheThighOfStFiacre: 29,
-    # Item.HumanRibcage: 22,
-    # Item.SkullInCoral: 4,
-    # Item.SabreToothedSkull: 1,
-    # Item.SkeletonWithSevenNecks: 4,
-    # Item.LeviathanFrame: 1
-    # Item.Echo: 1
-}
+# core_constraint = {
+#     Item.Constraint: 1,
+#     Item.Action: 1,
+#     # Item.CardDraws: 0.25,
+
+#     # bone inventory
+#     # Item.BoneFragments: 51_000,
+#     # Item.FinBonesCollected: 43,
+#     # Item.JetBlackStinger: 68,
+#     # Item.SurveyOfTheNeathsBones: 210,
+#     # Item.UnidentifiedThighbone: 53,
+#     # Item.WitheredTentacle: 62,
+#     # Item.FemurOfAJurassicBeast: 6,
+#     # Item.HeadlessSkeleton: 14,
+#     # Item.HumanArm: 14,
+#     # Item.KnottedHumerus: 13,
+#     # Item.PlasterTailBones: 19,
+#     # Item.WingOfAYoungTerrorBird: 21,
+#     # Item.FlourishingRibcage: 12,
+#     # Item.FossilisedForelimb: 1,
+#     # Item.HolyRelicOfTheThighOfStFiacre: 29,
+#     # Item.HumanRibcage: 22,
+#     # Item.SkullInCoral: 4,
+#     # Item.SabreToothedSkull: 1,
+#     # Item.SkeletonWithSevenNecks: 4,
+#     # Item.LeviathanFrame: 1
+#     # Item.Echo: 1
+# }
 
 # actions_per_day = 120.0
 # cards_seen_per_day = 0
@@ -243,7 +247,7 @@ player_generic_licentiate = Player(
         Stat.Persuasive: Player.baseline_persuasive
     })
 
-active_player = player_third_city_silverer
+active_player = player_bal_licentiate
 
 # hack
 var_buffer = 5_000
@@ -271,23 +275,116 @@ zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
 
 # Plug in the basic economic contraints
 
-# config.per_day({
-#     Item.Action: actions_per_day,
-#     Item.CardDraws: cards_seen_per_day
-# })
 
-# config.add({
-#     Item.Constraint: 1,
-#     Item.Action: actions_per_day,
-#     Item.CardDraws: cards_seen_per_day
-# })
+# ------------------------------
+# ----- Bone Market Hack -------
+# ------------------------------
+
+# Having written this code, it occurs to me it might make more sense to do it in reverse
+# Like, keep the constraint just as "action" but add a trade to trade 18 actions
+# for one of each of the subtypes. Well, whatever. this is fine
+
+bone_market_week_actions = {
+    "Antiquity": {
+        "Reptile": Item.AntiquityReptileAction,
+        "Amphibian": Item.AntiquityAmphibianAction,
+        "Bird": Item.AntiquityBirdAction,
+        "Fish": Item.AntiquityFishAction,
+        "Arachnid": Item.AntiquityArachnidAction,
+        "Insect": Item.AntiquityInsectAction,
+    },
+    "Amalgamy": {
+        "Reptile": Item.AmalgamyReptileAction,
+        "Amphibian": Item.AmalgamyAmphibianAction,
+        "Bird": Item.AmalgamyBirdAction,
+        "Fish": Item.AmalgamyFishAction,
+        "Arachnid": Item.AmalgamyArachnidAction,
+        "Insect": Item.AmalgamyInsectAction,
+    },
+    "Menace": {
+        "Reptile": Item.MenaceReptileAction,
+        "Amphibian": Item.MenaceAmphibianAction,
+        "Bird": Item.MenaceBirdAction,
+        "Fish": Item.MenaceFishAction,
+        "Arachnid": Item.MenaceArachnidAction,
+        "Insect": Item.MenaceInsectAction,
+    }
+}
+
+bone_market_cycle_length = 18
+
+core_constraint = {
+    Item.Constraint: 1
+}
+
+for category, actions in bone_market_week_actions.items():
+    for creature, action in actions.items():
+        core_constraint[action] = 1
+
+        config.add({
+            action: -1,
+            Item.Action: 1
+        })
+
+        if (category == "Amalgamy"):
+            config.add({
+                action: -1,
+                Item.AmalgamyGeneralAction: 1
+            })
+
+        if (category == "Antiquity"):
+            config.add({
+                action: -1,
+                Item.AntiquityGeneralAction: 1
+            })
+
+        if (category == "Menace"):
+            config.add({
+                action: -1,
+                Item.MenaceGeneralAction: 1
+            })
+
+        if (creature == "Amphibian"):
+            config.add({
+                action: -1,
+                Item.GeneralAmphibianAction: 1
+            })
+
+        if (creature == "Arachnid"):
+            config.add({
+                action: -1,
+                Item.GeneralArachnidAction: 1
+            })
+
+        if (creature == "Bird"):
+            config.add({
+                action: -1,
+                Item.GeneralBirdAction: 1
+            })
+
+        if (creature == "Fish"):
+            config.add({
+                action: -1,
+                Item.GeneralFishAction: 1
+            })
+
+        if (creature == "Insect"):
+            config.add({
+                action: -1,
+                Item.GeneralInsectAction: 1
+            })
+
+        if (creature == "Reptile"):
+            config.add({
+                action: -1,
+                Item.GeneralReptileAction: 1
+            })
 
 config.add(core_constraint)
 
 # -----------------------------------------------------
 # --- Modules
 # ----------------------------------------------------
-
 
 # doing some goofy inversion of control stuff here so that I can just copy paste everything
 
@@ -303,9 +400,11 @@ decks.london_deck.add_trades(config)
 
 london.uncategorized.add_trades(active_player, config)
 london.newspaper.add_trades(active_player, config)
-london.bone_market.add_trades(active_player, config)
 london.laboratory.add_trades(active_player, lab_rpa, config)
 london.hearts_game.add_trades(active_player, config)
+london.arbor.add_trades(config)
+
+london.bone_market.add_trades(active_player, config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
@@ -329,8 +428,9 @@ upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 
-fate.philosofruits.add_trades(active_player, config)
-fate.upwards.add_trades(active_player, config)
+# fate.philosofruits.add_trades(active_player, config)
+# fate.upwards.add_trades(active_player, config)
+# fate.whiskerways.add_trades(config)
 
 
 # --------------
@@ -537,7 +637,8 @@ print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
 # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
 trades_used = []
-actions_per_cycle = core_constraint[Item.Action]
+# actions_per_cycle = core_constraint[Item.Action]
+actions_per_cycle = bone_market_cycle_length
 
 print("-----Trades In Grind-------")
 for i in range(0, len(opt_result.slack)):

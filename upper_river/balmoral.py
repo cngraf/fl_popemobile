@@ -327,3 +327,18 @@ def add_trades(active_player, config: Config):
         Item.CoverBackstory: -5,
         Item.MagnificentDiamond: 1
     })
+
+    # Grand Larcenies
+    # check action costs
+
+    trade(1, {
+        Item.CoverTiesBazaar: -1,
+        Item.CoverElaboration: -10,
+        Item.CoverCredentials: -5,
+        Item.CoverNuance: -5,
+        Item.CoverBackstory: -80,
+
+        Item.ScrapOfIvoryOrganza: 1
+    })
+
+    # TODO: other cash outs
