@@ -5,35 +5,97 @@ from config import Config
 def add_trades(active_player, config: Config):
     trade = config.trade
     player = config.player
-    
-    # 2x (1 action, 4 research) to enter
-    # 1 action to go to glade
-    # 3x (1 action, 3 bombazine) to darken
-    # 1 action wander
-    # 1 action locate red deer
-    # 1 action cash out with keeper
 
-    # TODO: double check action counts for these
-    # Mammoth Ribcage
+    # each starts with same 3 actions:
+    # - compel x2
+    # - enter woods x1
+
+    # --- Seven Necked Skeleton
+
+    # fringes x1, lay trail x1, wander fringes x2, track x1, report x1
     trade(9, {
+        Item.VolumeOfCollatedResearch: -8,
+        Item.UnprovenancedArtefact: -4,
+
+        Item.Moonlit: 1,
+        Item.SkeletonWithSevenNecks: 1,
+        Item.WingOfAYoungTerrorBird: 3,
+        Item.BoneFragments: 200
+    })
+
+    # fringes x1, lay trail x2, track x1, report x1
+    trade(8, {
+        Item.VolumeOfCollatedResearch: -8,
+        Item.UnprovenancedArtefact: -8,
+
+        Item.Moonlit: 2,
+        Item.SkeletonWithSevenNecks: 1,
+        Item.WingOfAYoungTerrorBird: 3,
+        Item.BoneFragments: 200
+    })
+
+    # glades x1, darken x2, return (free), fringes x1, track x1, report x1
+    trade(9, {
+        Item.VolumeOfCollatedResearch: -8,
+        Item.ThirstyBombazineScrap: -6,
+
+        Item.Moonlit: 2,
+        Item.SkeletonWithSevenNecks: 1,
+        Item.WingOfAYoungTerrorBird: 3,
+        Item.BoneFragments: 200
+    })    
+
+    # --- Mammoth Ribcage
+
+    # glades x1, darken x3, wander glades x1, track x1, report x1
+    trade(10, {
         Item.VolumeOfCollatedResearch: -8,
         Item.ThirstyBombazineScrap: -9,
 
+        Item.Moonlit: 4,
         Item.MammothRibcage: 1,
         Item.HolyRelicOfTheThighOfStFiacre: 1,
         Item.FemurOfAJurassicBeast: 2,
         Item.BoneFragments: 400
     })
 
-    # Skeleton with 7 Necks
-    trade(7, {
+    # fringes x1, lay trail x3, return (0), gladex x1, darken x2, track x1, report x1
+    trade(10, {
+        Item.VolumeOfCollatedResearch: -8,
+        Item.ThirstyBombazineScrap: -6,
+        Item.UnprovenancedArtefact: -4,
+
+        Item.Moonlit: 3,
+        Item.MammothRibcage: 1,
+        Item.HolyRelicOfTheThighOfStFiacre: 1,
+        Item.FemurOfAJurassicBeast: 2,
+        Item.BoneFragments: 400
+    })    
+
+
+    # --- Doubled Skull & Thorned Ribcage
+
+    # fringes x1, lay trail x1, wander glades x2, return, moonlight x1, track x1, report x1
+    trade(10, {
         Item.VolumeOfCollatedResearch: -8,
         Item.UnprovenancedArtefact: -4,
 
-        Item.SkeletonWithSevenNecks: 1,
-        Item.WingOfAYoungTerrorBird: 3,
-        Item.BoneFragments: 200
+        Item.Moonlit: -5 + 1,
+        Item.DoubledSkull: 1,
+        Item.ThornedRibcage: 1,
+        Item.KnottedHumerus: 2
     })
+
+    # glades x1, darken x2, return (free), moonlight x1, track x1, report x1
+    trade(9, {
+        Item.VolumeOfCollatedResearch: -8,
+        Item.ThirstyBombazineScrap: -6,
+
+        Item.Moonlit: -5 + 3,
+        Item.DoubledSkull: 1,
+        Item.ThornedRibcage: 1,
+        Item.KnottedHumerus: 2
+    })    
 
     # ------- Cabinet Noir
     # TODO: check for leftovers on various sales
@@ -58,19 +120,19 @@ def add_trades(active_player, config: Config):
         Item.CoverBackstory: 1
     })
 
-    # if (player.treasure == Treasure.PalatialHomeInTheArcticCircle):
-    trade(1, {
-        Item.CoverTiesSurface: 1,
-        Item.CoverElaboration: 1,
-        Item.CoverNuance: 1
-    })
+    if (player.treasure == Treasure.PalatialHomeInTheArcticCircle):
+        trade(1, {
+            Item.CoverTiesSurface: 1,
+            Item.CoverElaboration: 1,
+            Item.CoverNuance: 1
+        })
 
-    # if (player.treasure == Treasure.SocietyOfTheThreeFingeredHand):
-    trade(1, {
-        Item.CoverTiesSurface: 1,
-        Item.CoverElaboration: 1,
-        Item.CoverWitnessnes: 1
-    })
+    if (player.treasure == Treasure.SocietyOfTheThreeFingeredHand):
+        trade(1, {
+            Item.CoverTiesSurface: 1,
+            Item.CoverElaboration: 1,
+            Item.CoverWitnessnes: 1
+        })
 
     trade(1, {
         Item.FavSociety: -1,
@@ -95,12 +157,12 @@ def add_trades(active_player, config: Config):
         Item.CoverElaboration: 1
     })
 
-    # if (player.treasure == Treasure.TheMarvellous):
-    trade(1, {
-        Item.CoverTiesDispossessed: 1,
-        Item.CoverElaboration: 1,
-        Item.CoverWitnessnes: 1
-    })
+    if (player.treasure == Treasure.TheMarvellous):
+        trade(1, {
+            Item.CoverTiesDispossessed: 1,
+            Item.CoverElaboration: 1,
+            Item.CoverWitnessnes: 1
+        })
 
     # TODO: Increase cost for higher counts
     trade(1, {

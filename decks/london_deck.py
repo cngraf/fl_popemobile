@@ -537,7 +537,7 @@ def create_deck_old(config: Config):
 
 def create_london_deck(config: Config):
 
-    replacement_epa = 6.5
+    replacement_epa = 6.0
     player = config.player
     wounds_multiplier = menace_multiplier(player.wounds_reduction)
     suspicion_multiplier = menace_multiplier(player.suspicion_reduction)

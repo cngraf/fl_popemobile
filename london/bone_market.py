@@ -61,7 +61,7 @@ def bone_table():
         Bone(Item.PrismaticFrame, 312.5, anitquity=2, amalgamy=2),
         Bone(Item.FivePointedRibcage, 312.5, amalgamy=2, menace=1),
 
-        # Bone(Item.VictimsSkull, 2.5),
+        Bone(Item.VictimsSkull, 2.5),
         Bone(Item.CarvedBallOfStygianIvory, 2.5),
         Bone(Item.RubberySkull, 6, amalgamy=1),
         Bone(Item.HornedSkull, 12.5, anitquity=1, menace=2),
@@ -175,17 +175,6 @@ def create_skeleton(recipe: dict):
 
     return result
 
-def naive_collector_payout(skeleton: Bone, zoo_multi: float = 1.0):
-    return {
-        Item.ThirstyBombazineScrap: skeleton.echo_value * (zoo_multi)/2.5
-    }
-    
-def bone_hoarder_payout(skeleton: Bone, zoo_multi: float = 1.0):
-    return {
-        Item.BoneFragments: 5 + (skeleton.echo_value * zoo_multi * 100),
-        Item.UnearthlyFossil: 2
-    }
-
 def bohemian_sculptress_payout(skeleton: Bone, zoo_multi: float = 1.0):
     if skeleton.antiquity > 0:
         return {}
@@ -194,14 +183,6 @@ def bohemian_sculptress_payout(skeleton: Bone, zoo_multi: float = 1.0):
             Item.PreservedSurfaceBlooms: 4 + (skeleton.echo_value * zoo_multi / 2.5),
             Item.RumourOfTheUpperRiver: skeleton.theology
         }
-
-def skeleton_exchange(bones: dict, calculate_payout):
-    skelly = create_skeleton(bones)
-    payout = calculate_payout(skelly)
-
-    return utils.sum_dicts(bones, payout)
-
-# def pedagocially_inclinded_grandmother_payout(skeleton: Bone, zoo_multi: float = 1.0):
 
 def zoo_multiplier(skeletonType = ZooType):
     if skeletonType in (ZooType.Bird, ZooType.Amphibian, ZooType.Reptile):
@@ -282,7 +263,66 @@ def match_action_type(zoo_type, flux_type):
         else:
             return Item.Action
 
+def naive_collector_trade(trade,
+                        player: Player,
+                       recipe: dict,
+                       zoo_type: ZooType = ZooType.NoType,
+                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+    payout = {}
+
+    skeleton = create_skeleton(recipe)
+    zoo_multi = zoo_multiplier(zoo_type)
+
+    payout = {
+        Item.ThirstyBombazineScrap: (skeleton.echo_value * zoo_multi / 2.5),
+    }
+
+    avg_failures = expected_failed_sell_attempts(player,
+                        skeleton,
+                        zoo_type == ZooType.Chimera,
+                        dc_per_point=25)
     
+    action_type = match_action_type(zoo_type, fluctuations)
+
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+    trade(0, totals)
+
+
+def hoarding_paleo_trade(trade,
+                        player: Player,
+                       recipe: dict,
+                       zoo_type: ZooType = ZooType.NoType,
+                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+    payout = {}
+
+    skeleton = create_skeleton(recipe)
+    zoo_multi = zoo_multiplier(zoo_type)
+
+    payout = {
+        Item.BoneFragments: 5 + (skeleton.echo_value * zoo_multi * 100),
+        Item.UnearthlyFossil: 2
+    }
+
+    avg_failures = expected_failed_sell_attempts(player,
+                        skeleton,
+                        zoo_type == ZooType.Chimera,
+                        dc_per_point=40)
+    
+    action_type = match_action_type(zoo_type, fluctuations)
+
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+    trade(0, totals)
+
 def tentacled_entrepreneur_trade(trade,
                         player: Player,
                        recipe: dict,
@@ -303,10 +343,15 @@ def tentacled_entrepreneur_trade(trade,
             Item.FinalBreath: 4 * (prop_a ** flux_power)
         }
 
-    action_penalty = -1 * expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
+    avg_failures = expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
     action_type = match_action_type(zoo_type, fluctuations)
 
-    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, { action_type: action_penalty })
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
  
 def ambassador_trade(trade,
@@ -329,10 +374,15 @@ def ambassador_trade(trade,
             Item.TailfeatherBrilliantAsFlame: 0.8 * (prop_a ** flux_power)
         }
 
-    action_penalty = -1 * expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
+    avg_failures = expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
     action_type = match_action_type(zoo_type, fluctuations)
 
-    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, { action_type: action_penalty })
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
 def teller_of_terrors_trade(trade,
@@ -355,10 +405,15 @@ def teller_of_terrors_trade(trade,
             Item.RoyalBlueFeather: 4 * (prop_a ** flux_power)
         }
 
-    action_penalty = -1 * expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
+    avg_failures = expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
     action_type = match_action_type(zoo_type, fluctuations)
 
-    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, { action_type: action_penalty })
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
 def gothic_tales_trade(trade,
@@ -384,10 +439,15 @@ def gothic_tales_trade(trade,
             Item.CarvedBallOfStygianIvory: (prop_a + bonus_b) * (prop_b + bonus_a)
         }
 
-    action_penalty = -1 * expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
+    avg_failures = expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
     action_type = match_action_type(zoo_type, fluctuations)
 
-    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, { action_type: action_penalty })
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
 def zailor_particular_trade(trade,
@@ -413,10 +473,15 @@ def zailor_particular_trade(trade,
             Item.KnobOfScintillack: (prop_a + bonus_b) * (prop_b + bonus_a)
         }
 
-    action_penalty = -1 * expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
+    avg_failures = expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
     action_type = match_action_type(zoo_type, fluctuations)
 
-    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, { action_type: action_penalty })
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
 def rubbery_collector_trade(trade,
@@ -442,26 +507,16 @@ def rubbery_collector_trade(trade,
             Item.BasketOfRubberyPies: (prop_a + bonus_b) * (prop_b + bonus_a)
         }
 
-    action_penalty = -1 * expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
+    avg_failures = expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
     action_type = match_action_type(zoo_type, fluctuations)
 
-    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, { action_type: action_penalty })
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
-
-# def author_of_gothic_tales_payout(skeleton: Bone, zoo_multi: float = 1.0,
-#                                   fluctuations: Fluctuations = Fluctuations.NoQuality):
-    
-#     menace_bonus = 0.5 if fluctuations == Fluctuations.Menace else 0
-#     antiquity_bonus = 0.5 if fluctuations == Fluctuations.Antiquity else 0
-
-#     if skeleton.antiquity < 1 and skeleton.menace < 1:
-#         return {}
-#     else:
-#         return {
-#             Item.BoneMarketExhaustion: math.floor(skeleton.antiquity * skeleton.menace/20),
-#             Item.HinterlandScrip: 5 + (skeleton.echo_value * zoo_multi * 2),
-#             Item.CarvedBallOfStygianIvory: (skeleton.antiquity + menace_bonus) * (skeleton.menace + antiquity_bonus)
-#         }
 
 def expected_failed_sell_attempts(player, skeleton: Bone, is_chimera: bool = False, dc_per_point: int = 75):
     challenge_dc = dc_per_point * (skeleton.implausibility)
@@ -470,29 +525,9 @@ def expected_failed_sell_attempts(player, skeleton: Bone, is_chimera: bool = Fal
     pass_rate = utils.pass_rate(player, Stat.Shadowy, challenge_dc)
     return (1.0 / pass_rate) - 1
 
-def actions_to_sell_skelly(shadowy, implausibility, second_chance = False):
-    if (implausibility < 1): return 1
-    difficulty = 75 * implausibility
-    success_rate = min(0.6 * shadowy/difficulty, 1.0)
-    if second_chance:
-        success_rate =  1.0 - ((1.0 - success_rate) ** 2)
-    fails = 1.0/success_rate - 1
-    second_chance_penalty = 0.33 * (fails + 1) if second_chance else 0
-    # assumes 5 clear per action
-    suspicion_penalty = 0.2 * fails
-    return 1 + fails + suspicion_penalty + second_chance_penalty
-
 def add_trades(player: Player, config: Config):
     trade = config.trade
 
-    chimera_success_rate = utils.narrow_challenge_success_rate(player.stats[Stat.Mithridacy], 10)
-    actions_on_success = actions_to_sell_skelly(player.stats[Stat.Shadowy], 3)
-    actions_on_failure = actions_to_sell_skelly(player.stats[Stat.Shadowy], 6)
-    actions_to_sell_chimera = (actions_on_success * chimera_success_rate) + (actions_on_failure * (1.0 - chimera_success_rate))
-
-    shadowy = player.stats[Stat.Shadowy]
-
-    # Bone Market
     trade(0, {
         Item.HinterlandScrip: -2,
         Item.UnidentifiedThighbone: 1
@@ -508,7 +543,6 @@ def add_trades(player: Player, config: Config):
         Item.Echo: -62.5,
         Item.BrightBrassSkull: 1
     })
-
 
     # Buy from patrons
 
@@ -537,14 +571,6 @@ def add_trades(player: Player, config: Config):
     # -------------------------
     # TODO: Verify all outputs
 
-    # TODO: some of these definitely produce exhaustion
-
-    '''
-    6000 fragment recipes require:
-    - BaL for the vake skull
-    - AotRS 10 to 100% the check
-    '''
-
     if (player.ambition == Ambition.BagALegend):
         # min 1 action is baked into recipes, this only adds for failure
         # ignores other failure costs bc lazy
@@ -555,9 +581,9 @@ def add_trades(player: Player, config: Config):
             Item.DuplicatedVakeSkull: 1
         })
 
-
     if player.profession == Profession.Licentiate:
-        trade(0, { Item.ASkeletonOfYourOwn: 1 })        
+        trade(0, { Item.ASkeletonOfYourOwn: 1 })
+        trade(0, { Item.VictimsSkulls })
 
     trade(0, {
         Item.BoneFragments: -500,
@@ -589,7 +615,7 @@ def add_trades(player: Player, config: Config):
         # TODO: 1/1 split
         for i in range(0, 3):
             amber_fins = -1 * i
-            fin_bones_collected = 2 - amber_fins
+            fin_bones_collected = -2 -amber_fins
 
             ambassador_trade(trade, player,
                 recipe={
@@ -691,116 +717,132 @@ def add_trades(player: Player, config: Config):
                 fluctuations=Fluctuations.Menace)
 
 
-    # gothic_tales_trade(trade,
-    #     player=player,
-    #     recipe={
-    #         Item.MenaceFishAction: -6,
-    #         Item.LeviathanFrame: -1,
-    #         Item.DuplicatedVakeSkull: -1,
-    #         Item.AmberCrustedFin: -2
-    #     },
-    #     zoo_type=ZooType.Fish,
-    #     fluctuations=Fluctuations.Menace)
-    
-    # gothic_tales_trade(trade,
-    #     player=player,
-    #     recipe={
-    #         Item.MenaceFishAction: -6,
-    #         Item.LeviathanFrame: -1,
-    #         Item.DuplicatedVakeSkull: -1,
-    #         Item.FinBonesCollected: -2
-    #     },
-    #     zoo_type=ZooType.Fish,
-    #     fluctuations=Fluctuations.Menace)
-    
-    # gothic_tales_trade(trade,
-    #     player=player,
-    #     recipe={
-    #         Item.MenaceFishAction: -6,
-    #         Item.LeviathanFrame: -1,
-    #         Item.BrightBrassSkull: -1,
-    #         Item.FinBonesCollected: -2
-    #     },
-    #     zoo_type=ZooType.Fish,
-    #     fluctuations=Fluctuations.Menace)
-
-    # # 2/2/4 fish => gothic
-    # gothic_tales_trade(trade,
-    #     player=player,
-    #     recipe={
-    #         Item.MenaceFishAction: -6,
-    #         Item.LeviathanFrame: -1,
-    #         Item.SabreToothedSkull: -1,
-    #         Item.AmberCrustedFin: -2,
-    #     },
-    #     zoo_type=ZooType.Fish,
-    #     fluctuations=Fluctuations.Menace
-    # )
-
-    # # 1/2/3 fish => gothic
-    # gothic_tales_trade(trade,
-    #     player=player,
-    #     recipe={
-    #         Item.MenaceFishAction: -6,
-    #         Item.LeviathanFrame: -1,
-    #         Item.BrightBrassSkull: -1,
-    #         Item.AmberCrustedFin: -2,
-    #     },
-    #     zoo_type=ZooType.Fish,
-    #     fluctuations=Fluctuations.Menace
-    # )
-
-    # # chimera => grandmother
-    # trade(5 + actions_to_sell_skelly(shadowy, 3), {
-    #     Item.LeviathanFrame: -1,
-    #     Item.SabreToothedSkull: -1,
-    #     Item.HumanArm: -2,
-    #     Item.IncisiveObservation: 780
-    # })
-
-    # TODO: wrong recipe, fix this
-    # # fish => grandmother
-    # trade(5 + actions_to_sell_skelly(shadowy, 3), {
-    #     Item.MammothRibcage: -1,
-    #     Item.BrightBrassSkull: -1,
-    #     Item.FinBonesCollected: -2,
-    #     Item.IncisiveObservation: 316
-    # })
-
     # ----------------------
     # ---- Mammoth Ribcage
 
-    trade(9, {
-        Item.MammothRibcage: -1,
-        Item.SabreToothedSkull: -1,
-        Item.FemurOfAJurassicBeast: -3,
-        Item.HolyRelicOfTheThighOfStFiacre: -1,
-        Item.JetBlackStinger: -1,
-        Item.HinterlandScrip: 299,
-        Item.CarvedBallOfStygianIvory: 21
-    })
+    for skull_type in (
+        Item.VictimsSkull,
+        Item.HornedSkull,
+        Item.PentagrammicSkull,
+        Item.DuplicatedCounterfeitHeadOfJohnTheBaptist,
+        Item.SkullInCoral,
+        Item.PlatedSkull,
+        Item.EyelessSkull,
+        Item.SabreToothedSkull,
+        Item.BrightBrassSkull,
+        Item.DuplicatedVakeSkull
+    ):
+        gothic_tales_trade(trade, player,
+            recipe={
+                Item.AntiquityReptileAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -3,
+                Item.HolyRelicOfTheThighOfStFiacre: -1,
+                Item.JetBlackStinger: -1
+            },
+            zoo_type=ZooType.Reptile,
+            fluctuations=Fluctuations.Antiquity)
+        
+        gothic_tales_trade(trade, player,
+            recipe={
+                Item.MenaceReptileAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -3,
+                Item.HolyRelicOfTheThighOfStFiacre: -1,
+                Item.JetBlackStinger: -1
+            },
+            zoo_type=ZooType.Reptile,
+            fluctuations=Fluctuations.Menace)         
+           
+        zailor_particular_trade(trade, player,
+            recipe={
+                Item.AntiquityReptileAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -4,
+                Item.ObsidianChitinTail: -1
+            },
+            zoo_type=ZooType.Reptile,
+            fluctuations=Fluctuations.Antiquity)
+        
+        zailor_particular_trade(trade, player,
+            recipe={
+                Item.AmalgamyReptileAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -4,
+                Item.ObsidianChitinTail: -1
+            },
+            zoo_type=ZooType.Reptile,
+            fluctuations=Fluctuations.Amalgamy)        
+
+        zailor_particular_trade(trade, player,
+            recipe={
+                Item.AntiquityAmphibianAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -4,
+            },
+            zoo_type=ZooType.Amphibian,
+            fluctuations=Fluctuations.Antiquity)
+        
+        zailor_particular_trade(trade, player,
+            recipe={
+                Item.AntiquityAmphibianAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -1,
+                Item.HelicalThighbone: -2,
+                Item.HolyRelicOfTheThighOfStFiacre: -1
+            },
+            zoo_type=ZooType.Amphibian,
+            fluctuations=Fluctuations.Antiquity)
+        
+        zailor_particular_trade(trade, player,
+            recipe={
+                Item.AmalgamyAmphibianAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -1,
+                Item.HelicalThighbone: -2,
+                Item.HolyRelicOfTheThighOfStFiacre: -1
+            },
+            zoo_type=ZooType.Amphibian,
+            fluctuations=Fluctuations.Amalgamy)                
+
+    # trade(9, {
+    #     Item.MammothRibcage: -1,
+    #     Item.SabreToothedSkull: -1,
+    #     Item.FemurOfAJurassicBeast: -3,
+    #     Item.HolyRelicOfTheThighOfStFiacre: -1,
+    #     Item.JetBlackStinger: -1,
+    #     Item.HinterlandScrip: 299,
+    #     Item.CarvedBallOfStygianIvory: 21
+    # })
 
     # -------------------------------
     # ----- Human Ribcage
 
-    # 0/6/3 humanoid
-    trade(8, {
-        Item.HumanRibcage: -1,
-        Item.DuplicatedVakeSkull: -1,
-        Item.KnottedHumerus: -2,
-        Item.HelicalThighbone: -2,
-        Item.NightsoilOfTheBazaar: 184,
-        Item.BasketOfRubberyPies: 21,
-    })
+    # # 0/6/3 humanoid
+    # trade(8, {
+    #     Item.HumanRibcage: -1,
+    #     Item.DuplicatedVakeSkull: -1,
+    #     Item.KnottedHumerus: -2,
+    #     Item.HelicalThighbone: -2,
+    #     Item.NightsoilOfTheBazaar: 184,
+    #     Item.BasketOfRubberyPies: 21,
+    # })
 
-    trade(8, {
-        Item.HumanRibcage: -1,
-        Item.DuplicatedVakeSkull: -1,
-        Item.FossilisedForelimb: -2,
-        Item.FemurOfAJurassicBeast: -2,
-        Item.NightsoilOfTheBazaar: utils.skelly_value_in_items(12.5 + 65 + (27.5 * 2) + (3 * 2), 0.5, False),
-        Item.CarvedBallOfStygianIvory: 21,
-    })
+    # trade(8, {
+    #     Item.HumanRibcage: -1,
+    #     Item.DuplicatedVakeSkull: -1,
+    #     Item.FossilisedForelimb: -2,
+    #     Item.FemurOfAJurassicBeast: -2,
+    #     Item.NightsoilOfTheBazaar: utils.skelly_value_in_items(12.5 + 65 + (27.5 * 2) + (3 * 2), 0.5, False),
+    #     Item.CarvedBallOfStygianIvory: 21,
+    # })
 
     '''
     "Biblically Inaccurate Angel"
@@ -809,226 +851,257 @@ def add_trades(player: Player, config: Config):
     the filler limb can be any limb with 0 antiquity, menace, and implausibility
     '''
 
-    for filler_limb, filler_limb_echo_value in (
-        (Item.KnottedHumerus, 3),
-        (Item.IvoryHumerus, 15),
-        (Item.UnidentifiedThighbone, 1),
-        (Item.HelicalThighbone, 2),
-        (Item.HolyRelicOfTheThighOfStFiacre, 12.5),
-        (Item.IvoryFemur, 65),
-        (Item.AlbatrossWing, 12.5),
-        (Item.FinBonesCollected, 0.5)
+    for filler_limb in (
+        Item.KnottedHumerus,
+        Item.IvoryHumerus,
+        Item.UnidentifiedThighbone,
+        Item.HelicalThighbone,
+        Item.HolyRelicOfTheThighOfStFiacre,
+        Item.IvoryFemur,
+        Item.AlbatrossWing,
+        Item.FinBonesCollected
     ):
-        # 3/?/6
-        trade(7 + actions_to_sell_chimera, {
-            Item.HumanRibcage: -1,
-            Item.DuplicatedVakeSkull: -1,
-            Item.WingOfAYoungTerrorBird: -3,
-            filler_limb: -1,
-            Item.HinterlandScrip: 5 + utils.skelly_value_in_items(12.5 + 65 + (3 * 2.5) + filler_limb_echo_value, 0.5, False),
-            Item.CarvedBallOfStygianIvory: 21, # 20/18/21
-        })
+        
+        for num_wings in range(0, 4):
 
-        # 4/?/4
-        trade(7 + actions_to_sell_chimera, {
-            Item.HumanRibcage: -1,
-            Item.SabreToothedSkull: -1,
-            Item.WingOfAYoungTerrorBird: -3,
-            filler_limb: -1,
-            Item.HinterlandScrip: 5 + utils.skelly_value_in_items(12.5 + 62.5 + (3 * 2.5) + filler_limb_echo_value, 0.5, False),
-            Item.CarvedBallOfStygianIvory: 18, # 18/16/18
-        })
+            gothic_tales_trade(trade, player,
+                recipe={
+                    Item.MenaceGeneralAction: -8,
+                    Item.HumanRibcage: -1,
+                    Item.DuplicatedVakeSkull: -1,
+                    Item.WingOfAYoungTerrorBird: -1 * num_wings,
+                    filler_limb: -4 + num_wings
+                },
+                zoo_type=ZooType.Chimera,
+                fluctuations=Fluctuations.Menace)
+            
+            gothic_tales_trade(trade, player,
+                recipe={
+                    Item.MenaceGeneralAction: -8,
+                    Item.HumanRibcage: -1,
+                    Item.HornedSkull: -1,
+                    Item.WingOfAYoungTerrorBird: -1 * num_wings,
+                    filler_limb: -4 + num_wings
+                },
+                zoo_type=ZooType.Chimera,
+                fluctuations=Fluctuations.Menace)
+            
+            gothic_tales_trade(trade, player,
+                recipe={
+                    Item.MenaceGeneralAction: -8,
+                    Item.HumanRibcage: -1,
+                    Item.SabreToothedSkull: -1,
+                    Item.WingOfAYoungTerrorBird: -1 * num_wings,
+                    filler_limb: -4 + num_wings
+                },
+                zoo_type=ZooType.Chimera,
+                fluctuations=Fluctuations.Menace)
+                            
+            gothic_tales_trade(trade, player,
+                recipe={
+                    Item.AntiquityGeneralAction: -8,
+                    Item.HumanRibcage: -1,
+                    Item.SabreToothedSkull: -1,
+                    Item.WingOfAYoungTerrorBird: -1 * num_wings,
+                    filler_limb: -4 + num_wings
+                },
+                zoo_type=ZooType.Chimera,
+                fluctuations=Fluctuations.Antiquity)
 
-    # 3/1/6
-    trade(7 + actions_to_sell_chimera, {
-        Item.HumanRibcage: -1,
-        Item.DuplicatedVakeSkull: -1,
-        Item.FemurOfAJurassicBeast: -1,
-        Item.WingOfAYoungTerrorBird: -2,
-        Item.AmberCrustedFin: -1,
-        Item.HinterlandScrip: 5+ utils.skelly_value_in_items(12.5 + 65 + 3 + (2 * 2.5) + 15, 0.5, False),
-        Item.CarvedBallOfStygianIvory: 21, # 20/18/21
-    })
+        # # # 3/?/6
+        # # trade(7 + actions_to_sell_chimera, {
+        # #     Item.HumanRibcage: -1,
+        # #     Item.DuplicatedVakeSkull: -1,
+        # #     Item.WingOfAYoungTerrorBird: -3,
+        # #     filler_limb: -1,
+        # #     Item.HinterlandScrip: 5 + utils.skelly_value_in_items(12.5 + 65 + (3 * 2.5) + filler_limb_echo_value, 0.5, False),
+        # #     Item.CarvedBallOfStygianIvory: 21, # 20/18/21
+        # # })
 
-    # 3/2/6
-    trade(7 + actions_to_sell_chimera, {
-        Item.HumanRibcage: -1,
-        Item.HornedSkull: -1,
-        Item.WingOfAYoungTerrorBird: -2,
-        Item.AmberCrustedFin: -2,
-        Item.HinterlandScrip: 5 + utils.skelly_value_in_items(12.5 + 12.5 + (2 * 2.5) + (2 * 15), 0.5, False),
-        Item.CarvedBallOfStygianIvory: 21 # 20/18/21,
-    })
+        # # 4/?/4
+        # trade(7 + actions_to_sell_chimera, {
+        #     Item.HumanRibcage: -1,
+        #     Item.SabreToothedSkull: -1,
+        #     Item.WingOfAYoungTerrorBird: -3,
+        #     filler_limb: -1,
+        #     Item.HinterlandScrip: 5 + utils.skelly_value_in_items(12.5 + 62.5 + (3 * 2.5) + filler_limb_echo_value, 0.5, False),
+        #     Item.CarvedBallOfStygianIvory: 18, # 18/16/18
+        # })
 
-    foo_recipe = {
-        Item.HumanRibcage: -1,
-        Item.HornedSkull: -1,
-        Item.WingOfAYoungTerrorBird: -2,
-        Item.AmberCrustedFin: -2
-    }
+    # # 3/1/6
+    # trade(7 + actions_to_sell_chimera, {
+    #     Item.HumanRibcage: -1,
+    #     Item.DuplicatedVakeSkull: -1,
+    #     Item.FemurOfAJurassicBeast: -1,
+    #     Item.WingOfAYoungTerrorBird: -2,
+    #     Item.AmberCrustedFin: -1,
+    #     Item.HinterlandScrip: 5+ utils.skelly_value_in_items(12.5 + 65 + 3 + (2 * 2.5) + 15, 0.5, False),
+    #     Item.CarvedBallOfStygianIvory: 21, # 20/18/21
+    # })
 
-    # agt_payout = author_of_gothic_tales_payout(
-    #     create_skeleton(foo_recipe),
-    #     fluctuations=Fluctuations.Menace)
-    
-    # skelly_exchange = skeleton_exchange(
-    #     foo_recipe,
-    #     lambda x : author_of_gothic_tales_payout(x, fluctuations=Fluctuations.Menace))
+    # # 3/2/6
+    # trade(7 + actions_to_sell_chimera, {
+    #     Item.HumanRibcage: -1,
+    #     Item.HornedSkull: -1,
+    #     Item.WingOfAYoungTerrorBird: -2,
+    #     Item.AmberCrustedFin: -2,
+    #     Item.HinterlandScrip: 5 + utils.skelly_value_in_items(12.5 + 12.5 + (2 * 2.5) + (2 * 15), 0.5, False),
+    #     Item.CarvedBallOfStygianIvory: 21 # 20/18/21,
+    # })
 
     # ------------------------------------------------
-    # ------ Skeleton with Seven Necks Reicpes -------
+    # ------ Skeleton with Seven Necks ---------------
     # ------------------------------------------------
 
-    gothic_tales_trade(trade, player,
-        recipe = {
-            Item.MenaceBirdAction: -12,
-            Item.SkeletonWithSevenNecks: -1,
-            Item.BrightBrassSkull: -5,
-            Item.DuplicatedVakeSkull: -2,
-            Item.WingOfAYoungTerrorBird: -2
-        },
-        zoo_type = ZooType.Bird,
-        fluctuations= Fluctuations.Menace)
-
-
-    # for i in range(0,8):
-
-    #     brass_bird = {
+    # gothic_tales_trade(trade, player,
+    #     recipe = {
+    #         Item.MenaceBirdAction: -12,
     #         Item.SkeletonWithSevenNecks: -1,
-    #         Item.BrightBrassSkull: -1 * i,
-    #         Item.SabreToothedSkull: -1 * (7 - i),
+    #         Item.BrightBrassSkull: -5,
+    #         Item.DuplicatedVakeSkull: -2,
     #         Item.WingOfAYoungTerrorBird: -2
-    #     }
-
-    #     trade(
-    #         actionCost= 12 + actions_to_sell_skelly(315, 2 * i, True),
-    #         exchanges= utils.sum_dicts(
-    #             brass_bird,
-    #             author_of_gothic_tales_payout(
-    #                 create_skeleton(brass_bird),
-    #                 1.15,
-    #                 fluctuations=Fluctuations.Menace
-    #             )
-    #     ))
-
+    #     },
+    #     zoo_type = ZooType.Bird,
+    #     fluctuations= Fluctuations.Menace)
+    
     # Generator Skeleton, various
-    # testing various balances of brass vs. sabre-toothed skull
-    # TODO: remove ones that create exhaustion
 
-    for i in range(0, 4):
-        zoo_bonus = 0.1
+    # Define the target sum
+    seven_skulls = 7
 
-        brass_skulls = i
-        sabre_toothed_skulls = 7 - i
+    # Iterate over possible values
+    for brass_skulls in range(seven_skulls + 1):
+        other_skull_types = [
+            Item.HornedSkull,
+            Item.SkullInCoral,
+            Item.SabreToothedSkull,
+            Item.PlatedSkull,
+            Item.PentagrammicSkull, 
+            Item.DuplicatedVakeSkull,
+            Item.DoubledSkull
+        ]
 
-        penny_value = 6250 + 2500
-        penny_value += 6500 * brass_skulls
-        penny_value += 6250 * sabre_toothed_skulls
+        num_skull_types = len(other_skull_types)
 
-        trade(11 + actions_to_sell_skelly(player.stats[Stat.Shadowy], brass_skulls * 2), {
-            Item.SkeletonWithSevenNecks: -1,
-            Item.BrightBrassSkull: -1 * brass_skulls,
-            Item.NevercoldBrassSliver: -200 * brass_skulls,
-            Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
-            Item.AlbatrossWing: -2,
-            Item.MemoryOfDistantShores: 5 + (penny_value * (1 + zoo_bonus)/50),
-            Item.FinalBreath: 74
-        })
+        for i in range(0, num_skull_types):
+            skull_type_1 = other_skull_types[i]
+            
+            for j in range(i + 1, num_skull_types):
+                skull_type_2 = other_skull_types[j]
 
-    # same as above but with 1x skull in coral and different wings
-    for i in range(0, 4):
-        brass_skulls = i
-        sabre_toothed_skulls = 6 - i
+                # Iterate over possible values of b
+                for num_skull_1 in range(seven_skulls + 1 - brass_skulls):
 
-        penny_value = 6250 + 1750 + 500
-        penny_value += 6500 * brass_skulls
-        penny_value += 6250 * sabre_toothed_skulls
+                    # Calculate the value of c
+                    num_skull_2 = seven_skulls - brass_skulls - num_skull_1
 
-        zoo_bonus = 0.1
+                    # Memory of Distant Shores & Volumes of Collated Research
+                    tentacled_entrepreneur_trade(trade, player,
+                        recipe={
+                            Item.AmalgamyBirdAction: -12,
+                            Item.SkeletonWithSevenNecks: -1,
+                            Item.BrightBrassSkull: -1 * brass_skulls,
+                            skull_type_1: -1 * num_skull_1,
+                            skull_type_2: -1 * num_skull_2,
+                            Item.AlbatrossWing: -2
+                        },
+                        zoo_type=ZooType.Bird,
+                        fluctuations=Fluctuations.Amalgamy)
+                    
+                    tentacled_entrepreneur_trade(trade, player,
+                        recipe={
+                            Item.GeneralBirdAction: -12,
+                            Item.SkeletonWithSevenNecks: -1,
+                            Item.BrightBrassSkull: -1 * brass_skulls,
+                            skull_type_1: -1 * num_skull_1,
+                            skull_type_2: -1 * num_skull_2,
+                            Item.WingOfAYoungTerrorBird: -2
+                        },
+                        zoo_type=ZooType.Bird,
+                        fluctuations=Fluctuations.NoQuality)            
 
-        trade(11 + actions_to_sell_skelly(shadowy, brass_skulls * 2), {
-            Item.SkeletonWithSevenNecks: -1,
-            Item.BrightBrassSkull: -1 * brass_skulls,
-            Item.NevercoldBrassSliver: -200 * brass_skulls,
-            Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
-            Item.SkullInCoral: -1,
-            Item.KnobOfScintillack: -1,
+                    # Bone Fragments
+                    hoarding_paleo_trade(trade, player,
+                        recipe={
+                            Item.GeneralBirdAction: -12,
+                            Item.SkeletonWithSevenNecks: -1,
+                            Item.BrightBrassSkull: -1 * brass_skulls,
+                            skull_type_1: -1 * num_skull_1,
+                            skull_type_2: -1 * num_skull_2,
+                            Item.WingOfAYoungTerrorBird: -2
+                        },
+                        zoo_type=ZooType.Bird,
+                        fluctuations=Fluctuations.NoQuality)
+
+
+                    zailor_particular_trade(trade, player,
+                        recipe={
+                            Item.GeneralBirdAction: -12,
+                            Item.SkeletonWithSevenNecks: -1,
+                            Item.BrightBrassSkull: -1 * brass_skulls,
+                            skull_type_1: -1 * num_skull_1,
+                            skull_type_2: -1 * num_skull_2,
+                            Item.WingOfAYoungTerrorBird: -2
+                        },
+                        zoo_type=ZooType.Bird,
+                        fluctuations=Fluctuations.NoQuality)
+
+
+                    naive_collector_trade(trade, player,
+                        recipe={
+                            Item.GeneralBirdAction: -12,
+                            Item.SkeletonWithSevenNecks: -1,
+                            Item.BrightBrassSkull: -1 * brass_skulls,
+                            skull_type_1: -1 * num_skull_1,
+                            skull_type_2: -1 * num_skull_2,
+                            Item.WingOfAYoungTerrorBird: -2
+                        },
+                        zoo_type=ZooType.Bird,
+                        fluctuations=Fluctuations.NoQuality)                    
+
+
+    # ------------------------------------------------
+    # ------------ Thorned Ribcage ---------------
+    # ------------------------------------------------
+
+    # 6/3/3 recipe
+    gothic_tales_trade(trade, player,
+        recipe={
+            Item.AntiquityBirdAction: -9,
+            Item.ThornedRibcage: -1,
+            Item.DoubledSkull: -1,
+            Item.FemurOfAJurassicBeast: -2,
             Item.WingOfAYoungTerrorBird: -2,
-            Item.MemoryOfDistantShores: 5 + (penny_value * (1 + zoo_bonus)/50),
-            # amalgamy week
-            Item.FinalBreath: 74
-        })
-
-    # Hoarding Palaeo
-    for i in range(0, 4):
-        zoo_bonus = 0.1
-
-        brass_skulls = i
-        sabre_toothed_skulls = 7 - i
-
-        penny_value = 0
-        penny_value += 6250 # skelly
-        penny_value += 6500 * brass_skulls
-        penny_value += 6250 * sabre_toothed_skulls
-        penny_value += 250 * 2 # wings
-
-        trade(11 + actions_to_sell_skelly(shadowy, brass_skulls * 2), {
-            Item.SkeletonWithSevenNecks: -1,
-            Item.BrightBrassSkull: -1 * brass_skulls,
-            Item.NevercoldBrassSliver: -200 * brass_skulls,
-            Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
+            Item.ObsidianChitinTail: -1
+        },
+        zoo_type=ZooType.Bird,
+        fluctuations=Fluctuations.Antiquity)
+    
+    zailor_particular_trade(trade, player,
+        recipe={
+            Item.AntiquityBirdAction: -9,
+            Item.ThornedRibcage: -1,
+            Item.DoubledSkull: -1,
+            Item.FemurOfAJurassicBeast: -2,
             Item.WingOfAYoungTerrorBird: -2,
-            Item.BoneFragments: penny_value * (1 + zoo_bonus),
-            Item.UnearthlyFossil: 2
-        })
+            Item.ObsidianChitinTail: -1
+        },
+        zoo_type=ZooType.Bird,
+        fluctuations=Fluctuations.Antiquity)
 
-    # Zailor Particular
-    for i in range(0, 4):
-        zoo_bonus = 0.1
-        antiquity_bonus = 0.5
-        amalgamy_bonus  = 0
+    zailor_particular_trade(trade, player,
+        recipe={
+            Item.AntiquityGeneralAction: -9,
+            Item.ThornedRibcage: -1,
+            Item.DoubledSkull: -1,
+            Item.KnottedHumerus: -2,
+            Item.HelicalThighbone: -1,
+            Item.FinBonesCollected: -1,
+            Item.TombLionsTail: -1
+        },
+        zoo_type=ZooType.Chimera,
+        fluctuations=Fluctuations.Antiquity)       
 
-        brass_skulls = i
-        sabre_toothed_skulls = 7 - i
-
-        penny_value = 0
-        penny_value += 6250 # skelly
-        penny_value += 6500 * brass_skulls
-        penny_value += 6250 * sabre_toothed_skulls
-        penny_value += 250 * 2 # wings
-
-        antiquity = sabre_toothed_skulls + 2
-        amalgamy = 2
-
-        trade(11 + actions_to_sell_skelly(shadowy, brass_skulls * 2), {
-            Item.SkeletonWithSevenNecks: -1,
-            Item.BrightBrassSkull: -1 * brass_skulls,
-            Item.NevercoldBrassSliver: -200 * brass_skulls,
-            Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
-            Item.WingOfAYoungTerrorBird: -2,
-            Item.NoduleOfWarmAmber: 25 + (penny_value * (1 + zoo_bonus))/10,
-            Item.KnobOfScintillack: ((antiquity + amalgamy_bonus) * (amalgamy + antiquity_bonus))
-        })    
-
-    for i in range(0, 8):
-        zoo_bonus = 0.1
-
-        brass_skulls = i
-        sabre_toothed_skulls = 7 - i
-
-        penny_value = 6250 + 2500
-        penny_value += 6500 * brass_skulls
-        penny_value += 6250 * sabre_toothed_skulls
-
-        trade(11 + actions_to_sell_skelly(player.stats[Stat.Shadowy], (brass_skulls * 2)/3), {
-            Item.SkeletonWithSevenNecks: -1,
-            Item.BrightBrassSkull: -1 * brass_skulls,
-            Item.NevercoldBrassSliver: -200 * brass_skulls,
-            Item.SabreToothedSkull: -1 * sabre_toothed_skulls,
-            Item.AlbatrossWing: -2,
-
-            Item.ThirstyBombazineScrap: (penny_value * (1 + zoo_bonus)/250),
-        })
 
     # TODO: organize this
     # Random Stuff

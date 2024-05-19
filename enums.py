@@ -652,6 +652,8 @@ class Item(Enum):
     EsteemOfTheGuild = auto()
     WagesOfADig = auto()
 
+    Moonlit = auto()
+
     CoverTiesGeneric = auto()
     CoverTiesSurface = auto()
     CoverTiesBazaar = auto()
@@ -695,6 +697,7 @@ class Item(Enum):
 
     DuplicatedVakeSkull = auto()
     DuplicatedCounterfeitHeadOfJohnTheBaptist = auto()
+    VictimsSkull = auto()
     ASkeletonOfYourOwn = auto()
 
     Placeholder = auto()

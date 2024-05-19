@@ -27,22 +27,20 @@ def add_trades(active_player, config):
 
     # Hunting Pinewood Shark
     # TODO: check actual length of carousel
+    # lengths per wiki
 
-    # just stay there, ignore travel cost
-    trade(6, {
-        # Item.CardDraws: 6 * lost_draw_cost,
-        Item.FinBonesCollected: 2,
-        Item.FavDocks: 1,
-        Item.RemainsOfAPinewoodShark: 1
-    })
-
-    # short trip, no cards missed
-    trade(6, {
-        Item.ParabolaRoundTrip: -1,
-        Item.FinBonesCollected: 2,
-        Item.FavDocks: 1,
-        Item.RemainsOfAPinewoodShark: 1
-    })
+    if (active_player.profession == Profession.MonsterHunter):
+        trade(8, {
+            Item.FinBonesCollected: 2,
+            Item.FavDocks: 1,
+            Item.RemainsOfAPinewoodShark: 1
+        })
+    else:    
+        trade(12, {
+            Item.FinBonesCollected: 2,
+            Item.FavDocks: 1,
+            Item.RemainsOfAPinewoodShark: 1
+        })
 
     # ------------------
     # Parabolan War

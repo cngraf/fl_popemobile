@@ -213,6 +213,10 @@ player_generic = Player(stats = {
     Stat.Persuasive: Player.baseline_persuasive
 })
 
+player_generic_monster_hunter = Player(
+    profession=Profession.MonsterHunter
+)
+
 # aka "cosmogone silvererhand"
 player_third_city_silverer = Player(
     ambition=Ambition.BagALegend,
@@ -247,10 +251,10 @@ player_generic_licentiate = Player(
         Stat.Persuasive: Player.baseline_persuasive
     })
 
-active_player = player_bal_licentiate
+active_player = player_third_city_silverer
 
 # hack
-var_buffer = 5_000
+var_buffer = 6_000 # think this will just throw an error when it's too low
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
@@ -259,9 +263,7 @@ config = Config(num_vars, active_player)
 # Toggles
 config.enable_all_rat_market_moons = True
 
-
 trade = config.trade
-
 
 # ---------------- Decks ----------------------------
 
@@ -283,6 +285,8 @@ zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
 # Having written this code, it occurs to me it might make more sense to do it in reverse
 # Like, keep the constraint just as "action" but add a trade to trade 18 actions
 # for one of each of the subtypes. Well, whatever. this is fine
+
+bone_market_cycle_length = 18
 
 bone_market_week_actions = {
     "Antiquity": {
@@ -311,10 +315,9 @@ bone_market_week_actions = {
     }
 }
 
-bone_market_cycle_length = 18
-
 core_constraint = {
-    Item.Constraint: 1
+    Item.Constraint: 1,
+    Item.CardDraws: 0.25 * bone_market_cycle_length
 }
 
 for category, actions in bone_market_week_actions.items():
@@ -408,7 +411,7 @@ london.bone_market.add_trades(active_player, config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
-unterzee.port_cecil.add_trades(active_player, config)
+# unterzee.port_cecil.add_trades(active_player, config)
 unterzee.zailing.add_trades(active_player, zailing_epa, config)
 
 parabola.add_trades(active_player, config)
@@ -428,9 +431,9 @@ upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 
-# fate.philosofruits.add_trades(active_player, config)
-# fate.upwards.add_trades(active_player, config)
-# fate.whiskerways.add_trades(config)
+fate.philosofruits.add_trades(active_player, config)
+fate.upwards.add_trades(active_player, config)
+fate.whiskerways.add_trades(config)
 
 
 # --------------
@@ -464,60 +467,60 @@ trade(0, {
     Item.PalaeontologicalDiscovery: 10
 })
 
-config.railway_card("Under the Statue - Liberation",
-        Rarity.Standard,
-        Location.TheHurlers,
-        True, {
-    Item.FavRevolutionaries: -4,
-    Item.NightOnTheTown: 12
-})
+# config.railway_card("Under the Statue - Liberation",
+#         Rarity.Standard,
+#         Location.TheHurlers,
+#         True, {
+#     Item.FavRevolutionaries: -4,
+#     Item.NightOnTheTown: 12
+# })
 
-config.railway_card("Under the Statue - Anchoress",
-        Rarity.Standard,
-        Location.TheHurlers,
-        True, {
-    Item.FavChurch: -4,
-    Item.VolumeOfCollatedResearch: 12
-})
+# config.railway_card("Under the Statue - Anchoress",
+#         Rarity.Standard,
+#         Location.TheHurlers,
+#         True, {
+#     Item.FavChurch: -4,
+#     Item.VolumeOfCollatedResearch: 12
+# })
 
-config.railway_card("Under the Statue - Goat Demons",
-        Rarity.Standard,
-        Location.TheHurlers,
-        True, {
-    Item.FavHell: -4,
-    Item.NightsoilOfTheBazaar: 60
-})
+# config.railway_card("Under the Statue - Goat Demons",
+#         Rarity.Standard,
+#         Location.TheHurlers,
+#         True, {
+#     Item.FavHell: -4,
+#     Item.NightsoilOfTheBazaar: 60
+# })
 
-config.railway_card("Under the Statue - Overgoat",
-        Rarity.Standard,
-        Location.TheHurlers,
-        True, {
-    Item.FavHell: -4,
-    Item.AeolianScream: 12
-})
+# config.railway_card("Under the Statue - Overgoat",
+#         Rarity.Standard,
+#         Location.TheHurlers,
+#         True, {
+#     Item.FavHell: -4,
+#     Item.AeolianScream: 12
+# })
 
-config.railway_card("Under the Statue - Ubergoat",
-        Rarity.Standard,
-        Location.TheHurlers,
-        True, {
-    Item.FavHell: -4,
-    Item.VolumeOfCollatedResearch: 12
-})
+# config.railway_card("Under the Statue - Ubergoat",
+#         Rarity.Standard,
+#         Location.TheHurlers,
+#         True, {
+#     Item.FavHell: -4,
+#     Item.VolumeOfCollatedResearch: 12
+# })
 
-config.railway_card("Under the Statue - Discordance",
-        Rarity.Standard,
-        Location.TheHurlers,
-        True, {
-    Item.MemoryOfDiscordance: -2,
-    Item.CorrespondencePlaque: 60 
-})
+# config.railway_card("Under the Statue - Discordance",
+#         Rarity.Standard,
+#         Location.TheHurlers,
+#         True, {
+#     Item.MemoryOfDiscordance: -2,
+#     Item.CorrespondencePlaque: 60 
+# })
 
-config.railway_card("Grazing Goat Demons",
-        Rarity.Standard,
-        Location.TheHurlers,
-        False, {
-    # TODO might be playable? looks complicated
-})
+# config.railway_card("Grazing Goat Demons",
+#         Rarity.Standard,
+#         Location.TheHurlers,
+#         False, {
+#     # TODO might be playable? looks complicated
+# })
 
 # -------------------------------
 # ---- Opportunity Deck Math ----

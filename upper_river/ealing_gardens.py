@@ -255,11 +255,11 @@ def add_trades(active_player: Player, config):
             })
 
     # placeholder
-    trade(0, {
-        Item.MemoryOfALesserSelf: -1,
-        # Item.MemoryOfDiscordance: -1,
-        Item.Echo: 2.5
-    })
+    # trade(0, {
+    #     Item.MemoryOfALesserSelf: -1,
+    #     # Item.MemoryOfDiscordance: -1,
+    #     Item.Echo: 2.5
+    # })
 
     # TODO: display your painting option
 
