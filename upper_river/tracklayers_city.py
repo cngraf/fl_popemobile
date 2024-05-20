@@ -104,4 +104,15 @@ def add_trades(config: Config):
     #     Item.DubiousTestimony: 10_000
     # })
 
+    # Communing
+
+    # Needs 15 in 3 advanced stats to 100%
+    trade(11, {
+        Item.SearingEnigma: 1
+    })
+    
+    trade(11, {
+        Item.PrimaevalHint: 1
+    })
+
     

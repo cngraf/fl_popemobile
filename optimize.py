@@ -24,7 +24,9 @@ import decks.nadir
 import social_actions as SocialActions
 import bazaar as Bazaar
 import inventory_conversions as InventoryConversions
-import rat_market as RatMarket
+
+import old_rat_market
+import rat_market
 
 import professional_activities
 
@@ -110,23 +112,12 @@ Khanate
 Railway
 - TONS of shit
 - opportunity deck
-- TRACKLAYER CITY
 
 short term
 - Check out Red (free) cards esp. Discordance stuff
 - bone market exhaustion
     - model it as just 4/7ths of a point per day?
     - fuck maybe we have to move to a per-week basis blergh
-
-medium term
-- option to optimize for hinterland scrip instead of echoes
-    - fuck it optimize for any item
-    - it already does this, just the option for the terminal output
-    
-long term
-- incorporate a given character's capabilities
-    - what are your stats, what various options do you have unlocked
-    - in general more fine-grained control over the various base assumptions
 
 crackpot idea
 - normalize all trades to 1 echo where possible?
@@ -233,7 +224,7 @@ player_bal_licentiate = Player(
     ambition=Ambition.BagALegend,
     treasure=Treasure.WingedAndTalonedSteed,
     profession=Profession.Licentiate,
-        stats={
+    stats={
         Stat.Watchful: Player.baseline_watchful,
         Stat.Shadowy: 230 + 97,
         Stat.Dangerous: Player.baseline_dangerous + 6 + 13,
@@ -244,14 +235,26 @@ player_generic_licentiate = Player(
     ambition=Ambition.NoAmbition,
     treasure=Treasure.NoTreasure,
     profession=Profession.Licentiate,
-        stats={
+    stats={
         Stat.Watchful: Player.baseline_watchful,
         Stat.Shadowy: Player.baseline_shadowy + 6,
         Stat.Dangerous: Player.baseline_dangerous,
         Stat.Persuasive: Player.baseline_persuasive
     })
 
-active_player = player_third_city_silverer
+# aka my PC
+player_bal_monster_hunter = Player(
+    ambition=Ambition.BagALegend,
+    treasure=Treasure.WingedAndTalonedSteed,
+    profession=Profession.MonsterHunter,
+    stats={
+        Stat.Watchful: 230 + 98,
+        Stat.Shadowy: 230 + 82,
+        Stat.Dangerous: 230 + 96,
+        Stat.Persuasive: 230 + 75
+    })
+
+active_player = player_bal_monster_hunter
 
 # hack
 var_buffer = 6_000 # think this will just throw an error when it's too low
@@ -393,7 +396,9 @@ config.add(core_constraint)
 
 SocialActions.add_trades(config)
 Bazaar.add_trades(config)
-# RatMarket.add_trades(config)
+
+# old_rat_market.add_trades(config)
+rat_market.add_trades(config)
 
 professional_activities.add_trades(active_player, config)
 
@@ -411,7 +416,7 @@ london.bone_market.add_trades(active_player, config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
-# unterzee.port_cecil.add_trades(active_player, config)
+unterzee.port_cecil.add_trades(active_player, config)
 unterzee.zailing.add_trades(active_player, zailing_epa, config)
 
 parabola.add_trades(active_player, config)
@@ -434,7 +439,6 @@ firmament.hallows_throat.add_trades(config)
 fate.philosofruits.add_trades(active_player, config)
 fate.upwards.add_trades(active_player, config)
 fate.whiskerways.add_trades(config)
-
 
 # --------------
 # Upper River Deck

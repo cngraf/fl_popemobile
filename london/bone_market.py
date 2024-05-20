@@ -75,6 +75,15 @@ def bone_table():
         Bone(Item.BrightBrassSkull, 65, implausibility=2, addtl_costs={Item.NevercoldBrassSliver: -200}),
         Bone(Item.DuplicatedVakeSkull, 65, menace=3),
 
+        Bone(Item.FailedStygianIvorySkull, 2.5, implausibility=2),
+        Bone(Item.FailedHornedSkull, 12.5, anitquity=1, menace=1),
+        Bone(Item.FailedPentagrammaticSkull, 12.5, amalgamy=1, menace=1),
+        Bone(Item.FailedSkullInCoral, 17.5, amalgamy=1, implausibility=1, addtl_costs={Item.KnobOfScintillack: -1}),
+        Bone(Item.FailedPlatedSkull, 25, menace=1),
+        Bone(Item.FailedDoubledSkull, 30, anitquity=1, amalgamy=1),
+        Bone(Item.FailedSabreToothedSkull, 30, anitquity=1),
+        Bone(Item.BrightBrassSkull, 65, implausibility=6),
+
         Bone(Item.CrustaceanPincer, 0, menace=1),
         Bone(Item.KnottedHumerus, 3, amalgamy=1),
         Bone(Item.HumanArm, 2.5, menace=-1),
@@ -91,6 +100,8 @@ def bone_table():
         Bone(Item.AlbatrossWing, 12.5, amalgamy=1),
         Bone(Item.FinBonesCollected, 0.5),
         Bone(Item.AmberCrustedFin, 15, amalgamy=1, menace=1),
+
+        Bone(Item.FailedKnottedHumerus, 0.1, amalgamy=1, implausibility=2),
 
         Bone(Item.WitheredTentacle, 2.5, anitquity=-1),
         Bone(Item.JetBlackStinger, 2.5, menace=2),

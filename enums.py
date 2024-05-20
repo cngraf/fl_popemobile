@@ -452,6 +452,39 @@ class Item(Enum):
     WingOfAYoungTerrorBird = auto()
     WitheredTentacle = auto()
 
+    # Psueo-items for failed assembly checks
+    FailedStygianIvorySkull = auto()
+    FailedHornedSkull = auto()
+    FailedPentagrammaticSkull = auto()
+    FailedSkullInCoral = auto()
+    FailedPlatedSkull = auto()
+    FailedDoubledSkull = auto()
+    FailedSabreToothedSkull = auto()
+    FailedBrightBrassSkull = auto()
+
+    FailedKnottedHumerus = auto()
+    FailedFossilisedForelimb = auto()
+    FailedIvoryHumerus = auto()
+
+    FailedFemurOfAJurassicBeast = auto()
+    FailedHelicalThighbone = auto()
+    FailedHolyRelicOfTheThighOfStFiacre = auto()
+    FailedIvoryFemur = auto()
+
+    FailedBatWing = auto()
+    FailedWingOfAYoungTerrorBird = auto()
+    FailedAlbatrossWing = auto()
+    FailedFinBonesCollected = auto()
+    FailedAmberCrustedFin = auto()
+
+    FailedWitheredTentacle = auto()
+
+    FailedJetBlackStinger = auto()
+    FailedObsidianChitinTail = auto()
+    FailedPlasterTailBones = auto()
+    FailedTombLionsTail = auto()
+    FailedWitheredTentacleTail = auto()
+
     # Rag Trade
     SilkScrap = auto()
     SurfaceSilkScrap = auto()
@@ -664,6 +697,15 @@ class Item(Enum):
     CoverWitnessnes = auto()
     CoverCredentials = auto()
     CoverBackstory = auto()
+
+    CompletedPainting = auto()
+    PresentYourPaintingInLondon = auto()
+    PresentYourPaintingInHeliconHouse = auto()
+
+    PaintingIncendiary = auto()
+    PaintingLuminosity = auto()
+    PaintingNostalgic = auto()
+    PaintingAnyQuality = auto()
 
     MonographCautionary = auto()
     MonographTragic = auto()

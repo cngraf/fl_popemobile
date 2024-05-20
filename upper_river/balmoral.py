@@ -404,3 +404,169 @@ def add_trades(active_player, config: Config):
     })
 
     # TODO: other cash outs
+
+    # -------------------------
+    # ------- Painting --------
+    # -------------------------
+
+    trade(0, {
+        Item.PaintingIncendiary: -1,
+        Item.PaintingAnyQuality: 1
+    })
+
+    trade(0, {
+        Item.PaintingLuminosity: -1,
+        Item.PaintingAnyQuality: 1
+    })
+
+    trade(0, {
+        Item.PaintingNostalgic: -1,
+        Item.PaintingAnyQuality: 1
+    })
+
+    # Paint with Moonlight => Success
+    # TODO: Nontrivial challenge (Persuasive 200)
+    trade(0, {
+        Item.Moonlit: -2,
+        Item.MemoryOfALesserSelf: -2,
+        Item.MemoryOfLight: -10,
+
+        Item.PaintingLuminosity: 1,
+        Item.Inspired: 1
+    })
+
+    # Paint with Moonlight => Failure
+    trade(0, {
+        Item.Moonlit: -2,
+        Item.MemoryOfALesserSelf: -2,
+        Item.MemoryOfLight: -10,
+
+        Item.PaintingNostalgic: 1
+    })
+
+    # Subversive => Success
+    trade(0, {
+        Item.VitalIntelligence: -1,
+
+        Item.PaintingIncendiary: 1,
+        Item.RomanticNotion: 15
+    })
+
+    # Subversive => Failure
+    trade(0, {
+        Item.VitalIntelligence: -1,
+
+        Item.PaintingNostalgic: 1
+    })
+
+    # Paint! => success
+    # TODO: Nontrivial challenge (Persuasive 200)
+    trade(0, {
+        Item.TouchingLoveStory: -5,
+
+        Item.PaintingNostalgic: 1,
+        Item.RomanticNotion: 15
+    })
+
+    # Paint! => failure
+    trade(0, {
+        Item.TouchingLoveStory: -3,
+
+        Item.PaintingIncendiary: 1
+    })
+
+    # TODO: Confirm action costs for full carousel
+    # 
+
+    # 1 to start carousel
+    # 6 to paint
+    # 1 to finalize
+    # 1 to travel to London
+    # 1 to present
+    # 1 to return back to Balmoral (or to get there, if start/end in London)
+
+    trade(9, {
+        Item.CompletedPainting: 1
+    })
+
+    trade(2, {
+        Item.CompletedPainting: -1,
+        Item.PresentYourPaintingInLondon: 1,
+        Item.RumourOfTheUpperRiver: 2
+    })
+
+    trade(2, {
+        Item.CompletedPainting: -1,
+        Item.PresentYourPaintingInHeliconHouse: 1,
+        Item.RumourOfTheUpperRiver: 2
+    })    
+
+    trade(0, {
+        Item.PresentYourPaintingInLondon: -1,
+        Item.PaintingNostalgic: -4,
+        Item.PaintingAnyQuality: -2,
+
+        Item.BottleOfFourthCityAirag: 1,
+        Item.CellarOfWine: 1,
+        Item.SwornStatement: 2
+    })
+
+    trade(0, {
+        Item.PresentYourPaintingInLondon: -1,
+        Item.PaintingLuminosity: -4,
+        Item.PaintingAnyQuality: -2,
+
+        Item.ViennaOpening: 5,
+        Item.SwornStatement: 5,
+        Item.ParabolaLinenScrap: 1,
+        Item.BazaarPermit: 1
+    })
+
+    trade(0, {
+        Item.PresentYourPaintingInLondon: -1,
+        Item.PaintingIncendiary: -4,
+        Item.PaintingAnyQuality: -2,
+
+        Item.SkeletonWithSevenNecks: 1,
+        Item.SilentSoul: 1,
+        Item.ThirstyBombazineScrap: 2
+    })
+    
+    trade(0, {
+        Item.PresentYourPaintingInLondon: -1,        
+        Item.PaintingIncendiary: -3,
+        Item.PaintingNostalgic: -3,
+
+        Item.DiscordantSoul: 1,
+        Item.DirefulReflection: 1,
+        Item.MourningCandle: 2
+    })
+
+    trade(0, {
+        Item.PresentYourPaintingInLondon: -1,
+        Item.PaintingIncendiary: -3,
+        Item.PaintingLuminosity: -3,
+
+        Item.NightWhisper: 1,
+        Item.ViennaOpening: 5,
+        Item.ThirstyBombazineScrap: 5,
+        Item.BlackmailMaterial: 1
+    })
+
+    trade(0, {
+        Item.PresentYourPaintingInLondon: -1,
+        Item.PaintingIncendiary: -3,
+        Item.PaintingNostalgic: -3,
+
+        Item.BottleOfFourthCityAirag: 1,
+        Item.MourningCandle: 10,
+        Item.FavourInHighPlaces: 1
+    })
+
+    # TODO: Move to helicon house
+    trade(0, {
+        Item.PresentYourPaintingInLondon: -1,
+        Item.PaintingAnyQuality: -6,
+
+        Item.HinterlandScrip: 125
+    })
