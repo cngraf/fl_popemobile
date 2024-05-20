@@ -477,7 +477,7 @@ class Item(Enum):
     FailedFinBonesCollected = auto()
     FailedAmberCrustedFin = auto()
 
-    FailedWitheredTentacle = auto()
+    FailedWitheredTentacleLimb = auto()
 
     FailedJetBlackStinger = auto()
     FailedObsidianChitinTail = auto()

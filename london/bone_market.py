@@ -88,20 +88,33 @@ def bone_table():
         Bone(Item.KnottedHumerus, 3, amalgamy=1),
         Bone(Item.HumanArm, 2.5, menace=-1),
         Bone(Item.IvoryHumerus, 15),
-        Bone(Item.FossilisedForelimb, 15, anitquity=2),
+        Bone(Item.FossilisedForelimb, 27.5, anitquity=2),
         Bone(Item.FemurOfASurfaceDeer, 0.1, menace=-1),
         Bone(Item.UnidentifiedThighbone, 1),
         Bone(Item.FemurOfAJurassicBeast, 3, anitquity=1),
         Bone(Item.HelicalThighbone, 3, amalgamy=2),
         Bone(Item.HolyRelicOfTheThighOfStFiacre, 12.5),
         Bone(Item.IvoryFemur, 65),
+
+        Bone(Item.FailedKnottedHumerus, 0.1, amalgamy=1, implausibility=2),
+        Bone(Item.FailedFossilisedForelimb, 27.5, anitquity=1),
+        Bone(Item.FailedIvoryHumerus, 15, implausibility=2),
+        Bone(Item.FailedFemurOfAJurassicBeast, 3, anitquity=1, implausibility=2),
+        Bone(Item.FailedHelicalThighbone, 3, amalgamy=1),
+        Bone(Item.FailedHolyRelicOfTheThighOfStFiacre, 12.5, implausibility=2),
+        Bone(Item.FailedIvoryFemur, 65, implausibility=4),        
+
         Bone(Item.BatWing, 0.01, menace=-1),
         Bone(Item.WingOfAYoungTerrorBird, 2.5, anitquity=1, menace=1),
         Bone(Item.AlbatrossWing, 12.5, amalgamy=1),
         Bone(Item.FinBonesCollected, 0.5),
         Bone(Item.AmberCrustedFin, 15, amalgamy=1, menace=1),
 
-        Bone(Item.FailedKnottedHumerus, 0.1, amalgamy=1, implausibility=2),
+        Bone(Item.FailedBatWing, 0.01, menace=-1, implausibility=2),
+        Bone(Item.FailedWingOfAYoungTerrorBird, 2.5, anitquity=1, menace=1, implausibility=2),
+        Bone(Item.FailedAlbatrossWing, 12.5, amalgamy=1, implausibility=2), # TODO: confirm
+        Bone(Item.FailedFinBonesCollected, 0.5, implausibility=2),
+        Bone(Item.FailedAmberCrustedFin, 15, amalgamy=1, implausibility=2),
 
         Bone(Item.WitheredTentacle, 2.5, anitquity=-1),
         Bone(Item.JetBlackStinger, 2.5, menace=2),
@@ -109,6 +122,14 @@ def bone_table():
         Bone(Item.TombLionsTail, 2.5, anitquity=1),
         Bone(Item.ObsidianChitinTail, 5, amalgamy=1),
 
+        Bone(Item.FailedWitheredTentacleLimb, 0.5, anitquity=-1, implausibility=1),
+        Bone(Item.FailedWitheredTentacleTail, 2.5, anitquity=-1, implausibility=2),
+        Bone(Item.FailedJetBlackStinger, 2.5, menace=1),
+        Bone(Item.FailedPlasterTailBones, 2.5, implausibility=4),
+        Bone(Item.FailedTombLionsTail, 2.5),
+        Bone(Item.FailedObsidianChitinTail, 5),
+
+        # TODO: modifications
         # Bone(Item.FourMoreJoints, 0, amalgamy=2),
     ):
         dictionary[bone.item] = bone
@@ -621,7 +642,9 @@ def add_trades(player: Player, config: Config):
         Item.DuplicatedVakeSkull,
         Item.SabreToothedSkull,
         Item.PlatedSkull,
-        Item.HornedSkull):
+        Item.HornedSkull,
+        Item.FailedHornedSkull,
+        Item.FailedSabreToothedSkull):
 
         # TODO: 1/1 split
         for i in range(0, 3):
@@ -757,6 +780,18 @@ def add_trades(player: Player, config: Config):
         
         gothic_tales_trade(trade, player,
             recipe={
+                Item.AntiquityReptileAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -3,
+                Item.HolyRelicOfTheThighOfStFiacre: -1,
+                Item.FailedJetBlackStinger: -1
+            },
+            zoo_type=ZooType.Reptile,
+            fluctuations=Fluctuations.Antiquity)        
+        
+        gothic_tales_trade(trade, player,
+            recipe={
                 Item.MenaceReptileAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -765,7 +800,19 @@ def add_trades(player: Player, config: Config):
                 Item.JetBlackStinger: -1
             },
             zoo_type=ZooType.Reptile,
-            fluctuations=Fluctuations.Menace)         
+            fluctuations=Fluctuations.Menace)
+
+        gothic_tales_trade(trade, player,
+            recipe={
+                Item.MenaceReptileAction: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.FemurOfAJurassicBeast: -3,
+                Item.HolyRelicOfTheThighOfStFiacre: -1,
+                Item.FailedJetBlackStinger: -1
+            },
+            zoo_type=ZooType.Reptile,
+            fluctuations=Fluctuations.Menace)           
            
         zailor_particular_trade(trade, player,
             recipe={
@@ -989,7 +1036,11 @@ def add_trades(player: Player, config: Config):
             Item.PlatedSkull,
             Item.PentagrammicSkull, 
             Item.DuplicatedVakeSkull,
-            Item.DoubledSkull
+            Item.DoubledSkull,
+
+            Item.FailedHornedSkull,
+            Item.FailedSabreToothedSkull,
+            Item.FailedDoubledSkull
         ]
 
         num_skull_types = len(other_skull_types)

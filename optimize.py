@@ -257,7 +257,9 @@ player_bal_monster_hunter = Player(
 active_player = player_bal_monster_hunter
 
 # hack
-var_buffer = 6_000 # think this will just throw an error when it's too low
+# `IndexError: list assignment index out of range` => increase this number
+# most of this is bone market combinatoric shit
+var_buffer = 10_000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
