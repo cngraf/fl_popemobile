@@ -7,12 +7,12 @@ def add_trades(active_player, config):
     # Port Cecil
     # -------------
 
-    # 7? actions to zail from london? 4 + 2 + 1
-    # TODO: check round trip length
-    trade(14, {
-        Item.PortCecilCycles: 4, # arbitrary, how many times thru before home
-        Item.ZailingDraws: 12
-    })
+    # # 7? actions to zail from london? 4 + 2 + 1
+    # # TODO: check round trip length
+    # trade(14, {
+    #     Item.PortCecilCycles: 4, # arbitrary, how many times thru before home
+    #     Item.ZailingDraws: 12
+    # })
 
     # ideal cycle w/ maxed stats
     # - 13 AotRS (reliable but less profitable w less)
@@ -24,8 +24,10 @@ def add_trades(active_player, config):
     # 2x (deploy cat wrangling => 30x silvered cats claw)
     #   OR (distact w wildlife => 4x withered tentacle)
 
-    trade(14, {
-        Item.PortCecilCycles: -1,
+    trade(1, { Item.PortCecilAction: 1 })
+
+    trade(0, {
+        Item.PortCecilAction: -14,
         Item.MapScrap: 35,
         Item.KnobOfScintillack: 5,
         Item.ScrapOfIncendiaryGossip: 5,
@@ -36,10 +38,29 @@ def add_trades(active_player, config):
         Item.SegmentedRibcage: 3
     })
 
-    # alternative in carousel
     trade(0, {
-        Item.WitheredTentacle: -4,
-        Item.SilveredCatsClaw: 30
+        Item.PortCecilAction: -14,
+        Item.MapScrap: 35,
+        Item.KnobOfScintillack: 5,
+        Item.ScrapOfIncendiaryGossip: 5,
+        Item.RomanticNotion: 7,
+        Item.JournalOfInfamy: 30,
+        Item.WitheredTentacle: 4,
+        Item.SilveredCatsClaw: 30,
+        Item.LostResearchAssistant: 1,
+        Item.SegmentedRibcage: 3
+    })
+
+    trade(0, {
+        Item.PortCecilAction: -14,
+        Item.MapScrap: 35,
+        Item.KnobOfScintillack: 5,
+        Item.ScrapOfIncendiaryGossip: 5,
+        Item.RomanticNotion: 7,
+        Item.JournalOfInfamy: 30,
+        Item.SilveredCatsClaw: 60,
+        Item.LostResearchAssistant: 1,
+        Item.SegmentedRibcage: 3
     })
 
     # slightly less profitable but more achievable grind
@@ -51,8 +72,8 @@ def add_trades(active_player, config):
     # 3x bring refreshments
     # 1x distract cats w/ wildlife
 
-    trade (14, {
-        Item.PortCecilCycles: -1,
+    trade(0, {
+        Item.PortCecilAction: -14,
         Item.ZeeZtory: 6 * 5,
         Item.ScrapOfIncendiaryGossip: 5,
         Item.RomanticNotion: 7,

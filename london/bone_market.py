@@ -35,6 +35,7 @@ class Bone():
                  menace: int = 0,
                  theology: int = 0,
                  implausibility: int = 0,
+                 skulls: int = 0,
                  addtl_costs: dict = {}):
         self.item = item
         self.echo_value = echo_value
@@ -43,6 +44,7 @@ class Bone():
         self.menace = menace
         self.theology = theology
         self.implausibility = implausibility
+        self.skulls = skulls
         self.addtl_costs = addtl_costs
 
 def bone_table():
@@ -56,33 +58,33 @@ def bone_table():
         Bone(Item.SkeletonWithSevenNecks, 62.5, amalgamy=2, menace=1),
         Bone(Item.FlourishingRibcage, 12.5, amalgamy=2),
         Bone(Item.MammothRibcage, 62.5, anitquity=2),
-        Bone(Item.RibcageWithABoutiqueOfEightSpines, 312.5, amalgamy=1,menace=1),
+        Bone(Item.RibcageWithABoutiqueOfEightSpines, 312.5, amalgamy=1,menace=2),
         Bone(Item.LeviathanFrame, 312.5, anitquity=1, menace=1),
         Bone(Item.PrismaticFrame, 312.5, anitquity=2, amalgamy=2),
         Bone(Item.FivePointedRibcage, 312.5, amalgamy=2, menace=1),
 
-        Bone(Item.VictimsSkull, 2.5),
+        Bone(Item.VictimsSkull, 2.5, skulls=1),
         Bone(Item.CarvedBallOfStygianIvory, 2.5),
-        Bone(Item.RubberySkull, 6, amalgamy=1),
-        Bone(Item.HornedSkull, 12.5, anitquity=1, menace=2),
-        Bone(Item.PentagrammicSkull, 12.5, amalgamy=2, menace=2),
-        Bone(Item.DuplicatedCounterfeitHeadOfJohnTheBaptist, 12.5, theology=1),
-        Bone(Item.SkullInCoral, 17.5, amalgamy=2, addtl_costs={Item.KnobOfScintillack: -1}),
-        Bone(Item.PlatedSkull, 25, menace=2),
-        Bone(Item.EyelessSkull, 30, menace=2),
-        Bone(Item.DoubledSkull, 30, anitquity=2, amalgamy=1),
-        Bone(Item.SabreToothedSkull, 30, anitquity=1, menace=1),
-        Bone(Item.BrightBrassSkull, 65, implausibility=2, addtl_costs={Item.NevercoldBrassSliver: -200}),
-        Bone(Item.DuplicatedVakeSkull, 65, menace=3),
+        Bone(Item.RubberySkull, 6, amalgamy=1, skulls=1),
+        Bone(Item.HornedSkull, 12.5, anitquity=1, menace=2, skulls=1),
+        Bone(Item.PentagrammicSkull, 12.5, amalgamy=2, menace=2, skulls=1),
+        Bone(Item.DuplicatedCounterfeitHeadOfJohnTheBaptist, 12.5, theology=1, skulls=1),
+        Bone(Item.SkullInCoral, 17.5, amalgamy=2, skulls=1, addtl_costs={Item.KnobOfScintillack: -1}),
+        Bone(Item.PlatedSkull, 25, menace=2, skulls=1),
+        Bone(Item.EyelessSkull, 30, menace=2, skulls=1),
+        Bone(Item.DoubledSkull, 30, anitquity=2, amalgamy=1, skulls=2),
+        Bone(Item.SabreToothedSkull, 30, anitquity=1, menace=1, skulls=1),
+        Bone(Item.BrightBrassSkull, 65, implausibility=2, skulls=1, addtl_costs={Item.NevercoldBrassSliver: -200}),
+        Bone(Item.DuplicatedVakeSkull, 65, menace=3, skulls=1),
 
-        Bone(Item.FailedStygianIvorySkull, 2.5, implausibility=2),
-        Bone(Item.FailedHornedSkull, 12.5, anitquity=1, menace=1),
-        Bone(Item.FailedPentagrammaticSkull, 12.5, amalgamy=1, menace=1),
-        Bone(Item.FailedSkullInCoral, 17.5, amalgamy=1, implausibility=1, addtl_costs={Item.KnobOfScintillack: -1}),
-        Bone(Item.FailedPlatedSkull, 25, menace=1),
-        Bone(Item.FailedDoubledSkull, 30, anitquity=1, amalgamy=1),
-        Bone(Item.FailedSabreToothedSkull, 30, anitquity=1),
-        Bone(Item.BrightBrassSkull, 65, implausibility=6),
+        Bone(Item.FailedStygianIvorySkull, 2.5, implausibility=2, skulls=1),
+        Bone(Item.FailedHornedSkull, 12.5, anitquity=1, menace=1, skulls=1),
+        Bone(Item.FailedPentagrammaticSkull, 12.5, amalgamy=1, menace=1, skulls=1),
+        Bone(Item.FailedSkullInCoral, 17.5, amalgamy=1, implausibility=1, skulls=1, addtl_costs={Item.KnobOfScintillack: -1}),
+        Bone(Item.FailedPlatedSkull, 25, menace=1, skulls=1),
+        Bone(Item.FailedDoubledSkull, 30, anitquity=1, amalgamy=1, skulls=2),
+        Bone(Item.FailedSabreToothedSkull, 30, anitquity=1, skulls=1),
+        Bone(Item.FailedBrightBrassSkull, 65, implausibility=6, skulls=1),
 
         Bone(Item.CrustaceanPincer, 0, menace=1),
         Bone(Item.KnottedHumerus, 3, amalgamy=1),
@@ -159,6 +161,7 @@ def create_skeleton(recipe: dict):
             result.amalgamy += bone.amalgamy * count
             result.menace += bone.menace * count
             result.theology += bone.theology * count
+            result.skulls += bone.skulls * count
             result.implausibility += bone.implausibility * count
             for i in range(0, count):
                 result.addtl_costs = utils.sum_dicts(result.addtl_costs, bone.addtl_costs)
@@ -324,6 +327,36 @@ def naive_collector_trade(trade,
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
+def bohemian_sculptress_trade(trade,
+                        player: Player,
+                       recipe: dict,
+                       zoo_type: ZooType = ZooType.NoType,
+                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+    payout = {}
+
+    skeleton = create_skeleton(recipe)
+    zoo_multi = zoo_multiplier(zoo_type)
+
+    payout = {
+        Item.PreservedSurfaceBlooms: 4 + (skeleton.echo_value * zoo_multi / 2.5),
+        Item.RumourOfTheUpperRiver: skeleton.theology
+    }
+
+    avg_failures = expected_failed_sell_attempts(player,
+                        skeleton,
+                        zoo_type == ZooType.Chimera,
+                        dc_per_point=50)
+    
+    action_type = match_action_type(zoo_type, fluctuations)
+
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+    trade(0, totals)
+
 
 def hoarding_paleo_trade(trade,
                         player: Player,
@@ -355,8 +388,7 @@ def hoarding_paleo_trade(trade,
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
-def tentacled_entrepreneur_trade(trade,
-                        player: Player,
+def tentacled_entrepreneur_trade(config,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
                        fluctuations: Fluctuations = Fluctuations.NoQuality):
@@ -375,7 +407,7 @@ def tentacled_entrepreneur_trade(trade,
             Item.FinalBreath: 4 * (prop_a ** flux_power)
         }
 
-    avg_failures = expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
+    avg_failures = expected_failed_sell_attempts(config.player, skeleton, zoo_type == ZooType.Chimera)
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
@@ -384,7 +416,7 @@ def tentacled_entrepreneur_trade(trade,
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
-    trade(0, totals)
+    config.trade(0, totals)
  
 def ambassador_trade(trade,
                         player: Player,
@@ -516,19 +548,19 @@ def zailor_particular_trade(trade,
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
-def rubbery_collector_trade(trade,
-                        player: Player,
+def rubbery_collector_trade(config,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Fluctuations = Fluctuations.NoQuality,
+                       debug: bool = False):
     payout = {}
 
     skeleton = create_skeleton(recipe)
-    prop_a = skeleton.antiquity
-    prop_b = skeleton.amalgamy
+    prop_a = skeleton.amalgamy
+    prop_b = skeleton.menace
 
-    bonus_a = 0.5 if fluctuations == Fluctuations.Antiquity else 0
-    bonus_b = 0.5 if fluctuations == Fluctuations.Amalgamy else 0
+    bonus_a = 0.5 if fluctuations == Fluctuations.Amalgamy else 0
+    bonus_b = 0.5 if fluctuations == Fluctuations.Menace else 0
 
     if prop_a >= 1 and prop_b >= 1:
         zoo_multi = zoo_multiplier(zoo_type)
@@ -539,7 +571,7 @@ def rubbery_collector_trade(trade,
             Item.BasketOfRubberyPies: (prop_a + bonus_b) * (prop_b + bonus_a)
         }
 
-    avg_failures = expected_failed_sell_attempts(player, skeleton, zoo_type == ZooType.Chimera)
+    avg_failures = expected_failed_sell_attempts(config.player, skeleton, zoo_type == ZooType.Chimera)
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
@@ -547,8 +579,112 @@ def rubbery_collector_trade(trade,
         Item.Suspicion: 2 * avg_failures * 0.85
     }
 
+    if debug:
+        print(payout)
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
-    trade(0, totals)
+    config.trade(0, totals)
+
+def phantasist_amalgamy_trade(config: Config,
+                                    recipe: dict,
+                                    zoo_type: ZooType = ZooType.NoType):
+
+    player = config.player
+    payout = {}
+
+    skeleton = create_skeleton(recipe)
+    prop = skeleton.amalgamy
+    imp = skeleton.implausibility
+
+    if prop >= 4 and imp >= 2:
+        zoo_multi = zoo_multiplier(zoo_type)
+
+        payout = {
+            Item.BoneMarketExhaustion: math.floor((imp * prop + 1)/20),
+            Item.HinterlandScrip: 2 + (skeleton.echo_value * zoo_multi * 2),
+            Item.SlimVolumeOfBazaarinePoetry: 1 + imp * prop
+        }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
+    config.trade(0, totals)    
+
+def phantasist_antiquity_trade(config: Config,
+                                    recipe: dict,
+                                    zoo_type: ZooType = ZooType.NoType):
+
+    player = config.player
+    payout = {}
+
+    skeleton = create_skeleton(recipe)
+    prop = skeleton.antiquity
+    imp = skeleton.implausibility
+
+    if prop >= 4 and imp >= 2:
+        zoo_multi = zoo_multiplier(zoo_type)
+
+        payout = {
+            Item.BoneMarketExhaustion: math.floor((imp * prop + 1)/20),
+            Item.MemoryOfLight: 2 + (skeleton.echo_value * zoo_multi * 2),
+            Item.KnobOfScintillack: 1 + imp * prop
+        }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
+    config.trade(0, totals)
+
+
+def phantasist_menace_trade(config: Config,
+                                    recipe: dict,
+                                    zoo_type: ZooType = ZooType.NoType):
+
+    player = config.player
+    payout = {}
+
+    skeleton = create_skeleton(recipe)
+    prop = skeleton.menace
+    imp = skeleton.implausibility
+    if prop >= 4 and imp >= 2:
+        zoo_multi = zoo_multiplier(zoo_type)
+
+        payout = {
+            Item.BoneMarketExhaustion: math.floor((imp * prop + 1)/20),
+            Item.HinterlandScrip: 2 + (skeleton.echo_value * zoo_multi * 2),
+            Item.CarvedBallOfStygianIvory: 1 + imp * prop
+        }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
+    config.trade(0, totals)
+
+def enthusiast_skulls_trade(config: Config,
+                                    recipe: dict,
+                                    zoo_type: ZooType = ZooType.NoType):
+
+    player = config.player
+    payout = {}
+
+    skeleton = create_skeleton(recipe)
+    skulls = skeleton.skulls
+
+    if skulls >= 2:
+        zoo_multi = zoo_multiplier(zoo_type)
+
+        payout = {
+            Item.BoneMarketExhaustion: math.floor(((skulls - 1) ** 1.8)/4),
+            Item.PieceOfRostygold: (skeleton.echo_value * zoo_multi * 100),
+            Item.VitalIntelligence: math.floor((skulls - 1) ** 1.8)
+        }
+
+    avg_failures = expected_failed_sell_attempts(player, skeleton,
+                                                zoo_type == ZooType.Chimera,
+                                                dc_per_point=60)
+    action_type = match_action_type(zoo_type, Fluctuations.NoQuality)
+
+    failure_penalty = {
+        action_type: -1 * avg_failures,
+        Item.Suspicion: 2 * avg_failures * 0.85
+    }
+
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+    totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
+    config.trade(0, totals)
 
 def expected_failed_sell_attempts(player, skeleton: Bone, is_chimera: bool = False, dc_per_point: int = 75):
     challenge_dc = dc_per_point * (skeleton.implausibility)
@@ -571,10 +707,10 @@ def add_trades(player: Player, config: Config):
         Item.WingOfAYoungTerrorBird: 2
     })
 
-    trade(0, {
-        Item.Echo: -62.5,
-        Item.BrightBrassSkull: 1
-    })
+    # trade(0, {
+    #     Item.Echo: -62.5,
+    #     Item.BrightBrassSkull: 1
+    # })
 
     # Buy from patrons
 
@@ -588,6 +724,38 @@ def add_trades(player: Player, config: Config):
         Item.IvoryHumerus: 1
     })
 
+    # Failed Items
+    trade(0, { Item.CarvedBallOfStygianIvory: -1, Item.FailedStygianIvorySkull: 1 })
+    trade(0, { Item.HornedSkull: -1, Item.FailedHornedSkull: 1 })
+    trade(0, { Item.PentagrammicSkull: -1, Item.FailedPentagrammaticSkull: 1 })
+    trade(0, { Item.SkullInCoral: -1, Item.FailedSkullInCoral: 1 })
+    trade(0, { Item.PlatedSkull: -1, Item.FailedPlatedSkull: 1 })
+    trade(0, { Item.DoubledSkull: -1, Item.FailedDoubledSkull: 1 })
+    trade(0, { Item.SabreToothedSkull: -1, Item.FailedSabreToothedSkull: 1 })
+    trade(0, { Item.BrightBrassSkull: -1, Item.FailedBrightBrassSkull: 1 })
+
+    trade(0, { Item.KnottedHumerus: -1, Item.FailedKnottedHumerus: 1 })
+    trade(0, { Item.FossilisedForelimb: -1, Item.FailedFossilisedForelimb: 1 })
+    trade(0, { Item.IvoryHumerus: -1, Item.FailedIvoryHumerus: 1 })
+
+    trade(0, { Item.FemurOfAJurassicBeast: -1, Item.FailedFemurOfAJurassicBeast: 1 })
+    trade(0, { Item.HelicalThighbone: -1, Item.FailedHelicalThighbone: 1 })
+    trade(0, { Item.HolyRelicOfTheThighOfStFiacre: -1, Item.FailedHolyRelicOfTheThighOfStFiacre: 1 })
+    trade(0, { Item.IvoryFemur: -1, Item.FailedIvoryFemur: 1 })
+
+    trade(0, { Item.BatWing: -1, Item.FailedBatWing: 1 })
+    trade(0, { Item.WingOfAYoungTerrorBird: -1, Item.FailedWingOfAYoungTerrorBird: 1 })
+    trade(0, { Item.AlbatrossWing: -1, Item.FailedAlbatrossWing: 1 })
+    trade(0, { Item.FinBonesCollected: -1, Item.FailedFinBonesCollected: 1 })
+    trade(0, { Item.AmberCrustedFin: -1, Item.FailedAmberCrustedFin: 1 })
+
+    trade(0, { Item.JetBlackStinger: -1, Item.FailedJetBlackStinger: 1 })
+    trade(0, { Item.ObsidianChitinTail: -1, Item.FailedObsidianChitinTail: 1 })
+    trade(0, { Item.PlasterTailBones: -1, Item.FailedPlasterTailBones: 1 })
+    trade(0, { Item.TombLionsTail: -1, Item.FailedTombLionsTail: 1 })
+
+    trade(0, { Item.WitheredTentacle: -1, Item.FailedWitheredTentacleLimb: 1 })
+    trade(0, { Item.WitheredTentacle: -1, Item.FailedWitheredTentacleTail: 1 })
 
     # -----------------
     # Sell To Patrons
@@ -597,6 +765,63 @@ def add_trades(player: Player, config: Config):
         Item.HumanRibcage: -1,
         Item.IncisiveObservation: 30
     })
+
+    # Value estimates to hit 5.7 EPA
+    # trade(0, {
+    #     Item.SkeletonWithSevenNecks: -1,
+    #     Item.Echo: 84
+    # })
+    # needs about 153 in profit per skeleton
+    # 
+
+    # # ----- Test
+
+    # # Identify items that can be acquired profitably
+    # for (item, data) in bone_table().items():
+    #     blacklist = [
+    #         # Infintite loop
+    #         Item.BrightBrassSkull,
+    #         Item.FailedBrightBrassSkull,
+    #         Item.ASkeletonOfYourOwn,
+    #         Item.VictimsSkull,
+
+    #         # Profitable Tier 1
+    #         Item.DuplicatedCounterfeitHeadOfJohnTheBaptist,
+    #         Item.WingOfAYoungTerrorBird,
+    #         Item.FailedWingOfAYoungTerrorBird,
+
+    #         # Tier 2
+    #         Item.WitheredTentacle,
+    #         Item.FailedWitheredTentacleTail,
+
+    #         # Tier 3
+    #         Item.DuplicatedVakeSkull,
+    #         Item.HumanArm,
+    #         Item.UnidentifiedThighbone,
+    #         Item.PlasterTailBones,
+    #         Item.JetBlackStinger,
+    #         Item.FailedJetBlackStinger,
+
+    #         # Tier 4 - below TLC communing
+    #         Item.SkullInCoral,
+    #         Item.FailedSkullInCoral,
+
+    #         # Tier 5 - only with 1.15 zoo bonus
+    #         Item.AlbatrossWing,
+    #         Item.FailedAlbatrossWing,
+    #         Item.PlasterTailBones,
+    #         Item.FailedPlasterTailBones,
+    #         Item.HolyRelicOfTheThighOfStFiacre,
+    #         Item.FailedWitheredTentacleLimb,
+    #         Item.RibcageWithABoutiqueOfEightSpines
+    #     ]
+    #     if item in blacklist:
+    #         pass
+    #     else:
+    #         trade(0, {
+    #             item: -1,
+    #             Item.Echo: data.echo_value * 1.15
+    #         })
 
     # -------------------------
     # ------- Recipes ---------
@@ -615,7 +840,7 @@ def add_trades(player: Player, config: Config):
 
     if player.profession == Profession.Licentiate:
         trade(0, { Item.ASkeletonOfYourOwn: 1 })
-        trade(0, { Item.VictimsSkulls })
+        trade(0, { Item.VictimsSkull: 1 })
 
     trade(0, {
         Item.BoneFragments: -500,
@@ -643,10 +868,33 @@ def add_trades(player: Player, config: Config):
         Item.SabreToothedSkull,
         Item.PlatedSkull,
         Item.HornedSkull,
+        Item.DoubledSkull,
+
         Item.FailedHornedSkull,
         Item.FailedSabreToothedSkull):
 
-        # TODO: 1/1 split
+        # Chimera
+        gothic_tales_trade(trade, player, 
+            recipe={
+                Item.AntiquityGeneralAction: -6,
+                Item.LeviathanFrame: -1,
+                skull_type: -1,
+                Item.WingOfAYoungTerrorBird: -2
+            },
+            zoo_type=ZooType.Chimera,
+            fluctuations=Fluctuations.Antiquity)
+        
+        gothic_tales_trade(trade, player, 
+            recipe={
+                Item.MenaceGeneralAction: -6,
+                Item.LeviathanFrame: -1,
+                skull_type: -1,
+                Item.WingOfAYoungTerrorBird: -2
+            },
+            zoo_type=ZooType.Chimera,
+            fluctuations=Fluctuations.Menace)   
+
+        # Fish
         for i in range(0, 3):
             amber_fins = -1 * i
             fin_bones_collected = -2 -amber_fins
@@ -662,7 +910,7 @@ def add_trades(player: Player, config: Config):
                 zoo_type=ZooType.Fish,
                 fluctuations=Fluctuations.Antiquity)
 
-            tentacled_entrepreneur_trade(trade, player,
+            tentacled_entrepreneur_trade(config,
                 recipe={
                     Item.AmalgamyFishAction: -6,
                     Item.LeviathanFrame: -1,
@@ -704,7 +952,7 @@ def add_trades(player: Player, config: Config):
                     Item.FinBonesCollected: fin_bones_collected
                 },
                 zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Menace)
+                fluctuations=Fluctuations.Menace)            
             
             zailor_particular_trade(trade, player,
                 recipe={
@@ -728,7 +976,7 @@ def add_trades(player: Player, config: Config):
                 zoo_type=ZooType.Fish,
                 fluctuations=Fluctuations.Amalgamy)
             
-            rubbery_collector_trade(trade, player,
+            rubbery_collector_trade(config,
                 recipe={
                     Item.AmalgamyFishAction: -6,
                     Item.LeviathanFrame: -1,
@@ -739,7 +987,7 @@ def add_trades(player: Player, config: Config):
                 zoo_type=ZooType.Fish,
                 fluctuations=Fluctuations.Amalgamy)         
 
-            rubbery_collector_trade(trade, player,
+            rubbery_collector_trade(config,
                 recipe={
                     Item.MenaceFishAction: -6,
                     Item.LeviathanFrame: -1,
@@ -881,7 +1129,8 @@ def add_trades(player: Player, config: Config):
     # })
 
     # -------------------------------
-    # ----- Human Ribcage
+    # ----- Human Ribcage -----------
+    # -------------------------------
 
     # # 0/6/3 humanoid
     # trade(8, {
@@ -901,6 +1150,26 @@ def add_trades(player: Player, config: Config):
     #     Item.NightsoilOfTheBazaar: utils.skelly_value_in_items(12.5 + 65 + (27.5 * 2) + (3 * 2), 0.5, False),
     #     Item.CarvedBallOfStygianIvory: 21,
     # })
+
+    gothic_tales_trade(trade, player,
+        recipe={
+            Item.AntiquityGeneralAction: -8,
+            Item.HumanRibcage: -1,
+            Item.DuplicatedVakeSkull: -1,
+            Item.FossilisedForelimb: -1,
+            Item.FailedFossilisedForelimb: -1,
+            Item.FemurOfAJurassicBeast: -2
+        },
+        zoo_type=ZooType.Humanoid,
+        fluctuations=Fluctuations.Antiquity)
+    
+    # phantasist_menace_trade(trade, player,
+    #     recipe={
+    #         Item.HumanRibcage: -1,
+    #         Item.FailedBrightBrassSkull: -1,
+
+    #     },
+    #     zoo_type=ZooType.Chimera)
 
     '''
     "Biblically Inaccurate Angel"
@@ -1024,6 +1293,68 @@ def add_trades(player: Player, config: Config):
     
     # Generator Skeleton, various
 
+    # Okay we want 3 imp, and 6 of either menace or antiquity
+    # or 2 and 9
+
+    # # 6 menace, 3 imp
+    # phantasist_menace_trade(config,
+    #     recipe={
+    #         Item.GeneralBirdAction: -12,
+    #         Item.SkeletonWithSevenNecks: -1,
+    #         Item.FailedSkullInCoral: -1,
+    #         Item.BrightBrassSkull: -1,
+    #         Item.DuplicatedVakeSkull: -1,
+    #         Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: -4,
+    #         Item.WingOfAYoungTerrorBird: -2
+    #     },
+    #     zoo_type=ZooType.Bird)
+    
+    # # 9 men, 2 imp
+    # # actually not sure if this works
+    # phantasist_menace_trade(config,
+    #     recipe={
+    #         Item.GeneralBirdAction: -12,
+    #         Item.SkeletonWithSevenNecks: -1,
+    #         Item.BrightBrassSkull: -1,
+    #         Item.DuplicatedVakeSkull: -3,
+    #         Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: -3,
+    #         Item.WingOfAYoungTerrorBird: -2
+    #     },
+    #     zoo_type=ZooType.Bird)
+    
+    # phantasist_menace_trade(config,
+    #     recipe={
+    #         Item.GeneralBirdAction: -12,
+    #         Item.SkeletonWithSevenNecks: -1,
+    #         Item.DuplicatedVakeSkull: -4,
+    #         Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: -3,
+    #         Item.WingOfAYoungTerrorBird: -2
+    #     },
+    #     zoo_type=ZooType.Bird)
+
+    rubbery_collector_trade(config,
+        recipe={
+            Item.AmalgamyBirdAction: -12,
+            Item.SkeletonWithSevenNecks: -1,
+            Item.SkullInCoral: -7,
+            Item.AlbatrossWing: -2
+        },
+        zoo_type=ZooType.Bird,
+        fluctuations=Fluctuations.Amalgamy, debug=True)
+    
+    rubbery_collector_trade(config,
+        recipe={
+            Item.AmalgamyBirdAction: -16,
+            Item.RibcageWithABoutiqueOfEightSpines: -1,
+            Item.SkullInCoral: -8,
+            Item.AlbatrossWing: -2,
+            Item.FemurOfASurfaceDeer: -1,
+            Item.UnidentifiedThighbone: -1,
+            Item.WitheredTentacle: -1
+        },
+        zoo_type=ZooType.Bird,
+        fluctuations=Fluctuations.Amalgamy, debug=True)    
+
     # Define the target sum
     seven_skulls = 7
 
@@ -1034,13 +1365,15 @@ def add_trades(player: Player, config: Config):
             Item.SkullInCoral,
             Item.SabreToothedSkull,
             Item.PlatedSkull,
-            Item.PentagrammicSkull, 
+            # Item.PentagrammicSkull, 
+            Item.DuplicatedCounterfeitHeadOfJohnTheBaptist,
             Item.DuplicatedVakeSkull,
             Item.DoubledSkull,
 
             Item.FailedHornedSkull,
             Item.FailedSabreToothedSkull,
-            Item.FailedDoubledSkull
+            Item.FailedDoubledSkull,
+            Item.FailedSkullInCoral
         ]
 
         num_skull_types = len(other_skull_types)
@@ -1058,7 +1391,7 @@ def add_trades(player: Player, config: Config):
                     num_skull_2 = seven_skulls - brass_skulls - num_skull_1
 
                     # Memory of Distant Shores & Volumes of Collated Research
-                    tentacled_entrepreneur_trade(trade, player,
+                    tentacled_entrepreneur_trade(config,
                         recipe={
                             Item.AmalgamyBirdAction: -12,
                             Item.SkeletonWithSevenNecks: -1,
@@ -1070,7 +1403,7 @@ def add_trades(player: Player, config: Config):
                         zoo_type=ZooType.Bird,
                         fluctuations=Fluctuations.Amalgamy)
                     
-                    tentacled_entrepreneur_trade(trade, player,
+                    tentacled_entrepreneur_trade(config,
                         recipe={
                             Item.GeneralBirdAction: -12,
                             Item.SkeletonWithSevenNecks: -1,
@@ -1119,7 +1452,7 @@ def add_trades(player: Player, config: Config):
                             Item.WingOfAYoungTerrorBird: -2
                         },
                         zoo_type=ZooType.Bird,
-                        fluctuations=Fluctuations.NoQuality)                    
+                        fluctuations=Fluctuations.NoQuality)       
 
 
     # ------------------------------------------------
@@ -1164,6 +1497,9 @@ def add_trades(player: Player, config: Config):
         zoo_type=ZooType.Chimera,
         fluctuations=Fluctuations.Antiquity)       
 
+    # ------------------------------------------------
+    # ------------ Segmented Ribcage -----------------
+    # ------------------------------------------------
 
     # TODO: organize this
     # Random Stuff

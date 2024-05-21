@@ -2,6 +2,8 @@ from enums import *
 from utils import *
 from config import Config
 
+# TODO: multiple files?
+
 def add_trades(active_player, config: Config):
     trade = config.trade
     player = config.player
@@ -97,7 +99,9 @@ def add_trades(active_player, config: Config):
         Item.KnottedHumerus: 2
     })    
 
-    # ------- Cabinet Noir
+    # ---------------------------------
+    # ------- Cabinet Noir ------------
+    # ---------------------------------
     # TODO: check for leftovers on various sales
 
     trade(1, {
@@ -401,6 +405,16 @@ def add_trades(active_player, config: Config):
         Item.CoverBackstory: -80,
 
         Item.ScrapOfIvoryOrganza: 1
+    })
+
+    trade(1, {
+        Item.Casing: -10,
+        Item.CoverTiesGeneric: -1,
+        Item.CoverBackstory: -80,
+        Item.CoverElaboration: -10,
+        Item.CoverNuance: -5,
+        Item.CoverCredentials: -5,
+        Item.PrismaticFrame: 1
     })
 
     # TODO: other cash outs

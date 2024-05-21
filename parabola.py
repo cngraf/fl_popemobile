@@ -29,7 +29,7 @@ def add_trades(active_player, config):
     # TODO: check actual length of carousel
     # lengths per wiki
 
-    if (active_player.profession == Profession.MonsterHunter):
+    if (config.player.profession == Profession.MonsterHunter):
         trade(8, {
             Item.FinBonesCollected: 2,
             Item.FavDocks: 1,

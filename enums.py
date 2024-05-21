@@ -137,6 +137,8 @@ class Item(Enum):
     CardDraws = auto() # Fake item
     # DayOfCardDraws = 3 # Fake item
 
+    PortCecilAction = auto()
+
     # Bone Market Hack
     AntiquityReptileAction = auto()
     AntiquityAmphibianAction = auto()    
@@ -225,6 +227,7 @@ class Item(Enum):
     RevisionistHistoricalNarrative = auto()
     CorrectiveHistorialNarrative = auto()
     UnusualLoveStory = auto()
+    SlimVolumeOfBazaarinePoetry = auto()
 
     # Curiosity
     VenomRuby = auto()
@@ -477,12 +480,12 @@ class Item(Enum):
     FailedFinBonesCollected = auto()
     FailedAmberCrustedFin = auto()
 
-    FailedWitheredTentacleLimb = auto()
-
     FailedJetBlackStinger = auto()
     FailedObsidianChitinTail = auto()
     FailedPlasterTailBones = auto()
     FailedTombLionsTail = auto()
+
+    FailedWitheredTentacleLimb = auto()
     FailedWitheredTentacleTail = auto()
 
     # Rag Trade

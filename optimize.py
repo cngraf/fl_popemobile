@@ -37,7 +37,6 @@ import london.newspaper
 import london.bone_market
 import london.hearts_game
 
-
 import parabola
 
 import unterzee.zailing
@@ -259,7 +258,7 @@ active_player = player_bal_monster_hunter
 # hack
 # `IndexError: list assignment index out of range` => increase this number
 # most of this is bone market combinatoric shit
-var_buffer = 10_000
+var_buffer = 12_000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
@@ -322,7 +321,7 @@ bone_market_week_actions = {
 
 core_constraint = {
     Item.Constraint: 1,
-    Item.CardDraws: 0.25 * bone_market_cycle_length
+    # Item.CardDraws: 0.25 * bone_market_cycle_length
 }
 
 for category, actions in bone_market_week_actions.items():
@@ -399,8 +398,8 @@ config.add(core_constraint)
 SocialActions.add_trades(config)
 Bazaar.add_trades(config)
 
-# old_rat_market.add_trades(config)
-rat_market.add_trades(config)
+old_rat_market.add_trades(config)
+# rat_market.add_trades(config)
 
 professional_activities.add_trades(active_player, config)
 
@@ -434,13 +433,14 @@ upper_river.station_viii.add_trades(active_player, config)
 upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
+
 upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 
-fate.philosofruits.add_trades(active_player, config)
-fate.upwards.add_trades(active_player, config)
-fate.whiskerways.add_trades(config)
+# fate.philosofruits.add_trades(active_player, config)
+# fate.upwards.add_trades(active_player, config)
+# fate.whiskerways.add_trades(config)
 
 # --------------
 # Upper River Deck
@@ -635,21 +635,23 @@ print("------Assumptions-------")
 print(f"Core Constraint:                  {core_constraint}")
 # print(f"Total Actions per Day:            {actions_per_day:10}")
 # print(f"Cards Drawn per Day:              {cards_seen_per_day:10}")
-print(f"Good Card Density:                {london_good_card_density:10.3f}")
+# print(f"Good Card Density:                {london_good_card_density:10.3f}")
 
 print(f"Optimize For:                     {optimize_for}")
 print(f"-Player Stats-")
 pp.pprint(active_player.stats)
 
 print("------Summary-------")
-print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
+# print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
 # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
 trades_used = []
 # actions_per_cycle = core_constraint[Item.Action]
 actions_per_cycle = bone_market_cycle_length
 
-print("-----Trades In Grind-------")
+items_gained = []
+items_consumed = []
+
 for i in range(0, len(opt_result.slack)):
     slack = opt_result.slack[i]
     marginal = opt_result.ineqlin.marginals[i]
@@ -658,12 +660,17 @@ for i in range(0, len(opt_result.slack)):
         gain_items = ""
         for ii in range(0, num_items):
             quantity = round(config.A[i, ii],2)
+            item = Item(ii)
             if int(quantity) == quantity:
                 quantity = int(quantity)
             if quantity < 0:
-                lose_items += str(Item(ii)) + ":" + str(quantity) + "; "
+                lose_items += str(item) + ":" + str(quantity) + "; "
+                if item not in items_consumed:
+                    items_consumed.append(item)
             if quantity > 0:
-                gain_items += str(Item(ii)) + ":" + str(quantity) + "; "
+                gain_items += str(item) + ":" + str(quantity) + "; "
+                if item not in items_gained:
+                    items_gained.append(item)
         # trade_items = lose_items + " => " + gain_items            
         # trade_items = trade_items.replace("Item.","")
 
@@ -679,12 +686,24 @@ for i in range(0, len(opt_result.slack)):
 
 trades_used.sort()
 
+items_surplus = []
+for i in items_gained:
+    if i not in (items_consumed):
+        items_surplus.append(str(i))
+
+print("-----Gained & Unused-------")
+for i in items_surplus:
+    print(i)
+
+print("-----Trades In Grind-------")
 for i in trades_used:
     print(f"{i[0]:.3}       " + i[1])
 
-    
+print("-----Optimization Target-------")
 # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_cycle):10.5f}")
+print("-------------------------------")
+print("-------------------------------")
 
 # print(london_deck.normalized_trade())
 # print(zailing_deck.normalized_trade())
