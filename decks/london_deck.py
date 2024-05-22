@@ -8,14 +8,255 @@ from decks.deck import *
 import random
 
 
-def add_trades(config):
+def add_trades(config: Config):
     trade = config.trade
+    player = config.player
+
+    cards = [
+        Card(Item.CL_AVisit, ),
+
+        Card(Item.CL_Bohemians),
+        Card(Item.CL_Church),    
+        Card(Item.CL_Constables),
+        Card(Item.CL_Criminals),
+        Card(Item.CL_Docks),
+        Card(Item.CL_GreatGame),
+        Card(Item.CL_Hell),
+        Card(Item.CL_Revolutionaries),
+        Card(Item.CL_RubberyMen),
+        Card(Item.CL_Society),                            
+        Card(Item.CL_TombColonies),                            
+        Card(Item.CL_Urchins),
+
+        # Companions
+        Card(Item.CL_ConnectedPet),
+
+        # Spouses
+        Card(Item.CL_BewilderingProcessionSpouse, freq=Rarity.VeryInfrequent),
+
+        # Equipment
+        Card(Item.CL_ClaySedanChair),
+
+        # Lodgings
+        Card(Item.CL_SmokyFlophouse),
+        Card(Item.CL_HandsomeTownhouse, freq=Rarity.Frequent),
+        Card(Item.CL_PremisesAtTheBazaar, freq=Rarity.Frequent),
+        Card(Item.CL_LairInTheMarshes),
+
+        # Clubs
+        Card(Item.CL_YoungStags),
+
+        # Dreams
+        Card(Item.CL_Dreams1),
+        Card(Item.CL_Dreams2),
+        Card(Item.CL_Dreams3),
+        Card(Item.CL_Dreams4),
+        Card(Item.CL_Dreams5),
+    ]
+
+    deck_size = sum(i.freq.value for i in cards)
+
+    draw_conversion = {
+        Item.LondonDraw: -1,
+    }
+
+    for card in cards:
+        draw_rate = card.freq.value / (deck_size - Rarity.Standard.value * 4)
+        draw_conversion[card.item] = draw_rate
+
+    config.trade(0, {Item.CardDraws: -1, Item.LondonDraw: 1})
+    config.trade(0, draw_conversion)
 
     base_watchful = 230
     base_shadowy = 230
     base_dangerous = 230
     base_persuasive = 230
+    wounds_multiplier = menace_multiplier(player.wounds_reduction)
+    suspicion_multiplier = menace_multiplier(player.suspicion_reduction)
+    scandal_multiplier = menace_multiplier(player.scandal_reduction)    
+    nightmares_multiplier = menace_multiplier(player.nightmares_reduction)
 
+
+    # ----------------------------------------------------
+    # --- Factions
+    # ----------------------------------------------------
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Bohemians: -1,
+
+        Item.FoxfireCandleStub: -20,
+        Item.BottleOfGreyfields1882: -15,
+        Item.Scandal: 1 * scandal_multiplier,
+        Item.FavBohemians: 1
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Church: -1,
+        Item.PieceOfRostygold: -10,
+
+        Item.FavChurch: 1,
+        Item.AirsOfLondonChange: 1
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Constables: -1,
+        Item.PieceOfRostygold: -10,
+
+        Item.FavConstables: 1,
+        Item.AirsOfLondonChange: 1
+    })    
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Criminals: -1,
+
+        Item.FavCriminals: 1,
+        Item.Suspicion: 1 * suspicion_multiplier
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Docks: -1,
+        Item.PieceOfRostygold: -10,
+
+        Item.FavDocks: 1
+    })    
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_GreatGame: -1,
+
+        Item.FavGreatGame: 1,
+        Item.Wounds: 1 * wounds_multiplier
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Hell: -1,
+
+        Item.FavHell: 1,
+        Item.Suspicion: 1 * suspicion_multiplier
+    })
+
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Revolutionaries: -1,
+        Item.VisionOfTheSurface: -1,
+
+        Item.FavRevolutionaries: 1,
+        Item.Suspicion: 1 * suspicion_multiplier
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_RubberyMen: -1,
+        Item.NoduleOfWarmAmber: -1,
+
+        Item.NoduleOfDeepAmber: 50,
+        Item.FavRubberyMen: 1
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_RubberyMen: -1,
+        Item.NoduleOfWarmAmber: -100,
+        
+        Item.NoduleOfTremblingAmber: 1,
+        Item.FavRubberyMen: 1
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_RubberyMen: -1,
+        Item.NoduleOfWarmAmber: -100,
+        
+        Item.NoduleOfTremblingAmber: 1,
+        Item.FavRubberyMen: 1
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Society: -1,
+        Item.ScrapOfIncendiaryGossip: -1,
+        
+        Item.FavSociety: 1,
+        Item.ScrapOfIncendiaryGossip: 1 * suspicion_multiplier
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_TombColonies: -1,
+        
+        Item.FavTombColonies: 1,
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_Urchins: -1,
+        Item.LuckyWeasel: -1,
+        
+        Item.FavUrchins: 1,
+    })
+
+    # Requires FATE story
+    # trade(0, {
+    #     Item.Action: -1,
+    #     Item.CL_Urchins: -1,
+        
+    #     Item.FavUrchins: 1,
+    #     Item.Nightmares: -2
+    # })
+
+    # ----------------------------------------------------
+    # --- General
+    # ----------------------------------------------------
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_AVisit: -1,
+
+        Item.CrypticClue: base_shadowy,
+        Item.FavCriminals: 1,
+        Item.FavBohemians: 1
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_AVisit: -1,
+
+        Item.WhisperedHint: 50 + base_dangerous,
+        Item.RatOnAString: 50 + base_dangerous,
+        Item.FavDocks: 1,
+        Item.FavConstables: 1
+    })
+
+    trade(0, {
+        Item.Action: -1,        
+        Item.CL_AVisit: -1,
+
+        Item.WhisperedHint: base_persuasive * 1.5,
+        Item.FavBohemians: 1,
+        Item.FavSociety: 1
+    })
+
+    trade(0, {
+        Item.Action: -1,        
+        Item.CL_AVisit: -1,
+
+        Item.CrypticClue: base_watchful,
+        Item.FavGreatGame: 1,
+        Item.FavSociety: 1
+    })    
+
+    # ----------------------------------------------------
+    # --- Companions & Spouses
+    # ----------------------------------------------------
+
+    # TODO: require lock-in
     for favour in (
         Item.FavBohemians,
         Item.FavChurch,
@@ -29,42 +270,96 @@ def add_trades(config):
         Item.FavSociety,
         Item.FavTombColonies,
         Item.FavUrchins):
-        trade(0, { Item.Card_ConnectedPet: -1, favour: 1})
-
-    # lloyd forger
+        trade(0, {
+            Item.Action: -1,
+            Item.CL_ConnectedPet: -1,
+            favour: 1})
+        
     trade(0, {
-        Item.Card_AVisit: -1,
-        Item.CrypticClue: base_shadowy,
-        Item.FavCriminals: 1,
+        Item.Action: -1,
+        Item.CL_BewilderingProcessionSpouse: -1,
+
         Item.FavBohemians: 1
     })
 
-    # sad walrus
+
+    # -----------------------------------------------------
+    # --- Cards: Other Equipment
+    # ----------------------------------------------------
+
     trade(0, {
-        Item.Card_AVisit: -1,
-        Item.WhisperedHint: 50 + base_dangerous,
-        Item.RatOnAString: 50 + base_dangerous,
-        
-        Item.FavDocks: 1,
-        Item.FavConstables: 1
+        Item.Action: -1,
+        Item.CL_ClaySedanChair: -1,
+
+        Item.FavSociety: 1,
+        Item.Hedonist: -3
     })
 
-    # musical sardine
+    # -----------------------------------------------------
+    # --- Cards: Clubs
+    # ----------------------------------------------------
+
     trade(0, {
-        Item.Card_AVisit: -1,
-        Item.WhisperedHint: base_persuasive * 1.5,
-        Item.FavBohemians: 1,
-        Item.FavSociety: 1
+        Item.Action: -1,
+        Item.CL_YoungStags: -1,
+
+        Item.PieceOfRostygold: -500,
+        Item.FavSociety: 2,
+        Item.FavBohemians: 1
     })
 
-    # rye funzo
-    trade(0, {
-        Item.Card_AVisit: -1,
-        Item.CrypticClue: base_watchful,
-        Item.FavGreatGame: 1,
-        Item.FavSociety: 1
-    })    
+    # ----- Lodgings ----------
 
+    # ehh not sure about this format
+    rare_success_rate = 0.05
+    config.weighted_trade(
+        {
+            Item.Action: -1,
+            Item.CL_SmokyFlophouse: -1,
+        },
+        (1.0 - rare_success_rate, {
+            Item.FavCriminals: 0.5,
+            Item.FavRevolutionaries: 0.05
+        }),
+        (rare_success_rate, {
+            Item.AeolianScream: 1
+        })
+    )
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_LairInTheMarshes: -1,
+
+        Item.FavSociety: 1,
+        Item.CertifiableScrap: 1,
+        Item.Nightmares: 1 * nightmares_multiplier
+    })
+
+    trade(0, {
+        Item.Action: -1,
+        Item.CL_HandsomeTownhouse: -1,
+        Item.Scandal: 2 * scandal_multiplier,
+        Item.Hedonist: 3,
+        Item.FavBohemians: 0.5,
+        Item.FavSociety: 0.5
+    })
+
+    config.challenge_trade(
+        stat=Stat.APlayerOfChess,
+        dc=9,
+        cost={
+            Item.Action: -1,
+            Item.CL_PremisesAtTheBazaar: -1
+        },
+        on_pass={
+            Item.TouchingLoveStory: 1.5,
+            Item.StolenKiss: 1.5,
+            Item.NightsoilOfTheBazaar: 2            
+        },
+        on_fail={
+            Item.Echo: -2,
+            Item.Scandal: 1
+        })
 
 
 def create_deck_old(config: Config):
@@ -79,7 +374,7 @@ def create_deck_old(config: Config):
 
     single_favours_enabled = False
 
-        # Lair in the Marshes
+    # Lair in the Marshes
     london_deck.card("Lair in the Marshes", Rarity.Standard, single_favours_enabled, {
         Item.FavSociety: 1,
         Item.CertifiableScrap: 1,
@@ -110,7 +405,7 @@ def create_deck_old(config: Config):
     })
 
     london_deck.card("What will you do with your [connected pet]?", Rarity.Standard, single_favours_enabled, {
-        Item.Card_ConnectedPet: 1
+        Item.CL_ConnectedPet: 1
     })    
 
     # With Bewildering Procession
@@ -545,16 +840,21 @@ def create_london_deck(config: Config):
     nightmares_multiplier = menace_multiplier(player.nightmares_reduction)
 
     london_deck = Deck("London", -400)
-    good_cards = []
-    bad_cards = []
+    all_cards = []
 
+    # HACK for refactor convenience
+    good_cards = all_cards
+    bad_cards = all_cards
     single_favour_cards_list = good_cards
+
+
     # card worth calculated with baseline of 120/40 w 3rd city silverer
     # and ~6.46 EPA
 
     # borderline? minimal difference good vs. bad
     single_favour_cards_list.append(
         Card(
+            item=Item.CL_RooftopShack,
             name= "Lair in the Marshes: Peril and pyjamas",
             freq= Rarity.Standard,
             grade= Grade.Good,
@@ -573,6 +873,7 @@ def create_london_deck(config: Config):
 
     knives_rare_success_rate = 0.05
     single_favour_cards_list.append(Card(
+        item=Item.CL_SmokyFlophouse,
         name="Smoky Flophouse",
         freq=Rarity.Standard,
         grade= Grade.Good,        
@@ -593,6 +894,7 @@ def create_london_deck(config: Config):
 
     single_favour_cards_list.append(
         Card(
+            item = Item.CL_HandsomeTownhouse,
             name = "Handsome Townhouse: Scandalous Party",
             freq = Rarity.Frequent,
             grade= Grade.Good,
@@ -614,6 +916,7 @@ def create_london_deck(config: Config):
     # adds ~0.02 EPA
     good_cards.append(
         Card(
+            item = Item.CL_PremisesAtTheBazaar,
             name= "Premises at the Bazaar w/ Kraken",
             freq= Rarity.Standard,
             grade= Grade.Good,
@@ -643,7 +946,7 @@ def create_london_deck(config: Config):
             Rarity.Standard,
             grade= Grade.Good,
             exchange={
-                Item.Card_ConnectedPet: 1
+                Item.CL_ConnectedPet: 1
             }))
 
     single_favour_cards_list.append(
@@ -960,7 +1263,7 @@ def create_london_deck(config: Config):
         freq=Rarity.Standard,
         grade= Grade.Excellent,
         exchange={
-            Item.Card_AVisit: 1
+            Item.CL_AVisit: 1
         }
     ))
 

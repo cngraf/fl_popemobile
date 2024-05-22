@@ -104,6 +104,16 @@ class Config:
                 net_trade[key] = net_trade.get(key, 0) + val * weight
 
         self.trade(actions, net_trade)
+    
+    def weighted_trade(self, cost, *weighted_trades):
+        weighted_outcome = {}
+
+        for weight, trade in weighted_trades:
+            for key, val in trade.items():
+                weighted_outcome[key] = weighted_outcome.get(key, 0) + val * weight
+
+        net_trade = utils.sum_dicts(cost, weighted_outcome)
+        self.trade(0, net_trade)
 
     def challenge_ev(self, stat: Stat, dc: int, on_pass: dict, on_fail: dict):
         pass_rate = self.player.pass_rate(stat, dc)
@@ -112,11 +122,12 @@ class Config:
             (pass_rate, on_pass),
             (1.0 - pass_rate, on_fail)
         )
+    
+    def challenge_trade(self, stat: Stat, dc: int, cost, on_pass, on_fail):
+        pass_rate = self.player.pass_rate(stat, dc)
 
-    def add_challenge(self, actions: int, stat: Stat, dc: int, on_pass, on_fail):
-        pass_rate = self.player.pass_rate(self.player.stats[stat], dc)
-
-        self.add_weighted_trade(actions,
+        self.weighted_trade(
+            cost,
             (pass_rate, on_pass),
             (1.0 - pass_rate, on_fail)
         )

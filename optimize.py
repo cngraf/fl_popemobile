@@ -272,7 +272,7 @@ trade = config.trade
 # ---------------- Decks ----------------------------
 
 # london_deck = Decks.create_london_deck(active_player, 6.5, config)
-london_deck = decks.london_deck.create_deck_old(config)
+# london_deck = decks.london_deck.create_deck_old(config)
 
 # should just have one deck for each region and dummy "card draws in X" item for each one
 zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
@@ -321,7 +321,7 @@ bone_market_week_actions = {
 
 core_constraint = {
     Item.Constraint: 1,
-    # Item.CardDraws: 0.25 * bone_market_cycle_length
+    Item.CardDraws: 0.25 * bone_market_cycle_length
 }
 
 for category, actions in bone_market_week_actions.items():
@@ -556,7 +556,7 @@ trade(0, {
 # london_deck_normalized_trade[Item.CardDraws] = -1
 
 # print(card_exchange)
-london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
+# london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
 
 # trade(london_good_card_density, london_deck.normalized_trade())
 # print(london_good_card_density)
@@ -569,34 +569,34 @@ trade(1, zailing_deck.normalized_trade())
 # })
 
 
-'''
-I might be an idiot?
-Instead of manually calibrating the cards as good or bad and running sims,
-just give each one a value of Item.CardDraw inverse of its rarity, add as a trade,
-and let the math do the rest.
-'''
-run_london_sim = False
-london_sim_file_location = "simulated/london_deck.pkl"
-if run_london_sim:
-    with open(london_sim_file_location, "wb") as file:
-        runs = 1000
-        draws_per_run = 200
-        print(f"Simulating London deck {runs} times with {draws_per_run} draws per run...")
-        london_sim_result = decks.london_deck.monte_carlo(config, runs, draws_per_run)
-        print(london_sim_result)
+# '''
+# I might be an idiot?
+# Instead of manually calibrating the cards as good or bad and running sims,
+# just give each one a value of Item.CardDraw inverse of its rarity, add as a trade,
+# and let the math do the rest.
+# '''
+# run_london_sim = False
+# london_sim_file_location = "simulated/london_deck.pkl"
+# if run_london_sim:
+#     with open(london_sim_file_location, "wb") as file:
+#         runs = 1000
+#         draws_per_run = 200
+#         print(f"Simulating London deck {runs} times with {draws_per_run} draws per run...")
+#         london_sim_result = decks.london_deck.monte_carlo(config, runs, draws_per_run)
+#         print(london_sim_result)
 
-        trade(0, london_sim_result)
-        pickle.dump(london_sim_result, file)
-        print("London Deck result saved to " + london_sim_file_location)
-else:
-    print("Loading London deck sim from " + london_sim_file_location)
-    with open(london_sim_file_location, "rb") as file:
-        london_sim_result = pickle.load(file)
-        print(london_sim_result)
-        trade(0, london_sim_result)
+#         trade(0, london_sim_result)
+#         pickle.dump(london_sim_result, file)
+#         print("London Deck result saved to " + london_sim_file_location)
+# else:
+#     print("Loading London deck sim from " + london_sim_file_location)
+#     with open(london_sim_file_location, "rb") as file:
+#         london_sim_result = pickle.load(file)
+#         print(london_sim_result)
+#         trade(0, london_sim_result)
 
 
-# with open(london_sim_file_location, )
+# # with open(london_sim_file_location, )
 
 
 

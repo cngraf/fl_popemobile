@@ -747,12 +747,6 @@ class Item(Enum):
 
     Placeholder = auto()
 
-    # Cards
-    Card_AVisit = auto()
-    Card_ConnectedPet = auto()
-    Card_NavigationError = auto()
-    C_Arbor = auto()
-
     # Zailing
     ZailingProgress = auto()
     HomeWatersZeeDraw = auto()
@@ -772,3 +766,56 @@ class Item(Enum):
     HeroicRally = auto()
     InscrutableTwist = auto()
     WhiskerwaysSecondaryPayout = auto()
+
+    # ---------------------------------
+    # ---------- Cards ----------------
+    # ---------------------------------
+
+    LondonDraw = auto()
+    
+    # Lodgings
+    CL_LairInTheMarshes = auto()
+    CL_CottageByTheObservatory = auto()
+    CL_RoomsInAHalfAbandonedMansion = auto()
+    CL_RoomsAboveABookshop = auto()
+    CL_RoomsAboveAGamblingDen = auto()
+    CL_HandsomeTownhouse = auto()
+    CL_RooftopShack = auto()
+    CL_DecommissionedSteamer = auto()
+    CL_SmokyFlophouse = auto()
+    CL_AGuestRoomAtTheBrassEmbassy = auto()
+    CL_ARoomAtTheRoyalBethlehemHotel = auto()
+    CL_PremisesAtTheBazaar = auto()
+
+    CL_AVisit = auto()
+    CL_ConnectedPet = auto()
+
+    CL_ClaySedanChair = auto()
+
+    CL_BewilderingProcessionSpouse = auto()
+    
+    CL_YoungStags = auto()
+
+    CL_Arbor = auto()
+
+    CL_Bohemians = auto()
+    CL_Church = auto()    
+    CL_Constables = auto()
+    CL_Criminals = auto()
+    CL_Docks = auto()
+    CL_GreatGame = auto()
+    CL_Hell = auto()
+    CL_Revolutionaries = auto()
+    CL_RubberyMen = auto()
+    CL_Society = auto()                            
+    CL_TombColonies = auto()                            
+    CL_Urchins = auto()                            
+
+    # TODO
+    CL_Dreams1 = auto()
+    CL_Dreams2 = auto()
+    CL_Dreams3 = auto()
+    CL_Dreams4 = auto()
+    CL_Dreams5 = auto()
+
+    Card_NavigationError = auto()

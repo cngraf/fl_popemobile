@@ -579,8 +579,8 @@ def rubbery_collector_trade(config,
         Item.Suspicion: 2 * avg_failures * 0.85
     }
 
-    if debug:
-        print(payout)
+    # if debug:
+    #     print(payout)
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     config.trade(0, totals)
 

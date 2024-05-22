@@ -9,7 +9,7 @@ def add_trades(config: Config):
     player = config.player
 
     trade(9, {
-        Item.C_Arbor: -1,
+        Item.CL_Arbor: -1,
         Item.Attar: 13
     })
 
@@ -39,12 +39,12 @@ def add_trades(config: Config):
     })
 
     trade(3, {
-        Item.C_Arbor: -1,
+        Item.CL_Arbor: -1,
         Item.PresbyteratePassphrase: 7
     })
 
     trade(3, {
-        Item.C_Arbor: -1,
+        Item.CL_Arbor: -1,
         Item.SwornStatement: 7
     })
 

@@ -28,17 +28,21 @@ class Deck:
 
 class Card:
     name: str
+    item: Item
     freq: Rarity
     exchange: dict
     discardable: bool
     grade: Grade
 
-    def __init__(self, name: str,
-                 freq: Rarity,
+    def __init__(self,
+                 item: Item,
+                 name: str = "",
+                 freq: Rarity = Rarity.Standard,
                  grade: Grade = Grade.Good,
                  discardable: bool = True,
                  exchange = {}):
         self.name = name
+        self.item = item
         self.freq = freq
         self.score = grade
         self.discardable: discardable

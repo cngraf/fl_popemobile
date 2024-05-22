@@ -71,7 +71,6 @@ CON
 2. navigate to the directory
 3. run `python3 optimize.py`
 
-
 ## TODO
 
 * Rework how London deck is modeled
@@ -109,6 +108,12 @@ CON
     * Marigold stuff?
     * all the location decks
 
+* General
+    * Railway statues
+    * TLC params
+    * Expand professional activities
+    * Other mutually exclusive items & qualities
+
 * Figure out a way to model the unlimited draw decks with plain matrixes, aka one that doesn't require a monte carlo simulation
 
 * Lots more things
@@ -118,7 +123,11 @@ CON
 
 A: almost certainly not
 
-### Q: How do I tweak this parameter?
+### Q: How do I change the optimization target?
+
+A: set `optimize_for` in `optimize.py`
+
+### Q: How do I tweak this other parameter?
 
 A: it's probably in there somewhere
 
