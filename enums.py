@@ -205,6 +205,8 @@ class Item(Enum):
     FavTombColonies = auto()
     FavUrchins = auto()
 
+    FavourFingerkings = auto()
+
     # Connected
     ConnectedBenthic = auto()
     ConnectedSummerset = auto()
@@ -282,6 +284,7 @@ class Item(Enum):
     ComprehensiveBribe = auto()
     MirrorcatchBox = auto()
     Hillmover = auto()
+    UnassumingCrate = auto()
 
     # Currency
     FirstCityCoin = auto()

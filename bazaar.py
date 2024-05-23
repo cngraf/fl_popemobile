@@ -264,3 +264,6 @@ def add_trades(config: Config):
     # Equipment
     buy_sell(config, Item.SulkyBat, -0.4, 0.2)
     buy_sell(config, Item.LuckyWeasel, -0.4, 0.2)
+
+    # Unsorted
+    trade(0, { Item.CracklingDevice: -1, Item.Echo: 62.5 })

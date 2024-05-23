@@ -321,7 +321,7 @@ bone_market_week_actions = {
 
 core_constraint = {
     Item.Constraint: 1,
-    Item.CardDraws: 0.25 * bone_market_cycle_length
+    # Item.CardDraws: 0.25 * bone_market_cycle_length
 }
 
 for category, actions in bone_market_week_actions.items():
@@ -434,7 +434,7 @@ upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
 
-# upper_river.tracklayers_city.add_trades(config)
+upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 
