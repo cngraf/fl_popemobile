@@ -1,8 +1,13 @@
 from enums import *
 from utils import *
 
-def add_trades(active_player, config):
+from config import *
+from player import *
+
+def add_trades(_, config: Config):
     trade = config.trade
+    player = config.player
+
     # -----------------
     # --- Underclay
     # ----------------
@@ -127,7 +132,7 @@ def add_trades(active_player, config):
 
     trade(1, {
         Item.FavRevolutionaries: -1,
-        Item.Suspicion: 1 * menace_multiplier(active_player.suspicion_reduction),
+        Item.Suspicion: 1 * menace_multiplier(config.player.suspicion_reduction),
         Item.Inspired: 35,
     })
 
@@ -151,4 +156,13 @@ def add_trades(active_player, config):
     trade(1, {
         Item.DropOfPrisonersHoney: -25,
         Item.Inspired: 20
+    })
+
+
+    ## ----------------
+    ## --- Unsorted ---
+    ## ----------------
+
+    config.add({
+
     })

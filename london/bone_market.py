@@ -696,6 +696,103 @@ def expected_failed_sell_attempts(player, skeleton: Bone, is_chimera: bool = Fal
 def add_trades(player: Player, config: Config):
     trade = config.trade
 
+    bone_market_week_actions = {
+        "Antiquity": {
+            "Reptile": Item.AntiquityReptileAction,
+            "Amphibian": Item.AntiquityAmphibianAction,
+            "Bird": Item.AntiquityBirdAction,
+            "Fish": Item.AntiquityFishAction,
+            "Arachnid": Item.AntiquityArachnidAction,
+            "Insect": Item.AntiquityInsectAction,
+        },
+        "Amalgamy": {
+            "Reptile": Item.AmalgamyReptileAction,
+            "Amphibian": Item.AmalgamyAmphibianAction,
+            "Bird": Item.AmalgamyBirdAction,
+            "Fish": Item.AmalgamyFishAction,
+            "Arachnid": Item.AmalgamyArachnidAction,
+            "Insect": Item.AmalgamyInsectAction,
+        },
+        "Menace": {
+            "Reptile": Item.MenaceReptileAction,
+            "Amphibian": Item.MenaceAmphibianAction,
+            "Bird": Item.MenaceBirdAction,
+            "Fish": Item.MenaceFishAction,
+            "Arachnid": Item.MenaceArachnidAction,
+            "Insect": Item.MenaceInsectAction,
+        }
+    }
+
+    action_split = {
+        Item.RootAction: -1
+    }
+
+    for category, actions in bone_market_week_actions.items():
+        for creature, action in actions.items():
+
+            action_split[action] = 1/18
+
+            config.add({
+                action: -1,
+                Item.Action: 1
+            })
+
+            if (category == "Amalgamy"):
+                config.add({
+                    action: -1,
+                    Item.AmalgamyGeneralAction: 1
+                })
+
+            if (category == "Antiquity"):
+                config.add({
+                    action: -1,
+                    Item.AntiquityGeneralAction: 1
+                })
+
+            if (category == "Menace"):
+                config.add({
+                    action: -1,
+                    Item.MenaceGeneralAction: 1
+                })
+
+            if (creature == "Amphibian"):
+                config.add({
+                    action: -1,
+                    Item.GeneralAmphibianAction: 1
+                })
+
+            if (creature == "Arachnid"):
+                config.add({
+                    action: -1,
+                    Item.GeneralArachnidAction: 1
+                })
+
+            if (creature == "Bird"):
+                config.add({
+                    action: -1,
+                    Item.GeneralBirdAction: 1
+                })
+
+            if (creature == "Fish"):
+                config.add({
+                    action: -1,
+                    Item.GeneralFishAction: 1
+                })
+
+            if (creature == "Insect"):
+                config.add({
+                    action: -1,
+                    Item.GeneralInsectAction: 1
+                })
+
+            if (creature == "Reptile"):
+                config.add({
+                    action: -1,
+                    Item.GeneralReptileAction: 1
+                })
+
+    config.add(action_split)
+
     trade(0, {
         Item.HinterlandScrip: -2,
         Item.UnidentifiedThighbone: 1

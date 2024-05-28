@@ -10,6 +10,7 @@ import random
 
 def add_trades(config: Config):
     trade = config.trade
+    add = config.add
     player = config.player
 
     cards = [
@@ -79,7 +80,7 @@ def add_trades(config: Config):
 
     # ----------------------------------------------------
     # --- Factions
-    # ----------------------------------------------------
+    # ----------------------------------------------------    
 
     trade(0, {
         Item.Action: -1,
@@ -270,10 +271,16 @@ def add_trades(config: Config):
         Item.FavSociety,
         Item.FavTombColonies,
         Item.FavUrchins):
-        trade(0, {
+        add({
             Item.Action: -1,
             Item.CL_ConnectedPet: -1,
             favour: 1})
+        
+        # HACK
+        add({
+            Item.FavourableCircumstance: -1,
+            favour: 1
+        })
         
     trade(0, {
         Item.Action: -1,

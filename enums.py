@@ -150,8 +150,8 @@ class Item(Enum):
 
     # Actions Hack
     RootAction = auto()
+    LondonAction = auto()
     PortCecilAction = auto()
-
     MangroveAction = auto()
 
     # Bone Market Hack
@@ -649,6 +649,21 @@ class Item(Enum):
 
     # TODO: organize this section somehow
 
+    # Weekly Stuff
+    FreeEvening = auto()
+    FavourableCircumstance = auto()
+    AnEarnestOfPayment = auto()
+    AConsequenceOfYourAmbition = auto()
+    BraggingRightsAtTheMedusasHead = auto()
+    DelayUntilTheNextBoardMeeting = auto()
+    RecentParticipantInAStarvedCulturalExchange = auto()
+    RavagesOfParabolanWarfare = auto()
+    FleetingRecollections = auto()
+    AGiftFromBalmoral = auto()
+    GlowingViric = auto()
+    MiredInMail = auto()
+    AReportFromTheKhagansPalace = auto()
+
     # Quriks
     Austere = auto()
     Hedonist = auto()
@@ -686,8 +701,6 @@ class Item(Enum):
     # miscellaneous
     ResearchOnAMorbidFad = auto()
     Tribute = auto()
-    AConsequenceOfYourAmbition = auto()
-    BraggingRightsAtTheMedusasHead = auto()
     HeartsGameExploits = auto()
     ApproximateValueOfOutstandingInvoicesInPennies = auto()
 

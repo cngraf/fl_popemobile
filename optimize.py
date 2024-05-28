@@ -21,6 +21,8 @@ import decks.deck as Decks
 import decks.london_deck
 import decks.nadir
 
+import time_the_healer
+
 import social_actions as SocialActions
 import bazaar as Bazaar
 import inventory_conversions as InventoryConversions
@@ -286,118 +288,31 @@ zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
 # Plug in the basic economic contraints
 
 
-# ------------------------------
-# ----- Bone Market Hack -------
-# ------------------------------
-
-# Having written this code, it occurs to me it might make more sense to do it in reverse
-# Like, keep the constraint just as "action" but add a trade to trade 18 actions
-# for one of each of the subtypes. Well, whatever. this is fine
-
-bone_market_cycle_length = 18
-
-bone_market_week_actions = {
-    "Antiquity": {
-        "Reptile": Item.AntiquityReptileAction,
-        "Amphibian": Item.AntiquityAmphibianAction,
-        "Bird": Item.AntiquityBirdAction,
-        "Fish": Item.AntiquityFishAction,
-        "Arachnid": Item.AntiquityArachnidAction,
-        "Insect": Item.AntiquityInsectAction,
-    },
-    "Amalgamy": {
-        "Reptile": Item.AmalgamyReptileAction,
-        "Amphibian": Item.AmalgamyAmphibianAction,
-        "Bird": Item.AmalgamyBirdAction,
-        "Fish": Item.AmalgamyFishAction,
-        "Arachnid": Item.AmalgamyArachnidAction,
-        "Insect": Item.AmalgamyInsectAction,
-    },
-    "Menace": {
-        "Reptile": Item.MenaceReptileAction,
-        "Amphibian": Item.MenaceAmphibianAction,
-        "Bird": Item.MenaceBirdAction,
-        "Fish": Item.MenaceFishAction,
-        "Arachnid": Item.MenaceArachnidAction,
-        "Insect": Item.MenaceInsectAction,
-    }
-}
+actions_per_day = 120
+actions_per_cycle = 7 * actions_per_day + 10
 
 core_constraint = {
     Item.Constraint: 1,
+    Item.RootAction: actions_per_cycle,
+    Item.VisitFromTimeTheHealer: 1
     # Item.CardDraws: 0.25 * bone_market_cycle_length
 }
 
-for category, actions in bone_market_week_actions.items():
-    for creature, action in actions.items():
-        core_constraint[action] = 1
-
-        config.add({
-            action: -1,
-            Item.Action: 1
-        })
-
-        if (category == "Amalgamy"):
-            config.add({
-                action: -1,
-                Item.AmalgamyGeneralAction: 1
-            })
-
-        if (category == "Antiquity"):
-            config.add({
-                action: -1,
-                Item.AntiquityGeneralAction: 1
-            })
-
-        if (category == "Menace"):
-            config.add({
-                action: -1,
-                Item.MenaceGeneralAction: 1
-            })
-
-        if (creature == "Amphibian"):
-            config.add({
-                action: -1,
-                Item.GeneralAmphibianAction: 1
-            })
-
-        if (creature == "Arachnid"):
-            config.add({
-                action: -1,
-                Item.GeneralArachnidAction: 1
-            })
-
-        if (creature == "Bird"):
-            config.add({
-                action: -1,
-                Item.GeneralBirdAction: 1
-            })
-
-        if (creature == "Fish"):
-            config.add({
-                action: -1,
-                Item.GeneralFishAction: 1
-            })
-
-        if (creature == "Insect"):
-            config.add({
-                action: -1,
-                Item.GeneralInsectAction: 1
-            })
-
-        if (creature == "Reptile"):
-            config.add({
-                action: -1,
-                Item.GeneralReptileAction: 1
-            })
-
 config.add(core_constraint)
+
+config.add({
+    Item.RootAction: -1,
+    Item.Action: 1
+})
+
 
 # -----------------------------------------------------
 # --- Modules
 # ----------------------------------------------------
 
 # doing some goofy inversion of control stuff here so that I can just copy paste everything
+
+time_the_healer.add_trades(config)
 
 SocialActions.add_trades(config)
 Bazaar.add_trades(config)
@@ -477,138 +392,13 @@ trade(0, {
     Item.PalaeontologicalDiscovery: 10
 })
 
-# config.railway_card("Under the Statue - Liberation",
-#         Rarity.Standard,
-#         Location.TheHurlers,
-#         True, {
-#     Item.FavRevolutionaries: -4,
-#     Item.NightOnTheTown: 12
-# })
-
-# config.railway_card("Under the Statue - Anchoress",
-#         Rarity.Standard,
-#         Location.TheHurlers,
-#         True, {
-#     Item.FavChurch: -4,
-#     Item.VolumeOfCollatedResearch: 12
-# })
-
-# config.railway_card("Under the Statue - Goat Demons",
-#         Rarity.Standard,
-#         Location.TheHurlers,
-#         True, {
-#     Item.FavHell: -4,
-#     Item.NightsoilOfTheBazaar: 60
-# })
-
-# config.railway_card("Under the Statue - Overgoat",
-#         Rarity.Standard,
-#         Location.TheHurlers,
-#         True, {
-#     Item.FavHell: -4,
-#     Item.AeolianScream: 12
-# })
-
-# config.railway_card("Under the Statue - Ubergoat",
-#         Rarity.Standard,
-#         Location.TheHurlers,
-#         True, {
-#     Item.FavHell: -4,
-#     Item.VolumeOfCollatedResearch: 12
-# })
-
-# config.railway_card("Under the Statue - Discordance",
-#         Rarity.Standard,
-#         Location.TheHurlers,
-#         True, {
-#     Item.MemoryOfDiscordance: -2,
-#     Item.CorrespondencePlaque: 60 
-# })
-
-# config.railway_card("Grazing Goat Demons",
-#         Rarity.Standard,
-#         Location.TheHurlers,
-#         False, {
-#     # TODO might be playable? looks complicated
-# })
-
-# -------------------------------
-# ---- Opportunity Deck Math ----
-# -------------------------------
-
-# print("")
-# print("Starting Nadir simulation....")
-# print("")
-# nadir_average = decks.nadir.simulate_full(config, 10000)
-
-# config.trade(0, nadir_average)
-
-# # hack
-# config.trade(1, {
-#     Item.DiscordantSoul: -1,
-#     Item.Echo: 62.5
-# })
-
-# London Deck
-# deck_size = lon
-# london_deck_normalized_trade = {}
-
-# for item in Item:
-#     if london[item.value] != 0:
-#         london_deck_normalized_trade[item] = (LondonCardsByItem[item.value] / deck_size)
-
-# london_deck_normalized_trade[Item.CardDraws] = -1
-
-# print(card_exchange)
-# london_good_card_density = london_deck.num_good_cards / london_deck.deck_size
-
-# trade(london_good_card_density, london_deck.normalized_trade())
-# print(london_good_card_density)
-# print(london_deck.normalized_trade())
-
 trade(1, zailing_deck.normalized_trade())
-
-# trade(1, {
-#     Item.Echo: 100
-# })
-
-
-# '''
-# I might be an idiot?
-# Instead of manually calibrating the cards as good or bad and running sims,
-# just give each one a value of Item.CardDraw inverse of its rarity, add as a trade,
-# and let the math do the rest.
-# '''
-# run_london_sim = False
-# london_sim_file_location = "simulated/london_deck.pkl"
-# if run_london_sim:
-#     with open(london_sim_file_location, "wb") as file:
-#         runs = 1000
-#         draws_per_run = 200
-#         print(f"Simulating London deck {runs} times with {draws_per_run} draws per run...")
-#         london_sim_result = decks.london_deck.monte_carlo(config, runs, draws_per_run)
-#         print(london_sim_result)
-
-#         trade(0, london_sim_result)
-#         pickle.dump(london_sim_result, file)
-#         print("London Deck result saved to " + london_sim_file_location)
-# else:
-#     print("Loading London deck sim from " + london_sim_file_location)
-#     with open(london_sim_file_location, "rb") as file:
-#         london_sim_result = pickle.load(file)
-#         print(london_sim_result)
-#         trade(0, london_sim_result)
-
-
-# # with open(london_sim_file_location, )
-
-
 
 # ------------------------------------------
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.HinterlandScrip
+optimize_for = Item.Echo
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1
@@ -651,7 +441,6 @@ print("------Summary-------")
 
 trades_used = []
 # actions_per_cycle = core_constraint[Item.Action]
-actions_per_cycle = bone_market_cycle_length
 
 items_gained = []
 items_consumed = []
