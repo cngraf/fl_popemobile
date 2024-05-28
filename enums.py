@@ -99,6 +99,7 @@ class Stat(Enum):
     Shadowy = auto()
     Dangerous = auto()
     Persuasive = auto()
+
     KatalepticToxicology = auto()
     MonstrousAnatomy = auto()
     APlayerOfChess = auto()
@@ -106,8 +107,18 @@ class Stat(Enum):
     ShapelingArts = auto()
     ArtisanOfTheRedScience = auto()
     Mithridacy = auto()
+
     StewardOfTheDiscordance = auto()
     Zeefaring = auto()
+    Chthonosophy = auto()
+
+    Respectable = auto()
+    Dreaded = auto()
+    Bizarre = auto()
+
+    Inerrant = auto()
+    Insubstantial = auto()
+    Neathproofed  = auto()
 
 class Treasure(Enum):
     NoTreasure = auto()
@@ -137,7 +148,11 @@ class Item(Enum):
     CardDraws = auto() # Fake item
     # DayOfCardDraws = 3 # Fake item
 
+    # Actions Hack
+    RootAction = auto()
     PortCecilAction = auto()
+
+    MangroveAction = auto()
 
     # Bone Market Hack
     AntiquityReptileAction = auto()
@@ -719,6 +734,10 @@ class Item(Enum):
 
     DiscordantLaw = auto()
 
+    TheMindsAscent1 = auto()
+    TheMindsAscent2 = auto()
+    TheMindsAscent3 = auto()
+
     # ----- Psuedo Items
     VisitFromTimeTheHealer = auto()
 
@@ -734,7 +753,6 @@ class Item(Enum):
     AirsOfIndustry71to80 = auto()
     AirsOfIndustry81to90 = auto()
     AirsOfIndustry91to100 = auto()
-
 
     PortCecilCycles = auto()
     TimeAtJerichoLocks = auto()

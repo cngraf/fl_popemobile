@@ -193,8 +193,12 @@ nightmares_multiplier = 0.85
 
 # --------------------------------------------
 # -------------- Player Config ---------------
-# --------------------------------------------    
-# TODO: separate class?
+# --------------------------------------------
+
+# utils.sum
+player_baseline_f2p = Player(
+    stats = utils.sum_dicts(baseline_stats(), min_endgame_f2p_bonuses())
+    )
 
 player_generic = Player(stats = {
     Stat.Watchful: Player.baseline_watchful,
@@ -253,7 +257,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 75
     })
 
-active_player = player_generic
+active_player = player_bal_monster_hunter
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -604,7 +608,7 @@ trade(1, zailing_deck.normalized_trade())
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.Echo
+optimize_for = Item.HinterlandScrip
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1

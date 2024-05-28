@@ -107,12 +107,43 @@ def add_trades(config: Config):
     # Communing
 
     # Needs 15 in 3 advanced stats to 100%
-    trade(11, {
+
+    def commune(stat: Stat, dc: int, reward: Item):
+        config.challenge_trade(stat, dc,
+            cost={
+                Item.Action: -1
+            },
+            on_pass={
+                reward: 1
+            },
+            on_fail={
+                Item.Nightmares: 2
+            }
+        )
+
+    commune(Stat.MonstrousAnatomy, 10, Item.TheMindsAscent1)
+    commune(Stat.ShapelingArts, 10, Item.TheMindsAscent1)
+    commune(Stat.KatalepticToxicology, 10, Item.TheMindsAscent1)
+
+    commune(Stat.ArtisanOfTheRedScience, 10, Item.TheMindsAscent2)
+    commune(Stat.Zeefaring, 10, Item.TheMindsAscent2)
+    commune(Stat.StewardOfTheDiscordance, 4, Item.TheMindsAscent2)
+
+    commune(Stat.Mithridacy, 10, Item.TheMindsAscent3)
+    commune(Stat.Glasswork, 10, Item.TheMindsAscent3)
+    commune(Stat.APlayerOfChess, 10, Item.TheMindsAscent3)
+
+    trade(2, {
+        Item.TheMindsAscent1: -2,
+        Item.TheMindsAscent2: -3,     
+        Item.TheMindsAscent3: -4,     
         Item.SearingEnigma: 1
     })
     
-    trade(11, {
+    trade(2, {
+        Item.TheMindsAscent1: -2,
+        Item.TheMindsAscent2: -3,     
+        Item.TheMindsAscent3: -4,     
         Item.PrimaevalHint: 1
     })
-
     
