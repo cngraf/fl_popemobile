@@ -326,7 +326,7 @@ SocialActions.add_trades(config)
 Bazaar.add_trades(config)
 
 # old_rat_market.add_trades(config)
-# rat_market.add_trades(config)
+rat_market.add_trades(config)
 
 professional_activities.add_trades(active_player, config)
 
