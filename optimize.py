@@ -259,7 +259,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 75
     })
 
-active_player = player_bal_monster_hunter
+active_player = player_generic
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -289,13 +289,16 @@ zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
 
 
 actions_per_day = 120
-actions_per_cycle = 7 * actions_per_day + 10
+full_draws_per_day = 3.5
+# +10 for the weekly action refresh card
+# -3 for rat market entry
+actions_per_cycle = (7 * actions_per_day) + 10 - 3
 
 core_constraint = {
     Item.Constraint: 1,
     Item.RootAction: actions_per_cycle,
-    Item.VisitFromTimeTheHealer: 1
-    # Item.CardDraws: 0.25 * bone_market_cycle_length
+    Item.VisitFromTimeTheHealer: 1,
+    Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
@@ -303,6 +306,11 @@ config.add(core_constraint)
 config.add({
     Item.RootAction: -1,
     Item.Action: 1
+})
+
+config.add({
+    Item.RootAction: -1,
+    Item.LondonAction: 1
 })
 
 
@@ -318,7 +326,7 @@ SocialActions.add_trades(config)
 Bazaar.add_trades(config)
 
 # old_rat_market.add_trades(config)
-# rat_market.add_trades(config)
+rat_market.add_trades(config)
 
 professional_activities.add_trades(active_player, config)
 
@@ -492,8 +500,12 @@ print("-----Trades In Grind-------")
 for i in trades_used:
     print(f"{i[0]:.3}       " + i[1])
 
+print("-----Cycle-------")
+print(core_constraint)
+
 print("-----Optimization Target-------")
 # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
+print(f"{str(optimize_for) + ' Per Cycle ':34}{-1.0/(opt_result.fun):10.5f}")
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_cycle):10.5f}")
 print("-------------------------------")
 print("-------------------------------")

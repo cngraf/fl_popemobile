@@ -39,6 +39,7 @@ class Config:
         self.bounds[Item.TroubledWaters.value] = (None, 35)
 
         self.bounds[Item.BoneMarketExhaustion.value] = (-4, 0)
+        self.bounds[Item.BoneMarketExhaustion.value] = (-50_000, 0)
 
         self.bounds[Item.Hedonist.value] = (0, 55)
 
@@ -64,6 +65,8 @@ class Config:
         self.bounds[Item.FavUrchins.value] = (0, 7)
 
         self.bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
+
+        self.bounds[Item.RecentParticipantInAStarvedCulturalExchange.value] = (-1, 0)
 
         self.bounds[Item.CoverTiesGeneric.value] = (0, 1)
         self.bounds[Item.CoverTiesSurface.value] = (0, 1)
@@ -104,6 +107,17 @@ class Config:
                 net_trade[key] = net_trade.get(key, 0) + val * weight
 
         self.trade(actions, net_trade)
+
+    def uniform_random_trade(self, input, outputs):
+        net_output = {}
+        num = len(outputs)
+
+        for i in outputs:
+            for key, val in i.items():
+                net_output[key] = net_output.get(key, 0) + (val / num)
+
+        net_trade = utils.sum_dicts(input, net_output)
+        self.trade(0, net_trade)        
     
     def weighted_trade(self, cost, *weighted_trades):
         weighted_outcome = {}

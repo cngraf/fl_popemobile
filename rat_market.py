@@ -8,26 +8,39 @@ import config
 ## ------------
 def add_trades(config: config.Config):
     trade = config.trade
+    add = config.add
+
+    stage1_multiplier = 1.3
     
-    # for tier5 in (Item.UncannyIncunabulum,
-    #               Item.StormThrenody,
-    #               Item.RattyReliquary,
-    #               Item.UnlawfulDevice):
-    #     trade(1, { tier5: -1, Item.RatShilling: 200 })
-    #     trade(5, { tier5: -5, Item.RatShilling: 850 })
+    for tier5 in (Item.UncannyIncunabulum,
+                  Item.StormThrenody,
+                  Item.RattyReliquary,
+                  Item.UnlawfulDevice):
+        add({
+            tier5: -1,
+            Item.RatShilling: 162,
+            Item.RatMarketExhaustion: 1250
+        })
 
     for tier6 in (Item.NightWhisper,
                   Item.ParabolaLinenScrap,
-                  Item.CracklingDevice,
+                #   Item.CracklingDevice,
                   Item.CaptivatingBallad):
-        trade(0, { tier6: -1, Item.RatShilling: 625 })
+        add({
+            tier6: -1,
+            Item.RatShilling: 812,
+            Item.RatMarketExhaustion: 6250
+        })
 
     for tier7 in (Item.CorrespondingSounder,
                   Item.ScrapOfIvoryOrganza,
                   Item.CartographersHoard,
                   Item.ParabolanParable):
-        trade(0, { tier7: -1, Item.RatShilling: 3125 })
-
+        add({
+            tier7: -1,
+            Item.RatShilling: 4062,
+            Item.RatMarketExhaustion: 31250
+        })
 
     # if config.enable_all_rat_market_moons:
     #     for item, price in (

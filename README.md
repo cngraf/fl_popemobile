@@ -5,8 +5,6 @@
 
 Everything is in flux until we learn how the new rat market works. 5 EPA is the new 6 EPA.
 
-As of 21 May 24:
-
 ### 1. Commune with TLC, aka The New Benchmark
 
 5.68 EPA
@@ -20,7 +18,6 @@ PRO
 
 CON
 * Requires 15 in three advanced stats and completed railway
-
 
 ### 2. TLC Deck
 
@@ -70,21 +67,23 @@ CON
 1. download
 2. navigate to the directory
 3. run `python3 optimize.py`
+4. ask your preferred LLM to explain everything
 
 ## TODO
 
-* Rework how London deck is modeled
+* Rework how London deck is modeled (IN PROGRESS)
     * Create dummy items for each card
     * Trade one generic action for like, a collection of card actions
     * Look I have a model in my head, it's hard to explain
     * Do the same thing for Hinterland deck
 
-* Move to a per-week framing
+* Move to a per-week framing (IN PROGRESS)
     * New Rat Market
     * Bone Market Exhaustion
+        * sanity check this later. model currently recommends some 6, 12 exhaustion recipes. not obviously wrong, but it doesn't know that you can't use 0-exhaustion recipes while at 4+. will probably end up just hard-coding a limit of 4 or 7
     * Other stuff on a weekly cycle
 
-* Khanate
+* Khanate (DONE)
     * Intrigues
     * Smuggling
     * Widow crates

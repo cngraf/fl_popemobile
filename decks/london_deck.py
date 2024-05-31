@@ -53,6 +53,55 @@ def add_trades(config: Config):
         Card(Item.CL_Dreams3),
         Card(Item.CL_Dreams4),
         Card(Item.CL_Dreams5),
+
+        Card(Item.CL_TheSeekersOfTheGarden),
+        Card(Item.CL_ATradeInSouls),
+        Card(Item.CL_YourAunt),
+
+        # all TODO
+        Card(Item.CL_TournamentOfWeasels, freq=Rarity.Unusual),
+        Card(Item.CL_OrthographicInfection),
+        Card(Item.CL_CityVicesDecadentEvening),
+        Card(Item.CL_ARestorative),
+        Card(Item.CL_AfternoonOfGoodDeeds), # done
+        Card(Item.CL_AMomentsPeace, freq=Rarity.VeryInfrequent),
+        Card(Item.CL_TheInterpreterOfDreams, freq=Rarity.Unusual),
+        Card(Item.CL_AnImplausiblePenance),
+        Card(Item.CL_DevicesAndDesires),
+        Card(Item.CL_APoliteInvitation),
+        Card(Item.CL_GiveAGift), # done
+        Card(Item.CL_ADayAtTheRaces), # done
+        Card(Item.CL_OnesPublic),
+        Card(Item.CL_GodsEditors), # done
+        Card(Item.CL_BringingTheRevolution),
+        Card(Item.CL_MirrorsAndClay),
+        Card(Item.CL_TheCitiesThatFell),
+        Card(Item.CL_TheSoftHeartedWidow),
+        Card(Item.CL_AllFearTheOvergoat),
+        Card(Item.CL_TheNorthboundParliamentarian),
+        Card(Item.CL_Arbor),
+        Card(Item.CL_WeatherAtLast),
+        Card(Item.CL_AnUnusualWager),
+        Card(Item.CL_MrWinesIsHoldingASale),
+        Card(Item.CL_TheAwfulTemtpationfMoney),
+        Card(Item.CL_InvestigatingTheAffluentPhotographer),
+        Card(Item.CL_TheGeologyOfWinewound),
+        Card(Item.CL_APublicLecture),
+        Card(Item.CL_WantedRemindersOfBrighterDays),
+        Card(Item.CL_AnUnsignedMessage, freq=Rarity.VeryInfrequent),
+        Card(Item.CL_APresumptuousLittleOpportunity, freq=Rarity.VeryInfrequent),
+        Card(Item.CL_SLowcakesAmanuensis, freq=Rarity.Infrequent),
+        Card(Item.CL_AMerrySortOfCrime, freq=Rarity.VeryInfrequent),
+        Card(Item.CL_ADustyBookshop, freq=Rarity.Rare),
+        Card(Item.CL_ALittleOmen, freq=Rarity.Rare),
+        Card(Item.CL_ADisgracefulSpectacle, freq=Rarity.Rare),
+        Card(Item.CL_AVoiceFromAWell, freq=Rarity.Rare),
+        Card(Item.CL_AFineDayInTheFlit, freq=Rarity.Unusual),
+        Card(Item.CL_TheParanomasticNewshound, freq=Rarity.Unusual),
+        Card(Item.CL_Relicker1, freq=Rarity.VeryInfrequent),
+        Card(Item.CL_Relicker2, freq=Rarity.VeryInfrequent),
+        Card(Item.CL_Relicker3, freq=Rarity.VeryInfrequent),
+        Card(Item.CL_Relicker4, freq=Rarity.VeryInfrequent),
     ]
 
     deck_size = sum(i.freq.value for i in cards)
@@ -193,6 +242,16 @@ def add_trades(config: Config):
         Item.CL_TombColonies: -1,
         
         Item.FavTombColonies: 1,
+    })
+
+    add({
+        Item.Action: -1,
+        Item.CL_TombColonies: -1,
+        Item.FavTombColonies: -1,
+        Item.CollectionOfCuriosities: -1,
+
+        Item.PuzzlingMap: 5,
+        Item.ExtraordinaryImplication: 1
     })
 
     trade(0, {
@@ -367,7 +426,108 @@ def add_trades(config: Config):
             Item.Echo: -2,
             Item.Scandal: 1
         })
+    
+    # ----------------------------------------------------
+    # --- General
+    # ----------------------------------------------------    
 
+    add({
+        # TODO: unique hallowmas option looks pretty good too
+        Item.CL_AfternoonOfGoodDeeds: -1,
+        Item.Action: -1,
+
+        Item.FavHell: 1,
+        Item.ConfidentSmile: 1,
+        Item.Scandal: 2 * scandal_multiplier,
+        Item.JadeFragment: 10
+    })
+
+    add({
+        Item.CL_GiveAGift: -1,
+        Item.Action: -1,
+
+        Item.ConfidentSmile: 1,
+        Item.HardEarnedLesson: 1,
+        Item.SuddenInsight: 1,
+        Item.HastilyScrawledWarningNote: 1        
+    })
+
+    add({
+        Item.CL_ADayAtTheRaces: -1,
+        Item.Action: -1,
+
+        Item.FavChurch: 1
+    })
+
+    add({
+        Item.CL_GodsEditors: -1,
+        Item.Action: -1,
+        Item.TaleOfTerror: -1,
+
+        Item.FavChurch: 1
+    })
+
+    config.challenge_trade(
+        stat=Stat.Persuasive,
+        dc=220,
+        cost={
+            Item.CL_OnesPublic: -1,
+            Item.Action: -1
+        },
+        on_pass={
+            Item.PieceOfRostygold: 20,
+            Item.JadeFragment: 20,
+            Item.ConfidentSmile: 2,
+            Item.PrimordialShriek: 30,
+            Item.Echo: 1,
+            Item.BottleOfGreyfields1879: 100
+        },
+        on_fail={
+            Item.Scandal: 1
+        }
+    )
+
+    # assume Evolution completed
+    add({
+        Item.Action: -1,
+        Item.CL_TheSeekersOfTheGarden: -1,
+        Item.ZeeZtory: -7, 
+
+        Item.FavBohemians: 1,
+        Item.FavDocks: 0.5,
+        Item.FavSociety: 0.5,
+        Item.Fascinating: 7
+    })
+
+    # FATE
+    config.weighted_trade(
+        {
+            Item.Action: -1,
+            Item.CL_YourAunt: -1,
+            Item.BottleOfGreyfields1882: -50
+        },
+        (0.3, {
+            Item.Action: 10
+        }),
+        (0.7, {
+            Item.FavSociety: 1,
+            Item.ScrapOfIncendiaryGossip: 3,
+            Item.InklingOfIdentity: 5,
+            Item.Scandal: -2
+        })
+    )
+
+    # FATE
+    add({
+        Item.Action: -1,
+        Item.CL_ATradeInSouls: -1,
+        Item.Soul: -50,
+        Item.InfernalContract: -5,
+
+        Item.FavConstables: 1,
+        Item.FavChurch: 1,
+        Item.FavSociety: 1 
+    })    
 
 def create_deck_old(config: Config):
     replacement_epa = 6.5

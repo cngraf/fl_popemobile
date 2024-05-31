@@ -148,9 +148,13 @@ class Item(Enum):
     CardDraws = auto() # Fake item
     # DayOfCardDraws = 3 # Fake item
 
-    # Actions Hack
+    # Actions
     RootAction = auto()
+
     LondonAction = auto()
+
+    JerichoAction = auto()
+
     PortCecilAction = auto()
     MangroveAction = auto()
 
@@ -197,6 +201,7 @@ class Item(Enum):
     TroubledWaters = auto()
 
     BoneMarketExhaustion = auto()
+    RatMarketExhaustion = auto()
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
 
@@ -247,6 +252,7 @@ class Item(Enum):
     SlimVolumeOfBazaarinePoetry = auto()
 
     # Curiosity
+    ABlueAndShiningStone = auto()
     VenomRuby = auto()
     Sapphire = auto()
     StrongBackedLabour = auto()
@@ -288,6 +294,7 @@ class Item(Enum):
     ParabolanParable = auto()
     CartographersHoard = auto()
     WaswoodAlmanac = auto()
+    CollectionOfCuriosities = auto() # not a curiosity???
 
     # Contraband
     FlawedDiamond = auto()
@@ -642,6 +649,10 @@ class Item(Enum):
     LuckyWeasel = auto()
     SulkyBat = auto()
     WinsomeDispossessedOrphan = auto()
+    CheerfulGoldfish = auto()
+
+    # Unsorted
+    BundleOfRaggedClothing = auto()
 
     # -----
     # Qualities
@@ -703,7 +714,6 @@ class Item(Enum):
     Tribute = auto()
     HeartsGameExploits = auto()
     ApproximateValueOfOutstandingInvoicesInPennies = auto()
-
     HinterlandProsperity = auto()
 
     # Piracy
@@ -801,10 +811,39 @@ class Item(Enum):
     InscrutableTwist = auto()
     WhiskerwaysSecondaryPayout = auto()
 
+    FruitfulAsceticism = auto()
+    FruitfulCuriosity = auto()
+    FruitfulFrivolity = auto()
+    FruitfulRot = auto()
+    PhilsofruitYield = auto()
+
     # ---------------------------------
     # ---------- Cards ----------------
     # ---------------------------------
 
+    '''
+    CXY_CardName
+    X is a character for the broader location
+    - L for London
+    - H for Hinterlands / Railway
+    - F for Firmament / Roof
+    - Z for Unterzee
+    avoiding R bc ambiguous between railway and roof
+
+    Y is optional character(s) for sub-location that has transit costs
+    - Ea for Ealing
+    - Je for Jericho
+    - ME for Magistracy of Evenlode
+    - Ba for Balmoral
+    - St for Station VIII
+    - Bu for Burrow
+    - Mo for Moulin
+    - Hu for Hurlers
+    - MS for Marigold
+
+    idk man this is a lot maybe just use the full names
+
+    '''
     LondonDraw = auto()
     
     # Lodgings
@@ -825,12 +864,11 @@ class Item(Enum):
     CL_ConnectedPet = auto()
 
     CL_ClaySedanChair = auto()
+    CL_GodsEditors = auto() # TODO
 
     CL_BewilderingProcessionSpouse = auto()
     
     CL_YoungStags = auto()
-
-    CL_Arbor = auto()
 
     CL_Bohemians = auto()
     CL_Church = auto()    
@@ -852,4 +890,72 @@ class Item(Enum):
     CL_Dreams4 = auto()
     CL_Dreams5 = auto()
 
+    # All TODO
+    CL_Arbor = auto()
+    CL_TournamentOfWeasels = auto()
+    CL_OrthographicInfection = auto()
+    CL_CityVicesDecadentEvening = auto()
+    CL_ARestorative = auto()
+    CL_AfternoonOfGoodDeeds = auto()
+    CL_AMomentsPeace = auto()
+    CL_TheInterpreterOfDreams = auto()
+    CL_AnImplausiblePenance = auto()
+    CL_TheSeekersOfTheGarden = auto()
+    CL_DevicesAndDesires = auto()
+    CL_APoliteInvitation = auto()
+    CL_GiveAGift = auto()
+    CL_ADayAtTheRaces = auto()
+    CL_OnesPublic = auto()
+    CL_BringingTheRevolution = auto()
+    CL_MirrorsAndClay = auto()
+    CL_TheCitiesThatFell = auto()
+    CL_TheSoftHeartedWidow = auto()
+    CL_AllFearTheOvergoat = auto()
+    CL_TheNorthboundParliamentarian = auto()
+    CL_WeatherAtLast = auto()
+    CL_AnUnusualWager = auto()
+    CL_MrWinesIsHoldingASale = auto()
+    CL_TheAwfulTemtpationfMoney = auto()
+    CL_InvestigatingTheAffluentPhotographer = auto()
+    CL_TheGeologyOfWinewound = auto()
+    CL_APublicLecture = auto()
+    CL_WantedRemindersOfBrighterDays = auto()
+    CL_AnUnsignedMessage = auto()
+    CL_APresumptuousLittleOpportunity = auto()
+    CL_SLowcakesAmanuensis = auto()
+    CL_AMerrySortOfCrime = auto()
+    CL_ADustyBookshop = auto()
+    CL_ALittleOmen = auto()
+    CL_ADisgracefulSpectacle = auto()
+    CL_AVoiceFromAWell = auto()
+    CL_AFineDayInTheFlit = auto()
+    CL_TheParanomasticNewshound = auto()
+
+    CL_Relicker1 = auto()
+    CL_Relicker2 = auto()
+    CL_Relicker3 = auto()
+    CL_Relicker4 = auto()
+
+    # Fate Cards
+    CL_ATradeInSouls = auto()
+    CL_YourAunt = auto()
+
+    # Zailing
     Card_NavigationError = auto()
+
+    # Philsofruits
+    # named after the png icons
+
+    CZP_TreeBlue = auto()
+    CZP_Blemmigan = auto()
+    CZP_Passerby = auto()
+    CZP_Argument = auto()
+    CZP_Crowd2 = auto()     
+    CZP_Jungle = auto()     
+    CZP_Stick = auto()     
+    CZP_Cherries = auto()     
+    CZP_MangroveCollegeInterior = auto()     
+    CZP_ElegaicCockatoo = auto()     
+    CZP_Drowned = auto()     
+    CZP_SpiderTree = auto()     
+    CZP_Parrot = auto()

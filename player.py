@@ -282,6 +282,25 @@ class Player:
         
     # def challenge_ev(self, stat, difficulty, on)
 
+    def wounds_ev(self, int):
+        blocked = min(2, int * utils.menace_multiplier(self.wounds_reduction))
+        return max(0, int - blocked)
+
+    def scandal_ev(self, int):
+        blocked = min(2, int * utils.menace_multiplier(self.scandal_reduction))
+        return max(0, int - blocked)
+
+    def nightmares_ev(self, int):
+        blocked = min(2, int * utils.menace_multiplier(self.nightmares_reduction))
+        return max(0, int - blocked)                
+
+    def suspicion_ev(self, int):
+        blocked = min(2, int * utils.menace_multiplier(self.suspicion_reduction))
+        return max(0, int - blocked)
+
+    # suspicion_multiplier = menace_multiplier(player.suspicion_reduction)
+    # scandal_multiplier = menace_multiplier(player.scandal_reduction)    
+    # nightmares_multiplier = menace_multiplier(player.nightmares_reduction)
 
 
 class Challenge:

@@ -388,6 +388,8 @@ def hoarding_paleo_trade(trade,
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
+exhaustion_hard_cap = 6
+
 def tentacled_entrepreneur_trade(config,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
@@ -416,6 +418,8 @@ def tentacled_entrepreneur_trade(config,
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
     config.trade(0, totals)
  
 def ambassador_trade(trade,
@@ -447,6 +451,8 @@ def ambassador_trade(trade,
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
     trade(0, totals)
 
 def teller_of_terrors_trade(trade,
@@ -478,6 +484,9 @@ def teller_of_terrors_trade(trade,
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+
     trade(0, totals)
 
 def gothic_tales_trade(trade,
@@ -512,6 +521,9 @@ def gothic_tales_trade(trade,
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+
     trade(0, totals)
 
 def zailor_particular_trade(trade,
@@ -546,6 +558,9 @@ def zailor_particular_trade(trade,
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+
     trade(0, totals)
 
 def rubbery_collector_trade(config,
@@ -582,6 +597,9 @@ def rubbery_collector_trade(config,
     # if debug:
     #     print(payout)
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+
     config.trade(0, totals)
 
 def phantasist_amalgamy_trade(config: Config,
@@ -605,6 +623,9 @@ def phantasist_amalgamy_trade(config: Config,
         }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+
     config.trade(0, totals)    
 
 def phantasist_antiquity_trade(config: Config,
@@ -628,6 +649,9 @@ def phantasist_antiquity_trade(config: Config,
         }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+
     config.trade(0, totals)
 
 
@@ -651,6 +675,9 @@ def phantasist_menace_trade(config: Config,
         }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+
     config.trade(0, totals)
 
 def enthusiast_skulls_trade(config: Config,
@@ -684,6 +711,9 @@ def enthusiast_skulls_trade(config: Config,
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
+
+    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+
     config.trade(0, totals)
 
 def expected_failed_sell_attempts(player, skeleton: Bone, is_chimera: bool = False, dc_per_point: int = 75):

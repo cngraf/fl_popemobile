@@ -8,6 +8,8 @@ def add_trades(_, config: Config):
     trade = config.trade
     player = config.player
 
+    scandal_multi = player.scandal_reduction
+
     # -----------------
     # --- Underclay
     # ----------------
@@ -163,6 +165,97 @@ def add_trades(_, config: Config):
     ## --- Unsorted ---
     ## ----------------
 
-    config.add({
+    # --- Starved cultural exchange ---
+    config.uniform_random_trade(
+        input={
+            Item.LondonAction: -1,
+            Item.ExtraordinaryImplication: -1,
+            Item.RecentParticipantInAStarvedCulturalExchange: 1
+        },
+        outputs=({
+            Item.AeolianScream: 6,
+            Item.Scandal: player.scandal_ev(1)
+        },
+        {
+            Item.EmeticRevelation: 1,
+            Item.VenomRuby: 50,
+            Item.Scandal: player.scandal_ev(2)
+        },
+        {
+            Item.HumanRibcage: 1,
+            Item.HeadlessSkeleton: 5,
+            Item.Scandal: player.scandal_ev(3)
+        },
+        {
+            Item.StolenKiss: 8,
+            Item.Scandal: player.scandal_ev(4)
+        },
+        {
+            Item.NoduleOfDeepAmber: 2000,
+            Item.Scandal: player.scandal_ev(5)
+        },
+        {
+            Item.NoduleOfTremblingAmber: 2,
+            Item.Scandal: player.scandal_ev(6)
+        })
+    )
 
-    })
+
+    config.uniform_random_trade(
+        input={
+            Item.LondonAction: -1,
+            Item.BottleOfGreyfields1882: -375,
+            Item.RecentParticipantInAStarvedCulturalExchange: 1
+        },
+        outputs=({
+            Item.AeolianScream: 6,
+        },
+        {
+            Item.EmeticRevelation: 1,
+            Item.VenomRuby: 50,
+        },
+        {
+            Item.HumanRibcage: 1,
+            Item.HeadlessSkeleton: 5,
+        },
+        {
+            Item.StolenKiss: 8,
+        },
+        {
+            Item.NoduleOfDeepAmber: 2000,
+        },
+        {
+            Item.NoduleOfTremblingAmber: 2,
+            Item.Scandal: player.scandal_ev(2)
+        })
+    )
+
+    config.uniform_random_trade(
+        input={
+            Item.LondonAction: -1,
+            Item.PuzzleDamaskScrap: -1,
+            Item.RecentParticipantInAStarvedCulturalExchange: 1
+        },
+        outputs=({
+            Item.AeolianScream: 6,
+        },
+        {
+            Item.EmeticRevelation: 1,
+            Item.VenomRuby: 50,
+        },
+        {
+            Item.HumanRibcage: 1,
+            Item.HeadlessSkeleton: 5,
+        },
+        {
+            Item.StolenKiss: 8,
+        },
+        {
+            Item.NoduleOfDeepAmber: 2000,
+        },
+        {
+            Item.NoduleOfTremblingAmber: 2,
+        })
+    )    
+
+    

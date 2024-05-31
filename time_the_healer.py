@@ -23,7 +23,8 @@ def add_trades(config: Config):
         Item.Suspicion: -1,
         Item.Scandal: -1,
 
-        Item.BoneMarketExhaustion: -4, # done
+        # Item.BoneMarketExhaustion: -4, # done
+        Item.RatMarketExhaustion: -50_000,
 
         Item.RavagesOfParabolanWarfare: -10, # TODO
         Item.RecentParticipantInAStarvedCulturalExchange: -1, # TODO

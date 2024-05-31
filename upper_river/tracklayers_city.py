@@ -8,6 +8,9 @@ from player import Player
 
 def add_trades(config: Config):
     trade = config.trade
+    add = config.add
+
+    efficiency = 300
 
     # ballpark
     trade(1, {
@@ -16,53 +19,53 @@ def add_trades(config: Config):
 
     # Cashing in
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.PuzzlingMap: 1
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.AmbiguousEolith: 15,
         Item.UnidentifiedThighbone: 5
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.NoduleOfTremblingAmber: 1,
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.LegalDocument: 1,
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.VitalIntelligence: 1,
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.NoduleOfTremblingAmber: 1,
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.CrystallizedEuphoria: 1,
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.VerseOfCounterCreed: 1,
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.LostResearchAssistant: 1,
     })
 
     trade(1, {
-        Item.HinterlandProsperity: -1050,
+        Item.HinterlandProsperity: -1050 + efficiency,
         Item.BlackmailMaterial: 1,
     })
 
@@ -133,14 +136,16 @@ def add_trades(config: Config):
     commune(Stat.Glasswork, 10, Item.TheMindsAscent3)
     commune(Stat.APlayerOfChess, 10, Item.TheMindsAscent3)
 
-    trade(2, {
+    add({
+        Item.Action: -2,
         Item.TheMindsAscent1: -2,
         Item.TheMindsAscent2: -3,     
         Item.TheMindsAscent3: -4,     
         Item.SearingEnigma: 1
     })
     
-    trade(2, {
+    add({
+        Item.Action: -2,
         Item.TheMindsAscent1: -2,
         Item.TheMindsAscent2: -3,     
         Item.TheMindsAscent3: -4,     
