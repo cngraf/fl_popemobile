@@ -116,35 +116,32 @@ def add_trades(config: config.Config):
                 exhaustion: 31250
             })
 
-    # for tier5 in (Item.UncannyIncunabulum,
-    #               Item.StormThrenody,
-    #               Item.RattyReliquary,
-    #               Item.UnlawfulDevice):
-    #     add({
-    #         tier5: -1,
-    #         Item.RatShilling: 162,
-    #         Item.RatMarketExhaustion: 1250
-    #     })
+    for tier5 in (Item.UncannyIncunabulum,
+                  Item.StormThrenody,
+                  Item.RattyReliquary,
+                  Item.UnlawfulDevice):
+        add({
+            tier5: -1,
+            Item.RatShilling: 125,
+        })
 
-    # for tier6 in (Item.NightWhisper,
-    #               Item.ParabolaLinenScrap,
-    #             #   Item.CracklingDevice,
-    #               Item.CaptivatingBallad):
-    #     add({
-    #         tier6: -1,
-    #         Item.RatShilling: 812,
-    #         Item.RatMarketExhaustion: 6250
-    #     })
+    for tier6 in (Item.NightWhisper,
+                  Item.ParabolaLinenScrap,
+                #   Item.CracklingDevice,
+                  Item.CaptivatingBallad):
+        add({
+            tier6: -1,
+            Item.RatShilling: 625,
+        })
 
-    # for tier7 in (Item.CorrespondingSounder,
-    #               Item.ScrapOfIvoryOrganza,
-    #               Item.CartographersHoard,
-    #               Item.ParabolanParable):
-    #     add({
-    #         tier7: -1,
-    #         Item.RatShilling: 4062,
-    #         Item.RatMarketExhaustion: 31250
-    #     })
+    for tier7 in (Item.CorrespondingSounder,
+                  Item.ScrapOfIvoryOrganza,
+                  Item.CartographersHoard,
+                  Item.ParabolanParable):
+        add({
+            tier7: -1,
+            Item.RatShilling: 3125,
+        })
 
     # if config.enable_all_rat_market_moons:
     #     for item, price in (

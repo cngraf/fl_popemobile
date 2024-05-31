@@ -203,10 +203,10 @@ player_baseline_f2p = Player(
     )
 
 player_generic = Player(stats = {
-    Stat.Watchful: Player.baseline_watchful,
-    Stat.Shadowy: Player.baseline_shadowy,
-    Stat.Dangerous: Player.baseline_dangerous,
-    Stat.Persuasive: Player.baseline_persuasive
+    Stat.Watchful: 330,
+    Stat.Shadowy: 330,
+    Stat.Dangerous: 330,
+    Stat.Persuasive: 330
 })
 
 player_generic_monster_hunter = Player(
@@ -259,7 +259,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 75
     })
 
-active_player = player_baseline_f2p
+active_player = player_generic
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -326,7 +326,7 @@ SocialActions.add_trades(config)
 Bazaar.add_trades(config)
 
 # old_rat_market.add_trades(config)
-rat_market.add_trades(config)
+# rat_market.add_trades(config)
 
 professional_activities.add_trades(active_player, config)
 
