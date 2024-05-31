@@ -39,7 +39,19 @@ class Config:
         self.bounds[Item.TroubledWaters.value] = (None, 35)
 
         self.bounds[Item.BoneMarketExhaustion.value] = (-4, 0)
-        self.bounds[Item.BoneMarketExhaustion.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketExhaustion.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek1ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek2ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek3ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek4ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek5ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek6ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek7ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek8ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek9ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek10ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek11ExhaustionStage1.value] = (-50_000, 0)
+        self.bounds[Item.RatMarketWeek12ExhaustionStage1.value] = (-50_000, 0)
 
         self.bounds[Item.Hedonist.value] = (0, 55)
 
