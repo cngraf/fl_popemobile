@@ -582,7 +582,7 @@ def rubbery_collector_trade(config,
 
         payout = {
             Item.BoneMarketExhaustion: math.floor(prop_a * prop_b/20),
-            Item.HinterlandScrip: 5 + (skeleton.echo_value * zoo_multi * 2),
+            Item.NightsoilOfTheBazaar: 5 + (skeleton.echo_value * zoo_multi * 2),
             Item.BasketOfRubberyPies: (prop_a + bonus_b) * (prop_b + bonus_a)
         }
 

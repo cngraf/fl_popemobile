@@ -259,7 +259,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 75
     })
 
-active_player = player_generic
+active_player = player_bal_monster_hunter
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -326,7 +326,7 @@ SocialActions.add_trades(config)
 Bazaar.add_trades(config)
 
 # old_rat_market.add_trades(config)
-rat_market.add_trades(config)
+# rat_market.add_trades(config)
 
 professional_activities.add_trades(active_player, config)
 
@@ -361,7 +361,7 @@ upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
 
-upper_river.tracklayers_city.add_trades(config)
+# upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 

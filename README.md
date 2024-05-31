@@ -1,25 +1,20 @@
 
 # PROJECT: POPEMOBILE
 
-## TL;DR Best Grind
+31 May 24: Everything is in flux until we figure out exactly how the New Rat Market works.
 
-Everything is in flux until we learn how the new rat market works. 5 EPA is the new 6 EPA.
+Reliable 5+ EPA grinds in the meantime:
 
-### 1. Commune with TLC, aka The New Benchmark
+### Commune with TLC
 
 5.68 EPA
 
 1. Commune with City or Creditor.
 1. Sell the item you get.
 
-PRO
-* Extremely simple
-* No randomness, no special items or qualities
-
-CON
 * Requires 15 in three advanced stats and completed railway
 
-### 2. TLC Deck
+### TLC Deck
 
 ~5.2 EPA
 
@@ -27,41 +22,21 @@ CON
 2. Play cards for Prosperity
 3. Exchange Prosperity for items
 
-PRO
-* Pretty simple
-* Flexible payouts
 * Requires completed railway
-
 
 ### 3. Hearts' Game
 
 5.2+ EPA
 
-1. Farm Hearts' Game for Leviathan Frames
-3. Sell Fish skeletons during Fish weeks
+1. Play Hearts' Game
+2. Trade Exploits for `Leviathan Frame`
+3. Hunt and dissect Pinewood Sharks for `Fin Bones, Collected`
+4. Sell Fish skeletons during Fish weeks
 
-PRO
-* Accessible with unfinished railway
-* Clears 5.4 EPA with all the bells and whistles
-* Minimal stat barriers
-
-CON
-* Requires several interlocking carousels to supply ideal bone market recipes
-* Takes weeks or months to realize gains
-
-
-### 4. Advanced Grinds
-
-5.7+ EPA?
-
-WIP
-
-PRO
-* more fun
-* more profitable
-
-CON
-* require specific ambitions, professions, items, FATE-locked locations, etc.
+* Default recipe is 1 Bright Brass Skull and 2 Fin Bones Collected.
+    * BaL players can get better payouts using the duplicated Vake skull with any Menace-scaling buyer
+* Swap in 1 or 2 Amber-Crusted Fins to access Amalgamy buyers
+    * obtained by up-converting fin bones at Helicon House
 
 ## How to Run
 1. download
