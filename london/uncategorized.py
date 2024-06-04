@@ -165,6 +165,32 @@ def add_trades(_, config: Config):
     ## --- Unsorted ---
     ## ----------------
 
+    # --- Railway Board Meeting Dividend
+    
+    # Add Entrepreneur and vote him off
+    # TODO: confirm action cost
+    config.add({
+        Item.LondonAction: -7,
+        Item.InCorporateDebt: -15,
+        Item.HinterlandScrip: 10
+    })
+
+    # TODO: check that this works
+    # does TLC spur count as a station?
+
+    # start at 0 debt & 4 members
+    # vote dividend twice
+    config.add({
+        Item.LondonAction: -1 * (6 + 6 + 1),
+
+        Item.MoonPearl: 2 * (2000 + 9 * 250 + 6 * 50),
+        Item.MagnificentDiamond: 4,
+        Item.BottleOfBrokenGiant1844: 4,
+        Item.InCorporateDebt: 5 + 7,
+        Item.DelayUntilTheNextBoardMeeting: 1
+    })
+
+
     # --- Starved cultural exchange ---
     config.uniform_random_trade(
         input={

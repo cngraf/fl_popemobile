@@ -259,7 +259,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 75
     })
 
-active_player = player_generic
+active_player = player_bal_monster_hunter
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -289,7 +289,7 @@ zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
 
 
 actions_per_day = 120
-full_draws_per_day = 3.5
+full_draws_per_day = 3
 # +10 for the weekly action refresh card
 # -3 for rat market entry
 actions_per_cycle = (7 * actions_per_day) + 10 - 3
@@ -406,7 +406,7 @@ trade(1, zailing_deck.normalized_trade())
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.Echo
+optimize_for = Item.HinterlandScrip
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1

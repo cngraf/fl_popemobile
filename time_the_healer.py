@@ -31,6 +31,8 @@ def add_trades(config: Config):
         Item.MiredInMail: -99,
         Item.AReportFromTheKhagansPalace: -1,
 
+        Item.DelayUntilTheNextBoardMeeting: -1,
+
         # 0 to 50k
         Item.RatMarketWeek1ExhaustionStage1: -50_000 / 12,
         Item.RatMarketWeek2ExhaustionStage1: -50_000 / 12,

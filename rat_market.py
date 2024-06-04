@@ -92,6 +92,16 @@ def add_trades(config: config.Config):
          Item.RatMarketWeek12ExhaustionStage3,         
          Item.UncannyIncunabulum, Item.NightWhisper, Item.ParabolanParable),
     ):
+        
+        # selling right before inflection point
+        # use up stage 2 range, but get stage 1 price
+        # barely moves the needle tho, like less than 1 echo/week
+        add({
+            tier7: -1,
+            Item.RatShilling: 4062,
+            exhaustionStage2: 31250 * stage1_multiplier
+        })
+
         for exhaustion, multiplier in (
             (exhaustionStage1, stage1_multiplier),
             (exhaustionStage2, stage2_multiplier),

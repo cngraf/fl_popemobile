@@ -39,6 +39,42 @@ class Config:
         self.bounds[Item.TroubledWaters.value] = (None, 35)
 
         self.bounds[Item.BoneMarketExhaustion.value] = (-4, 0)
+
+        self.bounds[Item.Hedonist.value] = (0, 55)
+
+        self.bounds[Item.InCorporateDebt.value] = (None, 15)
+        self.bounds[Item.SeeingBanditryInTheUpperRiver.value] = (0, 36)
+
+        self.bounds[Item.ConnectedBenthic.value] = (0, 800)
+
+        self.bounds[Item.Tribute.value] = (0, 260)
+        self.bounds[Item.TimeAtWakefulCourt.value] = (0, 13)
+        self.bounds[Item.TimeAtJerichoLocks.value] = (0, 5)
+
+        self.bounds[Item.FavBohemians.value] = (0, 7)
+        self.bounds[Item.FavChurch.value] = (0, 7)
+        self.bounds[Item.FavConstables.value] = (0, 7)
+        self.bounds[Item.FavCriminals.value] = (0, 7)
+        self.bounds[Item.FavDocks.value] = (0, 7)
+        self.bounds[Item.FavGreatGame.value] = (0, 7)
+        self.bounds[Item.FavHell.value] = (0, 7)
+        self.bounds[Item.FavRevolutionaries.value] = (0, 7)
+        self.bounds[Item.FavRubberyMen.value] = (0, 7)
+        self.bounds[Item.FavSociety.value] = (0, 7)
+        self.bounds[Item.FavTombColonies.value] = (0, 7)
+        self.bounds[Item.FavUrchins.value] = (0, 7)
+
+        self.bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
+
+        self.bounds[Item.RecentParticipantInAStarvedCulturalExchange.value] = (-1, 0)
+
+        self.bounds[Item.DelayUntilTheNextBoardMeeting.value] = (-1, 0)
+
+        self.bounds[Item.CoverTiesGeneric.value] = (0, 1)
+        self.bounds[Item.CoverTiesSurface.value] = (0, 1)
+        self.bounds[Item.CoverTiesBazaar.value] = (0, 1)
+        self.bounds[Item.CoverTiesDispossessed.value] = (0, 1)
+
         self.bounds[Item.RatMarketExhaustion.value] = (-50_000, 0)
         self.bounds[Item.RatMarketWeek1ExhaustionStage1.value] = (-50_000, 0)
         self.bounds[Item.RatMarketWeek2ExhaustionStage1.value] = (-50_000, 0)
@@ -77,39 +113,7 @@ class Config:
         self.bounds[Item.RatMarketWeek9ExhaustionStage3.value] = (-90_000, 0)
         self.bounds[Item.RatMarketWeek10ExhaustionStage3.value] = (-90_000, 0)
         self.bounds[Item.RatMarketWeek11ExhaustionStage3.value] = (-90_000, 0)
-        self.bounds[Item.RatMarketWeek12ExhaustionStage3.value] = (-90_000, 0)
-
-        self.bounds[Item.Hedonist.value] = (0, 55)
-
-        self.bounds[Item.SeeingBanditryInTheUpperRiver.value] = (0, 36)
-
-        self.bounds[Item.ConnectedBenthic.value] = (0, 800)
-
-        self.bounds[Item.Tribute.value] = (0, 260)
-        self.bounds[Item.TimeAtWakefulCourt.value] = (0, 13)
-        self.bounds[Item.TimeAtJerichoLocks.value] = (0, 5)
-
-        self.bounds[Item.FavBohemians.value] = (0, 7)
-        self.bounds[Item.FavChurch.value] = (0, 7)
-        self.bounds[Item.FavConstables.value] = (0, 7)
-        self.bounds[Item.FavCriminals.value] = (0, 7)
-        self.bounds[Item.FavDocks.value] = (0, 7)
-        self.bounds[Item.FavGreatGame.value] = (0, 7)
-        self.bounds[Item.FavHell.value] = (0, 7)
-        self.bounds[Item.FavRevolutionaries.value] = (0, 7)
-        self.bounds[Item.FavRubberyMen.value] = (0, 7)
-        self.bounds[Item.FavSociety.value] = (0, 7)
-        self.bounds[Item.FavTombColonies.value] = (0, 7)
-        self.bounds[Item.FavUrchins.value] = (0, 7)
-
-        self.bounds[Item.ResearchOnAMorbidFad.value] = (0, 6)
-
-        self.bounds[Item.RecentParticipantInAStarvedCulturalExchange.value] = (-1, 0)
-
-        self.bounds[Item.CoverTiesGeneric.value] = (0, 1)
-        self.bounds[Item.CoverTiesSurface.value] = (0, 1)
-        self.bounds[Item.CoverTiesBazaar.value] = (0, 1)
-        self.bounds[Item.CoverTiesDispossessed.value] = (0, 1)
+        self.bounds[Item.RatMarketWeek12ExhaustionStage3.value] = (-90_000, 0)        
 
         self.enable_all_rat_market_moons = True
 
