@@ -1,14 +1,15 @@
 # from enums import *
 import random
 
-'''
+"""
 Assumptions
 - 12 MA for "Dogs?" card
 - 12 GW for "Intricate Lock" card
 - 200 Shadowy for a couple cards
 - 10 Dreaded (or a Lyrebird) for Watchman card
 - 
-'''
+"""
+
 
 class HeistState:
     progress: int
@@ -48,12 +49,18 @@ class HeistState:
             Documents(),
             Lock(),
             Dogs(),
-            Prize()
+            Prize(),
         ]
-    
+
     def draw_card(self):
-        weights = [card.weight(self) for card in self.deck]
-        drawn = random.choices(self.deck, weights=weights, k=1)[0]
+        drawn = None
+        best = float("inf")
+        for card in self.deck:
+            if card.weight(self):
+                number = random.random() / card.weight(self)
+                if number < best:
+                    best = number
+                    drawn = card
         self.hand.append(drawn)
 
     def step(self):
@@ -75,6 +82,7 @@ class HeistState:
         while self.status == "InProgress":
             self.step()
 
+
 class HeistCard:
     def weight(self, state: HeistState):
         if self in state.hand:
@@ -87,6 +95,7 @@ class HeistCard:
 
     def play(self, state: HeistState):
         pass
+
 
 class Stairs(HeistCard):
     def ev(self, state: HeistState):
@@ -110,6 +119,7 @@ class Watchman(HeistCard):
     def play(self, state: HeistState):
         state.progress += 1
 
+
 class Door(HeistCard):
     def ev(self, state: HeistState):
         if state.info > 0:
@@ -117,7 +127,7 @@ class Door(HeistCard):
         elif state.tread == 2:
             return -10
         else:
-            return -5 # arbitrary
+            return -5  # arbitrary
 
     def play(self, state: HeistState):
         if state.info > 0:
@@ -129,12 +139,13 @@ class Door(HeistCard):
             else:
                 state.tread -= 2
 
+
 class Place(HeistCard):
     def ev(self, state: HeistState):
         if state.info > 0:
-            return 0.8 # safe but costs items
+            return 0.8  # safe but costs items
         else:
-            return 0.2 # arbitrary
+            return 0.2  # arbitrary
 
     def play(self, state: HeistState):
         if state.info > 0:
@@ -146,6 +157,7 @@ class Place(HeistCard):
             else:
                 state.tread -= 1
 
+
 class Cat(HeistCard):
     def ev(self, state: HeistState):
         return 0.99
@@ -153,6 +165,7 @@ class Cat(HeistCard):
     def play(self, state: HeistState):
         state.progress += 1
         state.cat_bribes += 1
+
 
 class Look(HeistCard):
     def ev(self, state: HeistState):
@@ -163,7 +176,7 @@ class Look(HeistCard):
         else:
             # TODO: would we rather play this or door at 3 tread?
             return -4
-        
+
     def play(self, state: HeistState):
         if state.keys > 0:
             state.keys -= 1
@@ -176,11 +189,12 @@ class Look(HeistCard):
                 state.tread -= 1
         else:
             # this option always loses tread
-            state.tread -=1
+            state.tread -= 1
             if random.random() > 0.4:
                 state.progress += 1
             else:
                 state.progress -= 1
+
 
 class Climb(HeistCard):
     def weight(self, state: HeistState):
@@ -188,7 +202,7 @@ class Climb(HeistCard):
             return 0
         else:
             return 0.2
-        
+
     def ev(self, state: HeistState):
         if state.info > 0:
             return 0.9
@@ -204,13 +218,14 @@ class Climb(HeistCard):
             if random.random() > 0.5:
                 state.progress += 1
 
+
 class Shadows(HeistCard):
     def ev(self, state: HeistState):
         if state.info > 0:
             return 2
         else:
             return 0
-        
+
     def play(self, state: HeistState):
         if state.info > 0:
             state.info -= 1
@@ -221,15 +236,16 @@ class Shadows(HeistCard):
             else:
                 state.progress -= 1
 
+
 class Corridor(HeistCard):
     def ev(self, state: HeistState):
         if state.info > 0:
             return 2
         elif state.tread > 1:
-            return -0.1 # arbitrary
+            return -0.1  # arbitrary
         else:
             return -5  # arbitrary
-        
+
     def play(self, state: HeistState):
         if state.info > 0:
             state.info -= 1
@@ -238,7 +254,7 @@ class Corridor(HeistCard):
             if random.random() > 0.5:
                 state.progress += 1
             else:
-                state.tread -= 1    
+                state.tread -= 1
 
 
 class Lights(HeistCard):
@@ -247,23 +263,25 @@ class Lights(HeistCard):
             return 0.5
         else:
             return 0
-        
+
     def play(self, state: HeistState):
         state.tread = min(state.tread + 1, 3)
+
 
 class Rats(HeistCard):
     def ev(self, state: HeistState):
         return 1
-    
+
     def play(self, state: HeistState):
         state.progress += 1
+
 
 class Documents(HeistCard):
     # TODO: random key option?
 
     def ev(self, state: HeistState):
         return 1
-    
+
     def play(self, state: HeistState):
         state.progress += 1
 
@@ -271,16 +289,18 @@ class Documents(HeistCard):
 class Lock(HeistCard):
     def ev(self, state: HeistState):
         return 2
-    
+
     def play(self, state: HeistState):
         state.progress += 2
+
 
 class Dogs(HeistCard):
     def ev(self, state: HeistState):
         return 1
-    
+
     def play(self, state: HeistState):
-        state.progress += 1        
+        state.progress += 1
+
 
 class Prize(HeistCard):
     def weight(self, state: HeistState):
@@ -288,12 +308,13 @@ class Prize(HeistCard):
             return 10
         else:
             return 0
-        
+
     def ev(self, state: HeistState):
         return 100
-    
+
     def play(self, state: HeistState):
         state.status = "Success"
+
 
 runs = 100_000
 keys = 0
@@ -324,4 +345,3 @@ print(f"Completed {runs} runs with {info} Info & {keys} Keys.")
 print(f"{successes/runs} success rate, in avg {success_steps/successes} steps")
 print(f"{failures/runs} fail rate, in avg {failure_steps/max(failures, 1)} steps")
 print(f"Bribed an avg of {cat_bribes/runs} cats")
-
