@@ -14,8 +14,8 @@ def menace_multiplier(reduction_points):
     # formula per wiki
     return 1 - (0.6 * (1 - 0.75**reduction_points))
 
-def pass_rate(player, stat, difficulty):
-    player_level = player.stats[stat]
+def pass_rate(player, stat, difficulty, modifier = 0):
+    player_level = player.stats[stat] + modifier
     if difficulty <= 0:
         return 1.0
     elif stat in (Stat.Watchful, Stat.Shadowy, Stat.Dangerous, Stat.Persuasive):

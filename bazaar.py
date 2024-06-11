@@ -62,10 +62,13 @@ def add_trades(config: Config):
     trade(0, { Item.UseOfVillains: -1, Item.Echo: 6 })
     trade(0, { Item.ComprehensiveBribe: -1, Item.Echo: 12.5 })
 
+    # Curiosity
+    trade(0, { Item.VenomRuby: -1, Item.Echo: 0.1 })
+    trade(0, { Item.Sapphire: -1, Item.Echo: 0.12 })
+
     # Currency ------
     buy_sell(config, Item.FistfulOfSurfaceCurrency, -0.06, 0.03)
     trade(0, { Item.FirstCityCoin: -1, Item.Echo: 0.25 })
-
 
     # Elder ---------
     buy_sell(config, Item.JadeFragment, -0.02, 0.01)

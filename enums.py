@@ -152,6 +152,7 @@ class Item(Enum):
     RootAction = auto()
 
     LondonAction = auto()
+    ParabolaAction = auto()
 
     JerichoAction = auto()
 
@@ -756,6 +757,8 @@ class Item(Enum):
     HeartsGameExploits = auto()
     ApproximateValueOfOutstandingInvoicesInPennies = auto()
     HinterlandProsperity = auto()
+    HidingPlaceOfAPeculiarItem = auto()
+    WaswoodHeistCashOut = auto()
 
     # Piracy
     ChasingDownYourBounty = auto()

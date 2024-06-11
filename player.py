@@ -149,6 +149,7 @@ def min_endgame_f2p_bonuses():
     # - SMEN
     # - retired items
     # - ubergoat (borderline?)
+    # - anything in-game but not currently obtainable
 
     # Includes
     # - faction renown items
@@ -160,7 +161,7 @@ def min_endgame_f2p_bonuses():
     return {
         Stat.Watchful: 8 + 11 + 8 + 8 + 10 + 7 + 10 + 5 + 7, # 74
         Stat.Shadowy: 6 + 6 + 7 + 10 + 10 + 10 + 6 + 10 + 5 + 8, # 78
-        Stat.Dangerous:  6 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 6 + 4, # 71
+        Stat.Dangerous:  6 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 8 + 4, # 73
         Stat.Persuasive: 10 + 10 + 8 + 5 + 10 + 5 + 10 + 2 + 8 + 8, # 76
 
         Stat.Bizarre: 1 + 2 + 2 + 2 + 1 + 1 + 1 + 2 + 1 + 2 + 2, # 17
@@ -195,8 +196,8 @@ def min_endgame_f2p_bonuses():
         # HMS Ramilies, Amber Vision
         Stat.Zeefaring: 5,
 
-        # Glim Earring
-        Stat.Chthonosophy: 1,
+        # earring not obtainable
+        Stat.Chthonosophy: 0,
 
         # Glim Earring, Carpetbag, Cinnabar Compass
         Stat.Inerrant: 3,
@@ -207,6 +208,64 @@ def min_endgame_f2p_bonuses():
         # Illuminating Cap or Hymn, Ratskin Suit, Devil's Dictionary, Ratskin Boots,
         # Indestructible Trunk
         Stat.Neathproofed: 5,
+    }
+
+def advanced_endgame_f2p_bonuses():
+    # Includes
+    # - everything in min set
+    # - seasonal non-FATE items
+    # - ubergoat
+    # - unburdened imp
+
+    return {
+        Stat.Watchful: 8 + 11 + 8 + 8 + 10 + 7 + 20 + 5 + 3 + 8,
+        Stat.Shadowy: 8 + 6 + 7 + 10 + 10 + 10 + 6 + 10 + 5 + 4 + 8,
+        Stat.Dangerous:  8 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 4 + 8 + 4,
+        Stat.Persuasive: 10 + 10 + 8 + 8 + 10 + 5 + 10 + 5 + 8 + 8,
+        # done
+
+        Stat.Bizarre: 4 + 2 + 2 + 2 + 3 + 1 + 1 + 3 + 4 + 3 + 2,
+        Stat.Dreaded: 4 + 2 + 1 + 2 + 2 + 1 + 1 + 3 + 4 + 2 + 2,
+        Stat.Respectable: 4 + 4 + 2 + 2 + 2 + 1 + 1 + 3 + 4 + 2 + 2,
+
+        # Hat, Clothes, Gloves, Weapon, Boots, Companion, Affil, Transport, HC
+        Stat.KatalepticToxicology: 9,
+
+        # Hat, Clothes, Gloves, Wep, Boots, Comp, Transport, HC
+        Stat.MonstrousAnatomy: 8,
+
+        # Hat, Clothes, Gloves, Wep, Boots, Luggage, Comp, Affil, Trans
+        Stat.APlayerOfChess: 9,
+
+        # Hat, Clothes, Adorn, Gloves, Wep, Boots, Comp+2, HC+2
+        Stat.Glasswork: 10,
+
+        # Hat, Wep, Booys, Comp, Affil, HC
+        Stat.ShapelingArts: 6,
+
+        # Hat, Clo, Adorn, Gloves, Wep, Boots, Comp+2, Affil, Trans, HC
+        Stat.ArtisanOfTheRedScience: 11,
+
+        # Hat, Adorn, Wep, Boots, Comp, Affil, Trans, HC
+        Stat.Mithridacy: 8,
+
+        # Companion
+        Stat.StewardOfTheDiscordance: 1,
+
+        # Hat, Clo, Gloves, Wep, Boots, Comp, Affil, Trans, HC
+        Stat.Zeefaring: 9,
+
+        # Companion
+        Stat.Chthonosophy: 1,
+
+        # Weapon, Luggage, HC
+        Stat.Inerrant: 3,
+
+        # Luggage, Affil
+        Stat.Insubstantial: 2,
+
+        # Hat, Clo+2, Gloves, Wep, Boots, Lugg, Comp
+        Stat.Neathproofed: 8,
     }
 
 

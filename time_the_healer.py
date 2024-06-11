@@ -20,7 +20,7 @@ def add_trades(config: Config):
 
         Item.Wounds: -2,
         Item.Nightmares: -1,
-        Item.Suspicion: -1,
+        # Item.Suspicion: -1,
         Item.Scandal: -1,
 
         # Item.BoneMarketExhaustion: -4, # done

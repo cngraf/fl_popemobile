@@ -2,6 +2,8 @@ from enums import *
 from utils import *
 from config import Config
 
+# TODO: not properly constrained
+
 def add_trades(config: Config):
     player = config.player
     trade = config.trade

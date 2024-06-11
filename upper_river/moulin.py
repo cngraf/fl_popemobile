@@ -3,6 +3,7 @@ from utils import *
 
 def add_trades(active_player, config):
     trade = config.trade
+    add = config.add
 
     # Antiquarian's Shop
 
@@ -83,6 +84,28 @@ def add_trades(active_player, config):
         Item.NicatoreanRelic: (net_wages / 1000) + 3 * lucky_finds * 0.25,
         Item.FirstCityCoin: 20 * lucky_finds * 0.25,
         Item.UnlawfulDevice: lucky_finds * 0.25
+    })
+
+    # Wellspring
+    # TODO: confirm action costs
+    # 2 to hire help
+    # 1 to start
+    # 5 more cards to get to 6 distance
+    # 1 to play wellspring card
+    # 1 to get waters (+4 waters)
+    # 1 to leave via mirror
+    # 1 to talk to fingerking (+1 memory of much lesser self)
+    # 12 actions to start in Moulin, end in Parabola
+    # can't get back to moulin directly, only London, Balmoral, S8, or Hurlers
+    # 1 to play mirror's hunger card (+1 rumour)
+    # 1 action to get back to moulin
+    # 1 to "pay off" your crew
+
+    add({
+        Item.Action: -15,
+        Item.FlaskOfWaswoodSpringWater: 4,
+        Item.MemoryOfALesserSelf: 1,
+        Item.RumourOfTheUpperRiver: 1
     })
 
     # --- Monographs

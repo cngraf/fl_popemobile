@@ -38,6 +38,7 @@ import london.laboratory
 import london.newspaper
 import london.bone_market
 import london.hearts_game
+import london.heists
 
 import parabola
 
@@ -202,6 +203,10 @@ player_baseline_f2p = Player(
     stats = utils.sum_dicts(baseline_stats(), min_endgame_f2p_bonuses())
     )
 
+player_advanced_f2p = Player(
+    stats = utils.sum_dicts(baseline_stats(), advanced_endgame_f2p_bonuses())
+    )
+
 player_generic = Player(stats = {
     Stat.Watchful: 330,
     Stat.Shadowy: 330,
@@ -259,7 +264,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 75
     })
 
-active_player = player_bal_monster_hunter
+active_player = player_baseline_f2p
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -297,8 +302,8 @@ actions_per_cycle = (7 * actions_per_day) + 10 - 3
 core_constraint = {
     Item.Constraint: 1,
     Item.RootAction: actions_per_cycle,
-    Item.VisitFromTimeTheHealer: 1,
-    Item.CardDraws: full_draws_per_day * 7 * 10
+    # Item.VisitFromTimeTheHealer: 1,
+    # Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
@@ -325,7 +330,6 @@ time_the_healer.add_trades(config)
 SocialActions.add_trades(config)
 Bazaar.add_trades(config)
 
-# old_rat_market.add_trades(config)
 rat_market.add_trades(config)
 
 professional_activities.add_trades(active_player, config)
@@ -339,6 +343,7 @@ london.newspaper.add_trades(active_player, config)
 london.laboratory.add_trades(active_player, lab_rpa, config)
 london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
+london.heists.add_trades(config)
 
 london.bone_market.add_trades(active_player, config)
 
@@ -373,40 +378,13 @@ firmament.hallows_throat.add_trades(config)
 # Upper River Deck
 # -------------
 
-# TODO: upper river deck stuff
-config.railway_card("Digs in the Magistracy of the Evenlode",
-    Rarity.Standard,
-    Location.TheMagistracyOfTheEvenlode,
-    True, {
-    Item.DigsInEvenlode: 1
-})
-
-trade(0, {
-    Item.DigsInEvenlode: -1,
-    Item.SurveyOfTheNeathsBones: -120,
-    Item.PalaeontologicalDiscovery: 5
-})
-
-trade(0, {
-    Item.DigsInEvenlode: -1,
-    Item.SurveyOfTheNeathsBones: -140,
-    Item.PalaeontologicalDiscovery: 6
-})
-
-# specific treasure only
-trade(0, {
-    Item.DigsInEvenlode: -1,
-    Item.SurveyOfTheNeathsBones: -240,
-    Item.PalaeontologicalDiscovery: 10
-})
-
 trade(1, zailing_deck.normalized_trade())
 
 # ------------------------------------------
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.HinterlandScrip
+optimize_for = Item.Echo
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1

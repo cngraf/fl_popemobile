@@ -298,6 +298,8 @@ def match_action_type(zoo_type, flux_type):
         else:
             return Item.Action
 
+suspicion_multiplier = 0.85
+
 def naive_collector_trade(trade,
                         player: Player,
                        recipe: dict,
@@ -321,7 +323,7 @@ def naive_collector_trade(trade,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
@@ -351,7 +353,7 @@ def bohemian_sculptress_trade(trade,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
@@ -382,7 +384,7 @@ def hoarding_paleo_trade(trade,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
@@ -414,7 +416,7 @@ def tentacled_entrepreneur_trade(config,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
@@ -447,7 +449,7 @@ def ambassador_trade(trade,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
@@ -480,7 +482,7 @@ def teller_of_terrors_trade(trade,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
@@ -517,7 +519,7 @@ def gothic_tales_trade(trade,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
@@ -554,7 +556,7 @@ def zailor_particular_trade(trade,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
@@ -591,7 +593,7 @@ def rubbery_collector_trade(config,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     # if debug:
@@ -706,7 +708,7 @@ def enthusiast_skulls_trade(config: Config,
 
     failure_penalty = {
         action_type: -1 * avg_failures,
-        Item.Suspicion: 2 * avg_failures * 0.85
+        Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)

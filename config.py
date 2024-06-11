@@ -113,7 +113,9 @@ class Config:
         self.bounds[Item.RatMarketWeek9ExhaustionStage3.value] = (-90_000, 0)
         self.bounds[Item.RatMarketWeek10ExhaustionStage3.value] = (-90_000, 0)
         self.bounds[Item.RatMarketWeek11ExhaustionStage3.value] = (-90_000, 0)
-        self.bounds[Item.RatMarketWeek12ExhaustionStage3.value] = (-90_000, 0)        
+        self.bounds[Item.RatMarketWeek12ExhaustionStage3.value] = (-90_000, 0)      
+
+        self.bounds[Item.WhiskerwaysSecondaryPayout.value] = (None, 0)  
 
         self.enable_all_rat_market_moons = True
 
