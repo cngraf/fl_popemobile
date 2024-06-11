@@ -65,13 +65,29 @@ def add_trades(config: Config):
     # 0.002 * (8 + 30 * 0.5)
     # that's about 0.05 addtl actions per run
 
+    # add({
+    #     Item.Action: -(1 + 2 + 7 + 0.05),
+    #     Item.Echo: -4.8,
+    #     Item.AppallingSecret: -6,
+    #     Item.HidingPlaceOfAPeculiarItem: -1,
+    #     Item.WaswoodHeistCashOut: 1
+    # })
+
+    # YOLO snaffle strat, start 1 info & 1 key
+    # 1 action to start heist
+    # 4.7 actions => 28 casing
+    # 1 action => buy key
+    # 1 action => buy info
+    # 5.6 actions to complete heist
+
     add({
-        Item.Action: -(1 + 2 + 7.2 + 0.5),
-        Item.Echo: -4.8,
-        Item.AppallingSecret: -6,
+        Item.Action: -13.3,
+        Item.AppallingSecret: -3,
+        Item.CompromisingDocument: 1.9,
+        Item.StolenCorrespondence: 4.2,
         Item.HidingPlaceOfAPeculiarItem: -1,
         Item.WaswoodHeistCashOut: 1
-    })
+    })    
 
     # optimistic semi-aggro strat
     # 3 actions + 7.2 echoes => 27 casing

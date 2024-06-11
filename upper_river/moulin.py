@@ -95,7 +95,7 @@ def add_trades(active_player, config):
     # 1 to get waters (+4 waters)
     # 1 to leave via mirror
     # 1 to talk to fingerking (+1 memory of much lesser self)
-    # 12 actions to start in Moulin, end in Parabola
+    # total 12 actions to start in Moulin, end in Parabola
     # can't get back to moulin directly, only London, Balmoral, S8, or Hurlers
     # 1 to play mirror's hunger card (+1 rumour)
     # 1 action to get back to moulin
@@ -105,7 +105,9 @@ def add_trades(active_player, config):
         Item.Action: -15,
         Item.FlaskOfWaswoodSpringWater: 4,
         Item.MemoryOfALesserSelf: 1,
-        Item.RumourOfTheUpperRiver: 1
+        Item.RumourOfTheUpperRiver: 1,
+        Item.Suspicion: 2.5 * (0.85 ** 2),
+        Item.Wounds: 18
     })
 
     # --- Monographs

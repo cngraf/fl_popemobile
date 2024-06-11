@@ -128,47 +128,6 @@ crackpot idea
 - maybe go halfway and do this for the buy/sell actions and that's it
 '''
 
-# class Config:
-#     def __init__(self):
-#         self.actions_per_day = 120.0
-#         self.cards_seen_per_day = 40
-
-# Important Parameters
-# actions doesn't matter on its own until I add some weekly+ stuff
-# but it does matter relative to cards seen per day
-
-# core_constraint = {
-#     Item.Constraint: 1,
-#     Item.Action: 1,
-#     # Item.CardDraws: 0.25,
-
-#     # bone inventory
-#     # Item.BoneFragments: 51_000,
-#     # Item.FinBonesCollected: 43,
-#     # Item.JetBlackStinger: 68,
-#     # Item.SurveyOfTheNeathsBones: 210,
-#     # Item.UnidentifiedThighbone: 53,
-#     # Item.WitheredTentacle: 62,
-#     # Item.FemurOfAJurassicBeast: 6,
-#     # Item.HeadlessSkeleton: 14,
-#     # Item.HumanArm: 14,
-#     # Item.KnottedHumerus: 13,
-#     # Item.PlasterTailBones: 19,
-#     # Item.WingOfAYoungTerrorBird: 21,
-#     # Item.FlourishingRibcage: 12,
-#     # Item.FossilisedForelimb: 1,
-#     # Item.HolyRelicOfTheThighOfStFiacre: 29,
-#     # Item.HumanRibcage: 22,
-#     # Item.SkullInCoral: 4,
-#     # Item.SabreToothedSkull: 1,
-#     # Item.SkeletonWithSevenNecks: 4,
-#     # Item.LeviathanFrame: 1
-#     # Item.Echo: 1
-# }
-
-# actions_per_day = 120.0
-# cards_seen_per_day = 0
-
 # placeholder for upconversions and stuff
 # if anyone knows the real values please share
 default_rare_success_rate = 0.05
@@ -264,7 +223,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 75
     })
 
-active_player = player_baseline_f2p
+active_player = player_advanced_f2p
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -274,9 +233,6 @@ num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
 config = Config(num_vars, active_player)
-
-# Toggles
-config.enable_all_rat_market_moons = True
 
 trade = config.trade
 
@@ -345,7 +301,7 @@ london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
 
-london.bone_market.add_trades(active_player, config)
+# london.bone_market.add_trades(active_player, config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
@@ -366,12 +322,12 @@ upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
 
-upper_river.tracklayers_city.add_trades(config)
+# upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 
-# fate.philosofruits.add_trades(active_player, config)
-# fate.upwards.add_trades(active_player, config)
+fate.philosofruits.add_trades(active_player, config)
+fate.upwards.add_trades(active_player, config)
 # fate.whiskerways.add_trades(config)
 
 # --------------
