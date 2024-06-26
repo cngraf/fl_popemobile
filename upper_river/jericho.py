@@ -6,7 +6,7 @@ def add_trades(active_player, config):
     trade = config.trade
     add = config.add
 
-    visit_length = 10
+    visit_length = 5
 
     add({
         Item.RootAction: -1 * (visit_length + 1),

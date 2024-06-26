@@ -58,18 +58,32 @@ class HeistState:
             Prize()
         ]
     
+    # def draw_card(self):
+    #     weights = [card.weight(self) for card in self.deck]
+    #     drawn = random.choices(self.deck, weights=weights, k=1)[0]
+    #     self.hand.append(drawn)
+
     def draw_card(self):
-        weights = [card.weight(self) for card in self.deck]
-        drawn = random.choices(self.deck, weights=weights, k=1)[0]
+        drawn, lowest = None, float('inf')
+        for card in self.deck:
+            if card not in self.hand and card.can_draw(self):
+                rand = random.random() / card.weight(self)
+                if rand < lowest:
+                    drawn = card
+                    lowest = rand
         self.hand.append(drawn)
 
     def step(self):
         self.steps += 1
 
         sum_free_prog = sum(i.free_progress for i in self.hand) + self.progress
-    
         sum_ev = sum(i.ev(self) for i in self.hand) + self.progress
-        while len(self.hand) < 3 and (sum_free_prog < 5 or sum_ev < 5 or self.progress >= 5):
+
+        has_2prog = False
+        if self.hand:
+            has_2prog = any(card.free_progress >= 2 for card in self.hand)
+
+        while len(self.hand) < 3 and ((sum_ev < 5 and not has_2prog) or self.progress >= 5):
             self.draw_card()
 
         self.hand.sort(key=lambda card: card.ev(self))
@@ -95,6 +109,9 @@ class HeistCard:
         self.info_progress = 0
         self.key_progress = 0
 
+    def can_draw(self, state: HeistState):
+        return True
+
     def weight(self, state: HeistState):
         if self in state.hand:
             return 0
@@ -112,13 +129,13 @@ class Stairs(HeistCard):
 
     def __init__(self):
         super().__init__()
-        self.free_progress = 1
+        self.free_progress = 1.4
 
     def ev(self, state: HeistState):
         if state.progress <= 3:
-            return 1.4
+            return 2.01
         else:
-            return 1
+            return 1.01
 
     def play(self, state: HeistState):
         if state.progress <= 3:
@@ -134,7 +151,7 @@ class Watchman(HeistCard):
         self.free_progress = 1
 
     def ev(self, state: HeistState):
-        return 1
+        return 1.01
 
     def play(self, state: HeistState):
         state.progress += 1
@@ -146,11 +163,17 @@ class Door(HeistCard):
         
     def ev(self, state: HeistState):
         if state.info > 0:
-            return 2
-        elif state.tread == 2:
+            return 2.001
+        elif state.tread <= 2:
             return -10
         else:
-            return -5
+            return 0
+        # elif state.tread >= 3 and state.progress <= 3:
+        #     return 0.01
+        # elif state.tread >= 3 and state.progress == 4:
+        #     return -1
+        # else:
+        #     return -9
 
     def play(self, state: HeistState):
         if state.info > 0:
@@ -172,22 +195,24 @@ class Place(HeistCard):
 
     def ev(self, state: HeistState):
         # if state.progress == 4 and state.tread >= 3: # and len(state.hand) < 3:
-        if state.tread >= 3:
-            return 3        
+        # if state.tread >= 3 and info < 1:
+            # return 0.1
         if state.info > 0:
-            return 0.8
+            return 1
+        elif state.tread > 1:
+            return 0.8 # arbitrary
         else:
-            return 0.2 # arbitrary
+            return 0.1
 
     def play(self, state: HeistState):
         # if state.progress == 4 and state.tread >= 3: # and len(state.hand) < 3:
-        if state.tread >= 3:
-            if random.random() > 0.5:
-                state.snaffled_docs += 9
-                state.stolen_correspondence += 20
-            else:
-                state.tread -= 2
-        elif state.info > 0:
+        # if state.tread >= 3:
+        #     if random.random() > 0.5:
+        #         state.snaffled_docs += 9
+        #         state.stolen_correspondence += 20
+        #     else:
+        #         state.tread -= 2
+        if state.info > 0:
             state.info -= 1
             state.progress += 1
         else:
@@ -202,7 +227,7 @@ class Cat(HeistCard):
         self.free_progress = 1
 
     def ev(self, state: HeistState):
-        return 0.99
+        return 1
 
     def play(self, state: HeistState):
         state.progress += 1
@@ -215,12 +240,12 @@ class Look(HeistCard):
 
     def ev(self, state: HeistState):
         if state.keys > 0:
-            return 2
+            return 2.02
         elif state.tread == 1:
-            return -10
+            return -50
         else:
             # TODO: would we rather play this or door at 3 tread?
-            return -4
+            return -1
         
     def play(self, state: HeistState):
         if state.keys > 0:
@@ -253,7 +278,7 @@ class Climb(HeistCard):
         
     def ev(self, state: HeistState):
         if state.info > 0:
-            return 0.9
+            return 1
         else:
             return 0.5
         # TODO: escape option if things are really bad?
@@ -273,7 +298,7 @@ class Shadows(HeistCard):
 
     def ev(self, state: HeistState):
         if state.info > 0:
-            return 2
+            return 2.01
         elif state.progress == 0:
             return 0.5
         else:
@@ -296,11 +321,11 @@ class Corridor(HeistCard):
 
     def ev(self, state: HeistState):
         if state.info > 0:
-            return 2
+            return 2.01
         elif state.tread > 1:
-            return -0.1 # arbitrary
+            return 0.5
         else:
-            return -5  # arbitrary
+            return -0.05  # arbitrary
         
     def play(self, state: HeistState):
         if state.info > 0:
@@ -316,7 +341,7 @@ class Corridor(HeistCard):
 class Lights(HeistCard):
     def ev(self, state: HeistState):
         if state.tread < 3:
-            return 0.5
+            return 0.51
         else:
             return 0
         
@@ -329,7 +354,7 @@ class Rats(HeistCard):
         self.free_progress = 1
 
     def ev(self, state: HeistState):
-        return 1
+        return 1.01
     
     def play(self, state: HeistState):
         state.progress += 1
@@ -342,7 +367,7 @@ class Documents(HeistCard):
         self.free_progress = 1
 
     def ev(self, state: HeistState):
-        return 1
+        return 1.01
     
     def play(self, state: HeistState):
         # if state.progress >= 5:
@@ -360,7 +385,7 @@ class Lock(HeistCard):
         self.free_progress = 2
 
     def ev(self, state: HeistState):
-        return 2
+        return 2.1
     
     def play(self, state: HeistState):
         state.progress += 2
@@ -371,12 +396,15 @@ class Dogs(HeistCard):
         self.free_progress = 1
 
     def ev(self, state: HeistState):
-        return 1
+        return 1.01
     
     def play(self, state: HeistState):
         state.progress += 1        
 
 class Prize(HeistCard):
+    def can_draw(self, state: HeistState):
+        return state.progress >= 5
+
     def weight(self, state: HeistState):
         if state.progress >= 5:
             return 10
@@ -391,7 +419,7 @@ class Prize(HeistCard):
 
 runs = 100_000
 keys = 1
-info = 1
+info = 0
 
 successes = 0
 success_steps = 0

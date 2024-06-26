@@ -107,7 +107,7 @@ def add_trades(active_player, config):
         Item.MemoryOfALesserSelf: 1,
         Item.RumourOfTheUpperRiver: 1,
         Item.Suspicion: 2.5 * (0.85 ** 2),
-        Item.Wounds: 18
+        Item.Wounds: 8
     })
 
     # --- Monographs

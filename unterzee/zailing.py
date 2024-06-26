@@ -3,6 +3,17 @@ from utils import *
 
 def add_trades(active_player, zailing_epa, config):
     trade = config.trade
+    add = config.add
+
+    add({
+        Item.HomeWatersZeeDraw: -1,
+        Item.ZailingDraws: 1
+    })    
+
+    add({
+        Item.ShephersWashZeeDraw: -1,
+        Item.ZailingDraws: 1
+    })    
 
     # ballparking EPA for zailing with piracy
     trade(0, {

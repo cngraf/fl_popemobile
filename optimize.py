@@ -133,7 +133,7 @@ crackpot idea
 default_rare_success_rate = 0.05
 
 # maybe improve slightly with EPA
-zailing_epa = 3.2
+zailing_epa = 3.0
 
 # lab research per action, somewhat optimistic
 lab_rpa = 33
@@ -258,7 +258,7 @@ actions_per_cycle = (7 * actions_per_day) + 10 - 3
 core_constraint = {
     Item.Constraint: 1,
     Item.RootAction: actions_per_cycle,
-    # Item.VisitFromTimeTheHealer: 1,
+    Item.VisitFromTimeTheHealer: 1,
     # Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
@@ -322,7 +322,7 @@ upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
 
-# upper_river.tracklayers_city.add_trades(config)
+upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 
@@ -340,7 +340,7 @@ trade(1, zailing_deck.normalized_trade())
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.Echo
+optimize_for = Item.HinterlandScrip
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1
