@@ -73,7 +73,7 @@ def bone_table():
         Bone(Item.PlatedSkull, 25, menace=2, skulls=1),
         Bone(Item.EyelessSkull, 30, menace=2, skulls=1),
         Bone(Item.DoubledSkull, 30, anitquity=2, amalgamy=1, skulls=2),
-        Bone(Item.SabreToothedSkull, 30, anitquity=1, menace=1, skulls=1),
+        Bone(Item.SabreToothedSkull, 62.5, anitquity=1, menace=1, skulls=1),
         Bone(Item.BrightBrassSkull, 65, implausibility=2, skulls=1, addtl_costs={Item.NevercoldBrassSliver: -200}),
         Bone(Item.DuplicatedVakeSkull, 65, menace=3, skulls=1),
 
@@ -1668,20 +1668,99 @@ def add_trades(player: Player, config: Config):
     #     Item.RumourOfTheUpperRiver: 24
     # })
 
-    # # trade(0, {
-    # #     Item.Echo: -60,
-    # #     Item.GlimEncrustedCarapace: 1
-    # # })
+    # hack for testing
+    # trade(29, {
+    #     # Item.Echo: -60,
+    #     Item.GlimEncrustedCarapace: 1
+    # })
 
-    # trade(12, {
-    #     Item.GlimEncrustedCarapace: -1,
-    #     Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: -1,
-    #     Item.HolyRelicOfTheThighOfStFiacre: -8,
+    # TODO require spider week
+    trade(0, {
+        Item.GeneralArachnidAction: -11,
+        Item.GlimEncrustedCarapace: -1,
+        Item.HolyRelicOfTheThighOfStFiacre: -8,
 
-    #     Item.PreservedSurfaceBlooms: 83,
-    #     Item.RumourOfTheUpperRiver: 41
-    # })  
+        Item.PreservedSurfaceBlooms: 78,
+        Item.RumourOfTheUpperRiver: 40
+    })
 
+    # trade(0, {
+    #     Item.Echo: -312.5,
+    #     Item.PrismaticFrame: 1
+    # })
+
+    # # might be 11 actions? declare no more tails?
+    # trade(10, {
+    #     Item.PrismaticFrame: -1,
+    #     Item.SabreToothedSkull: -1,
+    #     Item.CarvedBallOfStygianIvory: -2,
+    #     Item.AmberCrustedFin: -3,
+    #     Item.JetBlackStinger: -1,
+
+    #     Item.HinterlandScrip: 84,
+    #     Item.CarvedBallOfStygianIvory: 20
+    # })
+
+    gothic_tales_trade(trade, player,
+        recipe={
+            Item.AntiquityFishAction: -11, # might be 10?
+            Item.PrismaticFrame: -1,
+            Item.SabreToothedSkull: -1,
+            Item.CarvedBallOfStygianIvory: -2,
+            Item.AmberCrustedFin: -3,
+            Item.JetBlackStinger: -1,
+        },
+        zoo_type=ZooType.Fish,
+        fluctuations=Fluctuations.Antiquity)
+    
+    gothic_tales_trade(trade, player,
+        recipe={
+            Item.MenaceFishAction: -11,
+            Item.PrismaticFrame: -1,
+            Item.SabreToothedSkull: -1,
+            Item.CarvedBallOfStygianIvory: -2,
+            Item.AmberCrustedFin: -3,
+            Item.JetBlackStinger: -1,
+        },
+        zoo_type=ZooType.Fish,
+        fluctuations=Fluctuations.Menace)
+    
+    gothic_tales_trade(trade, player,
+        recipe={
+            Item.MenaceFishAction: -11,
+            Item.PrismaticFrame: -1,
+            Item.DuplicatedVakeSkull: -1,
+            Item.CarvedBallOfStygianIvory: -2,
+            Item.FinBonesCollected: -3,
+            Item.JetBlackStinger: -1,
+        },
+        zoo_type=ZooType.Fish,
+        fluctuations=Fluctuations.Menace)     
+    
+    rubbery_collector_trade(config,
+        recipe={
+            Item.MenaceFishAction: -11,
+            Item.PrismaticFrame: -1,
+            Item.DuplicatedVakeSkull: -1,
+            Item.CarvedBallOfStygianIvory: -2,
+            Item.FinBonesCollected: -3,
+            Item.JetBlackStinger: -1,
+        },
+        zoo_type=ZooType.Fish,
+        fluctuations=Fluctuations.Menace)         
+
+    gothic_tales_trade(trade, player,
+        recipe={
+            Item.GeneralFishAction: -11,
+            Item.PrismaticFrame: -1,
+            Item.SabreToothedSkull: -1,
+            Item.CarvedBallOfStygianIvory: -2,
+            Item.AmberCrustedFin: -3,
+            Item.JetBlackStinger: -1,
+        },
+        zoo_type=ZooType.Fish,
+        fluctuations=Fluctuations.NoQuality)    
+    
     # # 3/0/6/0/3 chimera => gothic w/ menace
     # trade(5 + actions_to_sell_chimera, {
     #     Item.SegmentedRibcage: -1,

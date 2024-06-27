@@ -259,7 +259,7 @@ core_constraint = {
     Item.Constraint: 1,
     Item.RootAction: actions_per_cycle,
     Item.VisitFromTimeTheHealer: 1,
-    # Item.CardDraws: full_draws_per_day * 7 * 10
+    Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
@@ -301,7 +301,7 @@ london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
 
-# london.bone_market.add_trades(active_player, config)
+london.bone_market.add_trades(active_player, config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
@@ -340,7 +340,7 @@ trade(1, zailing_deck.normalized_trade())
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.HinterlandScrip
+optimize_for = Item.Echo
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1

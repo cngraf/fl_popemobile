@@ -80,6 +80,14 @@ def add_trades(active_player, config):
         Item.HidingPlaceOfAPeculiarItem: 1
     })
 
+    # TODO: different file
+    add({
+        Item.RootAction: -1,
+        Item.FlaskOfWaswoodSpringWater: -1,
+        Item.DropOfPrisonersHoney: 650,
+        Item.Scandal: 1
+    })
+
     # ------------------
     # Parabolan War
     # ------------------
