@@ -488,6 +488,7 @@ def simulate_runs(num_runs):
     print(f"Successes: {successes} ({(successes / num_runs) * 100:.2f}%)")
     print(f"Failures: {failures} ({(failures / num_runs) * 100:.2f}%)")
     print(f"Average actions per run: {total_steps / num_runs:.2f}")
+    print(f"Average TPs per run: {state.tantalizing_possibilities / num_runs:.2f}")
 
     print("\nAccumulated Items after all runs:")
     print(f"Library Keys: {state.library_keys}")
@@ -499,9 +500,9 @@ def simulate_runs(num_runs):
     # Print insights on card play counts
     print("\nCard Play Counts:")
     for card_name, count in state.play_counts.items():
-        print(f"{card_name}: {count} times")
+        print(f"{card_name}: {count/successes :.2f} per run")
 
-    print(f"Est EPA: {(116 * successes + state.tantalizing_possibilities * 0.1)/total_steps}")
+    print(f"\nEst EPA: {(116 * successes + state.tantalizing_possibilities * 0.1)/total_steps}")
 
 # Run the simulation
 simulate_runs(10000)
