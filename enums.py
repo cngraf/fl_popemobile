@@ -679,6 +679,12 @@ class Item(Enum):
     StarvedExpression = auto()
     TempestuousTale = auto()
     GlimEncrustedCarapace = auto()
+    TantalisingPossibility = auto()
+
+    # Firmament - The Stacks
+    RouteTracedThroughTheLibrary = auto()
+    LibraryKey = auto()
+    FragmentaryOntology = auto()
 
     # -----
     # Equipment

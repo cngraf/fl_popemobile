@@ -147,11 +147,11 @@ replacement_good_card_density = 0.33
 # for long trips outside longon/upper river
 lost_draw_cost = 0
 
-# 0.85, 0.74, 0.65
-wounds_multiplier = 0.85
-scandal_multiplier = 0.85
-suspicion_multiplier = 0.85
-nightmares_multiplier = 0.85
+# # 0.85, 0.74, 0.65
+# wounds_multiplier = 0.85
+# scandal_multiplier = 0.85
+# suspicion_multiplier = 0.85
+# nightmares_multiplier = 0.85
 
 # --------------------------------------------
 # -------------- Player Config ---------------
@@ -217,13 +217,13 @@ player_bal_monster_hunter = Player(
     treasure=Treasure.WingedAndTalonedSteed,
     profession=Profession.MonsterHunter,
     stats={
-        Stat.Watchful: 230 + 98,
-        Stat.Shadowy: 230 + 82,
-        Stat.Dangerous: 230 + 96,
-        Stat.Persuasive: 230 + 75
+        Stat.Watchful: 230 + 102,
+        Stat.Shadowy: 230 + 90,
+        Stat.Dangerous: 230 + 101,
+        Stat.Persuasive: 230 + 91
     })
 
-active_player = player_advanced_f2p
+active_player = player_bal_monster_hunter
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -258,8 +258,8 @@ actions_per_cycle = (7 * actions_per_day) + 10 - 3
 core_constraint = {
     Item.Constraint: 1,
     Item.RootAction: actions_per_cycle,
-    Item.VisitFromTimeTheHealer: 1,
-    Item.CardDraws: full_draws_per_day * 7 * 10
+    # Item.VisitFromTimeTheHealer: 1,
+    # Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
@@ -326,8 +326,8 @@ upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 
-fate.philosofruits.add_trades(active_player, config)
-fate.upwards.add_trades(active_player, config)
+# fate.philosofruits.add_trades(active_player, config)
+# fate.upwards.add_trades(active_player, config)
 # fate.whiskerways.add_trades(config)
 
 # --------------
@@ -340,7 +340,7 @@ trade(1, zailing_deck.normalized_trade())
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.Echo
+optimize_for = Item.WellPlacedPawn
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1
@@ -441,6 +441,8 @@ print("-----Optimization Target-------")
 # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
 print(f"{str(optimize_for) + ' Per Cycle ':34}{-1.0/(opt_result.fun):10.5f}")
 print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_cycle):10.5f}")
+print(f"{'Actions Per ' + str(optimize_for):34}{-(opt_result.fun * actions_per_cycle):10.5f}")
+
 print("-------------------------------")
 print("-------------------------------")
 
