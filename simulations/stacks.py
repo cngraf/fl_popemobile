@@ -7,6 +7,8 @@ ev_key = 7.5
 ev_frag = 1.5
 ev_hand_clear = 1
 
+cartographer_enabled = False
+
 class LibraryState:
     def __init__(self):
         # Carried over
@@ -15,7 +17,9 @@ class LibraryState:
         self.fragmentary_ontologies = 0
         self.hour_in_the_library = 1
         self.tantalizing_possibilities = 0
+        self.wounds = 0
         self.completed_runs = 0
+        self.completed_anathema = 0
 
         # TODO
         self.librarians_office_failures = 0 
@@ -24,6 +28,8 @@ class LibraryState:
         self.in_search_of_lost_time = 1
         self.progress = 0
         self.noises = 0
+        self.anathema_unchained = 0
+
         self.hand = []
         self.status = "InProgress"
         self.steps = 0
@@ -46,7 +52,10 @@ class LibraryState:
             LabyrinthShape(),
             GreyCardinal(),
             GlimpseThroughAWindow(),
-            TeaRoom()
+            TeaRoom(),
+            CartographerBox(),
+            CartographerCompass(),
+            ChainedOctavo()
         ]
 
         self.play_counts = {card.name: 0 for card in self.deck}
@@ -86,9 +95,14 @@ class LibraryState:
                 # TODO more exact sim
                 self.in_search_of_lost_time = 1
                 self.completed_runs += 1
+
+                if self.anathema_unchained == 10:
+                    self.completed_anathema += 1
+
                 self.noises = 0
                 self.progress = 0
-                self.steps += 3 # approximation
+                self.steps += 5 # approximation
+                self.anathema_unchained = max(0, self.anathema_unchained - 1)
                 self.hand.clear()
 
     def run(self):
@@ -153,6 +167,7 @@ class DeadEnd(LibraryCard):
 
         if state.noises == 0 and state.library_keys < 100:
             state.noises += 2
+            state.wounds += 2 * 0.85
 
     def ev(self, state: LibraryState):
         if state.noises == 0 and state.library_keys < 100:
@@ -452,6 +467,64 @@ class TeaRoom(LibraryCard):
             return min(10, 40 - state.progress) * ev_progress - ev_route * 2
         else:
             return 0
+        
+class CartographerBox(LibraryCard):
+    def __init__(self):
+        super().__init__()
+        self.name = "Cartographer Snuffbox.png"
+
+    def can_draw(self, state: LibraryState):
+        return cartographer_enabled
+
+    # TODO other option
+    def play(self, state: LibraryState):
+        state.routes_traced -= 2
+        state.progress += 10
+
+    def ev(self, state: LibraryState):
+        if state.routes_traced > 0:
+            return ev_progress * 5 - ev_route
+        else:
+            return 0
+
+class CartographerCompass(LibraryCard):
+    def __init__(self):
+        super().__init__()
+        self.name = "Cartographer Compass.png"
+
+    def can_draw(self, state: LibraryState):
+        return cartographer_enabled
+
+    # TODO other option
+    def play(self, state: LibraryState):
+        if state.routes_traced >= 3:
+            state.progress += 10
+            state.routes_traced -= 3
+        else:
+            state.routes_traced += 2
+
+    def ev(self, state: LibraryState):
+        if state.routes_traced >= 3:
+            return ev_progress * min(10, 40 - state.progress) - ev_route * 3
+        else:
+            return ev_route * 2
+        
+class ChainedOctavo(LibraryCard):
+    def __init__(self):
+        super().__init__()
+        self.name = "A Chained Octavo"
+        self.weight = 0.1
+
+    def can_draw(self, state: LibraryState):
+        return state.anathema_unchained < 1 and state.in_search_of_lost_time == 1
+
+    # TODO other option
+    def play(self, state: LibraryState):
+        state.progress = 0
+        state.anathema_unchained = 10
+
+    def ev(self, state: LibraryState):
+        return 20
 
 # Simulation setup
 def simulate_runs(num_runs):
@@ -483,6 +556,8 @@ def simulate_runs(num_runs):
     total_steps = state.steps
     avg_steps = total_steps/num_runs
 
+    normal_successes = successes - state.completed_anathema
+
     # Calculate and print statistics
     print(f"Total runs: {num_runs}")
     print(f"Successes: {successes} ({(successes / num_runs) * 100:.2f}%)")
@@ -496,13 +571,17 @@ def simulate_runs(num_runs):
     print(f"Fragmentary Ontologies: {state.fragmentary_ontologies}")
     print(f"Tantalizing Possibilities: {state.tantalizing_possibilities}")
     print(f"Librarian's Office Failures: {state.librarians_office_failures}")
+    print(f"Wounds: {state.wounds}")
+    print(f"Normal Completions: {normal_successes}")
+    print(f"Glimpse of Anathema: {state.completed_anathema}")
+
 
     # Print insights on card play counts
     print("\nCard Play Counts:")
     for card_name, count in state.play_counts.items():
         print(f"{card_name}: {count/successes :.2f} per run")
 
-    print(f"\nEst EPA: {(116 * successes + state.tantalizing_possibilities * 0.1)/total_steps}")
+    print(f"\nEst EPA: {(116 * normal_successes + 312 * state.completed_anathema + state.tantalizing_possibilities * 0.1)/total_steps}")
 
 # Run the simulation
-simulate_runs(10000)
+simulate_runs(100000)
