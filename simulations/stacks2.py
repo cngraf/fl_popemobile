@@ -1,5 +1,6 @@
 import random
 from collections import defaultdict
+from enum import Enum, auto
 
 ev_route = 1.9
 ev_tant = 0.1
@@ -11,7 +12,12 @@ ev_wounds = -0.15
 ev_nightmares = -0.15
 ev_office_failure = 3 # idk
 
-cartographer_enabled = False
+class ApocryphaSought(Enum):
+    BannedWorks = 201
+    DeadStars = 202
+    SomeFrenchBullshit = 203
+    UnrealPlaces = 204
+    # ChainedOctavo = 1001
 
 class Action:
     def __init__(self, name):
@@ -69,6 +75,9 @@ class LibraryState:
         self.tantalizing_possibilities = 0
         self.disposition_of_the_cardinal = 0
 
+        # TODO
+        self.librarians_office_failures = 0 
+
         self.wounds = 0
         self.nightmares = 0
 
@@ -76,11 +85,8 @@ class LibraryState:
         self.completed_anathema_runs = 0
         self.failed_runs = 0
 
-        # TODO not carried over, determined by apocrypha sought
-        self.hour_in_the_library = 1
-
-        # TODO
-        self.librarians_office_failures = 0 
+        self.hour_in_the_library = 0
+        self.apocrypha_sought = 0
 
         self.cartographer_enabled = False
         self.in_search_of_lost_time = 1
@@ -128,6 +134,28 @@ class LibraryState:
 
     def total_runs(self):
         return self.failed_runs + self.completed_normal_runs + self.completed_anathema_runs
+
+    def start_new_run(self, apocrypha_sought, cartographer_enabled):
+        self.actions += 1
+        self.progress = 0
+        self.noises = 0
+        self.hand.clear()
+        self.in_search_of_lost_time = 1
+
+        self.apocrypha_sought = apocrypha_sought
+        self.cartographer_enabled = cartographer_enabled
+
+        if apocrypha_sought == ApocryphaSought.BannedWorks:
+            self.hour_in_the_library = 1
+
+        if apocrypha_sought == ApocryphaSought.DeadStars:
+            self.hour_in_the_library = 2
+
+        if apocrypha_sought == ApocryphaSought.SomeFrenchBullshit:
+            self.hour_in_the_library = 3
+
+        if apocrypha_sought == ApocryphaSought.UnrealPlaces:
+            self.hour_in_the_library = 4
 
     def ev_progress(self, val):
         # TODO this is actually wrong bc there should be no diff between 30 and 31
@@ -192,6 +220,9 @@ class LibraryState:
     def step(self):
         # print("Cards in hand: " + str(len(self.hand)))
         # print("Progress: " + str(self.progress))
+
+        if self.in_search_of_lost_time > 2:
+            self.start_new_run(self.apocrypha_sought, self.cartographer_enabled)
 
         if len(self.hand) == 0:
             self.refill_action.perform(self)
@@ -301,19 +332,17 @@ class ReadingRoomAction1(Action):
     def perform(self, state: LibraryState):
          # TODO pretty sure Hour doesn't work this way
         state.hour_in_the_library = (state.hour_in_the_library + 1) % 5
-
-        state.progress = 0
-        state.noises = 0
-
+        
+        # TODO separate flag for this just to be safe
         if state.anathema_unchained == 10:
             state.completed_anathema_runs += 1    
         else:
             state.completed_normal_runs += 1
 
-        state.actions += 3 # approximation
         state.anathema_unchained = max(0, state.anathema_unchained - 1)
-        state.in_search_of_lost_time = 1
-        state.hand.clear()        
+
+        state.in_search_of_lost_time = 3
+        state.actions += 2 # approximation
 
     def ev(self, state: LibraryState):
         # TODO
@@ -1006,7 +1035,7 @@ class BlackGalleryAction3(Action):
         state.noises += 2
 
     def failure_ev(self, state: LibraryState):
-        return state.ev_progress(5) + state.ev_noises(2)    
+        return state.ev_progress(5) + state.ev_noises(2)
 
 class GaolerLibrarian(LibraryCard):
     def __init__(self):
@@ -1136,7 +1165,7 @@ class TerribleShushingAction3(Action):
         super().__init__("Hurry along")
 
     def can_perform(self, state: LibraryState):
-        return cartographer_enabled
+        return state.cartographer_enabled
 
     def perform(self, state: LibraryState):
         state.noises = max(0, state.noises - random.randint(3, 10))
@@ -1386,7 +1415,7 @@ class CartographerSnuffbox(LibraryCard):
 
     def can_draw(self, state: LibraryState):
         # TODO confirm this requires routes to draw
-        return cartographer_enabled and state.routes_traced > 0
+        return state.cartographer_enabled and state.routes_traced > 0
 
 class CartographerSnuffboxAction1(Action):
     def __init__(self):
@@ -1510,7 +1539,6 @@ class ChainedOctavoAction2(Action):
     def failure_ev(self, state: LibraryState):
         return state.ev_progress(5)
 
-# Simulation setup
 def simulate_runs(num_runs):
     """
     Simulates a large number of runs of the game and prints the results.
@@ -1523,12 +1551,14 @@ def simulate_runs(num_runs):
     """
 
     state = LibraryState()
+    state.apocrypha_sought = ApocryphaSought.BannedWorks
+    state.cartographer_enabled = True
 
     while state.total_runs() < num_runs:
         state.step()
 
     total_steps = state.actions
-    avg_steps = total_steps/num_runs
+    avg_steps = total_steps / num_runs
 
     total_runs = state.total_runs()
 
@@ -1537,35 +1567,19 @@ def simulate_runs(num_runs):
     print(f"Successes: {total_runs} ({(total_runs / num_runs) * 100:.2f}%)")
     print(f"Failures: {state.failed_runs} ({(state.failed_runs / num_runs) * 100:.2f}%)")
     print(f"Average actions per run: {total_steps / num_runs:.2f}")
-    print(f"Average TPs per run: {state.tantalizing_possibilities / num_runs:.2f}\n")
+    # print(f"Average TPs per run: {state.tantalizing_possibilities / num_runs:.2f}\n")
 
-    print("Accumulated Items after all runs:")
-    print(f"Library Keys: {state.library_keys}")
-    print(f"Routes Traced: {state.routes_traced}")
-    print(f"Fragmentary Ontologies: {state.fragmentary_ontologies}")
-    print(f"Tantalizing Possibilities: {state.tantalizing_possibilities}")
-    print(f"Librarian's Office Failures: {state.librarians_office_failures}")
-    print(f"Wounds: {state.wounds}")
-    print(f"Normal Completions: {state.completed_normal_runs}")
-    print(f"Glimpse of Anathema: {state.completed_anathema_runs}\n")
-
-    # Define column widths
-    max_card_name_length = 27  # Max length for card names to fit in 30-char column
-    max_action_name_length = 37  # Max length for action names to fit in 40-char column
-
+    print("\nCard and Action Play Counts:")
+    print(f"{'Card':<30} {'Count':<10} {'Action':<40} {'Count per Run':<15}")
+    print("-" * 95)
 
     # Sort the deck by the card play counts in descending order
     sorted_deck = sorted(state.deck, key=lambda card: state.card_play_counts[card.name], reverse=True)
 
-    # Print insights on card play counts
-    print("Card and Action Play Counts:")
-    print(f"{'Card':<30} {'Count':<10} {'Action':<40} {'Count per Run':<15}")
-    print("-" * 95)
-
     for card in sorted_deck:
         card_name = card.name
         # Truncate card name if it exceeds max length
-        truncated_card_name = (card_name[:max_card_name_length] + '...') if len(card_name) > max_card_name_length else card_name
+        truncated_card_name = (card_name[:27] + '...') if len(card_name) > 27 else card_name
         card_count = state.card_play_counts[card_name]
         card_count_per_run = card_count / total_runs if total_runs > 0 else 0
 
@@ -1574,13 +1588,78 @@ def simulate_runs(num_runs):
         for action in card.actions:
             action_name = action.name
             # Truncate action name if it exceeds max length
-            truncated_action_name = (action_name[:max_action_name_length] + '...') if len(action_name) > max_action_name_length else action_name
+            truncated_action_name = (action_name[:37] + '...') if len(action_name) > 37 else action_name
             action_count = state.action_play_counts[action_name]
             action_count_per_run = action_count / total_runs if total_runs > 0 else 0
 
             print(f"{'':<30} {'':<10} {truncated_action_name:<40} {action_count_per_run:<15.2f}")
 
+    # Define the value of items in echoes and stuivers
+    item_values = {
+        'Library Keys': {'echoes': 0.0},
+        'Routes Traced': {'echoes': 0.0},
+        'Fragmentary Ontologies': {'echoes': 0.0},
+        'Tantalizing Possibilities': {'echoes': 0.1, 'stuivers': 2},
+        'Librarian\'s Office Failures': {'echoes': 3},
+        'Wounds': {'echoes': -1.0 },  # approx @ 6 heal for 1 action & 6 EPA
+        'Normal Completions': {'echoes': 116, 'stuivers': 2320},  # example value
+        'Glimpse of Anathema': {'echoes': 312.5, 'stuivers': 6250}  # example value
+    }
 
-    print(f"\nEst EPA: {(116 * state.completed_normal_runs + 312 * state.completed_anathema_runs + state.tantalizing_possibilities * 0.1) / total_steps:.2f}")
-# Run the simulation
-simulate_runs(1000)
+    print("Accumulated Items after all runs:")
+    print(f"{'Item':<30} {'Count':<10} {'Value per Unit (E/S)':<25} {'Total Value (E/S)':<25}")
+    print("-" * 95)
+
+    # Initialize total sums for echoes and stuivers
+    total_echoes = 0
+    total_stuivers = 0
+
+    # Print item counts and values
+    items = {
+        'Library Keys': state.library_keys,
+        'Routes Traced': state.routes_traced,
+        'Fragmentary Ontologies': state.fragmentary_ontologies,
+        'Tantalizing Possibilities': state.tantalizing_possibilities,
+        'Librarian\'s Office Failures': state.librarians_office_failures,
+        'Wounds': state.wounds,
+        'Normal Completions': state.completed_normal_runs,
+        'Glimpse of Anathema': state.completed_anathema_runs
+    }
+
+    for item, count in items.items():
+        value_data = item_values.get(item, {})
+        echo_value = value_data.get('echoes', None)
+        stuiver_value = value_data.get('stuivers', None)
+        total_echo_value = 0
+        total_stuiver_value = 0
+
+        if echo_value is not None:
+            total_echo_value = count * echo_value
+            total_echoes += total_echo_value
+
+        if stuiver_value is not None:
+            total_stuiver_value = count * stuiver_value
+            total_stuivers += total_stuiver_value
+
+        # Display both Echo and Stuiver values if both are present
+        if echo_value is not None and stuiver_value is not None:
+            print(f"{item:<30} {count:<10} {echo_value:.2f} E / {stuiver_value:.2f} S{'':<8} {total_echo_value:.2f} E / {total_stuiver_value:.2f} S")
+        elif echo_value is not None:
+            print(f"{item:<30} {count:<10} {echo_value:.2f} E{'':<14} {total_echo_value:.2f} E{'':<10}")
+        elif stuiver_value is not None:
+            print(f"{item:<30} {count:<10} {stuiver_value:.2f} S{'':<14} {total_stuiver_value:.2f} S{'':<10}")
+
+    # Print total sums
+    print("-" * 95)
+    print(f"{'Total':<30} {'':<10} {'':<25} {total_echoes:.2f} E / {total_stuivers:.2f} S")
+
+    # Calculate and print Echoes and Stuivers earned per action
+    echoes_per_action = total_echoes / total_steps if total_steps > 0 else 0
+    stuivers_per_action = total_stuivers / total_steps if total_steps > 0 else 0
+    print(f"{'Per Action':<30} {'':<10} {'':<25} {echoes_per_action:.4f} E / {stuivers_per_action:.4f} S")
+
+    print(f"ApocryphaSought: {state.apocrypha_sought}")
+    print(f"Cartographer Enabled: {state.cartographer_enabled}")
+    # print(f"\nEst EPA: {(116 * state.completed_normal_runs + 312 * state.completed_anathema_runs + state.tantalizing_possibilities * 0.1) / total_steps:.2f}")
+
+simulate_runs(100_000)
