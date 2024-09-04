@@ -103,6 +103,8 @@ def add_trades(config: Config):
     trade(0, { Item.NicatoreanRelic: -1, Item.Echo: 2.5 })
     trade(0, { Item.UnlawfulDevice: -1, Item.Echo: 12.5 })
     trade(0, { Item.ChimericalArchive: -1, Item.Echo: 62.5 })
+    trade(0, { Item.RelicOfTheFifthCity: -1, Item.Echo: 2.5 })
+
 
     # Infernal
     buy_sell(config, Item.Soul, -0.04, 0.02)

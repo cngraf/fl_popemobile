@@ -27,7 +27,7 @@ def add_trades(config: Config):
         # The Cenobitic Outfitter
         (Item.RoofChart, -100),
     ):
-        trade(0, { item: 1, Item.HinterlandScrip: buy_price })
+        trade(0, { item: 1, Item.Stuiver: buy_price })
 
     for item, sale_value in (
         (Item.NoduleOfWarmAmber, 1),

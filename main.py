@@ -61,6 +61,7 @@ import upper_river.marigold
 import upper_river.tracklayers_city
 
 import firmament.hallows_throat
+import firmament.midnight_moon
 
 import fate.philosofruits
 import fate.upwards
@@ -223,7 +224,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 91
     })
 
-active_player = player_bal_monster_hunter
+active_player = player_baseline_f2p
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -258,8 +259,8 @@ actions_per_cycle = (7 * actions_per_day) + 10 - 3
 core_constraint = {
     Item.Constraint: 1,
     Item.RootAction: actions_per_cycle,
-    # Item.VisitFromTimeTheHealer: 1,
-    # Item.CardDraws: full_draws_per_day * 7 * 10
+    Item.VisitFromTimeTheHealer: 1,
+    Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
@@ -301,7 +302,7 @@ london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
 
-london.bone_market.add_trades(active_player, config)
+# london.bone_market.add_trades(active_player, config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
@@ -325,6 +326,7 @@ upper_river.marigold.add_trades(active_player, config)
 upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
+firmament.midnight_moon.add_trades(config)
 
 # fate.philosofruits.add_trades(active_player, config)
 # fate.upwards.add_trades(active_player, config)
@@ -340,7 +342,7 @@ trade(1, zailing_deck.normalized_trade())
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.WellPlacedPawn
+optimize_for = Item.Echo
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1

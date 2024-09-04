@@ -404,6 +404,7 @@ class Item(Enum):
     UnlawfulDevice = auto()
     FlaskOfWaswoodSpringWater = auto()
     ChimericalArchive = auto()
+    RelicOfTheFifthCity = auto()
 
     # Infernal
     Soul = auto()
@@ -454,6 +455,8 @@ class Item(Enum):
     ElementOfDawn = auto()
     MountainSherd = auto()
     RayDrenchedCinder = auto()
+    Anticandle = auto()
+    MemoryOfMoonlight = auto()
 
     # Mysteries
     WhisperedHint = auto()
@@ -680,6 +683,7 @@ class Item(Enum):
     TempestuousTale = auto()
     GlimEncrustedCarapace = auto()
     TantalisingPossibility = auto()
+    GlimpseOfAnathema = auto()
 
     # Firmament - The Stacks
     RouteTracedThroughTheLibrary = auto()

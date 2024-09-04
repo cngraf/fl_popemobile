@@ -119,42 +119,42 @@ def add_trades(active_player, config):
     add({
         Item.JerichoAction: -1,
         Item.FavBohemians: -4,
-        Item.HolyRelicOfTheThighOfStFiacre: 2,
-        Item.WingOfAYoungTerrorBird: 1,
+        Item.IvoryHumerus: 2,
+        Item.WingOfAYoungTerrorBird: 2,
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavChurch: -4,
         Item.RattyReliquary: 2,
-        Item.ApostatesPsalm: 1,
+        Item.ApostatesPsalm: 2,
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavConstables: -4,
         Item.CaveAgedCodeOfHonour: 2,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 2
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavCriminals: -4,
         Item.HumanRibcage: 2,
-        Item.HumanArm: 1
+        Item.BoneFragments: 500
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavDocks: -4,
         Item.UncannyIncunabulum: 2,
-        Item.KnobOfScintillack: 1
+        Item.KnobOfScintillack: 2
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavGreatGame: -4,
-        Item.ViennaOpening: 1,
+        Item.ViennaOpening: 2,
         Item.QueenMate: 1
     })
 
@@ -162,42 +162,42 @@ def add_trades(active_player, config):
         Item.JerichoAction: -1,
         Item.FavHell: -4,
         Item.ThornedRibcage: 2,
-        Item.QueerSoul: 1
+        Item.QueerSoul: 2
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavRevolutionaries: -4,
         Item.UnlawfulDevice: 2,
-        Item.ThirstyBombazineScrap: 1
+        Item.ThirstyBombazineScrap: 2
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavRubberyMen: -4,
         Item.FlourishingRibcage: 2,
-        Item.BasketOfRubberyPies: 1,
+        Item.BasketOfRubberyPies: 2,
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavSociety: -4,
         Item.FavourInHighPlaces: 2,
-        Item.NightOnTheTown: 1
+        Item.NightOnTheTown: 2
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavTombColonies: -4,
         Item.AntiqueMystery: 2,
-        Item.UnprovenancedArtefact: 1,
+        Item.UnprovenancedArtefact: 2,
     })
 
     add({
         Item.JerichoAction: -1,
         Item.FavUrchins: -4,
         Item.StormThrenody: 2,
-        Item.AeolianScream: 1
+        Item.AeolianScream: 2
     })
 
     # Library
