@@ -245,7 +245,7 @@ class MapRoom(LibraryCard):
             state.routes_traced += 1
 
     def ev(self, state: LibraryState):
-        return ev_route * 1.5 + ev_tant * 50
+        return ev_route * 1.5 + ev_tant * 50 + 10
 
 class PoisonGallery(LibraryCard):
     def __init__(self):
@@ -313,7 +313,7 @@ class LibrariansOffice(LibraryCard):
             state.librarians_office_failures += 1
 
     def ev(self, state: LibraryState):
-        return 0.9 * (ev_tant * 40 + (ev_key + ev_route + ev_frag) / 3)
+        return 0.9 * (ev_tant * 40 + (ev_key + ev_route + ev_frag) / 3) + 10
     
 
 class FloweringGallery(LibraryCard):
@@ -363,7 +363,7 @@ class GaolerLibrarian(LibraryCard):
         return state.noises > 0        
 
     def play(self, state: LibraryState):
-        if state.noises > 21:
+        if state.noises >= 4:
             state.progress += 5
         elif random.random() <= 0.9:
             state.library_keys += 1
@@ -371,7 +371,7 @@ class GaolerLibrarian(LibraryCard):
             state.noises += 6
 
     def ev(self, state: LibraryState):
-        if state.noises <= 21: # hack
+        if state.noises < 4: # hack
             return ev_key * 0.9
         else:
             return ev_progress * 5
@@ -426,6 +426,9 @@ class LabyrinthShape(LibraryCard):
 
     def ev(self, state: LibraryState):
         potential_prog = min(10, 40 - state.progress)
+        if state.routes_traced > 100:
+            return potential_prog
+
         return potential_prog * ev_progress - ev_route * 4
     
 class GreyCardinal(LibraryCard):
