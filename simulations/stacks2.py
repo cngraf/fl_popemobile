@@ -327,7 +327,7 @@ class ReadingRoom(LibraryCard):
     
 class ReadingRoomAction1(Action):
     def __init__(self):
-        super().__init__("Claim the book")
+        super().__init__("Open the book")
 
     def perform(self, state: LibraryState):
          # TODO pretty sure Hour doesn't work this way
