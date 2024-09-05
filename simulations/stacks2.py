@@ -2,7 +2,7 @@ import random
 from collections import defaultdict
 from enum import Enum, auto
 
-ev_route = 1.8
+ev_route_base = 1.8
 ev_tant = 0.1
 ev_progress = 1
 ev_key = 8
@@ -11,6 +11,96 @@ ev_hand_clear = 1
 ev_wounds = -0.12
 ev_nightmares = -0.12
 ev_office_failure = 3 # idk
+
+'''
+Watchful, Inerrant +15
+- 220: AtriumAction1, also +15 per Routes
+- 200: Found in the IndexAction1 method.
+
+Watchful + Shadowy
+- 300: Found in the DeadEndAction1 method.
+
+Watchful, Cthonosophy +15
+- 350: Found in the DeadEndAction2 method.
+
+Watchful 300
+- 300: Found in the AtriumAction2 method, also +15 per FragmentaryOntology
+
+Shadowy
+- 200: Found in the GaolerLibrarianAction1 method.
+- 220: Found in the TerribleShushingAction1 method.
+- 295: Found in the TerribleShushingAction2 method.
+
+Shadowy, Neathproofed +15
+- 240: Found in the PoisonGalleryAction1 method.
+
+Shadowy, Insubstantial +15
+- 240: Found in the BlackGalleryAction1 method.
+- 250: Found in the GaolerLibrarianAction2 method.
+
+Dangerous + Watchful Challenges
+- 300: Found in the StoneGalleryAction3 method.
+
+Cthonosophy
+- 7: Found in the StoneGalleryAction2 and IndexAction2 methods.
+- 5: Found in the ShapeOfTheLabyrinthAction2 method.
+- 10: Found in the ChainedOctavoAction2 method, also +10 per FragmentaryOntology
+
+Persuasive, Bizarre +10
+- 250: Found in the GreyCardinalAction3 method.
+
+Watchful, MonstrousAnatomy +10, Inerrant +15
+- 240: Found in the BlackGalleryAction2 method.
+
+KatalepticToxicology
+- 10: Found in the PoisonGalleryAction2 method.
+- 12: Found in the FloweringGalleryAction2 method.
+'''
+
+class OutfitList:
+    def __init__(self, woesel_mode: False):
+        # atrum2
+        self.watchful = 332
+
+        # atrium1, index1
+        self.watchful_plus_inerrant15 = 311 + 5 * 15
+
+        # deadend1
+        self.watchful_plus_shadowy = 332 + 247
+
+        # stonegallery3
+        self.watchful_plus_dangerous = 332 + 261
+
+        # deadend2
+        self.watchful_plus_cthonosophy15 = 323 + 4 * 15
+
+        # gaoler1, shushing1, shushing2
+        self.shadowy = 323
+
+        # posiongallery1
+        self.shadowy_plus_neathproofed15 = 278 + 8 * 15
+
+        # blackGallery1, gaoler2
+        self.shadowy_plus_insubstantial15 = 306 + 4 * 15 + 10
+
+        # stonegallery2, shape2, octavo2
+        self.cthonosophy = 9
+
+        # greycaridnal3
+        self.persuasive_plus_bizarre10 = 260 + 28 * 10
+
+        # blackgallery2
+        self.watchful_plus_monstrous10_inerrant15 = 295 + 13 * 10 + 6 * 15
+
+        # poisongallery2
+        self.kataleptic_toxicology = 16
+
+        # flowering1
+        self.neathproofed_plus_inerrant = 8 + 3
+
+        if (woesel_mode):
+            for attr in self.__dict__:
+                setattr(self, attr, 0)
 
 class ApocryphaSought(Enum):
     BannedWorks = 201
@@ -34,7 +124,7 @@ class Action:
             self.perform_failure(state)
 
     def ev(self, state: 'LibraryState'):
-        pass_rate = self.pass_rate(state)
+        pass_rate = min(1.0, max(0.0, self.pass_rate(state)))
         success_ev = self.success_ev(state)
         failure_ev = self.failure_ev(state)
 
@@ -47,7 +137,7 @@ class Action:
             success_ev = 0.0
         if failure_ev is None:
             print(f"Debug: {self.name} - pass_rate: {pass_rate}, success_ev: {success_ev}, failure_ev: {failure_ev}")
-            failure_ev = 0.0        
+            failure_ev = 0.0
 
         return pass_rate * success_ev + (1.0 - pass_rate) * failure_ev
 
@@ -65,9 +155,27 @@ class Action:
 
     def failure_ev(self, state: 'LibraryState'):
         return 0.0
+    
+    def broad_success_rate(self, dc, stat_value):
+        return 0.6 * stat_value/dc
+    
+    def narrow_success_rate(self, dc, stat_value):
+        return 0.5 + (stat_value - dc) * 0.1
+    
+    def woesel_name(self):
+        return "(WOESEL) " + self.name
 
 class LibraryState:
     def __init__(self):
+
+        self.normal_outfit = OutfitList(woesel_mode = False)
+        self.woesel_outfit = OutfitList(woesel_mode = True)
+
+        self.outfits = self.normal_outfit
+
+        for attr in self.woesel_outfit.__dict__:
+            setattr(self.woesel_outfit, attr, -1000)
+        
         # Carried over
         self.library_keys = 0  # Count of keys collected
         self.routes_traced = 0
@@ -84,6 +192,10 @@ class LibraryState:
         self.completed_normal_runs = 0
         self.completed_anathema_runs = 0
         self.failed_runs = 0
+
+        self.gross_keys = 0
+        self.gross_routes = 0
+        self.gross_frags = 0 
 
         self.hour_in_the_library = 0
         self.apocrypha_sought = 0
@@ -171,6 +283,9 @@ class LibraryState:
         progress = min(40 - self.progress, val)
         ev = progress * ev_progress
 
+        if progress < 5:
+            return 0
+
         # basically if we're somehow at 39 then 1 is as good as 5
         if self.progress < 40 and self.progress + progress >= 40:
             ev = max(ev, ev_progress * 5)
@@ -179,6 +294,18 @@ class LibraryState:
         if progress < val:
             ev -= 1
 
+        return ev
+    
+    def ev_route(self, val = 1):
+        ev = ev_route_base
+        threshold = 5
+        current = self.routes_traced
+
+        # if (current < threshold and val > 0):
+            # ev += ev_route_base
+        # elif (current > threshold and current - val < threshold):
+            # ev -= ev_route_base
+        
         return ev
     
     def ev_noises(self, val):
@@ -242,11 +369,13 @@ class LibraryState:
 
         # Evaluate the best action across all cards in hand
         best_card, best_action, best_action_ev = None, None, -float('inf')
+        use_woesel = False
 
         if self.refill_action.can_perform(self):
             best_action = self.refill_action
             best_action_ev = self.refill_action.ev(self)
 
+        self.outfits = self.normal_outfit
         for card in self.hand:
             for action in card.actions:
                 if action.can_perform(self):
@@ -254,9 +383,24 @@ class LibraryState:
                     if action_ev > best_action_ev:
                         best_card, best_action, best_action_ev = card, action, action_ev
 
+        self.outfits = self.woesel_outfit
+        for card in self.hand:
+            for action in card.actions:
+                if action.can_perform(self):
+                    action_ev = action.ev(self)
+                    if action_ev > best_action_ev:
+                        use_woesel = True
+                        best_card, best_action, best_action_ev = card, action, action_ev
 
-        best_action.perform(self)
-        self.action_play_counts[best_action.name] += 1
+        if use_woesel:
+            self.outfits = self.woesel_outfit
+            best_action.perform(self)
+            self.action_play_counts[best_action.woesel_name()] += 1
+
+        else:
+            self.outfits = self.normal_outfit
+            best_action.perform(self)
+            self.action_play_counts[best_action.name] += 1
 
         if best_card is not None:
             self.actions += 1
@@ -328,7 +472,10 @@ class ApocryphaFoundAction1(Action):
 
     def ev(self, state: LibraryState):
         # TODO
-        return 6
+        if (state.anathema_unchained <= 0):
+            return 5
+        else:
+            return 7
     
 class ReadingRoom(LibraryCard):
     def __init__(self):
@@ -378,16 +525,16 @@ class AtriumAction1(Action):
         return state.routes_traced > 0
 
     def pass_rate(self, state: LibraryState):
-        # TODO
-        # Watchful DC 220, Inerrant & RouteTraced each +15
-        return 1.0
+        # return 1.0
+        bonus = state.routes_traced * 15
+        return self.broad_success_rate(220, state.outfits.watchful_plus_inerrant15 + bonus)
 
     def perform_success(self, state: LibraryState):
         state.routes_traced -= 1
         state.progress += 5
 
     def success_ev(self, state: LibraryState):
-        return ev_progress * 5 - ev_route
+        return ev_progress * 5 - state.ev_route()
 
     def perform_failure(self, state: LibraryState):
         state.noises += 6
@@ -404,16 +551,21 @@ class AtriumAction2(Action):
         return state.in_search_of_lost_time == 1 and state.fragmentary_ontologies > 0
 
     def pass_rate(self, state: LibraryState):
-        # TODO Watchful 300, Frag +15
-        return 1.0
+        # TODO set a frag floor so we can always 100% this just to be safe?
+        # return 1.0
+        bonus = state.fragmentary_ontologies * 15
+        return self.broad_success_rate(300, state.outfits.watchful + bonus)
 
     def perform_success(self, state: LibraryState):
+        routes = random.choice([1,2])
         state.progress += 5
-        state.routes_traced += random.choice([1,2])
+        state.routes_traced += routes
         state.fragmentary_ontologies -= 1
 
+        state.gross_routes += routes
+
     def success_ev(self, state: LibraryState):
-        return ev_progress * 5 + ev_route * 1.5 - ev_frag
+        return ev_progress * 5 + state.ev_route() * 1.5 - ev_frag
 
     def perform_failure(self, state: LibraryState):
         state.progress += 1
@@ -425,23 +577,25 @@ class AtriumAction2(Action):
 class DeadEnd(LibraryCard):
     def __init__(self):
         super().__init__("A Dead End?")
-        self.actions = [DeadEndAction1(), DeadEndAction2(),
-                        DeadEndAction3(), DeadEndAction4()]
+        self.actions = [DeadEndAction1(),
+                        DeadEndAction2(),
+                        DeadEndAction3(),
+                        DeadEndAction4()]
 
 class DeadEndAction1(Action):
     def __init__(self):
         super().__init__("Tie a rope")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Watchful + Shadowy 300
-        return 1.0
+        # return 1.0
+        return self.broad_success_rate(300, state.outfits.watchful_plus_shadowy)
 
     def perform_success(self, state: LibraryState):
         state.progress += 5
         state.hand.clear()
 
     def success_ev(self, state: LibraryState):
-        return ev_progress * 5 + ev_route * 1.5 - ev_frag + state.ev_hand_clear()
+        return ev_progress * 5 + state.ev_route() * 1.5 - ev_frag + state.ev_hand_clear()
 
     def perform_failure(self, state: LibraryState):
         state.progress += 5
@@ -457,21 +611,26 @@ class DeadEndAction2(Action):
         super().__init__("Take advantage")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Watchful 350, Cthonosophy +15
-        return 1.0
+        # return 1.0
+        # lower EPA! previous number unrealistic
+        return self.broad_success_rate(350, state.outfits.watchful_plus_cthonosophy15)
 
     def perform_success(self, state: LibraryState):
         state.routes_traced += 2
         state.tantalizing_possibilities += 50
 
+        state.gross_routes += 2
+
     def success_ev(self, state: LibraryState):
-        return ev_tant * 50 + ev_route * 2
+        return ev_tant * 50 + state.ev_route() * 2
 
     def perform_failure(self, state: LibraryState):
         state.routes_traced += 1
 
+        state.gross_routes += 2
+
     def failure_ev(self, state: LibraryState):
-        return ev_route
+        return state.ev_route()
     
 class DeadEndAction3(Action):
     def __init__(self):
@@ -507,7 +666,7 @@ class DeadEndAction4(Action):
 
 class DiscardedLadder(LibraryCard):
     def __init__(self):
-        super().__init__("A Grand Staircase")
+        super().__init__("A Discarded Ladder")
         self.actions = [DiscardedLadderAction1()]
 
 class DiscardedLadderAction1(Action):
@@ -515,14 +674,16 @@ class DiscardedLadderAction1(Action):
         super().__init__("Climb")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Watchful 200
-        return 0.99
+        # return 0.99
+        return self.broad_success_rate(200, state.outfits.watchful)
 
     def perform_success(self, state: LibraryState):
-        state.routes_traced += random.choice([1,2])
+        routes = random.choice([1,2])
+        state.routes_traced += routes
+        state.gross_routes += routes
 
     def success_ev(self, state: LibraryState):
-        return ev_route * 1.5
+        return state.ev_route() * 1.5
 
     def perform_failure(self, state: LibraryState):
         state.wounds += 1
@@ -551,7 +712,7 @@ class GrandStaircaseAction1(Action):
         state.hand.clear()
 
     def ev(self, state: LibraryState):
-        return state.ev_hand_clear() + state.ev_progress(5) - ev_route
+        return state.ev_hand_clear() + state.ev_progress(5) - state.ev_route()
 
 class LockedGate(LibraryCard):
     def __init__(self):
@@ -582,15 +743,15 @@ class MapRoomAction1(Action):
         super().__init__("Look for maps of the library")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Watchful 220
-        return 0.90
+        # return 0.9
+        return self.broad_success_rate(220, state.outfits.watchful)
 
     def perform_success(self, state: LibraryState):
         state.routes_traced += random.choice([1,2])
         state.tantalizing_possibilities += 50
 
     def success_ev(self, state: LibraryState):
-        return ev_route * 1.5 + ev_tant * 50
+        return state.ev_route() * 1.5 + ev_tant * 50
 
     def perform_failure(self, state: LibraryState):
         state.nightmares += 1
@@ -607,7 +768,8 @@ class MapRoomAction2(Action):
         super().__init__("Look for maps of the Neath")
 
     def pass_rate(self, state: LibraryState):
-        return 0.79
+        # return 0.79
+        return self.broad_success_rate(250, state.outfits.watchful)
 
     def perform_success(self, state: LibraryState):
         # TODO: +2 partial map, rare success +1 puzzling map instead
@@ -654,9 +816,8 @@ class PoisonGalleryAction1(Action):
         super().__init__("Use furniture as stepping stones")
 
     def pass_rate(self, state: LibraryState):
-        # TODO
-        # Shadowy 240, Neathproofed +15
-        return 1.0
+        # return 1.0
+        return self.broad_success_rate(240, state.outfits.shadowy_plus_neathproofed15)
 
     def perform_success(self, state: LibraryState):
         state.progress += 5
@@ -676,9 +837,8 @@ class PoisonGalleryAction2(Action):
         super().__init__("Prepare an antidote")
 
     def pass_rate(self, state: LibraryState):
-        # TODO
-        # KT 10
-        return 1.0
+        # return 0.9
+        return self.narrow_success_rate(10, state.outfits.kataleptic_toxicology)
 
     def perform_success(self, state: LibraryState):
         # flask of abominable salts -= 1
@@ -703,7 +863,7 @@ class StoneGallery(LibraryCard):
                         StoneGalleryAction2(),
                         StoneGalleryAction3(),
                         StoneGalleryAction4()]
-
+        
 class StoneGalleryAction1(Action):
     def __init__(self):
         super().__init__("Make your way through the silent gallery")
@@ -733,11 +893,13 @@ class StoneGalleryAction2(Action):
         super().__init__("Stop and examine the ancient volumes")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Cthonosophy 7
-        return 0.8
+        # return 0.8
+        return self.narrow_success_rate(7, state.outfits.cthonosophy)
     
     def perform_success(self, state: LibraryState):
-        state.fragmentary_ontologies += random.choice([1,2])
+        frag = random.randint(1,2)
+        state.fragmentary_ontologies += frag
+        state.gross_frags += 2
 
     def success_ev(self, state: LibraryState):
         return ev_frag * 1.5
@@ -757,8 +919,8 @@ class StoneGalleryAction3(Action):
         return state.routes_traced >= 2 and state.hour_in_the_library in (3, 4)
 
     def pass_rate(self, state: LibraryState):
-        # TODO Dangerous + Watchful DC 300
-        return 1.0
+        # return 1.0
+        return self.broad_success_rate(300, state.outfits.watchful_plus_dangerous)
 
     def perform_success(self, state: LibraryState):
         state.routes_traced -= 2
@@ -766,7 +928,7 @@ class StoneGalleryAction3(Action):
 
     def success_ev(self, state: LibraryState):
         # ignore route cost since this is best use
-        return state.ev_progress(10) # - ev_route * 2
+        return state.ev_progress(10) # - state.ev_route() * 2
 
     def perform_failure(self, state: LibraryState):
         state.progress += 5
@@ -774,7 +936,7 @@ class StoneGalleryAction3(Action):
         state.routes_traced -= 1
 
     def failure_ev(self, state: LibraryState):
-        return state.ev_progress(5) - ev_route * 1 + state.ev_noises(6)
+        return state.ev_progress(5) - state.ev_route() * 1 + state.ev_noises(6)
 
 class StoneGalleryAction4(Action):
     def __init__(self):
@@ -791,7 +953,7 @@ class StoneGalleryAction4(Action):
         state.progress += 10
 
     def success_ev(self, state: LibraryState):
-        return state.ev_progress(10) - ev_route * 2
+        return state.ev_progress(10) - state.ev_route() * 2
 
     def perform_failure(self, state: LibraryState):
         state.progress += 5
@@ -799,7 +961,7 @@ class StoneGalleryAction4(Action):
         state.routes_traced -= 1
 
     def failure_ev(self, state: LibraryState):
-        return state.ev_progress(5) - ev_route * 1 + state.ev_noises(6)
+        return state.ev_progress(5) - state.ev_route() * 1 + state.ev_noises(6)
 
 
 class Index(LibraryCard):
@@ -817,33 +979,41 @@ class IndexAction1(Action):
         super().__init__("Search for a reference card")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Watchful 200, Inerrant +15
-        return 1.0
+        # return 1.0
+        # lower epa?
+        return self.broad_success_rate(200, state.outfits.watchful_plus_inerrant15)
 
     def perform_success(self, state: LibraryState):
-        state.routes_traced += random.choice([1,2,3])
+        routes = random.choice([1,2,3])
+        state.routes_traced += routes
+        state.gross_routes += routes
 
     def success_ev(self, state: LibraryState):
-        return ev_route * 2
+        return state.ev_route() * 2
 
     def perform_failure(self, state: LibraryState):
         state.routes_traced += 1
         state.noises += 2
         state.progress += 1
 
+        state.gross_routes += 1
+
     def failure_ev(self, state: LibraryState):
-        return state.ev_progress(1) + ev_route + state.ev_noises(2)
+        return state.ev_progress(1) + state.ev_route() + state.ev_noises(2)
     
 class IndexAction2(Action):
     def __init__(self):
         super().__init__("Try to understand the organization of the library")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Cthonosophy 7
-        return 0.8
+        # return 0.8
+        # lower epa?
+        return self.narrow_success_rate(7, state.outfits.cthonosophy)
 
     def perform_success(self, state: LibraryState):
-        state.fragmentary_ontologies += random.choice([1,2,3])
+        frags = random.choice([1,2,3])        
+        state.fragmentary_ontologies += frags
+        state.gross_frags += frags
 
     def success_ev(self, state: LibraryState):
         return ev_frag * 2
@@ -853,8 +1023,10 @@ class IndexAction2(Action):
         state.noises += random.choice([1,2])
         state.progress += 1
 
+        state.gross_frags += 1
+
     def failure_ev(self, state: LibraryState):
-        return state.ev_progress(1) + ev_route + state.ev_noises(2)
+        return state.ev_progress(1) + state.ev_route() + state.ev_noises(2)
     
 class IndexAction3(Action):
     def __init__(self):
@@ -891,12 +1063,18 @@ class LibrariansOfficeAction1(Action):
     def perform_success(self, state: LibraryState):
         state.tantalizing_possibilities += 40
         drawer = random.choice([1,2,3])
-        if drawer == 1: state.library_keys += 1
-        if drawer == 2: state.routes_traced += 1
-        if drawer == 3: state.fragmentary_ontologies += 1
+        if drawer == 1:
+            state.library_keys += 1
+            state.gross_keys += 1
+        if drawer == 2:
+            state.routes_traced += 1
+            state.gross_routes += 1
+        if drawer == 3:
+            state.fragmentary_ontologies += 1
+            state.gross_frags += 1
 
     def success_ev(self, state: LibraryState):
-        return ev_tant * 40 + (state.ev_key() + ev_route + ev_frag)/3.0
+        return ev_tant * 40 + (state.ev_key() + state.ev_route() + ev_frag)/3.0
 
     def perform_failure(self, state: LibraryState):
         state.librarians_office_failures += 1
@@ -943,8 +1121,8 @@ class FloweringGalleryAction1(Action):
         super().__init__("Keep going")
 
     def pass_rate(self, state: LibraryState):
-        # TODO NP + Inerrant 0
-        return 1.0
+        # return 1.0
+        return self.narrow_success_rate(0, state.outfits.neathproofed_plus_inerrant)
 
     def perform_success(self, state: LibraryState):
         state.progress += 5
@@ -965,11 +1143,12 @@ class FloweringGalleryAction2(Action):
         super().__init__("Eat the fruit of knowledge")
 
     def pass_rate(self, state: LibraryState):
-        # TODO KT 12
-        return 0.9
+        # return 0.9
+        return self.narrow_success_rate(12, state.outfits.kataleptic_toxicology)
 
     def perform_success(self, state: LibraryState):
         state.fragmentary_ontologies += 2
+        state.gross_frags += 2
 
     def success_ev(self, state: LibraryState):
         return ev_frag * 2
@@ -998,8 +1177,8 @@ class BlackGalleryAction1(Action):
         super().__init__("Light a lantern")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Shadowy 240, Insub +15
-        return 1.0
+        # return 1.0
+        return self.broad_success_rate(240, state.outfits.shadowy_plus_insubstantial15)
 
     def perform_success(self, state: LibraryState):
         state.progress += 5
@@ -1019,8 +1198,9 @@ class BlackGalleryAction2(Action):
         super().__init__("Navigate by alternate senses")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Watchful 240, MA +10, Inerrant +15
         return 1.0
+        # return self.broad_success_rate(
+        #     240, state.outfits.watchful_plus_monstrous10_inerrant15)
 
     def perform_success(self, state: LibraryState):
         state.progress += 5
@@ -1034,7 +1214,7 @@ class BlackGalleryAction2(Action):
 
     def failure_ev(self, state: LibraryState):
         return state.ev_progress(1) + state.ev_noises(2)
-    
+
 class BlackGalleryAction3(Action):
     def __init__(self):
         super().__init__("Light a lantern + WOESEL")
@@ -1073,8 +1253,8 @@ class GaolerLibrarianAction1(Action):
         return state.noises > 0  # Action only available if there's noise
 
     def pass_rate(self, state: LibraryState):
-        # TODO: Shadowy 200
         return 0.96
+        # return self.broad_success_rate(200, state.outfits.shadowy)
 
     def perform_success(self, state: LibraryState):
         # Does nothing
@@ -1096,11 +1276,12 @@ class GaolerLibrarianAction2(Action):
         super().__init__("Try to lift one of its keys")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Shadowy 250, Insub +15
         return 0.87
+        # return self.broad_success_rate(250, state.outfits.shadowy_plus_insubstantial15)
 
     def perform_success(self, state: LibraryState):
         state.library_keys += 1
+        state.gross_keys += 1
 
     def success_ev(self, state: LibraryState):
         return state.ev_key()
@@ -1140,8 +1321,8 @@ class TerribleShushingAction1(Action):
         super().__init__("Find a hiding place")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Shadowy 220
         return 0.87
+        # return self.broad_success_rate(220, state.outfits.shadowy)
 
     def perform_success(self, state: LibraryState):
         state.noises -= 3
@@ -1160,8 +1341,8 @@ class TerribleShushingAction2(Action):
         super().__init__("Hurry along")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Shadowy 295
         return 0.65
+        # return self.broad_success_rate(295, state.outfits.shadowy)
 
     def perform_success(self, state: LibraryState):
         state.noises += 2
@@ -1180,7 +1361,7 @@ class TerribleShushingAction2(Action):
 # TODO: wiki is unsure about exact range of outcomes
 class TerribleShushingAction3(Action):
     def __init__(self):
-        super().__init__("Hurry along")
+        super().__init__("Quiet the Cartographer")
 
     def can_perform(self, state: LibraryState):
         return state.cartographer_enabled
@@ -1234,7 +1415,6 @@ class GodsEyeViewAction2(Action):
     def ev(self, state: LibraryState):
         # Ignore frag cost since this is the best use for them
         return state.ev_progress(15) # - ev_frag * 5
-    
 
 class ShapeOfTheLabyrinth(LibraryCard):
     def __init__(self):
@@ -1256,7 +1436,7 @@ class ShapeOfTheLabyrinthAction1(Action):
 
     def ev(self, state: LibraryState):
         # reduce route ev penalty since this is 2nd best use for them
-        return ev_progress * 10 - ev_route * 2 + state.ev_hand_clear()
+        return ev_progress * 10 - state.ev_route() * 2 + state.ev_hand_clear()
 
 class ShapeOfTheLabyrinthAction2(Action):
     def __init__(self):
@@ -1266,8 +1446,8 @@ class ShapeOfTheLabyrinthAction2(Action):
         return state.fragmentary_ontologies > 0
 
     def pass_rate(self, state: LibraryState):
-        # Cthonosophy 5
         return 0.9
+        # return self.narrow_success_rate(5, state.outfits.cthonosophy)
 
     def perform_success(self, state: LibraryState):
         state.fragmentary_ontologies -= 1
@@ -1320,8 +1500,8 @@ class GreyCardinalAction3(Action):
         super().__init__("Engage the Cardinal in conversation")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Persuasive 250, Bizarre +10
         return 1.0
+        # return self.broad_success_rate(250, state.outfits.persuasive_plus_bizarre10)
 
     def perform_success(self, state: LibraryState):
         state.tantalizing_possibilities += 50
@@ -1386,22 +1566,23 @@ class TeaRoomAction2(Action):
         super().__init__("Consult your maps of the library")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Routes Traced 0
+        # TODO: set a floor of 10 so we can always pass this?
         return 1.0
+        # return self.narrow_success_rate(0, state.routes_traced)
 
     def perform_success(self, state: LibraryState):
         state.routes_traced -= 1
         state.progress += 10
 
     def success_ev(self, state: LibraryState):
-        return state.ev_progress(10) - ev_route
+        return state.ev_progress(10) - state.ev_route()
 
     def perform_failure(self, state: LibraryState):
         state.routes_traced -= 1
         state.progress += 5
 
     def failure_ev(self, state: LibraryState):
-        return state.ev_progress(5) - ev_route
+        return state.ev_progress(5) - state.ev_route()
 
 class TeaRoomAction3(Action):
     def __init__(self):
@@ -1411,8 +1592,8 @@ class TeaRoomAction3(Action):
         return state.fragmentary_ontologies > 0
 
     def pass_rate(self, state: LibraryState):
-        # TODO Fragmentary Ontologies 2
-        return 1.0
+        # return 1.0
+        return self.narrow_success_rate(2, state.fragmentary_ontologies)
 
     def perform_success(self, state: LibraryState):
         state.fragmentary_ontologies -= 1
@@ -1423,6 +1604,7 @@ class TeaRoomAction3(Action):
 
     def perform_failure(self, state: LibraryState):
         state.fragmentary_ontologies += 1
+        state.gross_frags += 1
 
     def failure_ev(self, state: LibraryState):
         return ev_frag
@@ -1450,7 +1632,7 @@ class CartographerSnuffboxAction1(Action):
         state.progress += 5
 
     def ev(self, state: LibraryState):
-        return state.ev_progress(5) - ev_route
+        return state.ev_progress(5) - state.ev_route()
 
 class CartographerSnuffboxAction2(Action):
     def __init__(self):
@@ -1462,9 +1644,10 @@ class CartographerSnuffboxAction2(Action):
     def perform(self, state: LibraryState):
         state.routes_traced -= 3
         state.fragmentary_ontologies += 5
+        state.gross_frags += 5
 
     def ev(self, state: LibraryState):
-        return ev_frag * 5 - ev_route * 3
+        return ev_frag * 5 - state.ev_route() * 3
 
 class CartographerCompass(LibraryCard):
     def __init__(self):
@@ -1480,14 +1663,16 @@ class CartographerCompassAction1(Action):
         super().__init__("Camera2.png")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Watchful + Inerrant, need exact DC
-        return 1.0
+        # TODO need exact DC
+        return self.broad_success_rate(220, state.outfits.watchful_plus_inerrant15)
 
     def perform_success(self, state: LibraryState):
-        state.routes_traced += random.randint(1, 3)
+        routes = random.randint(1, 3)
+        state.routes_traced += routes
+        state.gross_routes += routes
 
     def success_ev(self, state: LibraryState):
-        return ev_route * 2
+        return state.ev_route() * 2
 
     def perform_failure(self, state: LibraryState):
         state.noises += 2
@@ -1547,8 +1732,9 @@ class ChainedOctavoAction2(Action):
         super().__init__("Examine this section, then move on")
 
     def pass_rate(self, state: LibraryState):
-        # TODO Cthonosophy + Fragmentary Ontology 10
-        return 1.0
+        # TODO: set a floor so we can always pass this?
+        bonus = state.fragmentary_ontologies
+        return self.narrow_success_rate(10, state.outfits.cthonosophy + bonus)
 
     def perform_success(self, state: LibraryState):
         state.progress += 5
@@ -1608,7 +1794,10 @@ def simulate_runs(num_runs):
     print(f"Successes: {total_runs} ({(total_runs / num_runs) * 100:.2f}%)")
     print(f"Failures: {state.failed_runs} ({(state.failed_runs / num_runs) * 100:.2f}%)")
     print(f"Average actions per run: {total_steps / num_runs:.2f}")
-    # print(f"Average TPs per run: {state.tantalizing_possibilities / num_runs:.2f}\n")
+
+    print(f"Keys collected: {state.gross_keys}")
+    print(f"Routes collected: {state.gross_routes}")
+    print(f"Frag. Ontologies collected: {state.gross_frags}")
 
     print("\nCard and Action Play Counts:")
     print(f"{'Card':<30} {'Count':<10} {'Action':<40} {'Count per Run':<15}")
@@ -1634,6 +1823,14 @@ def simulate_runs(num_runs):
             action_count_per_run = action_count / total_runs if total_runs > 0 else 0
 
             print(f"{'':<30} {'':<10} {truncated_action_name:<40} {action_count_per_run:<15.2f}")
+
+            woesel_name = action.woesel_name()
+            woesel_count = state.action_play_counts[woesel_name]    
+            woesel_count_per_run = woesel_count / total_runs if total_runs > 0 else 0
+            if (woesel_count_per_run > 0):
+                truncated_woesel_name = (woesel_name[:37] + '...') if len(woesel_name) > 37 else woesel_name
+                print(f"{'':<30} {'':<10} {truncated_woesel_name:<40} {woesel_count_per_run:<15.2f}")
+
 
     # Define the value of items in echoes and stuivers
     item_values = {
