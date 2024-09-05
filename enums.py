@@ -689,6 +689,7 @@ class Item(Enum):
     RouteTracedThroughTheLibrary = auto()
     LibraryKey = auto()
     FragmentaryOntology = auto()
+    DispositionOfTheCardinal = auto()
 
     # -----
     # Equipment
