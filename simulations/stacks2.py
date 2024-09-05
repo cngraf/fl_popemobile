@@ -2,14 +2,14 @@ import random
 from collections import defaultdict
 from enum import Enum, auto
 
-ev_route = 1.9
+ev_route = 1.8
 ev_tant = 0.1
 ev_progress = 1
-ev_key = 7.51
-ev_frag = 1.5
+ev_key = 8
+ev_frag = 2
 ev_hand_clear = 1
-ev_wounds = -0.15
-ev_nightmares = -0.15
+ev_wounds = -0.12
+ev_nightmares = -0.12
 ev_office_failure = 3 # idk
 
 class ApocryphaSought(Enum):
@@ -157,6 +157,14 @@ class LibraryState:
         if apocrypha_sought == ApocryphaSought.UnrealPlaces:
             self.hour_in_the_library = 4
 
+    def ev_key(self):
+        if self.library_keys == 0 and self.anathema_unchained == 0:
+            return 15
+        elif self.library_keys > 10:
+            return 1
+        else:
+            return 8
+
     def ev_progress(self, val):
         # TODO this is actually wrong bc there should be no diff between 30 and 31
         # but brain no work rn so leaving it
@@ -201,8 +209,11 @@ class LibraryState:
 
     def ev_hand_clear(self):
         ev = ev_hand_clear
-        if self.anathema_unchained <= 0:
-            ev += 2
+        if self.anathema_unchained <= 0 and self.in_search_of_lost_time == 1:
+            if any(card.name == "A Chained Octavo" for card in self.hand): 
+                ev -= 100
+            else:
+                ev += 10
 
         return ev
 
@@ -290,7 +301,9 @@ class RefillHandAction(Action):
             state.draw_card()
 
     def ev(self, state: LibraryState):
-        # TODO
+        if state.in_search_of_lost_time == 1 and state.anathema_unchained <= 0:
+            return 50
+        
         return ev_progress * 5
 
 # Specific card implementations with actions
@@ -557,7 +570,7 @@ class LockedGateAction1(Action):
         state.progress += 15
 
     def ev(self, state: LibraryState):
-        return state.ev_progress(15) - ev_key
+        return state.ev_progress(15) - state.ev_key()
 
 class MapRoom(LibraryCard):
     def __init__(self):
@@ -752,7 +765,8 @@ class StoneGalleryAction3(Action):
         state.progress += 10
 
     def success_ev(self, state: LibraryState):
-        return state.ev_progress(10) - ev_route * 2
+        # ignore route cost since this is best use
+        return state.ev_progress(10) # - ev_route * 2
 
     def perform_failure(self, state: LibraryState):
         state.progress += 5
@@ -882,7 +896,7 @@ class LibrariansOfficeAction1(Action):
         if drawer == 3: state.fragmentary_ontologies += 1
 
     def success_ev(self, state: LibraryState):
-        return ev_tant * 40 + (ev_key + ev_route + ev_frag)/3.0
+        return ev_tant * 40 + (state.ev_key() + ev_route + ev_frag)/3.0
 
     def perform_failure(self, state: LibraryState):
         state.librarians_office_failures += 1
@@ -912,7 +926,7 @@ class LibrariansOfficeAction3(Action):
         state.progress += 15
 
     def ev(self, state: LibraryState):
-        return state.ev_progress(15) - ev_key
+        return state.ev_progress(15) - state.ev_key()
     
 
 class FloweringGallery(LibraryCard):
@@ -1089,7 +1103,7 @@ class GaolerLibrarianAction2(Action):
         state.library_keys += 1
 
     def success_ev(self, state: LibraryState):
-        return ev_key
+        return state.ev_key()
 
     def perform_failure(self, state: LibraryState):
         state.noises += 6
@@ -1155,7 +1169,7 @@ class TerribleShushingAction2(Action):
 
     def success_ev(self, state: LibraryState):
         return state.ev_noises(2) + state.ev_progress(5)
-
+ 
     def perform_failure(self, state: LibraryState):
         state.noises += 4
         state.progress += 5
@@ -1218,7 +1232,8 @@ class GodsEyeViewAction2(Action):
         state.fragmentary_ontologies -= 5
     
     def ev(self, state: LibraryState):
-        return state.ev_progress(15) - ev_frag * 5 
+        # Ignore frag cost since this is the best use for them
+        return state.ev_progress(15) # - ev_frag * 5
     
 
 class ShapeOfTheLabyrinth(LibraryCard):
@@ -1226,6 +1241,7 @@ class ShapeOfTheLabyrinth(LibraryCard):
         super().__init__("The Shape of the Labyrinth")
         self.actions = [ShapeOfTheLabyrinthAction1(), ShapeOfTheLabyrinthAction2()]
 
+    # TODO: figure out how good this card is and tweak stateful route ev accordingly
     def can_draw(self, state: LibraryState):
         return state.routes_traced >= 6 and state.in_search_of_lost_time == 2
 
@@ -1239,7 +1255,8 @@ class ShapeOfTheLabyrinthAction1(Action):
         state.routes_traced -= random.randint(2,5)
 
     def ev(self, state: LibraryState):
-        return ev_progress * 10 - ev_route * 3.5 + state.ev_hand_clear()
+        # reduce route ev penalty since this is 2nd best use for them
+        return ev_progress * 10 - ev_route * 2 + state.ev_hand_clear()
 
 class ShapeOfTheLabyrinthAction2(Action):
     def __init__(self):
@@ -1562,8 +1579,8 @@ def simulate_runs(num_runs):
     print("=" * 80)
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
-    state.cartographer_enabled = True
+    state.apocrypha_sought = ApocryphaSought.SomeFrenchBullshit
+    state.cartographer_enabled = False
 
     # Progress bar setup
     progress_template = "\rProgress: [{:<50}] {:.2f}% ({}/{})"
@@ -1625,7 +1642,8 @@ def simulate_runs(num_runs):
         'Fragmentary Ontologies': {'echoes': 0.0},
         'Tantalizing Possibilities': {'echoes': 0.1, 'stuivers': 2},
         'Librarian\'s Office Failures': {'echoes': 3},
-        'Wounds': {'echoes': -1.0 },  # approx @ 6 heal for 1 action & 6 EPA
+        'Wounds': {'echoes': -0.8 },  # approx @ 6 heal for 1 action & 6 EPA + 2 defense
+        'Nightmares': {'echoes': -0.8 },  # approx @ 6 heal for 1 action & 6 EPA + 2 defense
         'Normal Completions': {'echoes': 116, 'stuivers': 2320},  # example value
         'Glimpse of Anathema': {'echoes': 312.5, 'stuivers': 6250}  # example value
     }
@@ -1646,6 +1664,7 @@ def simulate_runs(num_runs):
         'Tantalizing Possibilities': state.tantalizing_possibilities,
         'Librarian\'s Office Failures': state.librarians_office_failures,
         'Wounds': state.wounds,
+        'Nightmares': state.nightmares,
         'Normal Completions': state.completed_normal_runs,
         'Glimpse of Anathema': state.completed_anathema_runs
     }
@@ -1684,4 +1703,4 @@ def simulate_runs(num_runs):
 
     # print(f"\nEst EPA: {(116 * state.completed_normal_runs + 312 * state.completed_anathema_runs + state.tantalizing_possibilities * 0.1) / total_steps:.2f}")
 
-simulate_runs(100_000)
+simulate_runs(10_000)
