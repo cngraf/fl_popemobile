@@ -339,10 +339,14 @@ class ReadingRoomAction1(Action):
         else:
             state.completed_normal_runs += 1
 
-        state.anathema_unchained = max(0, state.anathema_unchained - 1)
-
         state.in_search_of_lost_time = 3
-        state.actions += 2 # approximation
+        state.actions += 1 # collect loot
+
+        # TODO make this its own action(s)
+        # Winding Back the thread 
+        state.actions += 1.33 # find your way back + rare "success" penalty
+        state.actions += 1 # return to midnight moon
+        state.anathema_unchained = max(0, state.anathema_unchained - 1)
 
     def ev(self, state: LibraryState):
         # TODO
@@ -967,7 +971,7 @@ class FloweringGalleryAction2(Action):
 
 class BlackGallery(LibraryCard):
     def __init__(self):
-        super().__init__("A Flowering Gallery")
+        super().__init__("A Black Gallery")
         self.actions = [BlackGalleryAction1(),
                         BlackGalleryAction2(),
                         BlackGalleryAction3()]
@@ -1450,6 +1454,9 @@ class CartographerCompass(LibraryCard):
         super().__init__("Compass.png")
         self.actions = [CartographerCompassAction1(),
                         CartographerCompassAction2()]
+        
+    def can_draw(self, state: LibraryState):
+        return state.cartographer_enabled     
 
 class CartographerCompassAction1(Action):
     def __init__(self):
@@ -1498,7 +1505,7 @@ class ChainedOctavo(LibraryCard):
 
 class ChainedOctavoAction1(Action):
     def __init__(self):
-        super().__init__("Camera2.png")
+        super().__init__("Unchain it")
 
     def can_perform(self, state: LibraryState):
         return state.library_keys > 1 and state.noises < 28
@@ -1520,7 +1527,7 @@ class ChainedOctavoAction1(Action):
 
 class ChainedOctavoAction2(Action):
     def __init__(self):
-        super().__init__("Camera2.png")
+        super().__init__("Examine this section, then move on")
 
     def pass_rate(self, state: LibraryState):
         # TODO Cthonosophy + Fragmentary Ontology 10
@@ -1550,17 +1557,34 @@ def simulate_runs(num_runs):
     - None
     """
 
+    print("=" * 80)
+    print(f"{'SIMULATION RESULTS':^80}")
+    print("=" * 80)
+
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.BannedWorks
+    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
     state.cartographer_enabled = True
+
+    # Progress bar setup
+    progress_template = "\rProgress: [{:<50}] {:.2f}% ({}/{})"
+    print(progress_template.format("", 0, 0, num_runs), end='')
 
     while state.total_runs() < num_runs:
         state.step()
+        # Update progress bar
+        progress = (state.total_runs() / num_runs) * 100
+        bar_length = int(progress / 2)
+        print(progress_template.format("=" * bar_length, progress, state.total_runs(), num_runs), end='')
+
+    print()  # Move to the next line after completing the progress bar
 
     total_steps = state.actions
-    avg_steps = total_steps / num_runs
+    # avg_steps = total_steps / num_runs
 
     total_runs = state.total_runs()
+
+    print(f"ApocryphaSought: {state.apocrypha_sought}")
+    print(f"Cartographer Enabled: {state.cartographer_enabled}")
 
     # Calculate and print statistics
     print(f"Total runs: {num_runs}")
@@ -1658,8 +1682,6 @@ def simulate_runs(num_runs):
     stuivers_per_action = total_stuivers / total_steps if total_steps > 0 else 0
     print(f"{'Per Action':<30} {'':<10} {'':<25} {echoes_per_action:.4f} E / {stuivers_per_action:.4f} S")
 
-    print(f"ApocryphaSought: {state.apocrypha_sought}")
-    print(f"Cartographer Enabled: {state.cartographer_enabled}")
     # print(f"\nEst EPA: {(116 * state.completed_normal_runs + 312 * state.completed_anathema_runs + state.tantalizing_possibilities * 0.1) / total_steps:.2f}")
 
 simulate_runs(100_000)
