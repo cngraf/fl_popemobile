@@ -121,7 +121,7 @@ class OutfitList:
         self.watchful_plus_dangerous = 332 + 261
 
         # deadend2
-        self.watchful_plus_cthonosophy15 = 323 + 4 * 15
+        self.watchful_plus_cthonosophy15 = 323 + 8 * 15
 
         # gaoler1, shushing1, shushing2
         self.shadowy = 323
@@ -2024,4 +2024,4 @@ def simulate_runs(num_runs):
 
     # print(f"\nEst EPA: {(116 * state.completed_normal_runs + 312 * state.completed_anathema_runs + state.items[Item.TantalisingPossibility] * 0.1) / total_steps:.2f}")
 
-simulate_runs(100_000)
+simulate_runs(10_000)
