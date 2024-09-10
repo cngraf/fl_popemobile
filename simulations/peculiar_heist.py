@@ -57,11 +57,9 @@ class HeistState:
             Dogs(),
             Prize()
         ]
-    
-    # def draw_card(self):
-    #     weights = [card.weight(self) for card in self.deck]
-    #     drawn = random.choices(self.deck, weights=weights, k=1)[0]
-    #     self.hand.append(drawn)
+
+        self.card_play_counts = {card.__class__.__name__: 0 for card in self.deck}  # Track how many times each card is played
+
 
     def draw_card(self):
         drawn, lowest = None, float('inf')
@@ -88,12 +86,14 @@ class HeistState:
 
         self.hand.sort(key=lambda card: card.ev(self))
         card = self.hand.pop()
+        self.card_play_counts[card.__class__.__name__] += 1  # Increment card play counter
         card.play(self)
 
         self.progress = max(self.progress, 0)
 
         if self.tread <= 0:
             self.status = "Failure"
+
 
     def run(self):
         while self.status == "InProgress":
@@ -418,7 +418,7 @@ class Prize(HeistCard):
         state.status = "Success"
 
 runs = 100_000
-keys = 1
+keys = 0
 info = 0
 
 successes = 0
@@ -431,9 +431,15 @@ cat_bribes = 0
 docs = 0
 corresondence = 0
 
+total_card_play_counts = {card.__class__.__name__: 0 for card in HeistState(info=info, keys=keys).deck}  # Initialize total counts
+
 for i in range(0, runs):
     heist = HeistState(info=info, keys=keys)
     heist.run()
+
+    # Track how many times each card was played
+    for card, count in heist.card_play_counts.items():
+        total_card_play_counts[card] += count
 
     cat_bribes += heist.cat_bribes
     docs += heist.snaffled_docs
@@ -452,3 +458,6 @@ print(f"{failures/runs} fail rate, in avg {failure_steps/max(failures, 1)} steps
 print(f"Bribed an avg of {cat_bribes/runs} cats," +
       f" and snaffled {docs/runs} documents and {corresondence/runs} correspondence")
 
+print("\nAverage card plays per run:")
+for card, total in total_card_play_counts.items():
+    print(f"{card}: {total / runs:.2f} plays per run")

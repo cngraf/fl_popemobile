@@ -272,6 +272,7 @@ class Item(Enum):
     # Connected
     ConnectedBenthic = auto()
     ConnectedSummerset = auto()
+    ConnectedTheDuchess = auto()
 
     # Academic
     FoxfireCandleStub = auto()
@@ -1014,3 +1015,12 @@ class Item(Enum):
     CZP_Drowned = auto()     
     CZP_SpiderTree = auto()     
     CZP_Parrot = auto()
+
+    # Simulation scratchpad
+
+    # Heists
+    BurglarsProgress = auto()
+    IntriguingKey = auto()
+    InsideInformation = auto()
+    CatlikeTread = auto()
+    EscapeRoute = auto()
