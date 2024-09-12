@@ -775,6 +775,10 @@ class Item(Enum):
     # Piracy
     ChasingDownYourBounty = auto()
     StashedTreasure = auto()
+    UnwelcomeOnTheWaters = auto()
+    TimeSpentAtZee = auto()
+    CreepingFear = auto()
+    RosyColours = auto()
 
     # Upper River
     FittingInAtHeliconHouse = auto()
@@ -856,6 +860,7 @@ class Item(Enum):
     SaltSteppesZeeDraw = auto()
     PillaredSeaZeeDraw = auto()
     SnaresZeeDraw = auto()
+    Plunder = auto()
 
     # Upper River
     DigsInEvenlode = auto()
