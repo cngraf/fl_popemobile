@@ -5,6 +5,16 @@ from enum import Enum, auto
 from enums import *
 from collections import defaultdict
 
+item_echo_values = {
+    Item.Plunder: 0.01,
+    Item.WhirringContraption: 12.5,
+
+    # Menaces
+    Item.Wounds: -0.2,
+    Item.Nightmares: -0.2
+}
+
+
 class Action:
     def __init__(self, name):
         self.name = name
@@ -53,10 +63,10 @@ class Action:
         return 1.0  # Default pass rate is 100%
 
     def pass_ev(self, state: 'GameState'):
-        return 1.0
+        return self.items_ev(state, self.pass_items(state))
     
     def failure_ev(self, state: 'GameState'):
-        return 0.0
+        return self.items_ev(state, self.fail_items(state))
     
     def ev(self, state: 'GameState'):
         pass_rate = min(1.0, max(0.0, self.pass_rate(state)))
@@ -74,6 +84,13 @@ class Action:
             fail_ev = 0.0
 
         return pass_rate * pass_ev + (1.0 - pass_rate) * fail_ev
+    
+    def items_ev(self, state: 'GameState', items: dict):
+        total_ev = 0
+        for item, amount in items.items():
+            ev_from_item = state.item_ev(item, amount)
+            total_ev += ev_from_item
+        return total_ev
         
     
     @staticmethod
@@ -95,10 +112,15 @@ class OpportunityCard:
 
 class OutfitList:
     def __init__(self):
+        self.zailing_speed = 55  # Example stat for "Zailing Speed"
+        self.dangerous = 300
+        self.watchful = 300
+        self.persuasive = 300
+        self.shadowy = 300
+
         self.chess_player = 15
         self.zeefaring = 15  # Example stat for "Zeefaring"
-        self.zailing_speed = 55  # Example stat for "Zailing Speed"
-        self.persuasive = 300
+        self.monstrous_anatomy = 15
 
 class GameState:
     def __init__(self):
@@ -226,24 +248,47 @@ class GameState:
         
         # Optionally, display other tracking metrics if needed
 
+    def item_ev(self, item: Item, val: int):
+        if item == Item.ZailingProgress:
+            return self.progress_ev(val)
+        elif item == Item.TroubledWaters:
+            return self.tw_ev(val)
+        else:
+            echo_value = item_echo_values.get(item, 0)
+            # TODO echo value
+            return echo_value * val
 
-from enum import Enum
+    def progress_ev(self, val: int):
+        """Calculates the EV for a given progress value based on current progress."""
+        # TODO
+        prog_unit_ev = 0.1
+        baseline_ev = 5.5
 
-# Define the Item Enum
-class Item(Enum):
-    TroubledWaters = 1
-    CreepingFear = 2
-    Plunder = 3
-    ZailingProgress = 4
-    ChasingDownYourBounty = 5
-    UnwelcomeOnTheWaters = 6
-    TimeSpentAtZee = 7
-    Nightmares = 8
-    RosyColours = 9
-    Suspicion = 10
-    SilentStalker = 11
-    PartialMap = 12
-    WhirringContraption = 13
+        # Current progress
+        current_progress = self.items.get(Item.ZailingProgress, 0)
+        zailing_speed = self.outfits.zailing_speed        
+        remaining_progress = self.progress_required - current_progress
+        
+        if remaining_progress <= 0:
+            return 0.0
+        elif remaining_progress <= val:
+            return baseline_ev
+        elif remaining_progress <= (val + zailing_speed):
+            return baseline_ev
+        else:
+            return val * prog_unit_ev
+    
+    def tw_ev(self, val: int):
+        # TODO
+        tw_unit_ev = -2
+        failure_threshold = 36
+
+        current_tw = self.items.get(Item.TroubledWaters, 0)
+        if current_tw + val >= failure_threshold:
+            return -10000
+        else:
+            return tw_unit_ev * val
+
 
 ################################################################################
 
@@ -712,6 +757,199 @@ class AwakenFromDream(Action):
             Item.RosyColours: 0
         }
 
+################################################################################
+###                            FlockOfProphets                                ###
+################################################################################
+
+class FlockOfProphets(OpportunityCard):
+    def __init__(self):
+        super().__init__("A Flock of Prophets")
+        self.actions = [TakeAuspices(), ZailAroundThem()]
+
+class TakeAuspices(Action):
+    def __init__(self):
+        super().__init__("Take auspices")
+    
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 4,
+            Item.ChasingDownYourBounty: random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 10,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.narrow_pass_rate(13, state.outfits.zeefaring)
+
+class ZailAroundThem(Action):
+    def __init__(self):
+        super().__init__("Zail around them")
+    
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 2,
+            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+################################################################################
+###                            GiantAnglerCrab                                ###
+################################################################################
+
+class GiantAnglerCrab(OpportunityCard):
+    def __init__(self):
+        super().__init__("A Giant Angler Crab")
+        self.actions = [FullReverse(), ReadyGuns(), PursueIt(), HarpoonRamming()]
+
+class FullReverse(Action):
+    def __init__(self):
+        super().__init__("Full reverse! Turn us away!")
+    
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 8,
+            Item.SilentStalker: 1,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.broad_pass_rate(80, state.outfits.shadowy)
+
+class ReadyGuns(Action):
+    def __init__(self):
+        super().__init__("Ready the guns and fire at its soft spots")
+    
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: -2,
+            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 8,
+            Item.SilentStalker: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.narrow_pass_rate(3, state.outfits.monstrous_anatomy)
+
+class PursueIt(Action):
+    def __init__(self):
+        super().__init__("Pursue it to its spawning grounds")
+    
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.ZailingProgress: int(state.outfits.zailing_speed * 1.2),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.broad_pass_rate(75, state.outfits.shadowy)
+
+class HarpoonRamming(Action):
+    def __init__(self):
+        super().__init__("Reach for your harpoon; call for ramming speed!")
+    
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.DeepZeeCatch: 5,
+            Item.TroubledWaters: 1,
+            # TODO
+            # Item.RumblingStomachs: 0  # Removes Rumbling Stomachs
+        }
+    
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+
+################################################################################
+###                            GrowingConcern                                ###
+################################################################################
+
+class GrowingConcern(OpportunityCard):
+    def __init__(self):
+        super().__init__("A Growing Concern")
+        self.actions = [Investigate(), DoubleZailorsRations()]
+
+class Investigate(Action):
+    def __init__(self):
+        super().__init__("Investigate")
+    
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: -5
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.Nightmares: 8,
+            Item.TroubledWaters: 5
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 0.5  # Luck challenge
+
+class DoubleZailorsRations(Action):
+    def __init__(self):
+        super().__init__("Double the zailors' rations")
+    
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 5,
+            Item.CrateOfIncorruptibleBiscuits: -1,
+            Item.FoxfireCandleStub: -100,
+            Item.BottleOfGreyfields1882: -100,
+            Item.RumblingStomachs: 1
+        }
+
+    def can_perform(self, state: 'GameState'):
+        return (state.items.get(Item.CrateOfIncorruptibleBiscuits, 0) >= 1 and
+                state.items.get(Item.FoxfireCandleStub, 0) >= 100 and
+                state.items.get(Item.BottleOfGreyfields1882, 0) >= 100)
+
+
+################################################################################
+###                            DreamOfSunbeams                                ###
+################################################################################
+################################################################################
+###                            DreamOfSunbeams                                ###
+################################################################################
+################################################################################
+###                            DreamOfSunbeams                                ###
+################################################################################
+################################################################################
+###                            DreamOfSunbeams                                ###
+################################################################################
+################################################################################
+###                            DreamOfSunbeams                                ###
+################################################################################
+
+
 
 cards = [
     BountyUponYourHead(),
@@ -723,7 +961,10 @@ cards = [
     DreamOfAscent(),
     DreamOfDesigns(),
     DreamOfStainedGlass(),
-    DreamOfSunbeams()
+    DreamOfSunbeams(),
+    FlockOfProphets(),
+    GiantAnglerCrab(),
+    GrowingConcern()
 ]
 
 # Initial setup
@@ -775,7 +1016,8 @@ def print_item_summary(total_item_changes, runs):
     print("-" * 45)
     for item, total_change in total_item_changes.items():
         avg_change = total_change / runs
-        print(f"{item.name:<30}{avg_change:<15.2f}")
+        if avg_change != 0.0:
+            print(f"{item.name:<30}{avg_change:<15.2f}")
 
 # Update progress bar function
 def update_progress(progress):

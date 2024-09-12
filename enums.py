@@ -861,6 +861,7 @@ class Item(Enum):
     PillaredSeaZeeDraw = auto()
     SnaresZeeDraw = auto()
     Plunder = auto()
+    SilentStalker = auto()
 
     # Upper River
     DigsInEvenlode = auto()
