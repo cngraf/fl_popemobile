@@ -58,6 +58,24 @@ class Action:
     def failure_ev(self, state: 'GameState'):
         return 0.0
     
+    def ev(self, state: 'GameState'):
+        pass_rate = min(1.0, max(0.0, self.pass_rate(state)))
+        pass_ev = self.pass_ev(state)
+        fail_ev = self.failure_ev(state)
+
+        if pass_rate is None:
+            print(f"Debug: {self.name} - pass_rate: {pass_rate}, success_ev: {pass_ev}, failure_ev: {fail_ev}")
+            pass_rate = 0.0
+        if pass_ev is None:
+            print(f"Debug: {self.name} - pass_rate: {pass_rate}, success_ev: {pass_ev}, failure_ev: {fail_ev}")
+            pass_ev = 0.0
+        if fail_ev is None:
+            print(f"Debug: {self.name} - pass_rate: {pass_rate}, success_ev: {pass_ev}, failure_ev: {fail_ev}")
+            fail_ev = 0.0
+
+        return pass_rate * pass_ev + (1.0 - pass_rate) * fail_ev
+        
+    
     @staticmethod
     def broad_pass_rate(dc, stat_value):
         return 0.6 * stat_value / dc
@@ -77,6 +95,7 @@ class OpportunityCard:
 
 class OutfitList:
     def __init__(self):
+        self.chess_player = 15
         self.zeefaring = 15  # Example stat for "Zeefaring"
         self.zailing_speed = 55  # Example stat for "Zailing Speed"
         self.persuasive = 300
@@ -97,25 +116,32 @@ class GameState:
         }
 
         # Additional tracking variables for this simulation
-        self.troubled_waters = 0
+        # self.troubled_waters = 0
         self.unwelcome_on_the_waters = 0
-        self.pieces_of_plunder = 0
-        self.zailing = 0
-        self.time_spent_at_zee = 0
+        # self.pieces_of_plunder = 0
+        # self.zailing = 0
+        # self.time_spent_at_zee = 0
+
+        self.progress_required = 80
 
         # Initialize cards in the deck
         self.deck = []  # This will be populated with cards
         self.hand = []
         self.actions = 0
+        self.total_actions = 0  # Accumulates actions over all runs
 
+        # Tracking data
         self.card_draw_counts = defaultdict(int)
         self.card_play_counts = defaultdict(int)
+        self.action_play_counts = defaultdict(int)
         self.action_success_counts = defaultdict(int)
         self.action_failure_counts = defaultdict(int)
-        self.action_play_counts = defaultdict(int)
+        self.total_item_changes = defaultdict(int)
 
         # Track total changes for each item
         self.total_item_changes = defaultdict(int)
+
+        self.status = "InProgress"
 
     def draw_card(self):
         drawn, lowest = None, float('inf')
@@ -126,11 +152,12 @@ class GameState:
                     drawn = card
                     lowest = rand
 
-        self.card_draw_counts[drawn.name] += 1
-        self.hand.append(drawn)
+        if drawn:
+            self.card_draw_counts[drawn.name] += 1
+            self.hand.append(drawn)
 
     def step(self):
-        # TODO: smart redraw
+        # TODO smart redraw
         while len(self.hand) < 3:
             self.draw_card()
 
@@ -139,39 +166,66 @@ class GameState:
         for card in self.hand:
             for action in card.actions:
                 if action.can_perform(self):
-                    action_ev = action.pass_ev(self)
+                    action_ev = action.ev(self)
                     if action_ev > best_action_ev:
                         best_card, best_action, best_action_ev = card, action, action_ev
 
-        outcome = best_action.perform(self)
-        self.actions += best_action.action_cost
-        self.action_play_counts[best_action.name] += 1
+        if best_action:
+            outcome = best_action.perform(self)
+            self.action_play_counts[best_action.name] += 1
+            self.actions += best_action.action_cost
+            if outcome == "Success":
+                self.action_success_counts[best_action.name] += 1
+            else:
+                self.action_failure_counts[best_action.name] += 1
 
         if best_card is not None:
             self.card_play_counts[best_card.name] += 1
             if best_card in self.hand:
-                self.hand.remove(best_card)
+                self.hand.remove(best_card)            
 
-        # Track successes and failures
-        if outcome == "Success":
-            self.action_success_counts[best_action.name] += 1
-        else:
-            self.action_failure_counts[best_action.name] += 1
-
-        # Update item tracking
-        for item, value in self.items.items():
-            self.total_item_changes[item] += value
-
-        self.actions += 1
         self.hand = [card for card in self.hand if card.can_draw(self)]
 
-    def run(self, steps):
-        while self.actions < steps:
+    def run(self):
+        self.items[Item.ZailingProgress] = 0  # Reset progress for each run
+        while self.items[Item.ZailingProgress] < 80:
             self.step()
 
-    def display_results(self, runs):
-        print_action_table(self.action_play_counts, self.action_success_counts, self.action_failure_counts, self.deck, runs)
+        self.total_actions += self.actions  # Accumulate total actions after the run
+
+
+    def update_item_totals(self):
+        for item, count in self.items.items():
+            self.total_item_changes[item] += count
+
+    def reset(self):
+        """Reset relevant parts of the game state but keep the deck and stats."""
+        self.items = {item: 0 for item in Item}
+        self.hand = []
+        self.actions = 0
+        self.items[Item.ZailingProgress] = 0  # Reset progress for each run
+
+    def display_results(self, runs: int):
+        avg_actions_per_run = self.total_actions / runs
+        print(f"\nAverage Actions per Run: {avg_actions_per_run:.2f}")
+
+        # Card and Action results display
+        print_condensed_action_table(
+            self.action_play_counts,
+            self.action_success_counts,
+            self.action_failure_counts,
+            self.card_draw_counts,
+            self.card_play_counts,
+            self.deck,
+            runs
+        )
+
+        # Display average change in items
         print_item_summary(self.total_item_changes, runs)
+        print(f"\nAverage Actions per Run: {avg_actions_per_run:.2f}")
+        
+        # Optionally, display other tracking metrics if needed
+
 
 from enum import Enum
 
@@ -659,45 +713,61 @@ class AwakenFromDream(Action):
         }
 
 
+cards = [
+    BountyUponYourHead(),
+    BlankSpaceOnTheCharts(),
+    CorvetteOfHerMajestysNavy(),
+    CorvetteWithCorsairColours(),
+    DreamOfACup(),
+    DreamOfATable(),
+    DreamOfAscent(),
+    DreamOfDesigns(),
+    DreamOfStainedGlass(),
+    DreamOfSunbeams()
+]
 
 # Initial setup
 def setup_simulation():
     state = GameState()
 
-    # Add all defined cards to the deck
-    cards = [
-        BountyUponYourHead(),
-        BlankSpaceOnTheCharts(),
-        CorvetteOfHerMajestysNavy(),
-        CorvetteWithCorsairColours(),
-        DreamOfACup(),
-        DreamOfATable(),
-        DreamOfAscent(),
-        DreamOfDesigns(),
-        DreamOfStainedGlass(),
-        DreamOfSunbeams()
-    ]
-    
     # Add each card to the deck
     for card in cards:
         state.deck.append(card)
 
     return state
 
-# Print the action table with average plays per run and success rates
-def print_action_table(action_play_counts, action_success_counts, action_failure_counts, deck, runs):
-    print(f"\n{'Card':<30}{'Action':<30}{'Avg Plays/Run':<15}{'Success Rate':<15}")
-    print("-" * 95)
+# Helper function to truncate long strings
+def truncate_string(s, length=25):
+    if len(s) > length:
+        return s[:length - 3] + '...'  # Truncate and add ellipsis
+    return s
+
+# Print the action table with condensed card/action info
+def print_condensed_action_table(action_play_counts, action_success_counts, action_failure_counts, card_draw_counts, card_play_counts, deck, runs, name_length=25):
+    print(f"\n{'Card/Action':<30}{'Played/Drawn':<20}{'Draw/Play %':<15}{'Avg Plays/Run':<15}{'Success Rate':<15}")
+    print("-" * 105)
+    
     for card in deck:
-        print(f"{card.name:<30}")
+        card_name = truncate_string(card.name, name_length)
+        drawn = card_draw_counts.get(card.name, 0) / runs
+        played = card_play_counts.get(card.name, 0) / runs
+        play_rate = (card_play_counts.get(card.name, 0) / card_draw_counts.get(card.name, 1)) * 100 if card_draw_counts.get(card.name, 0) > 0 else 0
+
+        # First row for card drawn/played info
+        print(f"{card_name:<30}{f'{played:.2f}/{drawn:.2f}':<20}{play_rate:<15.2f}")
+
+        # Next rows for action info (for each action in the card)
         for action in card.actions:
-            played = action_play_counts.get(action.name, 0) / runs
+            action_name = truncate_string(action.name, name_length)
+            action_played = action_play_counts.get(action.name, 0) / runs
             successes = action_success_counts.get(action.name, 0)
             failures = action_failure_counts.get(action.name, 0)
             total = successes + failures
             success_rate = (successes / total) * 100 if total > 0 else 0
-            print(f"{'':<30}{action.name:<30}{played:<15.2f}{success_rate:.2f}%")
-        print("-" * 95)
+            # Action rows indented under the card row
+            print(f"{'':<30}{action_name:<30}{'':<15}{action_played:<15.2f}{success_rate:.2f}%")
+
+        print("-" * 105)
 
 # Print the average change in items per run
 def print_item_summary(total_item_changes, runs):
@@ -715,9 +785,17 @@ def update_progress(progress):
     sys.stdout.write(text)
     sys.stdout.flush()
 
-# Now run the simulation
+
+def run_simulation(runs: int):
+    state = setup_simulation()  # Assuming setup_simulation initializes the deck
+    for i in range(runs):
+        state.run()  # Run each simulation for 80 progress
+        state.update_item_totals()  # Collect total changes in items
+        state.reset()  # Reset the state for the next run
+        update_progress((i + 1) / runs)  # Update the progress bar
+
+    state.display_results(runs)
+
+# Now execute multiple runs:
 if __name__ == "__main__":
-    steps = 1000
-    state = setup_simulation()
-    state.run(steps=steps)  # Run for 1000 steps
-    state.display_results(steps)
+    run_simulation(runs=1000)  # Run for 1000 separate simulations
