@@ -1,15 +1,24 @@
+'''
+NB: This version currently sucks.
+Do not use.
+- takes 20x longer to run
+- dumber than v2
+'''
+
 import argparse
 import random
 import sys
+import copy
 from enum import Enum
 from collections import defaultdict
 from enums import *
+
 
 ev_action = 6
 ev_prog_base = 10
 ev_key = 1
 ev_info = 1
-ev_tread_base = 4
+ev_tread_base = 6
 ev_echo = 1
 
 hand_size = 3
@@ -189,6 +198,9 @@ class HeistState:
                     lowest = rand
         self.hand.append(drawn)
 
+    def copy(self):
+        return copy.deepcopy(self)        
+
     def ev_items(self, items: dict[Item, int]) -> float:
         net_ev = 0
 
@@ -246,7 +258,88 @@ class HeistState:
 
     def ev_escape(self):
         return ev_echo * -1 * self.items[Item.CatlikeTread]
-        
+    
+    # hacky mvp bc tired
+    def holistic_ev(self):
+        total_ev = 0
+
+        ev_prize = ev_echo * self.prize_value
+        if self.status == "Success":
+            total_ev += ev_prize
+        elif self.status == "Escaped":
+            total_ev -= ev_prize
+        elif self.status == "Imprisoned":
+            total_ev -= ev_prize * 3
+        else:
+            # Progress
+            prog = self.items[Item.BurglarsProgress]
+            if prog < 5:
+                total_ev += ev_prog_base * prog
+            else:
+                total_ev += ev_prog_base * 5 + 1
+
+            # Tread
+            tread = self.items[Item.CatlikeTread]
+            if tread == 0:
+                total_ev -= 10000 
+            if tread == 1:
+                total_ev -= ev_tread_base * 4
+            elif tread == 2:
+                total_ev -= ev_tread_base
+            elif tread == 3:
+                pass
+            elif tread >= 4:
+                total_ev += ev_tread_base
+
+            keys = self.items[Item.IntriguingKey]
+            if keys == 1:
+                total_ev += ev_key
+            elif keys >= 2:
+                total_ev += ev_key * 1.2
+
+            info = self.items[Item.InsideInformation]
+            if info == 1:
+                total_ev += ev_info
+            elif info >= 2:
+                total_ev += ev_info * 1.2
+
+        return total_ev
+    
+    # yeah this is like 20x slower lmao
+    def predict_action_ev(self, action: 'Action'):
+        pass_rate = action.pass_rate(self)
+        pass_ev = 0.0
+        fail_ev = 0.0
+
+        if pass_rate > 0.0:
+            pass_copy = self.copy()        
+            action.perform_pass(pass_copy)
+            pass_ev = pass_copy.holistic_ev()
+
+        if pass_rate < 1.0:
+            fail_copy = self.copy()        
+            action.perform_fail(fail_copy)
+            fail_ev = fail_copy.holistic_ev()
+
+        return pass_rate * pass_ev + (1.0 - pass_rate) * fail_ev
+
+    def update_status(self):
+        if self.items[Item.CatlikeTread] <= 0:
+            if random.random() < 0.5:
+                self.status = "Escaped"
+            else:
+                self.status = "Imprisoned"
+
+            if verbose:
+                print("\n---Failure Summary---")
+                print(f"Status: {self.status}")
+                print(f"Progress: {self.items[Item.BurglarsProgress]}")
+                print("Final hand:")
+                for card in self.hand: print("  " + card.name)
+                print("Action History: ")
+                for i in self.action_history: print(f"  {i}")
+                print()
+
     def run(self):
         while self.status == "InProgress":
             self.step()
@@ -254,16 +347,19 @@ class HeistState:
     def step(self):
         best_card, best_action, best_action_ev = None, None, -float('inf')
 
-        if len(self.hand) == 0:
+        # if len(self.hand) == 0:
+        #     self.refill_action.perform(self)
+        # elif self.refill_action.can_perform(self):
+        #     best_action = self.refill_action
+        #     best_action_ev = self.holistic_ev() + ev_prog_base + 1
+
+        if len(self.hand) < hand_size:
             self.refill_action.perform(self)
-        elif self.refill_action.can_perform(self):
-            best_action = self.refill_action
-            best_action_ev = self.refill_action.ev(self)
 
         for card in self.hand:
             for action in card.actions:
                 if action.can_perform(self):
-                    action_ev = action.ev(self)
+                    action_ev = self.predict_action_ev(action)
                     if action_ev > best_action_ev:
                         best_card, best_action, best_action_ev = card, action, action_ev
 
@@ -281,24 +377,18 @@ class HeistState:
             self.action_failure_counts[best_action.name] += 1
 
         if best_card is not None:
-            self.action_history.append(f"{outcome} @ {best_card.name}: {best_action.name}")            
+            self.action_history.append(f"{outcome} @ {best_card.name}: {best_action.name}")
 
-        if self.items[Item.CatlikeTread] <= 0:
-            if random.random() < 0.5:
-                self.status = "Escaped"
-            else:
-                self.status = "Imprisoned"
-
-            if verbose:
-                print("\n---Failure Summary---")
-                print(f"Status: {self.status}")
-                print(f"Progress: {self.items[Item.BurglarsProgress]}")
-                print("Final hand:")
-                for card in self.hand: print("  " + card.name)
-                print("Action History: ")
-                for i in self.action_history: print(f"  {i}")
-                print()
-
+        self.update_status()
+        if self.status in ["Escaped", "Imprisoned"] and verbose:
+            print("\n---Failure Summary---")
+            print(f"Status: {self.status}")
+            print(f"Progress: {self.items[Item.BurglarsProgress]}")
+            print("Final hand:")
+            for card in self.hand: print("  " + card.name)
+            print("Action History: ")
+            for i in self.action_history: print(f"  {i}")
+            print()
 
 class HeistCard:
     def __init__(self, name):
@@ -396,7 +486,7 @@ class RefillHandAction(Action):
             state.draw_card()
 
     def pass_ev(self, state: HeistState):
-        return ev_prog_base
+        return ev_prog_base * 3
 
 # Card and Action implementations
 
@@ -1364,7 +1454,7 @@ parser = argparse.ArgumentParser(description='Run Heist simulation.')
 parser.add_argument('--keys', type=int, default=0, help='Initial number of keys')
 parser.add_argument('--info', type=int, default=0, help='Initial amount of inside info')
 parser.add_argument('--routes', type=int, default=0, help='Initial amount of escape routes')
-parser.add_argument('--runs', type=int, default=10_000, help='Number of runs to simulate')
+parser.add_argument('--runs', type=int, default=1_000, help='Number of runs to simulate')
 parser.add_argument('--target', type=int, default=11, help='Target location as integer (use numbers 1-12)')
 
 parser.add_argument('--verbose', action='store_true', help='Log action history on failures')
