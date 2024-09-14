@@ -243,7 +243,7 @@ trade = config.trade
 # london_deck = decks.london_deck.create_deck_old(config)
 
 # should just have one deck for each region and dummy "card draws in X" item for each one
-zailing_deck = Decks.create_zailing_deck(active_player, Location.TheSaltSteppes)
+zailing_deck = Decks.create_zailing_deck(active_player, Location.SaltSteppes)
 
 # ---------------- Trades ----------------------------
 

@@ -65,19 +65,19 @@ def chasing_ev(region, isAdvanced, pass_rate = 1.0, rare_success_rate = 0.1):
         gain_from_basic = 8
         gain_from_advanced = 9
         plunder = 5403
-    elif region == Location.TheSeaOfVoices:
+    elif region == Location.SeaOfVoices:
         gain_from_basic = 8
         gain_from_advanced = 10
         plunder = 5568
-    elif region == Location.TheSaltSteppes:
+    elif region == Location.SaltSteppes:
         gain_from_basic = 13
         gain_from_advanced = 14
         plunder = 5597
-    elif region == Location.ThePillaredSea:
+    elif region == Location.PillaredSea:
         gain_from_basic = 14
         gain_from_advanced = 15
         plunder = 5597    
-    elif region == Location.TheSnares:
+    elif region == Location.Snares:
         gain_from_basic = 15
         gain_from_advanced = 16
         plunder = 5659
@@ -112,25 +112,25 @@ def plunder_ev(region, isAdvanced, player_stat, rare_success_rate = 0.1):
 
         basic_challenge = 160
         advanced_challenge = 6        
-    elif region == Location.TheSeaOfVoices:
+    elif region == Location.SeaOfVoices:
         gain_from_basic = 300
         gain_from_advanced = 350
 
         basic_challenge = 160
         advanced_challenge = 7        
-    elif region == Location.TheSaltSteppes:
+    elif region == Location.SaltSteppes:
         gain_from_basic = 400
         gain_from_advanced = 400
 
         basic_challenge = 160
         advanced_challenge = 11        
-    elif region == Location.ThePillaredSea:
+    elif region == Location.PillaredSea:
         gain_from_basic = 450
         gain_from_advanced = 450
 
         basic_challenge = 160
         advanced_challenge = 12        
-    elif region == Location.TheSnares:
+    elif region == Location.Snares:
         gain_from_basic = 500
         gain_from_advanced = 500
 
@@ -261,7 +261,7 @@ def create_zailing_deck(player, region):
         Item.ChasingDownYourBounty: chasing_ev(region, True)
     })
 
-    if region == Location.TheSaltSteppes:
+    if region == Location.SaltSteppes:
         if (profession == Profession.MonsterHunter):
             deck.card("A Chelonite hunting ketch", Rarity.Standard, True, {
                 Item.TroubledWaters: -4

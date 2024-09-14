@@ -6,11 +6,24 @@ import utils
 
 import random
 
-class ZeeRegion:
+with_current = 160
+against_current = 220
+
+class ZeeRegion(Enum):
+    HOME_WATERS = "Home Waters"
+    SHEPHERDS_WASH = "Shepherd's Wash"
+    SEA_OF_VOICES = "The Sea of Voices"
+    SALT_STEPPE = "The Salt Steppe"
+    PILLARED_SEA = "The Pillared Sea"
+    STORMBONES = "Stormbones"
+    THE_SNARES = "The Snares"
+
+class ZeeRegionData:
     def __init__(self, location, peril, narrow_dc,
                  plunder_dc_basic, plunder_dc_advanced,
                  plunder_gain_basic, plunder_gain_advanced,
-                 chasing_gain_basic, chasing_gain_advanced, bounty):
+                 chasing_gain_basic, chasing_gain_advanced, bounty,
+                 distance_to):
         self.location = location
         self.peril = peril
         self.narrow = narrow_dc
@@ -21,10 +34,10 @@ class ZeeRegion:
         self.chasing_gain_basic = chasing_gain_basic
         self.chasing_gain_advanced = chasing_gain_advanced
         self.bounty = bounty
+        self.distance_to = distance_to
 
-    # def
 
-home_waters = ZeeRegion(Location.HomeWaters,
+home_waters = ZeeRegionData(Location.HomeWaters,
                         peril=100,
                         narrow_dc=3,
                         plunder_dc_basic= 160,
@@ -33,9 +46,14 @@ home_waters = ZeeRegion(Location.HomeWaters,
                         plunder_gain_advanced= 250,
                         chasing_gain_basic= 8,
                         chasing_gain_advanced= 8,
-                        bounty=5334)
+                        bounty=5334,
+                        distance_to={
+                            ZeeRegion.SHEPHERDS_WASH: with_current,
+                            ZeeRegion.STORMBONES: against_current,
+                            ZeeRegion.THE_SNARES: with_current
+                        })
 
-shepherds_wash = ZeeRegion(Location.ShepherdsWash,
+shepherds_wash = ZeeRegionData(Location.ShepherdsWash,
                         peril=110,
                         narrow_dc=3,
 
@@ -45,9 +63,14 @@ shepherds_wash = ZeeRegion(Location.ShepherdsWash,
                         plunder_gain_advanced= 300,
                         chasing_gain_basic= 8,
                         chasing_gain_advanced= 9,
-                        bounty=5350)
+                        bounty=5350,
+                        distance_to={
+                            ZeeRegion.SEA_OF_VOICES: with_current,
+                            ZeeRegion.HOME_WATERS: against_current,
+                            ZeeRegion.THE_SNARES: with_current
+                        })                        
          
-stormbones = ZeeRegion(Location.Stormbones,
+stormbones = ZeeRegionData(Location.Stormbones,
                         peril=110,
                         narrow_dc=3,
 
@@ -57,42 +80,87 @@ stormbones = ZeeRegion(Location.Stormbones,
                         plunder_gain_advanced= 300,
                         chasing_gain_basic= 8,
                         chasing_gain_advanced= 9,
-                        bounty=5350)
+                        bounty=5350,
+                        distance_to={
+                            ZeeRegion.HOME_WATERS: with_current,
+                            ZeeRegion.PILLARED_SEA: against_current,
+                            ZeeRegion.THE_SNARES: with_current
+                        })                        
 
-sea_of_voices = ZeeRegion(Location.TheSeaOfVoices, 150, 5,
+sea_of_voices = ZeeRegionData(Location.SeaOfVoices,
+                        peril= 150,
+                        narrow_dc=5,
                         plunder_dc_basic= 160,
                         plunder_dc_advanced= 7,
                         plunder_gain_basic= 300, 
                         plunder_gain_advanced= 350,
                         chasing_gain_basic= 8,
                         chasing_gain_advanced= 10,
-                        bounty=5403)
+                        bounty=5403,
+                        distance_to={
+                            ZeeRegion.SALT_STEPPE: with_current,
+                            ZeeRegion.SHEPHERDS_WASH: against_current,
+                            ZeeRegion.THE_SNARES: with_current
+                        })                        
 
-the_salt_steppe = ZeeRegion(Location.TheSaltSteppes, 200, 9,
+the_salt_steppe = ZeeRegionData(Location.SaltSteppes,
+                        peril = 200,
+                        narrow_dc=9,
                         plunder_dc_basic= 210,
                         plunder_dc_advanced= 11,
                         plunder_gain_basic= 400, 
                         plunder_gain_advanced= 400,
                         chasing_gain_basic= 13,
                         chasing_gain_advanced= 14,
-                        bounty=5568)
+                        bounty=5568,
+                        distance_to={
+                            ZeeRegion.PILLARED_SEA: with_current,
+                            ZeeRegion.SEA_OF_VOICES: against_current,
+                            ZeeRegion.THE_SNARES: with_current
+                        })                        
    
-pillared_sea = ZeeRegion(Location.ThePillaredSea, 210, 9,
+pillared_sea = ZeeRegionData(Location.PillaredSea,
+                        peril=210,
+                        narrow_dc=9,
                         plunder_dc_basic= 220,
                         plunder_dc_advanced= 12,
                         plunder_gain_basic= 450,
                         plunder_gain_advanced= 450,
                         chasing_gain_basic= 14,
                         chasing_gain_advanced= 15,
-                        bounty=5597)   
-the_snares = ZeeRegion(Location.TheSnares, 250, 12,
+                        bounty=5597,
+                        distance_to={
+                            ZeeRegion.STORMBONES: with_current,
+                            ZeeRegion.SALT_STEPPE: against_current,
+                            ZeeRegion.THE_SNARES: with_current
+                        })
+                        
+the_snares = ZeeRegionData(Location.Snares, 250, 12,
                         plunder_dc_basic= 260,
                         plunder_dc_advanced= 13,
                         plunder_gain_basic= 500,
                         plunder_gain_advanced= 500,
                         chasing_gain_basic= 15,
                         chasing_gain_advanced= 16,
-                        bounty=5659)   
+                        bounty=5659,
+                        distance_to={
+                            ZeeRegion.HOME_WATERS: with_current,
+                            ZeeRegion.STORMBONES: with_current,
+                            ZeeRegion.PILLARED_SEA: with_current,
+                            ZeeRegion.SALT_STEPPE: with_current,
+                            ZeeRegion.SEA_OF_VOICES: with_current,
+                            ZeeRegion.SHEPHERDS_WASH: with_current                            
+                        })                        
+
+zee_regions = {
+    ZeeRegion.HOME_WATERS: home_waters,
+    ZeeRegion.SHEPHERDS_WASH: shepherds_wash,
+    ZeeRegion.SEA_OF_VOICES: sea_of_voices,
+    ZeeRegion.SALT_STEPPE: the_salt_steppe,
+    ZeeRegion.PILLARED_SEA: pillared_sea,
+    ZeeRegion.STORMBONES: stormbones,
+    ZeeRegion.THE_SNARES: the_snares
+}
 
 def create_deck(config: Config, location: Location):
     '''

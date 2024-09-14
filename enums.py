@@ -22,10 +22,10 @@ class Location(Enum):
     HomeWaters = auto()
     ShepherdsWash = auto()
     Stormbones = auto()
-    TheSeaOfVoices = auto()
-    TheSaltSteppes = auto()
-    ThePillaredSea = auto()
-    TheSnares = auto()
+    SeaOfVoices = auto()
+    SaltSteppes = auto()
+    PillaredSea = auto()
+    Snares = auto()
     
     # railway
     EalingGardens = auto()
@@ -707,6 +707,7 @@ class Item(Enum):
 
     # Unsorted
     BundleOfRaggedClothing = auto()
+    ScarletStockings = auto()
 
     # -----
     # Qualities
@@ -728,6 +729,7 @@ class Item(Enum):
     GlowingViric = auto()
     MiredInMail = auto()
     AReportFromTheKhagansPalace = auto()
+    SomeoneIsComing = auto()
 
     # Quriks
     Austere = auto()
@@ -860,8 +862,15 @@ class Item(Enum):
     SaltSteppesZeeDraw = auto()
     PillaredSeaZeeDraw = auto()
     SnaresZeeDraw = auto()
-    Plunder = auto()
+    PiecesOfPlunder = auto()
     SilentStalker = auto()
+    UnaccountablyPeckish = auto()
+    GroaningHull = auto()
+    MutinousWhispers = auto()
+    RumblingStomachs = auto()
+    PageOfCryptopalaeontologicalNotes = auto()
+    PageOfPrelapsarianArchaeologicalNotes = auto()
+    PageOfTheosophisticalNotes = auto()
 
     # Upper River
     DigsInEvenlode = auto()
