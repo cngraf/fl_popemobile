@@ -781,6 +781,9 @@ class Item(Enum):
     HidingPlaceOfAPeculiarItem = auto()
     WaswoodHeistCashOut = auto()
 
+    SeeingThroughTheEyesOfIcarus = auto()
+    WalkingTheFallenCities = auto()
+
     # Piracy
     ChasingDownYourBounty = auto()
     StashedTreasure = auto()
@@ -879,7 +882,9 @@ class Item(Enum):
     PageOfPrelapsarianArchaeologicalNotes = auto()
     PageOfTheosophisticalNotes = auto()
     DirectionsToAHiddenStash = auto()
+    NorthernWind = auto()
     SouthernWind = auto()
+    EasternWind = auto()
 
     # Upper River
     DigsInEvenlode = auto()
