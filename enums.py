@@ -708,6 +708,13 @@ class Item(Enum):
     # Unsorted
     BundleOfRaggedClothing = auto()
     ScarletStockings = auto()
+    NotchedBoneHarpoon = auto()
+    ListOfAliasesWrittenInGant = auto()
+    StormInATeacup = auto()
+    FacetedDecanterOfDrownieEffluvia = auto()
+
+    # Treasures
+    FalseStarOfYourOwn = auto()
 
     # -----
     # Qualities
@@ -871,6 +878,8 @@ class Item(Enum):
     PageOfCryptopalaeontologicalNotes = auto()
     PageOfPrelapsarianArchaeologicalNotes = auto()
     PageOfTheosophisticalNotes = auto()
+    DirectionsToAHiddenStash = auto()
+    SouthernWind = auto()
 
     # Upper River
     DigsInEvenlode = auto()

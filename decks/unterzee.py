@@ -20,17 +20,17 @@ class ZeeRegion(Enum):
 
 class ZeeRegionData:
     def __init__(self, location, peril, narrow_dc,
-                 plunder_dc_basic, plunder_dc_advanced,
+                 dc_basic, dc_advanced,
                  plunder_gain_basic, plunder_gain_advanced,
                  chasing_gain_basic, chasing_gain_advanced, bounty,
                  distance_to):
         self.location = location
         self.peril = peril
         self.narrow = narrow_dc
-        self.plunder_dc_basic = plunder_dc_basic
-        self.plunder_dc_advanced = plunder_dc_advanced
+        self.dc_basic = dc_basic
+        self.dc_advanced = dc_advanced
         self.plunder_gain_basic = plunder_gain_basic
-        self.plunder_dc_advanced = plunder_gain_advanced
+        self.plunder_gain_advanced = plunder_gain_advanced
         self.chasing_gain_basic = chasing_gain_basic
         self.chasing_gain_advanced = chasing_gain_advanced
         self.bounty = bounty
@@ -40,8 +40,8 @@ class ZeeRegionData:
 home_waters = ZeeRegionData(Location.HomeWaters,
                         peril=100,
                         narrow_dc=3,
-                        plunder_dc_basic= 160,
-                        plunder_dc_advanced= 5,
+                        dc_basic= 160,
+                        dc_advanced= 5,
                         plunder_gain_basic= 300, 
                         plunder_gain_advanced= 250,
                         chasing_gain_basic= 8,
@@ -57,8 +57,8 @@ shepherds_wash = ZeeRegionData(Location.ShepherdsWash,
                         peril=110,
                         narrow_dc=3,
 
-                        plunder_dc_basic= 160,
-                        plunder_dc_advanced= 6,
+                        dc_basic= 160,
+                        dc_advanced= 6,
                         plunder_gain_basic= 300, 
                         plunder_gain_advanced= 300,
                         chasing_gain_basic= 8,
@@ -74,8 +74,8 @@ stormbones = ZeeRegionData(Location.Stormbones,
                         peril=110,
                         narrow_dc=3,
 
-                        plunder_dc_basic= 160,
-                        plunder_dc_advanced= 6,
+                        dc_basic= 160,
+                        dc_advanced= 6,
                         plunder_gain_basic= 300, 
                         plunder_gain_advanced= 300,
                         chasing_gain_basic= 8,
@@ -90,8 +90,8 @@ stormbones = ZeeRegionData(Location.Stormbones,
 sea_of_voices = ZeeRegionData(Location.SeaOfVoices,
                         peril= 150,
                         narrow_dc=5,
-                        plunder_dc_basic= 160,
-                        plunder_dc_advanced= 7,
+                        dc_basic= 160,
+                        dc_advanced= 7,
                         plunder_gain_basic= 300, 
                         plunder_gain_advanced= 350,
                         chasing_gain_basic= 8,
@@ -106,8 +106,8 @@ sea_of_voices = ZeeRegionData(Location.SeaOfVoices,
 the_salt_steppe = ZeeRegionData(Location.SaltSteppes,
                         peril = 200,
                         narrow_dc=9,
-                        plunder_dc_basic= 210,
-                        plunder_dc_advanced= 11,
+                        dc_basic= 210,
+                        dc_advanced= 11,
                         plunder_gain_basic= 400, 
                         plunder_gain_advanced= 400,
                         chasing_gain_basic= 13,
@@ -122,8 +122,8 @@ the_salt_steppe = ZeeRegionData(Location.SaltSteppes,
 pillared_sea = ZeeRegionData(Location.PillaredSea,
                         peril=210,
                         narrow_dc=9,
-                        plunder_dc_basic= 220,
-                        plunder_dc_advanced= 12,
+                        dc_basic= 220,
+                        dc_advanced= 12,
                         plunder_gain_basic= 450,
                         plunder_gain_advanced= 450,
                         chasing_gain_basic= 14,
@@ -136,8 +136,8 @@ pillared_sea = ZeeRegionData(Location.PillaredSea,
                         })
                         
 the_snares = ZeeRegionData(Location.Snares, 250, 12,
-                        plunder_dc_basic= 260,
-                        plunder_dc_advanced= 13,
+                        dc_basic= 260,
+                        dc_advanced= 13,
                         plunder_gain_basic= 500,
                         plunder_gain_advanced= 500,
                         chasing_gain_basic= 15,
