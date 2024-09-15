@@ -358,6 +358,7 @@ class Item(Enum):
     RatShilling = auto()
     AssortmentOfKhaganianCoinage = auto()
     FourthCityEcho = auto()
+    JustificandeCoin = auto()
 
     # Elder
     JadeFragment = auto()
