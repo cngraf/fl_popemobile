@@ -472,7 +472,7 @@ class Item(Enum):
     SearingEnigma = auto()
     DreadfulSurmise = auto()
     ImpossibleTheorem = auto()
-    MemoryOfALesserSelf = auto()
+    MemoryOfMuchLesserSelf = auto()
 
     # Nostalgia
     DropOfPrisonersHoney = auto()

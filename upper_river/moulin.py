@@ -104,7 +104,7 @@ def add_trades(active_player, config):
     add({
         Item.Action: -15,
         Item.FlaskOfWaswoodSpringWater: 4,
-        Item.MemoryOfALesserSelf: 1,
+        Item.MemoryOfMuchLesserSelf: 1,
         Item.RumourOfTheUpperRiver: 1,
         Item.Suspicion: 2.5 * (0.85 ** 2),
         Item.Wounds: 8

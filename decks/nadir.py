@@ -135,7 +135,7 @@ def create_deck(config: Config):
     })
 
     card_old_sins = Card("Old sins", Rarity.Standard, {
-        Item.MemoryOfALesserSelf: 1,
+        Item.MemoryOfMuchLesserSelf: 1,
         Item.ExtraordinaryImplication: 1.5,
         Item.Irrigo: 1
     })

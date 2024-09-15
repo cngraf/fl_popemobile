@@ -18,6 +18,8 @@ item_echo_values = {
     Item.MemoryOfLight: 0.5,
     Item.ZeeZtory: 0.5,
 
+    Item.ShardOfGlim: 0.01,
+    Item.MoonPearl: 0.01,
     Item.BottleOfBrokenGiant1844: 2.5,
 
     Item.FinBonesCollected: 0.5,
@@ -26,6 +28,8 @@ item_echo_values = {
 
     # Menaces
     Item.Wounds: -0.2,
+    Item.Suspicion: -0.2,
+    Item.Scandal: -0.2,
     Item.Nightmares: -0.2
 }
 
@@ -76,6 +80,13 @@ class Action:
             # Ensure item key exists, if not, initialize it
             if item not in state.items:
                 state.items[item] = 0
+
+            # HACK
+            if item == Item.TroubledWaters and amount > 0:
+                defense = state.outfits.reduce_tw
+                reduction = min(2, amount - amount * (0.85 ** defense))
+                amount -= reduction
+
             state.items[item] += amount
 
     def perform_failure(self, state: 'GameState'):
@@ -138,24 +149,25 @@ class OpportunityCard:
         return True
 
 class OutfitList:
-    def __init__(self):
+    def __init__(self, default_basic = 330, default_advanced = 15):
         self.zailing_speed = 55  # Example stat for "Zailing Speed"
         self.zubmersibility = 0
         self.luxurious = 0
+        self.reduce_tw = 0
 
-        self.dangerous = 300
-        self.watchful = 300
-        self.persuasive = 300
-        self.shadowy = 300
+        self.dangerous = default_basic
+        self.watchful = default_basic
+        self.persuasive = default_basic
+        self.shadowy = default_basic
 
-        self.player_of_chess = 15
-        self.zeefaring = 15
-        self.monstrous_anatomy = 15
-        self.mithridacy = 15
-        self.artisan_of_the_red_science = 15
-        self.kataleptic_toxicology = 15
-        self.shapeling_arts = 15
-        self.glasswork = 15
+        self.player_of_chess = default_advanced
+        self.zeefaring = default_advanced
+        self.monstrous_anatomy = default_advanced
+        self.mithridacy = default_advanced
+        self.artisan_of_the_red_science = default_advanced
+        self.kataleptic_toxicology = default_advanced
+        self.shapeling_arts = default_advanced
+        self.glasswork = default_advanced
 
 class GameState:
     def __init__(self):
@@ -1633,7 +1645,7 @@ class YouTooHaveAnAppetite(Action):
         super().__init__("You, too, have an appetite")
     
     def can_perform(self, state: GameState):
-        return state.items[Item.UnaccountablyPeckish] > 0
+        return state.items.get(Item.UnaccountablyPeckish, 0) > 0
 
     def pass_items(self, state: 'GameState'):
         return {
@@ -3954,7 +3966,7 @@ class HailPurchaseBagBones(Action):
         return {
             Item.MoonPearl: -500,
             Item.ShardOfGlim: -500,
-            Item.FinBones: 5,
+            Item.FinBonesCollected: 5,
             Item.WitheredTentacle: 6,
             Item.CrustaceanPincer: 2.5
         }
@@ -3998,7 +4010,7 @@ class RegaleWithOwnHunts(Action):
         super().__init__("Regale them with tales of your own hunts")
 
     def can_perform(self, state: GameState):
-        return state.items[Item.NotchedBoneHarpoon] > 0           
+        return state.items.get(Item.NotchedBoneHarpoon, 0) > 0           
 
     def pass_items(self, state: 'GameState'):
         return {
@@ -4109,7 +4121,7 @@ class MeasureMeasureless(Action):
         }
 
     def pass_rate(self, state: 'GameState'):
-        return self.narrow_pass_rate(10, state.outfits.artisan_of_red_science)
+        return self.narrow_pass_rate(10, state.outfits.artisan_of_the_red_science)
 
 
 class ReleaseUttermostEel(Action):
@@ -4331,14 +4343,12 @@ class WideBerthCorsair(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.Shadowy: 1,
             Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1,
         }
 
     def fail_items(self, state: 'GameState'):
         return {
-            Item.Shadowy: 1,
             Item.TroubledWaters: 8,
             Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
@@ -4889,54 +4899,6 @@ def truncate_string(s, length=25):
         return s[:length - 3] + '...'  # Truncate and add ellipsis
     return s
 
-# Print the action table with condensed card/action info
-def print_condensed_action_table(action_play_counts, action_success_counts, action_failure_counts, card_draw_counts, card_play_counts, deck, runs, name_length=25):
-    print(f"\n{'Card/Action':<30}{'Played/Drawn':<20}{'Draw/Play %':<15}{'Avg Plays/Run':<15}{'Success Rate':<15}")
-    print("-" * 105)
-    
-    for card in deck:
-        card_name = truncate_string(card.name, name_length)
-        drawn = card_draw_counts.get(card.name, 0) / runs
-        played = card_play_counts.get(card.name, 0) / runs
-        play_rate = (card_play_counts.get(card.name, 0) / card_draw_counts.get(card.name, 1)) * 100 if card_draw_counts.get(card.name, 0) > 0 else 0
-
-        # First row for card drawn/played info
-        print(f"{card_name:<30}{f'{played:.2f}/{drawn:.2f}':<20}{play_rate:<15.2f}")
-
-        # Next rows for action info (for each action in the card)
-        for action in card.actions:
-            action_name = truncate_string(action.name, name_length)
-            action_played = action_play_counts.get(action.name, 0) / runs
-            successes = action_success_counts.get(action.name, 0)
-            failures = action_failure_counts.get(action.name, 0)
-            total = successes + failures
-            success_rate = (successes / total) * 100 if total > 0 else 0
-            # Action rows indented under the card row
-            print(f"{'':<30}{action_name:<30}{'':<15}{action_played:<15.2f}{success_rate:.2f}%")
-
-        print("-" * 105)
-
-# Print the average change in items per run
-def print_item_summary(total_item_changes, runs, total_actions):
-    print(f"\n{'Item':<30}{'Avg +/Run':<15}{'Echo Value':<15}{'Total Echo/Action':<20}")
-    print("-" * 85)
-
-    total_echo_value = 0.0
-
-    for item, total_change in total_item_changes.items():
-        avg_change = total_change / runs
-        echo_value = item_echo_values.get(item, 0.0)
-        item_total_echo_value = echo_value * total_change
-
-        # Accumulate the total echo value across all items
-        total_echo_value += item_total_echo_value
-
-        # Only display items with non-zero average change
-        if avg_change != 0.0:
-            print(f"{item.name:<30}{avg_change:<15.2f}{echo_value:<15.2f}{item_total_echo_value / total_actions:<20.4f}")
-
-    print(f"\n{'Total Echo/Action':<45}{total_echo_value / total_actions:.4f}")
-
 # Update progress bar function
 def update_progress(progress):
     bar_length = 40
@@ -4962,11 +4924,12 @@ def run_simulation(runs: int, route: list[tuple[ZeeRegion, ZeeRegion]]):
     failures = 0    
 
     chasing_start = 1
+    outfit = None
     # Run the simulation for the specified number of runs
     for i in range(runs):
         state = setup_simulation(chasing_start, route)  # Initialize a fresh GameState for each run
         state.run()
-
+        outfit = state.outfits
         # Carry over chasing to next run
         chasing_start = state.items[Item.ChasingDownYourBounty]
 
@@ -5015,6 +4978,15 @@ def run_simulation(runs: int, route: list[tuple[ZeeRegion, ZeeRegion]]):
     for i in route:
         print(f"  {i}")
 
+    # Print the last outfit used
+    if outfit:
+        print("\nLast Outfit Used:")
+        print(f"{'Stat':<30}{'Value':<10}")
+        print("-" * 40)
+
+        for stat, value in vars(outfit).items():  # Assuming the outfit is an object
+            print(f"{stat:<30}{value:<10}")
+
     display_results(
         total_item_changes, avg_actions_per_run, total_action_play_counts,
         total_action_success_counts, total_action_failure_counts, 
@@ -5059,12 +5031,16 @@ def display_results(
     print()
 
 
+# Print the average change in items per run with truncated item names and sorted by echo per action
 def print_item_summary(total_item_changes, runs, total_actions):
-    print(f"\n{'Item':<30}{'Avg Change/Run':<20}{'Avg EPA':<20}")
+    max_name_length = 20  # Maximum length for item name to be displayed
+    print(f"\n{'Item':<30}{'Avg +/Run':<15}{'Echo Value':<15}{'Total Echo/Action':<20}")
     print("-" * 85)
 
     total_echo_value = 0.0
+    item_summaries = []
 
+    # Collect all item data into a list for sorting
     for item, total_change in total_item_changes.items():
         avg_change = total_change / runs
         echo_value = item_echo_values.get(item, 0.0)
@@ -5073,13 +5049,21 @@ def print_item_summary(total_item_changes, runs, total_actions):
         # Accumulate the total echo value across all items
         total_echo_value += item_total_echo_value
 
-        # Only display items with non-zero average change
-        if avg_change != 0.0:
-            print(f"{item.name:<30}{avg_change:<20.2f}{item_total_echo_value / total_actions:<20.4f}")
+        # Truncate item name if it's too long
+        truncated_item_name = item.name if len(item.name) <= max_name_length else item.name[:max_name_length - 3] + "..."
 
-    print(f"\n{'Avg Zailing EPA:':<50}{total_echo_value / total_actions:.4f}")
-    # TODO: count the 1 extra action required to leave port?
-    print()
+        # Only include items with non-zero average change
+        if avg_change != 0.0:
+            item_summaries.append((truncated_item_name, avg_change, echo_value, item_total_echo_value / total_actions))
+
+    # Sort the items by 'Total Echo/Action' in descending order
+    item_summaries.sort(key=lambda x: x[1], reverse=True)
+
+    # Print the sorted items
+    for item_name, avg_change, echo_value, echo_per_action in item_summaries:
+        print(f"{item_name:<30}{avg_change:<15.2f}{echo_value:<15.2f}{echo_per_action:<20.4f}")
+
+    print(f"\n{'Total Echo/Action':<45}{total_echo_value / total_actions:.4f}")
 
 
 # Print actions spent in each ZeeRegion
@@ -5093,13 +5077,14 @@ def print_region_action_summary(total_region_action_counts, runs):
         avg_actions = total_actions / runs
         print(f"{region.name:<30}{avg_actions:<15.2f}")
 
-
-# Condensed action table printing (already implemented)
 def print_condensed_action_table(action_play_counts, action_success_counts, action_failure_counts, card_draw_counts, card_play_counts, deck, runs, name_length=25):
     print(f"\n{'Card/Action':<30}{'Played/Drawn':<20}{'Draw/Play %':<15}{'Avg Plays/Run':<15}{'Success Rate':<15}")
     print("-" * 105)
     
-    for card in deck:
+    # Sort cards by total play count (descending)
+    sorted_cards = sorted(deck, key=lambda card: card_play_counts.get(card.name, 0), reverse=True)
+
+    for card in sorted_cards:
         card_name = truncate_string(card.name, name_length)
         drawn = card_draw_counts.get(card.name, 0) / runs
         played = card_play_counts.get(card.name, 0) / runs
@@ -5108,8 +5093,11 @@ def print_condensed_action_table(action_play_counts, action_success_counts, acti
         # First row for card drawn/played info
         print(f"{card_name:<30}{f'{played:.2f}/{drawn:.2f}':<20}{play_rate:<15.2f}")
 
+        # Sort actions by total play count (descending)
+        sorted_actions = sorted(card.actions, key=lambda action: action_play_counts.get(action.name, 0), reverse=True)
+        
         # Next rows for action info (for each action in the card)
-        for action in card.actions:
+        for action in sorted_actions:
             action_name = truncate_string(action.name, name_length)
             action_played = action_play_counts.get(action.name, 0) / runs
             successes = action_success_counts.get(action.name, 0)
@@ -5120,7 +5108,6 @@ def print_condensed_action_table(action_play_counts, action_success_counts, acti
             print(f"{'':<30}{action_name:<30}{'':<15}{action_played:<15.2f}{success_rate:.2f}%")
 
         print("-" * 105)
-
 
 london_to_elder_continent = [
     ZeeRegion.HOME_WATERS,
@@ -5138,6 +5125,19 @@ london_to_polythreme = [
     ZeeRegion.SEA_OF_VOICES
 ]
 
+london_to_khanate = [
+    ZeeRegion.HOME_WATERS,
+    ZeeRegion.THE_SNARES,
+    ZeeRegion.SALT_STEPPES
+]
+
+khanate_to_london = [
+    ZeeRegion.HOME_WATERS,
+    ZeeRegion.THE_SNARES,
+    ZeeRegion.SALT_STEPPES
+]
+
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=1_000, route=london_to_polythreme)
+    run_simulation(runs=1_000, route=khanate_to_london)
+

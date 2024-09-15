@@ -34,7 +34,7 @@ def add_trades(config: Config):
     })
 
     trade(1, {
-        Item.MemoryOfALesserSelf: -2,
+        Item.MemoryOfMuchLesserSelf: -2,
         Item.HeroicRally: 5
     })
 

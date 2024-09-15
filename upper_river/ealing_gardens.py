@@ -186,7 +186,7 @@ def add_trades(active_player: Player, config):
             Item.Inspired: -55 + 6,
             Item.MemoryOfLight: 6,
             Item.MemoryOfDistantShores: 6,
-            Item.MemoryOfALesserSelf: 1,
+            Item.MemoryOfMuchLesserSelf: 1,
             Item.MemoryOfDiscordance: 1
         })
 
@@ -199,7 +199,7 @@ def add_trades(active_player: Player, config):
             Item.Echo: 3.36,
             Item.MemoryOfLight: 6,
             Item.MemoryOfDistantShores: 6,
-            Item.MemoryOfALesserSelf: 1,
+            Item.MemoryOfMuchLesserSelf: 1,
             Item.MemoryOfDiscordance: 1
         })
 
@@ -212,7 +212,7 @@ def add_trades(active_player: Player, config):
             Item.HandPickedPeppercaps: 3,
             Item.MemoryOfLight: 6,
             Item.MemoryOfDistantShores: 6,
-            Item.MemoryOfALesserSelf: 1,
+            Item.MemoryOfMuchLesserSelf: 1,
             Item.MemoryOfDiscordance: 1
         })
 
@@ -226,7 +226,7 @@ def add_trades(active_player: Player, config):
             Item.HinterlandScrip: 56,
             Item.MemoryOfLight: 6,
             Item.MemoryOfDistantShores: 6,
-            Item.MemoryOfALesserSelf: 1,
+            Item.MemoryOfMuchLesserSelf: 1,
             Item.MemoryOfDiscordance: 1
         })
 
@@ -250,7 +250,7 @@ def add_trades(active_player: Player, config):
                 Item.Inspired: -55 + 5 + 6,
                 Item.MemoryOfLight: 6,
                 Item.MemoryOfDistantShores: 6,
-                Item.MemoryOfALesserSelf: 1,
+                Item.MemoryOfMuchLesserSelf: 1,
                 Item.MemoryOfDiscordance: 1
             })
 

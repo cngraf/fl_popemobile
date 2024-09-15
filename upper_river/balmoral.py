@@ -302,7 +302,7 @@ def add_trades(active_player, config: Config):
     # Elaboration conversion
     trade(0, {
         Item.CoverElaboration: -1,
-        Item.MemoryOfALesserSelf: 1
+        Item.MemoryOfMuchLesserSelf: 1
     })
 
     trade(0, {
@@ -323,7 +323,7 @@ def add_trades(active_player, config: Config):
     # Credenitals
     trade(0, {
         Item.CoverCredentials: -1,
-        Item.MemoryOfALesserSelf: 1
+        Item.MemoryOfMuchLesserSelf: 1
     })
     
     trade(0, {
@@ -344,7 +344,7 @@ def add_trades(active_player, config: Config):
     # Nuance
     trade(0, {
         Item.CoverNuance: -1,
-        Item.MemoryOfALesserSelf: 1
+        Item.MemoryOfMuchLesserSelf: 1
     })
 
     trade(0, {
@@ -365,7 +365,7 @@ def add_trades(active_player, config: Config):
     # Witnesses
     trade(0, {
         Item.CoverWitnessnes: -1,
-        Item.MemoryOfALesserSelf: 1
+        Item.MemoryOfMuchLesserSelf: 1
     })
 
     trade(0, {
@@ -386,7 +386,7 @@ def add_trades(active_player, config: Config):
     # Backstory
     trade(0, {
         Item.CoverBackstory: -1,
-        Item.MemoryOfALesserSelf: 1
+        Item.MemoryOfMuchLesserSelf: 1
     })
 
     trade(0, {
@@ -442,7 +442,7 @@ def add_trades(active_player, config: Config):
     # TODO: Nontrivial challenge (Persuasive 200)
     trade(0, {
         Item.Moonlit: -2,
-        Item.MemoryOfALesserSelf: -2,
+        Item.MemoryOfMuchLesserSelf: -2,
         Item.MemoryOfLight: -10,
 
         Item.PaintingLuminosity: 1,
@@ -452,7 +452,7 @@ def add_trades(active_player, config: Config):
     # Paint with Moonlight => Failure
     trade(0, {
         Item.Moonlit: -2,
-        Item.MemoryOfALesserSelf: -2,
+        Item.MemoryOfMuchLesserSelf: -2,
         Item.MemoryOfLight: -10,
 
         Item.PaintingNostalgic: 1
