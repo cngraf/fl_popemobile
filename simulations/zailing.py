@@ -270,7 +270,7 @@ class GameState:
         # for card in self.hand:
         #     for action in card.actions:
         #         if action.can_perform(self):
-        #             attempts = 25
+        #             attempts = 50
         #             action_ev = sum(action.ev(self) for _ in range(attempts)) / attempts
         #             if action_ev > best_action_ev:
         #                 best_card, best_action, best_action_ev = card, action, action_ev
@@ -395,9 +395,9 @@ class GameState:
             return -10000
         elif current_tw > 10 and current_tw + val >= 10:
             return (tw_unit_ev * 2) * val
-        
         # TODO other threshold, for rank 7?
-
+        elif val < 0:
+            return 0
         else:
             return tw_unit_ev * val
 
@@ -2472,7 +2472,8 @@ class CureIgnorance(Action):
         super().__init__("Cure the ignorance of your zailors")
 
     def can_perform(self, state: GameState):
-        return state.items.get(Item.FacetedDecanterOfDrownieEffluvia, 0) > 0
+        # return state.items.get(Item.FacetedDecanterOfDrownieEffluvia, 0) > 0
+        return True
 
     def pass_items(self, state: 'GameState'):
         return {
