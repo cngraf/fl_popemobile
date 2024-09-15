@@ -13,7 +13,7 @@ class ZeeRegion(Enum):
     HOME_WATERS = "Home Waters"
     SHEPHERDS_WASH = "Shepherd's Wash"
     SEA_OF_VOICES = "The Sea of Voices"
-    SALT_STEPPE = "The Salt Steppe"
+    SALT_STEPPES = "The Salt Steppes"
     PILLARED_SEA = "The Pillared Sea"
     STORMBONES = "Stormbones"
     THE_SNARES = "The Snares"
@@ -98,7 +98,7 @@ sea_of_voices = ZeeRegionData(Location.SeaOfVoices,
                         chasing_gain_advanced= 10,
                         bounty=5403,
                         distance_to={
-                            ZeeRegion.SALT_STEPPE: with_current,
+                            ZeeRegion.SALT_STEPPES: with_current,
                             ZeeRegion.SHEPHERDS_WASH: against_current,
                             ZeeRegion.THE_SNARES: with_current
                         })                        
@@ -131,7 +131,7 @@ pillared_sea = ZeeRegionData(Location.PillaredSea,
                         bounty=5597,
                         distance_to={
                             ZeeRegion.STORMBONES: with_current,
-                            ZeeRegion.SALT_STEPPE: against_current,
+                            ZeeRegion.SALT_STEPPES: against_current,
                             ZeeRegion.THE_SNARES: with_current
                         })
                         
@@ -147,7 +147,7 @@ the_snares = ZeeRegionData(Location.Snares, 250, 12,
                             ZeeRegion.HOME_WATERS: with_current,
                             ZeeRegion.STORMBONES: with_current,
                             ZeeRegion.PILLARED_SEA: with_current,
-                            ZeeRegion.SALT_STEPPE: with_current,
+                            ZeeRegion.SALT_STEPPES: with_current,
                             ZeeRegion.SEA_OF_VOICES: with_current,
                             ZeeRegion.SHEPHERDS_WASH: with_current                            
                         })                        
@@ -156,7 +156,7 @@ zee_regions = {
     ZeeRegion.HOME_WATERS: home_waters,
     ZeeRegion.SHEPHERDS_WASH: shepherds_wash,
     ZeeRegion.SEA_OF_VOICES: sea_of_voices,
-    ZeeRegion.SALT_STEPPE: the_salt_steppe,
+    ZeeRegion.SALT_STEPPES: the_salt_steppe,
     ZeeRegion.PILLARED_SEA: pillared_sea,
     ZeeRegion.STORMBONES: stormbones,
     ZeeRegion.THE_SNARES: the_snares

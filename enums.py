@@ -708,10 +708,13 @@ class Item(Enum):
     # Unsorted
     BundleOfRaggedClothing = auto()
     ScarletStockings = auto()
-    NotchedBoneHarpoon = auto()
-    ListOfAliasesWrittenInGant = auto()
     StormInATeacup = auto()
     FacetedDecanterOfDrownieEffluvia = auto()
+
+    # Tools
+    NotchedBoneHarpoon = auto()
+    ListOfAliasesWrittenInGant = auto()
+    ShrineToSaintJoshua = auto()
 
     # Treasures
     FalseStarOfYourOwn = auto()
@@ -782,7 +785,7 @@ class Item(Enum):
     WaswoodHeistCashOut = auto()
 
     SeeingThroughTheEyesOfIcarus = auto()
-    WalkingTheFallenCities = auto()
+    WalkingTheFallingCities = auto()
 
     # Piracy
     ChasingDownYourBounty = auto()
@@ -828,6 +831,7 @@ class Item(Enum):
     MonographIronic = auto()
 
     DiscordantLaw = auto()
+    CrystallisedCurio = auto()
 
     TheMindsAscent1 = auto()
     TheMindsAscent2 = auto()

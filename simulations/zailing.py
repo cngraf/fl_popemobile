@@ -20,6 +20,10 @@ item_echo_values = {
 
     Item.BottleOfBrokenGiant1844: 2.5,
 
+    Item.FinBonesCollected: 0.5,
+    Item.WitheredTentacle: 0.5,
+    Item.CrustaceanPincer: 0.0,
+
     # Menaces
     Item.Wounds: -0.2,
     Item.Nightmares: -0.2
@@ -181,8 +185,8 @@ class GameState:
         self.deck = []  # This will be populated with cards
         self.hand = []
 
-        self.actions = 0
-        self.total_actions = 0  # Accumulates actions over all runs
+        self.actions = 1
+        # self.total_actions = 0  # Accumulates actions over all runs
         self.region_action_counts = defaultdict(int)
 
         # Tracking data
@@ -202,8 +206,10 @@ class GameState:
         self.next_region = ZeeRegion.SHEPHERDS_WASH
         self.route_progress = 0
         self.route = [
-            (ZeeRegion.HOME_WATERS, ZeeRegion.SHEPHERDS_WASH)
-        ]
+            ZeeRegion.HOME_WATERS,
+            ZeeRegion.SHEPHERDS_WASH
+            ]
+        
 
     def region_data(self):
         return zee_regions[self.current_region]
@@ -293,15 +299,23 @@ class GameState:
     def go_to_next_region(self):
         self.route_progress += 1
         self.items[Item.ZailingProgress] = 0
-
+        
         if self.route_progress >= len(self.route):
-            self.status = "Success" 
+            self.status = "Success"
+        elif self.route_progress + 1 == len(self.route):
+            self.current_region = self.route[-1]
+            self.progress_required = 80
         else:
-            self.current_region, self.next_region = self.route[self.route_progress]
-            if self.current_region == self.next_region:
-                self.progress_required = 80
-            else:
-                self.progress_required = zee_regions[self.current_region].distance_to[self.next_region]
+            self.current_region = self.route[self.route_progress]
+            self.next_region = self.route[self.route_progress + 1]
+            self.progress_required = \
+                zee_regions[self.current_region].distance_to[self.next_region]
+
+            # self.current_region, self.next_region = self.route[self.route_progress]
+            # if self.current_region == self.next_region:
+            #     self.progress_required = 80
+            # else:
+            #     self.progress_required = zee_regions[self.current_region].distance_to[self.next_region]
 
 
     # def update_item_totals(self):
@@ -459,12 +473,12 @@ class SearchUnchartedWaters(Action):
 class BountyUponYourHead(OpportunityCard):
     def __init__(self):
         super().__init__("A Bounty Upon Your Head", 1.0)
-        self.actions = [OpenFire(), SignalRamillies(), EvadeThem()]
+        self.actions = [OpenFireBounty(), SignalRamillies(), EvadeThemBounty()]
 
     def can_draw(self, state: GameState):
         return state.piracy_enabled and state.items[Item.ChasingDownYourBounty] > 0
 
-class OpenFire(Action):
+class OpenFireBounty(Action):
     def __init__(self):
         super().__init__("Open Fire!")
     
@@ -516,7 +530,7 @@ class SignalRamillies(Action):
             Item.TimeSpentAtZee: 1
         }
 
-class EvadeThem(Action):
+class EvadeThemBounty(Action):
     def __init__(self):
         super().__init__("Evade Them!")
 
@@ -1625,7 +1639,7 @@ class YouTooHaveAnAppetite(Action):
             Item.TroubledWaters: 2,
             Item.UnaccountablyPeckish: 1,
             Item.Nightmares: 1,
-            Item.RumblingStomachs: -1 * state.items[Item.RumblingStomachs]
+            Item.RumblingStomachs: -1 * state.items.get(Item.RumblingStomachs, 0)
         }
 
     
@@ -2058,7 +2072,7 @@ class ThrowBaitOverboard(Action):
         super().__init__("Throw bait overboard")
 
     def can_perform(self, state: GameState):
-        return state.items[Item.RumblingStomachs] < 1
+        return state.items.get(Item.RumblingStomachs, 0) < 1
 
     def pass_items(self, state: 'GameState'):
         return {
@@ -2584,14 +2598,14 @@ class NavigateByStar(Action):
 class ZeebornePariahs(OpportunityCard):
     def __init__(self):
         super().__init__("Zeeborne Pariahs")
-        self.actions = [EvadeThem(), DisguiseShip()]
+        self.actions = [EvadeThemPariahs(), DisguiseShip()]
         self.weight = 1_000_000 # HACK high urgency
 
     def can_draw(self, state: GameState):
         return state.items[Item.TroubledWaters] >= 28 \
             and state.items.get(Item.UnwelcomeOnTheWaters, 0) > 0
 
-class EvadeThem(Action):
+class EvadeThemPariahs(Action):
     def __init__(self):
         super().__init__("Evade them!")
 
@@ -3727,8 +3741,7 @@ class BoardSteamer(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.Persuasive: 1,
-            Item.TroubledWaters: '?',  # TBD based on outcome
+            Item.TroubledWaters: 4,  # TODO unknown value
             Item.PiecesOfPlunder: 350,
             Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
@@ -3736,7 +3749,6 @@ class BoardSteamer(Action):
 
     def fail_items(self, state: 'GameState'):
         return {
-            Item.Persuasive: 1,
             Item.TroubledWaters: 7,
             Item.ZailingProgress: (state.outfits.zailing_speed // 2) + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
@@ -3764,7 +3776,6 @@ class HelloGiant(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.Persuasive: 1,
             Item.TroubledWaters: 5,
             Item.ZailingProgress: 80,
             Item.TimeSpentAtZee: 1
@@ -3772,7 +3783,6 @@ class HelloGiant(Action):
 
     def fail_items(self, state: 'GameState'):
         return {
-            Item.Persuasive: 1,
             Item.TroubledWaters: 8,
             Item.ZailingProgress: (state.outfits.zailing_speed // 2) + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
@@ -3809,7 +3819,7 @@ class PrudentDistance(Action):
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.CreepingFear: 1 - state.items.get(Item.TroubledWaters, 0)
+            Item.CreepingFear: 1 - state.items.get(Item.CreepingFear, 0)
         }
 
     def pass_rate(self, state: 'GameState'):
@@ -3913,6 +3923,479 @@ class OutpaceThem(Action):
 
     def pass_rate(self, state: 'GameState'):
         return 1.0
+    
+################################################################################
+###                         A Chelonite Hunting Ketch                         ###
+################################################################################
+
+class CheloniteHuntingKetch(OpportunityCard):
+    def __init__(self):
+        super().__init__("A Chelonite Hunting Ketch")
+        self.actions = [
+            HailPurchaseBagBones(),
+            OfferHelpSharpHunter(),
+            ExchangeStories(),
+            RegaleWithOwnHunts(),
+            OpenFire(),
+            ExchangeSightings()
+        ]
+
+    def can_draw(self, state: GameState):
+        return state.current_region == ZeeRegion.SALT_STEPPES
+
+
+class HailPurchaseBagBones(Action):
+    def __init__(self):
+        super().__init__("Hail them and purchase a bag of assorted bones")
+
+    # TODO rare success
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.MoonPearl: -500,
+            Item.ShardOfGlim: -500,
+            Item.FinBones: 5,
+            Item.WitheredTentacle: 6,
+            Item.CrustaceanPincer: 2.5
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+
+class OfferHelpSharpHunter(Action):
+    def __init__(self):
+        super().__init__("Offer to help a Sharp Hunter")
+
+    def can_perform(self, state: GameState):
+        # TODO: requires item from late railroad
+        return False           
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.CrystallisedCurio: 2
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+
+class ExchangeStories(Action):
+    def __init__(self):
+        super().__init__("Hail them and exchange stories")
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.ZeeZtory: -10,
+            Item.TaleOfTerror: 15
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+class RegaleWithOwnHunts(Action):
+    def __init__(self):
+        super().__init__("Regale them with tales of your own hunts")
+
+    def can_perform(self, state: GameState):
+        return state.items[Item.NotchedBoneHarpoon] > 0           
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TaleOfTerror: -10,
+            Item.MoonPearl: 250,
+            Item.ShardOfGlim: 250,
+            Item.FinBones: 5,
+            Item.TroubledWaters: -4
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+
+class OpenFire(Action):
+    def __init__(self):
+        super().__init__("Open fire!")
+
+    def can_perform(self, state: GameState):
+        return state.piracy_enabled
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.PiecesOfPlunder: 400,
+            Item.TroubledWaters: 3
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 6,
+            Item.GroaningHull: 1 - state.items.get(Item.GroaningHull, 0)
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.narrow_pass_rate(11, state.outfits.zeefaring)
+
+
+class ExchangeSightings(Action):
+    def __init__(self):
+        super().__init__("Exchange sightings of elusive beasts")
+
+    def can_perform(self, state: GameState):
+        return state.piracy_enabled
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.ChasingDownYourBounty: 16
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.Nightmares: 2
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.narrow_pass_rate(11, state.outfits.monstrous_anatomy)
+
+
+################################################################################
+###                           A Distant Gleam                                 ###
+################################################################################
+
+class DistantGleam(OpportunityCard):
+    def __init__(self):
+        super().__init__("A Distant Gleam")
+        self.actions = [FixLookingGlass(), MeasureMeasureless(), ReleaseUttermostEel()]
+
+    def can_draw(self, state: GameState):
+        return state.current_region == ZeeRegion.SALT_STEPPES
+
+
+class FixLookingGlass(Action):
+    def __init__(self):
+        super().__init__("Fix a looking-glass on the horizon")
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 2,
+            Item.EasternWind: 4 if state.items.get(Item.EasternWind, 0) == 0 else 1,
+            Item.MemoryOfDistantShores: 5,
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+
+class MeasureMeasureless(Action):
+    def __init__(self):
+        super().__init__("Measure the measureless")
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.ExtraordinaryImplication: 1,
+            Item.Nightmares: 1,
+            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.EasternWind: 1,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 9,
+            Item.Nightmares: 4,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.narrow_pass_rate(10, state.outfits.artisan_of_red_science)
+
+
+class ReleaseUttermostEel(Action):
+    def __init__(self):
+        super().__init__("Release your Uttermost Eel into the waters")
+
+    def can_perform(self, state: GameState):
+        # TODO requires item 
+        return True
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.EasternWind: 2,
+            Item.MemoryOfMuchLesserSelf: 1,
+            Item.Nightmares: 1,
+            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 9,
+            Item.Nightmares: 3,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.narrow_pass_rate(10, state.outfits.zeefaring)
+
+
+################################################################################
+###                   A Khaganian Patrol Vessel (Non-Corsair)                 ###
+################################################################################
+
+class KhaganianPatrolVesselNonCorsair(OpportunityCard):
+    def __init__(self):
+        super().__init__("A Khaganian Patrol Vessel (Non-Corsair)")
+        self.actions = [
+            WideBerthNonCorsair(),
+            BrazenlyHailNonCorsair(),
+            RecordPositionNonCorsair(),
+            # EncodeSignalsNonCorsair()
+        ]
+
+    def can_draw(self, state: GameState):
+        return state.current_region == ZeeRegion.SALT_STEPPES and \
+            state.piracy_enabled == False
+
+
+class WideBerthNonCorsair(Action):
+    def __init__(self):
+        super().__init__("Give them a wide berth")
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1,
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 8,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.broad_pass_rate(200, state.outfits.shadowy)
+
+
+class BrazenlyHailNonCorsair(Action):
+    def __init__(self):
+        super().__init__("Brazenly hail them")
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.Suspicion: -2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.Suspicion: 3,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.broad_pass_rate(200, state.outfits.persuasive)
+
+
+class RecordPositionNonCorsair(Action):
+    def __init__(self):
+        super().__init__("Record their position")
+
+    def can_perform(self, state: GameState):
+        return state.items.get(Item.ShrineToSaintJoshua, 0) > 0
+
+    def pass_items(self, state: 'GameState'):
+        # TODO depends on renown w/ GG
+        return {
+            Item.MovesInTheGreatGame: 5.5,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+
+# class EncodeSignalsNonCorsair(Action):
+#     def __init__(self):
+#         super().__init__("Encode signals to a Subtle Machinist")
+
+#     def pass_items(self, state: 'GameState'):
+#         return {
+#             Item.MechanicalComprehension: 10,
+#             Item.AssociatingWithNaturalist: 10,
+#             Item.JasmineLeaves: 3,
+#             Item.WhirringContraption: 20,
+#             Item.NevercoldBrassSliver: 5000,
+#             Item.MemoryOfDistantShores: 100,
+#             Item.FavourInHighPlaces: -1,
+#             Item.TroubledWaters: 2,
+#             Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+#             Item.TimeSpentAtZee: 1
+#         }
+
+#     def fail_items(self, state: 'GameState'):
+#         return {
+#             Item.Suspicion: 2,
+#             Item.TroubledWaters: 2,
+#             Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+#             Item.TimeSpentAtZee: 1,
+#             Item.UnwelcomeOnTheWaters: 1
+#         }
+
+#     def pass_rate(self, state: 'GameState'):
+#         return self.narrow_pass_rate(7, state.outfits.player_of_chess)
+
+
+################################################################################
+###                      A Khaganian Patrol Vessel (Corsair)                  ###
+################################################################################
+
+class KhaganianPatrolVesselCorsair(OpportunityCard):
+    def __init__(self):
+        super().__init__("A Khaganian Patrol Vessel (Corsair)")
+        self.actions = [
+            HailWithPassphrases(),
+            ManCannons(),
+            WideBerthCorsair(),
+            RecordPositionCorsair(),
+            # EncodeSignalsCorsair()
+        ]
+
+    def can_draw(self, state: GameState):
+        return state.current_region == ZeeRegion.SALT_STEPPES and \
+            state.piracy_enabled
+
+
+class HailWithPassphrases(Action):
+    def __init__(self):
+        super().__init__("Hail them with their own passphrases")
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 4,
+            Item.ChasingDownYourBounty: 14,
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 10,
+            Item.Suspicion: 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1,
+            Item.UnwelcomeOnTheWaters: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.narrow_pass_rate(11, state.outfits.player_of_chess)
+
+
+class ManCannons(Action):
+    def __init__(self):
+        super().__init__("Man the cannons!")
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 4,
+            Item.Suspicion: 2,
+            Item.PiecesOfPlunder: 400,
+            Item.UnwelcomeOnTheWaters: 1 - state.items.get(Item.UnwelcomeOnTheWaters, 0),
+            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.TroubledWaters: 10,
+            Item.Suspicion: 3,
+            Item.UnwelcomeOnTheWaters: 1,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.narrow_pass_rate(11, state.outfits.zeefaring)
+
+
+class WideBerthCorsair(Action):
+    def __init__(self):
+        super().__init__("Give them a wide berth")
+
+    def pass_items(self, state: 'GameState'):
+        return {
+            Item.Shadowy: 1,
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1,
+        }
+
+    def fail_items(self, state: 'GameState'):
+        return {
+            Item.Shadowy: 1,
+            Item.TroubledWaters: 8,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return self.broad_pass_rate(200, state.outfits.shadowy)
+
+
+class RecordPositionCorsair(Action):
+    def __init__(self):
+        super().__init__("Record their position")
+
+    def can_perform(self, state: GameState):
+        return state.items.get(Item.ShrineToSaintJoshua, 0)
+
+    def pass_items(self, state: 'GameState'):
+        # TODO depends on renown w/ GG
+        return {
+            Item.MovesInTheGreatGame: 5.5,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.TimeSpentAtZee: 1
+        }
+
+    def pass_rate(self, state: 'GameState'):
+        return 1.0  # Always success
+
+
+# class EncodeSignalsCorsair(Action):
+#     def __init__(self):
+#         super().__init__("Encode signals to a Subtle Machinist")
+
+#     def pass_items(self, state: 'GameState'):
+#         return {
+#             Item.MechanicalComprehension: 10,
+#             Item.AssociatingWithNaturalist: 10,
+#             Item.JasmineLeaves: 3,
+#             Item.WhirringContraption: 20,
+#             Item.NevercoldBrassSliver: 5000,
+#             Item.MemoryOfDistantShores: 100,
+#             Item.FavourInHighPlaces: -1,
+#             Item.TroubledWaters: 2,
+#             Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+#             Item.TimeSpentAtZee: 1
+#         }
+
+#     def fail_items(self, state: 'GameState'):
+#         return {
+#             Item.Suspicion: 2,
+#             Item.TroubledWaters: 2,
+#             Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+#             Item.TimeSpentAtZee: 1,
+#             Item.UnwelcomeOnTheWaters: 1
+#         }
+
+#     def pass_rate(self, state: 'GameState'):
+#         return self
+
 
 cards = [
     BountyUponYourHead(),
@@ -3982,11 +4465,17 @@ cards = [
     MeetingLocalSteamer(),
     GiantOfUnterzee(),
     TheIceberg(),
-    UnfinishedPirates()
+    UnfinishedPirates(),
+
+    # Salt Steppes
+    CheloniteHuntingKetch(),
+    DistantGleam(),
+    KhaganianPatrolVesselCorsair(),
+    KhaganianPatrolVesselNonCorsair()
 ]
 
 # Initial setup
-def setup_simulation(chasing, route: list[tuple[ZeeRegion, ZeeRegion]]):
+def setup_simulation(chasing, route: list[ZeeRegion]):
     state = GameState()
 
     # Add each card to the deck
@@ -3995,7 +4484,9 @@ def setup_simulation(chasing, route: list[tuple[ZeeRegion, ZeeRegion]]):
 
     state.items[Item.ChasingDownYourBounty] = chasing
     state.route = route
-    state.current_region, state.next_region = route[0]
+    state.current_region = route[0]
+    state.next_region = route[1]
+    state.route_progress = 0
     state.progress_required = zee_regions[state.current_region].distance_to[state.next_region]
 
     return state
@@ -4128,9 +4619,9 @@ def run_simulation(runs: int, route: list[tuple[ZeeRegion, ZeeRegion]]):
 
     print()
     print("Route:")
-    print(f"{route[0][0]} to {route[-1][1]} via:")
+    print(f"{route[0]} to location w/in {route[-1]} via:")
     for i in route:
-        print(f"    {i[0]} => {i[1]}")
+        print(f"  {i}")
 
     display_results(
         total_item_changes, avg_actions_per_run, total_action_play_counts,
@@ -4164,14 +4655,16 @@ def display_results(
         runs
     )
 
-    # Display the average actions run
-    print(f"\nAverage Actions per Run: {avg_actions_per_run:.2f}")
 
     # Display average change in items with echo values
     print_item_summary(total_item_changes, runs, total_actions)
 
     # Display actions spent in each region
     print_region_action_summary(total_region_action_counts, runs)
+
+    # Display the average actions run
+    print(f"\nAverage Actions per Run:      {avg_actions_per_run:.2f}")    
+    print()
 
 
 def print_item_summary(total_item_changes, runs, total_actions):
@@ -4201,6 +4694,9 @@ def print_item_summary(total_item_changes, runs, total_actions):
 def print_region_action_summary(total_region_action_counts, runs):
     print(f"\n{'Region':<30}{'Avg Actions/Run':<15}")
     print("-" * 45)
+
+    starter_action = "Put to Zee!"
+    print(f"{starter_action:<30}{1.0:<15.2f}")
     for region, total_actions in total_region_action_counts.items():
         avg_actions = total_actions / runs
         print(f"{region.name:<30}{avg_actions:<15.2f}")
@@ -4235,15 +4731,21 @@ def print_condensed_action_table(action_play_counts, action_success_counts, acti
 
 
 london_to_elder_continent = [
-    (ZeeRegion.HOME_WATERS, ZeeRegion.SHEPHERDS_WASH),
-    (ZeeRegion.SHEPHERDS_WASH, ZeeRegion.SHEPHERDS_WASH)
+    ZeeRegion.HOME_WATERS,
+    ZeeRegion.SHEPHERDS_WASH,
 ]
 
 elder_continent_to_london = [
-    (ZeeRegion.SHEPHERDS_WASH, ZeeRegion.HOME_WATERS),
-    (ZeeRegion.HOME_WATERS, ZeeRegion.HOME_WATERS)
+    ZeeRegion.SHEPHERDS_WASH,
+    ZeeRegion.HOME_WATERS
+]
+
+london_to_polythreme = [
+    ZeeRegion.HOME_WATERS,
+    ZeeRegion.SHEPHERDS_WASH,
+    ZeeRegion.SEA_OF_VOICES
 ]
 
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=1_000, route=london_to_elder_continent)
+    run_simulation(runs=1_000, route=london_to_polythreme)
