@@ -25,6 +25,7 @@ class ZooType(Enum):
     Insect = auto()
     Spider = auto()
     Curator = auto()
+    Primate = auto()
 
 class Bone():
     def __init__(self,
@@ -286,7 +287,17 @@ def match_action_type(zoo_type, flux_type):
         elif flux_type == Fluctuations.Menace:
             return Item.MenaceInsectAction
         else:
-            return Item.GeneralInsectAction        
+            return Item.GeneralInsectAction
+        
+    elif zoo_type == ZooType.Primate:
+        if flux_type == Fluctuations.Antiquity:
+            return Item.AntiquityPrimateAction
+        elif flux_type == Fluctuations.Amalgamy:
+            return Item.AmalgamyPrimateAction
+        elif flux_type == Fluctuations.Menace:
+            return Item.MenacePrimateAction
+        else:
+            return Item.GeneralPrimateAction
 
     else:
         if flux_type == Fluctuations.Antiquity:
@@ -736,6 +747,7 @@ def add_trades(player: Player, config: Config):
             "Fish": Item.AntiquityFishAction,
             "Arachnid": Item.AntiquityArachnidAction,
             "Insect": Item.AntiquityInsectAction,
+            "Primate": Item.AntiquityPrimateAction,
         },
         "Amalgamy": {
             "Reptile": Item.AmalgamyReptileAction,
@@ -744,6 +756,7 @@ def add_trades(player: Player, config: Config):
             "Fish": Item.AmalgamyFishAction,
             "Arachnid": Item.AmalgamyArachnidAction,
             "Insect": Item.AmalgamyInsectAction,
+            "Primate": Item.AmalgamyPrimateAction,
         },
         "Menace": {
             "Reptile": Item.MenaceReptileAction,
@@ -752,6 +765,7 @@ def add_trades(player: Player, config: Config):
             "Fish": Item.MenaceFishAction,
             "Arachnid": Item.MenaceArachnidAction,
             "Insect": Item.MenaceInsectAction,
+            "Primate": Item.MenacePrimateAction,
         }
     }
 
@@ -762,7 +776,7 @@ def add_trades(player: Player, config: Config):
     for category, actions in bone_market_week_actions.items():
         for creature, action in actions.items():
 
-            action_split[action] = 1/18
+            action_split[action] = 1/21
 
             config.add({
                 action: -1,
@@ -821,6 +835,12 @@ def add_trades(player: Player, config: Config):
                 config.add({
                     action: -1,
                     Item.GeneralReptileAction: 1
+                })
+
+            if (creature == "Primate"):
+                config.add({
+                    action: -1,
+                    Item.GeneralPrimateAction: 1
                 })
 
     config.add(action_split)
@@ -913,44 +933,52 @@ def add_trades(player: Player, config: Config):
     #         Item.FailedBrightBrassSkull,
     #         Item.ASkeletonOfYourOwn,
     #         Item.VictimsSkull,
+    #         # Item.CarvedBallOfStygianIvory,
 
-    #         # Profitable Tier 1
-    #         Item.DuplicatedCounterfeitHeadOfJohnTheBaptist,
-    #         Item.WingOfAYoungTerrorBird,
-    #         Item.FailedWingOfAYoungTerrorBird,
+    #         # # Profitable Tier 1
+    #         # Item.DuplicatedCounterfeitHeadOfJohnTheBaptist,
+    #         # Item.WingOfAYoungTerrorBird,
+    #         # Item.FailedWingOfAYoungTerrorBird,
 
-    #         # Tier 2
-    #         Item.WitheredTentacle,
-    #         Item.FailedWitheredTentacleTail,
+    #         # # Tier 2
+    #         # Item.WitheredTentacle,
+    #         # Item.FailedWitheredTentacleTail,
 
-    #         # Tier 3
-    #         Item.DuplicatedVakeSkull,
-    #         Item.HumanArm,
-    #         Item.UnidentifiedThighbone,
-    #         Item.PlasterTailBones,
-    #         Item.JetBlackStinger,
-    #         Item.FailedJetBlackStinger,
+    #         # # Tier 3
+    #         # Item.DuplicatedVakeSkull,
+    #         # Item.HumanArm,
+    #         # Item.UnidentifiedThighbone,
+    #         # Item.PlasterTailBones,
+    #         # Item.JetBlackStinger,
+    #         # Item.FailedJetBlackStinger,
 
-    #         # Tier 4 - below TLC communing
-    #         Item.SkullInCoral,
-    #         Item.FailedSkullInCoral,
+    #         # # Tier 4 - below TLC communing
+    #         # Item.SkullInCoral,
+    #         # Item.FailedSkullInCoral,
 
-    #         # Tier 5 - only with 1.15 zoo bonus
-    #         Item.AlbatrossWing,
-    #         Item.FailedAlbatrossWing,
-    #         Item.PlasterTailBones,
-    #         Item.FailedPlasterTailBones,
-    #         Item.HolyRelicOfTheThighOfStFiacre,
-    #         Item.FailedWitheredTentacleLimb,
-    #         Item.RibcageWithABoutiqueOfEightSpines
+    #         # # Tier 5 - only with 1.15 zoo bonus
+    #         # Item.AlbatrossWing,
+    #         # Item.FailedAlbatrossWing,
+    #         # Item.PlasterTailBones,
+    #         # Item.FailedPlasterTailBones,
+    #         # Item.HolyRelicOfTheThighOfStFiacre,
+    #         # Item.FailedWitheredTentacleLimb,
+    #         # Item.RibcageWithABoutiqueOfEightSpines
     #     ]
     #     if item in blacklist:
     #         pass
     #     else:
+    #         # # sell freely
     #         trade(0, {
     #             item: -1,
-    #             Item.Echo: data.echo_value * 1.15
+    #             Item.Echo: data.echo_value * 1
     #         })
+
+    #         # buy at cost
+    #         # trade(0, {
+    #         #     item: 1,
+    #         #     Item.Echo: data.echo_value * -1.05
+    #         # })
 
     # -------------------------
     # ------- Recipes ---------

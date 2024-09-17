@@ -207,6 +207,7 @@ class Item(Enum):
     AntiquityFishAction = auto()
     AntiquityArachnidAction = auto()
     AntiquityInsectAction = auto()
+    AntiquityPrimateAction = auto()
 
     AmalgamyReptileAction = auto()
     AmalgamyAmphibianAction = auto()    
@@ -214,6 +215,7 @@ class Item(Enum):
     AmalgamyFishAction = auto()
     AmalgamyArachnidAction = auto()
     AmalgamyInsectAction = auto()
+    AmalgamyPrimateAction = auto()
 
     MenaceReptileAction = auto()
     MenaceAmphibianAction = auto()    
@@ -221,6 +223,7 @@ class Item(Enum):
     MenaceFishAction = auto()
     MenaceArachnidAction = auto()
     MenaceInsectAction = auto()      
+    MenacePrimateAction = auto()      
 
     AntiquityGeneralAction = auto()
     AmalgamyGeneralAction = auto()
@@ -232,6 +235,7 @@ class Item(Enum):
     GeneralFishAction = auto()
     GeneralArachnidAction = auto()
     GeneralInsectAction = auto()    
+    GeneralPrimateAction = auto()    
 
     # Menaces
     Wounds = auto()

@@ -47,84 +47,63 @@ def add_trades(config: Config):
         Item.RoofChart: -1,
         Item.MoonPearl: 253
     })
-    
-    # Stacks results per simulation
-    trade(11, {
-        Item.MemoryOfAMuchStrangerSelf: 1,
-        Item.DirefulReflection: 1,
-        Item.EmeticRevelation: 1,
-        Item.AntiqueMystery: 1,
-        Item.TempestuousTale: 7,
-        Item.Wounds: -1,
-        Item.Nightmares: 1 * utils.menace_multiplier(config.player.nightmares_reduction)
+
+    # Results from simulations/stacks2 using my own stats, mostly ~330/15
+    # W/o cartographer unless required
+    # ignoring items less than +/- 0.01 EPA i.e. bones and rats
+
+    # Banned Works
+    trade(24.2, {
+        Item.CausticApocryphon: 8.5,
+        Item.TantalisingPossibility: 230,
+        Item.Nightmares: 1,
+        Item.GlimpseOfAnathema: 0.05
     })
 
-    # w/o Cartographer, avg run is 22 actions
-    # bonus of 170 TPs, 0.17 office failures, 1.3 wounds, 0.54 anathema
-
-    trade(22, {
-        Item.CausticApocryphon: 9,
-        Item.TantalisingPossibility: 170 + 35,
-        Item.FinBonesCollected: 1,
-        Item.DeepZeeCatch: 1,
-        Item.Wounds: 1.3,
-        Item.GlimpseOfAnathema: 0.054
-    })
-
-    trade(22, {
-        Item.GlimEncrustedCarapace: 1,
-        Item.TantalisingPossibility: 170 + 495,
+    # Dead Stars 1
+    trade(24.1, {
+        Item.GlimEncrustedCarapace: 0.95,
+        Item.TantalisingPossibility: 650,
         Item.ShardOfGlim: 400,
-        Item.FinBonesCollected: 1,
-        Item.DeepZeeCatch: 1,
-        Item.Wounds: 1.3,
-        Item.GlimpseOfAnathema: 0.054
+        Item.Nightmares: 1,
+        Item.GlimpseOfAnathema: 0.05
     })    
 
-    trade(22, {
+    # Dead Stars 2
+    trade(24.1, {
         Item.RoofChart: 40,
         Item.TantalisingPossibility: 170,
-        Item.FinBonesCollected: 1,
-        Item.DeepZeeCatch: 1,
-        Item.Wounds: 1.3,
-        Item.GlimpseOfAnathema: 0.054
+        Item.GlimpseOfAnathema: 0.05
     })
 
-    trade(22, {
-        Item.Anticandle: 10,
-        Item.FragmentOfTheTragedyProcedures: 1,
-        Item.RelicOfTheFifthCity: 10,
-        Item.TantalisingPossibility: 170 + 35,
-        Item.FinBonesCollected: 1,
-        Item.DeepZeeCatch: 1,
-        Item.Wounds: 1,
-        Item.GlimpseOfAnathema: 0.054
+    # Precipice 1
+    trade(23.2, {
+        Item.Anticandle: 9.4,
+        Item.FragmentOfTheTragedyProcedures: 0.94,
+        Item.RelicOfTheFifthCity: 9.4,
+        Item.TantalisingPossibility: 200,
+        Item.Nightmares: 0.5,
+        Item.GlimpseOfAnathema: 0.06
     })
     
-    trade(22, {
-        Item.Anticandle: 10,
-        Item.TempestuousTale: 10,
-        Item.MagnificentDiamond: 5,
-        Item.RelicOfTheFifthCity: 6,
-        Item.TantalisingPossibility: 170 + 10,
-        Item.FinBonesCollected: 1,
-        Item.DeepZeeCatch: 1,
-        Item.Wounds: 1,
-        Item.GlimpseOfAnathema: 0.054
+    # Precipice 2
+    trade(23.2, {
+        Item.Anticandle: 9.4,
+        Item.TempestuousTale: 9.4,
+        Item.TantalisingPossibility: 175,
+        Item.RelicOfTheFifthCity: 5.6,
+        Item.MagnificentDiamond: 4.7,
+        Item.Nightmares: 0.5,
+        Item.GlimpseOfAnathema: 0.06
     })
 
     # Cartographer
-    trade(22.3, {
-        Item.OneiromanticRevelation: 1,
-        Item.StormThrenody: 2,
-        Item.PuzzlingMap: 1,
-        Item.VolumeOfCollatedResearch: 6,
-
-        # Office failures
-        Item.FinBonesCollected: 1,
-        Item.DeepZeeCatch: 1,
-
-        Item.GlimpseOfAnathema: 0.05,
-        Item.TantalisingPossibility: 152 + 10,
-        Item.Wounds: 1.2
+    trade(23.5, {
+        Item.TantalisingPossibility: 205,
+        Item.PuzzlingMap: 0.94,
+        Item.OneiromanticRevelation: 0.94,
+        Item.StormThrenody: 1.88,
+        Item.VolumeOfCollatedResearch: 5.65,
+        Item.GlimpseOfAnathema: 0.06,
+        Item.Nightmares: 1
     })

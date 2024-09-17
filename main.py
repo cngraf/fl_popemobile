@@ -260,7 +260,7 @@ core_constraint = {
     Item.Constraint: 1,
     Item.RootAction: actions_per_cycle,
     Item.VisitFromTimeTheHealer: 1,
-    Item.CardDraws: full_draws_per_day * 7 * 10
+    # Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
@@ -323,7 +323,7 @@ upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
 
-upper_river.tracklayers_city.add_trades(config)
+# upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
@@ -342,7 +342,7 @@ trade(1, zailing_deck.normalized_trade())
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.Echo
+optimize_for = Item.HinterlandScrip
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1

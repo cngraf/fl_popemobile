@@ -1850,7 +1850,7 @@ def simulate_runs(num_runs):
     print("=" * 80)
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.BannedWorks
+    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
     state.cartographer_enabled = False
 
     # Progress bar setup
@@ -1937,7 +1937,7 @@ def simulate_runs(num_runs):
 
     # Process items for individual totals
     print("-" * 95)
-    print(f"{'Item':<30} {'Count':<10} {'Echoes per Action':<22} {'Stuivers per Action':<25}")
+    print(f"{'Item':<30} {'Net/Run':<10} {'Echoes/Action':<22} {'Stuivers/Action':<25}")
     print("-" * 95)
 
     for item, count in state.items.items():
@@ -1946,7 +1946,7 @@ def simulate_runs(num_runs):
         stuiver_value = value_data.get('stuiver', None)
 
         count = int(count)
-
+        count_per_run = count / num_runs
         # Calculate echoes and stuivers per action
         echoes_per_action = (count * echo_value) / total_steps if total_steps > 0 and echo_value is not None else 0
         stuivers_per_action = (count * stuiver_value) / total_steps if total_steps > 0 and stuiver_value is not None else 0
@@ -1957,16 +1957,16 @@ def simulate_runs(num_runs):
         if echoes_per_action != 0 and stuivers_per_action == 0:
             echoes_only_total += count * echo_value
             all_currency_total += count * echo_value
-            print(f"{truncated_item_name:<30} {count:<10} {echoes_per_action:.4f} {'':<25}")
+            print(f"{truncated_item_name:<30} {count_per_run:<10.3f} {echoes_per_action:.4f} {'':<25}")
         elif echoes_per_action == 0 and stuivers_per_action != 0:
             stuivers_only_total += count * stuiver_value
             all_currency_total += count * stuiver_value * 0.05
-            print(f"{truncated_item_name:<30} {count:<10} {'':<15} {stuivers_per_action:.4f}")
+            print(f"{truncated_item_name:<30} {count_per_run:<10.3f} {'':<22} {stuivers_per_action:.4f}")
         elif echoes_per_action != 0 and stuivers_per_action != 0:
             echoes_only_total += count * echo_value
             stuivers_only_total += count * stuiver_value
             all_currency_total += max(count * echo_value, count * stuiver_value * 0.05)
-            print(f"{truncated_item_name:<30} {count:<10} {echoes_per_action:.4f} {'':<15} {stuivers_per_action:.4f}")
+            print(f"{truncated_item_name:<30} {count_per_run:<10.3f} {echoes_per_action:.4f} {'':<15} {stuivers_per_action:.4f}")
 
     print("-" * 95)
 
@@ -1979,4 +1979,4 @@ def simulate_runs(num_runs):
     total_per_action = all_currency_total / total_steps if total_steps > 0 else 0
     print(f"{'Echoes/Stuivers Per Action':<30} {'':<10} {total_per_action:.4f} E")
 
-simulate_runs(10_000)
+simulate_runs(20_000)

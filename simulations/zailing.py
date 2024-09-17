@@ -8,6 +8,51 @@ from collections import defaultdict
 from enums import *
 from decks.unterzee import *
 
+'''
+TODO
+hidden stash
+- hard to model, but potentially very impactful
+    - could be worth > 1 EPA
+- efficiency depends on the route
+- odds of 10x and 50x unknown
+
+rare successes
+- don't know what the odds are for any card
+- big range in value
+
+randoom zailing gain
+- whether or not an action gives bonus 1-5 zailing seems kinda arbitrary?
+    - taking the wiki literally, possible it's just not been updated fully
+- audit our zailing EV algorithm
+    - 75 speed seems to barely make a difference, which is surprising
+
+improve TW handling
+- include length & difficulty of voyage remaining in EV calc
+- include TW reduction
+
+menace handling
+- customize menance costs
+- check for Game Overs on the 4 normal menaces
+    - unlikely to hit these before TW but you never know
+- add outfit swapping & menace reduction
+    - especially for luck-based cards
+
+player customization
+- add relevant items that lock/unlock cards and actions
+- don't bother with one-time story progression stuff
+- add toggle for the actions that have item costs
+    - eg if you're not zailing around with infinite moon pearls
+
+deck manipulation
+- can we add/remove any cards with outfit switching?
+- add new FATE colossus cards
+
+woesel
+- do what we did in stacks2 sim
+    - maybe part of broader improvement in outfit handling
+- doubt it is ever useful, but who knows
+'''
+
 item_echo_values = {
     Item.PiecesOfPlunder: 0.01,
     Item.WhirringContraption: 12.5,
@@ -21,6 +66,7 @@ item_echo_values = {
     Item.ShardOfGlim: 0.01,
     Item.MoonPearl: 0.01,
     Item.BottleOfBrokenGiant1844: 2.5,
+    Item.UnprovenancedArtefact: 2.5,
 
     Item.FinBonesCollected: 0.5,
     Item.WitheredTentacle: 0.5,
@@ -33,7 +79,7 @@ item_echo_values = {
     Item.Nightmares: -0.2,
 
     # Nonexistent items to handwave complexity
-    Item.Fake_HiddenStash: 12.5
+    Item.Fake_HiddenStash: 75
 }
 
 # HACK may god forgive me
@@ -46,8 +92,16 @@ def random_zailing_bonus():
     if comparison_mode:
         return zailing_bonus_estimate
     else:
-        # return random.randint(1, 5)
-        return 0
+        return random.randint(1, 5)
+        # return 0
+    
+# HACK using this on actions that seem like they should have it but don't on wiki
+def bonus_zailing2():
+    if comparison_mode:
+        return zailing_bonus_estimate
+    else:
+        return random.randint(1, 5)
+        # return 0    
 
 class Action:
     def __init__(self, name):
@@ -152,9 +206,9 @@ class OpportunityCard:
         return True
 
 class OutfitList:
-    def __init__(self, default_basic = 330, default_advanced = 15):
-        self.zailing_speed = 55  # Example stat for "Zailing Speed"
-        self.zubmersibility = 0
+    def __init__(self, default_basic = 330, default_advanced = 18):
+        self.zailing_speed = 55
+        self.zubmersibility = 1
         self.luxurious = 0
         self.reduce_tw = 0
 
@@ -182,9 +236,12 @@ class GameState:
 
             Item.PiecesOfPlunder: 0,
             Item.ZailingProgress: 0,
-            Item.ChasingDownYourBounty: 0,
+            Item.ChasingDownYourBounty: 1,
             Item.UnwelcomeOnTheWaters: 0,
             Item.TimeSpentAtZee: 0,
+
+            # Item.FalseStarOfYourOwn: 1,
+            # Item.NotchedBoneHarpoon: 1
         }
 
         # Additional tracking variables for this simulation
@@ -368,7 +425,7 @@ class GameState:
         """Calculates the EV for a given progress value based on current progress."""
         # TODO
         prog_unit_ev = 0.05
-        action_ev = 5.5
+        action_ev = 5
 
         # Current progress
         speed = self.outfits.zailing_speed
@@ -468,14 +525,14 @@ class SearchUnchartedWaters(Action):
         return {
             Item.TroubledWaters: -1,
             Item.ChasingDownYourBounty: state.region_data().chasing_gain_advanced,
-            Item.ZailingProgress: state.outfits.zailing_speed
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2()
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: -5,
             Item.CreepingFear: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2()
         }
 
     def pass_rate(self, state: 'GameState'):
@@ -507,7 +564,7 @@ class OpenFireBounty(Action):
         return {
             Item.TroubledWaters: 5,
             Item.PiecesOfPlunder: state.region_data().plunder_gain_advanced,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -515,7 +572,7 @@ class OpenFireBounty(Action):
         return {
             Item.TroubledWaters: 12,
             Item.UnwelcomeOnTheWaters: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -534,7 +591,7 @@ class SignalRamillies(Action):
         return {
             Item.TroubledWaters: 5,
             Item.PiecesOfPlunder: state.region_data().plunder_gain_advanced - 100,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -542,7 +599,7 @@ class SignalRamillies(Action):
         return {
             Item.TroubledWaters: 12,
             Item.UnwelcomeOnTheWaters: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -602,7 +659,7 @@ class TheyreNotSlowing(Action):
         return {
             Item.Suspicion: 3,
             Item.TroubledWaters: 3,
-            Item.ZailingProgress: state.outfits.zailing_speed
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
         }
 
     def fail_items(self, state: 'GameState'):
@@ -625,7 +682,7 @@ class RelyOnOldCodes(Action):
         return {
             Item.Suspicion: -3,
             Item.TroubledWaters: -random.randint(2, 8), # TODO unknown value
-            Item.ZailingProgress: state.outfits.zailing_speed
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
         }
 
     def fail_items(self, state: 'GameState'):
@@ -682,7 +739,7 @@ class TakeThemForAll(Action):
             Item.Suspicion: 1,
             Item.TroubledWaters: 4,
             Item.PiecesOfPlunder: state.region_data().plunder_gain_advanced,
-            Item.ZailingProgress: state.outfits.zailing_speed
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
         }
 
     def fail_items(self, state: 'GameState'):
@@ -705,14 +762,14 @@ class TheyreNotSlowing(Action):
         return {
             Item.Suspicion: 3,
             Item.TroubledWaters: 3,
-            Item.ZailingProgress: state.outfits.zailing_speed
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.SilentStalker: 1,
             Item.TroubledWaters: 9,
-            Item.ZailingProgress: state.outfits.zailing_speed
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2()
         }
 
     def pass_rate(self, state: 'GameState'):
@@ -915,14 +972,14 @@ class TakeAuspices(Action):
         return {
             Item.TroubledWaters: 4,
             Item.ChasingDownYourBounty: state.region_data().chasing_gain_advanced,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 10,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -937,7 +994,7 @@ class ZailAroundThem(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -983,7 +1040,7 @@ class ReadyGuns(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: -2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1132,7 +1189,7 @@ class SteamOnByBeast(Action):
         return {
             Item.TroubledWaters: 3,
             Item.SilentStalker: 1 - state.items.get(Item.SilentStalker, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1140,7 +1197,7 @@ class SteamOnByBeast(Action):
         return 1.0  # Always success
 
 ################################################################################
-###                            MessageInABottle                                ###
+###                            MessageInABottle                              ###
 ################################################################################
 
 # TODO complicated!
@@ -1157,6 +1214,7 @@ class MessageInABottle(OpportunityCard):
 class UnfurlThePaper(Action):
     def __init__(self):
         super().__init__("Unfurl the paper")
+        self.action_cost = 5
     
     def pass_items(self, state: 'GameState'):
         return {
@@ -1196,7 +1254,7 @@ class CorrectYourCourse(Action):
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1211,14 +1269,14 @@ class ListenToTheZee(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.MapScrap: 12,
-            Item.ZailingProgress: state.outfits.zailing_speed + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 9,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1237,14 +1295,14 @@ class StarvedMen(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.MapScrap: 13,
-            Item.ZailingProgress: state.outfits.zailing_speed + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 9,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1262,13 +1320,13 @@ class LetYourStarGuide(Action):
         tw = state.items[Item.TroubledWaters]
         return {
             Item.TroubledWaters: max(-5, -1 * tw),
-            Item.ZailingProgress: state.outfits.zailing_speed + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1287,14 +1345,14 @@ class UseDisorientation(Action):
         return {
             Item.TroubledWaters: random.randint(2, 3),
             Item.ChasingDownYourBounty: state.region_data().chasing_gain_advanced,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1334,7 +1392,7 @@ class DiveForSalvage(Action):
         return {
             Item.TroubledWaters: 8,
             Item.CreepingFear: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1349,7 +1407,7 @@ class ZailOnBy(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1374,7 +1432,7 @@ class HailAShip(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TaleOfTerror: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
             Item.TroubledWaters: -2,
             Item.TimeSpentAtZee: 1
         }
@@ -1389,7 +1447,7 @@ class SteamOnByFlotilla(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1420,14 +1478,14 @@ class SeeThemOff(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 10,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1444,7 +1502,7 @@ class RaceAway(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1455,14 +1513,14 @@ class PreachVariantCreed(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 10,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1481,7 +1539,7 @@ class SignalSamaritan(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1497,14 +1555,14 @@ class SendToFathomking(Action):
         return {
             Item.TroubledWaters: 2,
             Item.PiecesOfPlunder: state.region_data().plunder_gain_advanced,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1573,7 +1631,7 @@ class SteamOnBySpit(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1584,14 +1642,14 @@ class StopAtIsland(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: -1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1710,7 +1768,7 @@ class HailSteamship(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.RomanticNotion: 25,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1721,7 +1779,7 @@ class SteamOnByPilgrimage(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1873,7 +1931,7 @@ class ZailOn(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1886,7 +1944,7 @@ class StopForLead(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.ChasingDownYourBounty: state.region_data().chasing_gain_basic,
             Item.TimeSpentAtZee: 1
         }
@@ -1895,7 +1953,7 @@ class StopForLead(Action):
         return {
             Item.TroubledWaters: 7,
             Item.UnwelcomeOnTheWaters: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
     
@@ -1920,7 +1978,7 @@ class NegotiateWithRats(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1928,7 +1986,7 @@ class NegotiateWithRats(Action):
         return {
             Item.CreepingFear: 1,
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
     
@@ -1969,7 +2027,7 @@ class RatCatchingExpedition(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.RatOnAString: 100,
-            Item.ZailingProgress: state.outfits.zailing_speed + random.randint(1, 5),
+            Item.ZailingProgress: state.outfits.zailing_speed + random_zailing_bonus(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -1985,14 +2043,14 @@ class QuestionAboutShips(Action):
         return {
             Item.TroubledWaters: 2,
             Item.ChasingDownYourBounty: state.region_data().chasing_gain_basic,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 6,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
     
@@ -2066,7 +2124,7 @@ class TurnAroundAndConfront(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: -5,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2150,7 +2208,7 @@ class SealAndPump(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2()
         }
 
     def fail_items(self, state: 'GameState'):
@@ -2251,14 +2309,14 @@ class Villainy(Action):
             Item.PageOfPrelapsarianArchaeologicalNotes: 5,
             Item.PageOfTheosophisticalNotes: 5,
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2275,14 +2333,14 @@ class Subterfuge(Action):
             Item.PageOfPrelapsarianArchaeologicalNotes: 7,
             Item.PageOfTheosophisticalNotes: 7,
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2366,7 +2424,7 @@ class OutrunStorm(Action):
         return {
             Item.TroubledWaters: 4,
             Item.CreepingFear: 1 - state.items.get(Item.CreepingFear, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2390,7 +2448,7 @@ class MakeReadyToDive(Action):
         return {
             Item.TroubledWaters: -2,
             Item.ZeeZtory: 4.5,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2483,7 +2541,7 @@ class CureIgnorance(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TroubledWaters: max(-5, -1 * state.items[Item.TroubledWaters]),
             Item.TimeSpentAtZee: 1
         }
@@ -2492,7 +2550,7 @@ class CureIgnorance(Action):
         return {
             Item.TroubledWaters: 12,
             Item.CreepingFear: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2571,7 +2629,7 @@ class RestartParty(Action):
         return {
             Item.TroubledWaters: 4,
             Item.PiecesOfPlunder: state.region_data().plunder_gain_basic,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1,
             Item.BottleOfBrokenGiant1844: state.outfits.luxurious
         }
@@ -2607,7 +2665,7 @@ class NavigateByStar(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: -5,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2677,7 +2735,7 @@ class SteamPast(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TroubledWaters: 2
         }
 
@@ -2711,13 +2769,13 @@ class RecogniseQuarry(Action):
         return {
             Item.TroubledWaters: 5,
             Item.PieceOfRostygold: 250,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
         }
     
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
         }    
 
 class RobThemBlind(Action):
@@ -2734,13 +2792,13 @@ class RobThemBlind(Action):
         return {
             Item.TroubledWaters: 2,
             Item.PiecesOfPlunder: 300,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.UnwelcomeOnTheWaters: 1 - state.items.get(Item.UnwelcomeOnTheWaters, 0)
         }
 
@@ -2931,7 +2989,7 @@ class ZailIntoWind(Action):
             Item.TroubledWaters: 2,
             Item.SouthernWind: 1 if state.items.get(Item.SouthernWind, 0) > 0 else 0,
             Item.ZeeZtory: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2972,7 +3030,7 @@ class ZailIntoStormEye(Action):
             Item.ZeeZtory: 1,
             Item.MemoryOfLight: 1,
             Item.SouthernWind: 1 if state.items.get(Item.SouthernWind, 0) > 0 else 0,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -2997,14 +3055,14 @@ class ZailOnBy(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3063,7 +3121,7 @@ class ScavengeAmidstTheScrum(Action):
         return {
             Item.SilkScrap: 50,
             Item.TroubledWaters: 3,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3071,7 +3129,7 @@ class ScavengeAmidstTheScrum(Action):
         return {
             Item.TroubledWaters: 8,
             Item.CreepingFear: 1 - state.items.get(Item.CreepingFear, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3085,7 +3143,7 @@ class WeaveThroughThrong(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 3,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3093,7 +3151,7 @@ class WeaveThroughThrong(Action):
         return {
             Item.TroubledWaters: 10,
             Item.GroaningHull: 1 - state.items.get(Item.GroaningHull, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3186,7 +3244,7 @@ class RecordAndMoveOn(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TroubledWaters: 3,
             Item.TimeSpentAtZee: 1
         }
@@ -3205,7 +3263,7 @@ class WhatsDownThere(Action):
         return {
             Item.TroubledWaters: -2,
             Item.AppallingSecret: 5,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3220,14 +3278,14 @@ class RecogniseShape(Action):
         return {
             # Item.ShapelingArts: 1,
             Item.CrypticClue: 25,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 3,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3368,7 +3426,7 @@ class ZailPastLifeberg(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.Nightmares: 2
         }
 
@@ -3433,7 +3491,7 @@ class SetCourseAroundThing(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3441,7 +3499,7 @@ class SetCourseAroundThing(Action):
         return {
             Item.TroubledWaters: 2,
             Item.SilentStalker: 1 - state.items.get(Item.SilentStalker, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3577,7 +3635,7 @@ class SteamOnByPaths(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3655,7 +3713,7 @@ class SteamWhereVoicesTell(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TroubledWaters: 3,
             Item.TimeSpentAtZee: 1
         }
@@ -3705,7 +3763,7 @@ class SteamOnBySteamer(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3883,7 +3941,7 @@ class RepelBoarders(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TroubledWaters: 3,
             Item.ZeeZtory: 1,
             Item.TimeSpentAtZee: 1
@@ -3893,7 +3951,7 @@ class RepelBoarders(Action):
         return {
             Item.GroaningHull: 1 - state.items.get(Item.GroaningHull, 0),
             Item.TroubledWaters: 9,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3919,7 +3977,7 @@ class ShowMightOfBroadside(Action):
         return {
             Item.TroubledWaters: 8,
             Item.UnwelcomeOnTheWaters: 1 - state.items.get(Item.UnwelcomeOnTheWaters, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -3937,7 +3995,7 @@ class OutpaceThem(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4024,7 +4082,7 @@ class RegaleWithOwnHunts(Action):
             Item.TaleOfTerror: -10,
             Item.MoonPearl: 250,
             Item.ShardOfGlim: 250,
-            Item.FinBones: 5,
+            Item.FinBonesCollected: 5,
             Item.TroubledWaters: -4
         }
 
@@ -4114,7 +4172,7 @@ class MeasureMeasureless(Action):
         return {
             Item.ExtraordinaryImplication: 1,
             Item.Nightmares: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.EasternWind: 1,
             Item.TimeSpentAtZee: 1
         }
@@ -4123,7 +4181,7 @@ class MeasureMeasureless(Action):
         return {
             Item.TroubledWaters: 9,
             Item.Nightmares: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4144,7 +4202,7 @@ class ReleaseUttermostEel(Action):
             Item.EasternWind: 2,
             Item.MemoryOfMuchLesserSelf: 1,
             Item.Nightmares: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4152,7 +4210,7 @@ class ReleaseUttermostEel(Action):
         return {
             Item.TroubledWaters: 9,
             Item.Nightmares: 3,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4233,7 +4291,7 @@ class RecordPositionNonCorsair(Action):
         # TODO depends on renown w/ GG
         return {
             Item.MovesInTheGreatGame: 5.5,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4327,7 +4385,7 @@ class ManCannons(Action):
             Item.Suspicion: 2,
             Item.PiecesOfPlunder: 400,
             Item.UnwelcomeOnTheWaters: 1 - state.items.get(Item.UnwelcomeOnTheWaters, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4336,7 +4394,7 @@ class ManCannons(Action):
             Item.TroubledWaters: 10,
             Item.Suspicion: 3,
             Item.UnwelcomeOnTheWaters: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4370,13 +4428,13 @@ class RecordPositionCorsair(Action):
         super().__init__("Record their position")
 
     def can_perform(self, state: GameState):
-        return state.items.get(Item.ShrineToSaintJoshua, 0)
+        return state.items.get(Item.ShrineToSaintJoshua, 0) > 0
 
     def pass_items(self, state: 'GameState'):
         # TODO depends on renown w/ GG
         return {
             Item.MovesInTheGreatGame: 5.5,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4435,7 +4493,7 @@ class ShutOffLights(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.EasternWind: 1 if Item.EasternWind in state.items else 0,
             Item.TimeSpentAtZee: 1
         }
@@ -4505,7 +4563,7 @@ class LookTowardsShores(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: -2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.EasternWind: 1 if Item.EasternWind in state.items else 0,
             Item.NorthernWind: 1 if Item.NorthernWind in state.items else 0,
             Item.TimeSpentAtZee: 1
@@ -4515,7 +4573,7 @@ class LookTowardsShores(Action):
         return {
             Item.TroubledWaters: 8,
             Item.Nightmares: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4529,7 +4587,7 @@ class TurnHelmAway(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4545,7 +4603,7 @@ class ChangeCurrency(Action):
         return {
             Item.JustificandeCoin: -25,
             Item.OneiromanticRevelation: 1,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4575,14 +4633,14 @@ class RememberFindingQuarry(Action):
         return {
             Item.TroubledWaters: 3,
             Item.ChasingDownYourBounty: 15,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4598,14 +4656,14 @@ class RememberGreatRiches(Action):
         return {
             Item.TroubledWaters: 3,
             Item.PiecesOfPlunder: 450,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 8,
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4620,14 +4678,14 @@ class RememberSafeReturn(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: -2,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
     def fail_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4677,7 +4735,7 @@ class ReadyTheGunsPirate(Action):
     def pass_items(self, state: 'GameState'):
         return {
             Item.TroubledWaters: 4,
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4738,7 +4796,7 @@ class SlowAndSteady(Action):
 
     def pass_items(self, state: 'GameState'):
         return {
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4754,7 +4812,7 @@ class PlacesToBe(Action):
         return {
             Item.TroubledWaters: 6,
             Item.MutinousWhispers: 1 - state.items.get(Item.MutinousWhispers, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -4762,7 +4820,7 @@ class PlacesToBe(Action):
         return {
             Item.TroubledWaters: 14,
             Item.GroaningHull: 1 - state.items.get(Item.GroaningHull, 0),
-            Item.ZailingProgress: state.outfits.zailing_speed // 2,
+            Item.ZailingProgress: state.outfits.zailing_speed // 2 + bonus_zailing2(),
             Item.TimeSpentAtZee: 1
         }
 
@@ -5146,5 +5204,5 @@ khanate_to_london = [
 
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=1_000, route=khanate_to_london)
+    run_simulation(runs=10_000, route=khanate_to_london)
 
