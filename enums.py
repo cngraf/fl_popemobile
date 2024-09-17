@@ -890,6 +890,7 @@ class Item(Enum):
     NorthernWind = auto()
     SouthernWind = auto()
     EasternWind = auto()
+    Fake_HiddenStash = auto()
 
     # Upper River
     DigsInEvenlode = auto()

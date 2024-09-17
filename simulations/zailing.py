@@ -30,7 +30,10 @@ item_echo_values = {
     Item.Wounds: -0.2,
     Item.Suspicion: -0.2,
     Item.Scandal: -0.2,
-    Item.Nightmares: -0.2
+    Item.Nightmares: -0.2,
+
+    # Nonexistent items to handwave complexity
+    Item.Fake_HiddenStash: 12.5
 }
 
 # HACK may god forgive me
@@ -403,7 +406,9 @@ class GameState:
 
 
 ################################################################################
+###                          BlankSpaceOnTheCharts                           ###
 ################################################################################
+
 
 class BlankSpaceOnTheCharts(OpportunityCard):
     def __init__(self):
@@ -440,8 +445,6 @@ class FortuitousFragments(Action):
     def __init__(self):
         super().__init__("Fortuitous fragments")
 
-    # TODO requires 2 partial map
-
     def pass_items(self, state: 'GameState'):
         # Sets TW to level 5 aka 15 CP
         tw = state.items[Item.TroubledWaters]
@@ -450,8 +453,8 @@ class FortuitousFragments(Action):
             Item.PartialMap: -2
         }
 
-    def can_perform(self, state: 'GameState'):
-        return state.items.get(Item.PartialMap, 0) >= 2  # Requires 2 Partial Maps
+    # def can_perform(self, state: 'GameState'):
+    #     return state.items.get(Item.PartialMap, 0) >= 2  # Requires 2 Partial Maps
 
 class SearchUnchartedWaters(Action):
     def __init__(self):
@@ -1148,17 +1151,20 @@ class MessageInABottle(OpportunityCard):
         self.weight = 0.5
 
     def can_draw(self, state: GameState):
-        return state.items[Item.DirectionsToAHiddenStash] == 0
+        # return state.items[Item.DirectionsToAHiddenStash] == 0
+        return True
 
 class UnfurlThePaper(Action):
     def __init__(self):
         super().__init__("Unfurl the paper")
     
     def pass_items(self, state: 'GameState'):
-        # The effects of this action depend on a complex set of conditions, so we'll simplify it here.
         return {
             # Item.DirectionsToAHiddenStash: random.randint(1, 8),
-            Item.SizeOfBuriedStash: 0  # The Size of a Buried Stash Quality is reset
+            # Item.SizeOfBuriedStash: 0  # The Size of a Buried Stash Quality is reset
+
+            # Fake item
+            Item.Fake_HiddenStash: 1
         }
 
     def pass_rate(self, state: 'GameState'):
