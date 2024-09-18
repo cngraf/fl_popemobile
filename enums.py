@@ -782,6 +782,7 @@ class Item(Enum):
 
     # miscellaneous
     ResearchOnAMorbidFad = auto()
+    ApproximateValueOfYourSkeletonInPennies = auto()
     Tribute = auto()
     HeartsGameExploits = auto()
     ApproximateValueOfOutstandingInvoicesInPennies = auto()

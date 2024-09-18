@@ -72,6 +72,25 @@ import pprint
 
 '''
 TODO
+- Set up a table/matrix of all the "simple" item conversions and buy/sell options
+    - meeting the following conditions
+        - exactly one input and one output
+        - can be done as much as you like, as often as you like
+        - 0 action cost
+        - no randomness
+    - so buying and selling from the bazaar.
+    - this would be used for easy conversions of outputs of our monte carlo sims
+    - could also be generalized as a module
+    - example:
+        Item.RoofChart: {
+            Item.Stuiver: 50,
+            Item.MoonPearl: 253
+        },
+        Item.MoonPearl: {
+            Item.Echo: 0.01
+        }
+    - maybe do it as a Shop class so we can control access by player prog
+
 - add railway stuff before more london stuff bc it's prob more relevant
 
 London
@@ -85,10 +104,7 @@ London
 - model Airs somehow
 
 Laboratory
-- model the actual deck & bonus payoffs
-- highly dependent on exclusive character choices?
-    - ambition, profession, etc.
-- sounds like a lot of work payoff so putting this off unless something looks esp. promising
+- monte carlo sim
 
 Parabola
 - most parabolan hunts
@@ -97,18 +113,10 @@ Parabola
 - basically everything else
 
 Zailing
-- BETTER model of the deck, current one is a little too dumb
-    - worse estimate for shorter trips
-    - need to incorporate benefit of choosing from multiple good cards
-- godfall
-- polythreme
-- irem
-- other port cecil options
-- hunting the beasts
-- random smaller islands
+- plug the monte carlo results into the rest of the model
 
 Khanate
-- model the round-trip costs
+- update w/ zailing monte carlo results
 - smuggling
 - intrigues
 
@@ -116,11 +124,7 @@ Railway
 - TONS of shit
 - opportunity deck
 
-short term
-- Check out Red (free) cards esp. Discordance stuff
-- bone market exhaustion
-    - model it as just 4/7ths of a point per day?
-    - fuck maybe we have to move to a per-week basis blergh
+bone market exhaustion
 
 crackpot idea
 - normalize all trades to 1 echo where possible?

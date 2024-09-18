@@ -24,44 +24,93 @@ ev_tant = ev_stuiver * 2
 ev_wounds = -1 * ev_echo
 ev_nightmares = -1 * ev_echo
 
+# item_values = {
+#     # Stacks items
+#     Item.LibraryKey: {"echo": 0.01, "stuiver": 0},
+#     Item.RouteTracedThroughTheLibrary: {"echo": 0.01, "stuiver": 0},
+#     Item.FragmentaryOntology: {"echo": 0.01, "stuiver": 0},
+#     Item.DispositionOfTheCardinal: {"echo": 0.0, "stuiver": 0},
+
+#     # Econ items
+#     Item.TantalisingPossibility: {"echo": 0.1, "stuiver": 2},
+#     Item.RatOnAString: {"echo": 0.01, "stuiver": 0},
+#     Item.DeepZeeCatch: {"echo": 0.5, "stuiver": 0},
+
+#     Item.FinBonesCollected: {"echo": 0.5, "stuiver": 0, "bone": 0.5},
+#     Item.TempestuousTale: {"echo": 0, "stuiver": 10},
+#     Item.PartialMap: {"echo": 2.5, "stuiver": 0},
+#     Item.PuzzlingMap: {"echo": 12.5, "stuiver": 0},
+#     Item.FlaskOfAbominableSalts: {"echo": 0.1, "stuiver": 0},
+
+#     Item.CausticApocryphon: {"echo": 0, "stuiver": 250},
+#     Item.GlimEncrustedCarapace: {"echo": 0, "stuiver": 1250, "bone": 60},
+#     Item.ShardOfGlim: {"echo": 0.01, "stuiver": 0},
+#     Item.RoofChart: {"echo": 2.53, "stuiver": 50},
+
+#     # big assumption, no sale value atm
+#     Item.Anticandle: {"echo": 2.5, "stuiver": 50},
+#     Item.FragmentOfTheTragedyProcedures: {"echo": 62.5, "stuiver": 0},
+#     Item.RelicOfTheFifthCity: {"echo": 2.5, "stuiver": 50},
+#     Item.MagnificentDiamond: {"echo": 12.5, "stuiver": 0},
+#     Item.OneiromanticRevelation: {"echo": 62.5, "stuiver": 0},
+#     Item.StormThrenody: {"echo": 12.5, "stuiver": 0},
+#     Item.VolumeOfCollatedResearch: {"echo": 2.5, "stuiver": 0},
+#     Item.GlimpseOfAnathema: {"echo": 312.5, "stuiver": 6250},
+
+#     # Menaces
+#     # ballpark @ 1 action to clear 6 points with social alt
+#     Item.Wounds: {"echo": -1, "stuiver": -20, "action": 1/6},
+#     Item.Nightmares: {"echo": -1, "stuiver": -20, "action": 1/6},
+
+#     # Second Chances
+#     # ballpark @ 2/action
+#     Item.HastilyScrawledWarningNote: {"action": 0.5 }
+# }
+
 item_values = {
     # Stacks items
-    Item.LibraryKey: {"echo": 0.01, "stuiver": 0},
-    Item.RouteTracedThroughTheLibrary: {"echo": 0.01, "stuiver": 0},
-    Item.FragmentaryOntology: {"echo": 0.01, "stuiver": 0},
-    Item.DispositionOfTheCardinal: {"echo": 0.0, "stuiver": 0},
+    Item.LibraryKey: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.RouteTracedThroughTheLibrary: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.FragmentaryOntology: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.DispositionOfTheCardinal: {Item.Echo: 0.0, Item.Stuiver: 0},
 
     # Econ items
-    Item.TantalisingPossibility: {"echo": 0.1, "stuiver": 2},
-    Item.RatOnAString: {"echo": 0.01, "stuiver": 0},
-    Item.DeepZeeCatch: {"echo": 0.5, "stuiver": 0},
+    Item.TantalisingPossibility: {Item.Echo: 0.1, Item.Stuiver: 2},
+    Item.RatOnAString: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.DeepZeeCatch: {Item.Echo: 0.5, Item.Stuiver: 0},
 
-    Item.FinBonesCollected: {"echo": 0.5, "stuiver": 0, "bone": 0.5},
-    Item.TempestuousTale: {"echo": 0, "stuiver": 10},
-    Item.PartialMap: {"echo": 2.5, "stuiver": 0},
-    Item.PuzzlingMap: {"echo": 12.5, "stuiver": 0},
-    Item.FlaskOfAbominableSalts: {"echo": 0.1, "stuiver": 0},
+    Item.FinBonesCollected: {Item.Echo: 0.5, Item.Stuiver: 0},
+    Item.TempestuousTale: {Item.Echo: 0, Item.Stuiver: 10},
+    Item.PartialMap: {Item.Echo: 2.5, Item.Stuiver: 0},
+    Item.PuzzlingMap: {Item.Echo: 12.5, Item.Stuiver: 0},
+    Item.FlaskOfAbominableSalts: {Item.Echo: 0.1, Item.Stuiver: 0},
 
-    Item.CausticApocryphon: {"echo": 0, "stuiver": 250},
-    Item.GlimEncrustedCarapace: {"echo": 0, "stuiver": 1250, "bone": 60},
-    Item.ShardOfGlim: {"echo": 0.01, "stuiver": 0},
-    Item.RoofChart: {"echo": 2.53, "stuiver": 50},
+    Item.CausticApocryphon: {Item.Echo: 0, Item.Stuiver: 250},
+    Item.GlimEncrustedCarapace: {Item.Echo: 0, Item.Stuiver: 1250},
+    Item.ShardOfGlim: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.RoofChart: {Item.Echo: 2.53, Item.Stuiver: 50},
 
-    # big assumption, no sale value atm
-    Item.Anticandle: {"echo": 2.5, "stuiver": 50},
-    Item.FragmentOfTheTragedyProcedures: {"echo": 62.5, "stuiver": 0},
-    Item.RelicOfTheFifthCity: {"echo": 2.5, "stuiver": 50},
-    Item.MagnificentDiamond: {"echo": 12.5, "stuiver": 0},
-    Item.OneiromanticRevelation: {"echo": 62.5, "stuiver": 0},
-    Item.StormThrenody: {"echo": 12.5, "stuiver": 0},
-    Item.VolumeOfCollatedResearch: {"echo": 2.5, "stuiver": 0},
-    Item.GlimpseOfAnathema: {"echo": 312.5, "stuiver": 6250},
+    # Big assumption, no sale value atm
+    Item.Anticandle: {Item.Echo: 2.5, Item.Stuiver: 50},
+    Item.FragmentOfTheTragedyProcedures: {Item.Echo: 62.5, Item.Stuiver: 0},
+    Item.RelicOfTheFifthCity: {Item.Echo: 2.5, Item.Stuiver: 50},
+    Item.MagnificentDiamond: {Item.Echo: 12.5, Item.Stuiver: 0},
+    Item.OneiromanticRevelation: {Item.Echo: 62.5, Item.Stuiver: 0},
+    Item.StormThrenody: {Item.Echo: 12.5, Item.Stuiver: 0},
+    Item.VolumeOfCollatedResearch: {Item.Echo: 2.5, Item.Stuiver: 0},
+    Item.GlimpseOfAnathema: {Item.Echo: 312.5, Item.Stuiver: 6250},
 
     # Menaces
-    # ballpark @ 1 action to clear 6 points with social alt
-    Item.Wounds: {"echo": -1, "stuiver": -20},
-    Item.Nightmares: {"echo": -1, "stuiver": -20}
+    # Ballpark @ 1 action to clear 6 points with social alt
+    Item.Wounds: {Item.Echo: -1, Item.Stuiver: -20, Item.Action: 1/6},
+    Item.Nightmares: {Item.Echo: -1, Item.Stuiver: -20, Item.Action: 1/6},
+
+    # Second Chances
+    # Ballpark @ 2/action @ 6 EPA
+    Item.SuddenInsight: { Item.Echo: 3, Item.Action: 0.5 },
+    Item.HastilyScrawledWarningNote: {Item.Echo: 3, Item.Action: 0.5},
 }
+
 
 class OutfitList:
     def __init__(self, woesel_mode: False):
@@ -235,7 +284,10 @@ class LibraryState:
 
             # Menaces
             Item.Wounds: 0,
-            Item.Nightmares: 0
+            Item.Nightmares: 0,
+
+            # Second Chances
+            Item.HastilyScrawledWarningNote: 0
         }
         
         # Carried over
@@ -787,7 +839,7 @@ class DeadEndAction3(Action):
         state.items[Item.TempestuousTale] += 10
 
     def success_ev(self, state: LibraryState):
-        return ev_stuiver * item_values[Item.TempestuousTale]["stuiver"] * 10
+        return ev_stuiver * item_values[Item.TempestuousTale][Item.Stuiver] * 10
 
 class DiscardedLadder(LibraryCard):
     def __init__(self):
@@ -905,8 +957,8 @@ class MapRoomAction2(Action):
 
 
     def success_ev(self, state: LibraryState):
-        echo_normal = item_values[Item.PartialMap]["echo"] * 2 * (1.0 - self.rare_success_rate)
-        echo_rare = item_values[Item.PuzzlingMap]["echo"] * self.rare_success_rate
+        echo_normal = item_values[Item.PartialMap][Item.Echo] * 2 * (1.0 - self.rare_success_rate)
+        echo_rare = item_values[Item.PuzzlingMap][Item.Echo] * self.rare_success_rate
 
         return (echo_normal + echo_rare) * ev_echo
     
@@ -1324,6 +1376,7 @@ class GaolerLibrarian(LibraryCard):
         super().__init__("A Gaoler-Librarian")
         self.actions = [GaolerLibrarianAction1(),
                         GaolerLibrarianAction2(),
+                        GaolerLibrarianAction2SecondChance(),
                         GaolerLibrarianAction3()]
 
     def can_draw(self, state: LibraryState):
@@ -1374,7 +1427,33 @@ class GaolerLibrarianAction2(Action):
         state.noises += 6
 
     def failure_ev(self, state: LibraryState):
-        return state.ev_noises(6)
+        return state.ev_noises(6)    
+
+class GaolerLibrarianAction2SecondChance(Action):
+    def __init__(self):
+        super().__init__("(SECOND CHANCE) Try to lift one of its keys")
+
+    def pass_rate(self, state: LibraryState):
+        rate = self.broad_success_rate(250, state.outfits.shadowy_plus_insubstantial15) 
+        return 1.0 - (1.0 - rate) ** 2
+
+    def perform_success(self, state: LibraryState):
+        state.items[Item.LibraryKey] += 1
+        state.items[Item.HastilyScrawledWarningNote] -= 1
+        state.gross_keys += 1
+
+    def success_ev(self, state: LibraryState):
+        sc_val = ev_echo * item_values[Item.HastilyScrawledWarningNote][Item.Echo]
+        return state.ev_key() - sc_val
+
+    def perform_failure(self, state: LibraryState):
+        state.items[Item.HastilyScrawledWarningNote] -= 1
+        state.noises += 6
+
+    def failure_ev(self, state: LibraryState):
+        sc_val = ev_echo * item_values[Item.HastilyScrawledWarningNote][Item.Echo]
+        return state.ev_noises(6) - sc_val
+    
     
 class GaolerLibrarianAction3(Action):
     def __init__(self):
@@ -1850,7 +1929,7 @@ def simulate_runs(num_runs):
     print("=" * 80)
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
+    state.apocrypha_sought = ApocryphaSought.BannedWorks
     state.cartographer_enabled = False
 
     # Progress bar setup
@@ -1942,8 +2021,8 @@ def simulate_runs(num_runs):
 
     for item, count in state.items.items():
         value_data = item_values.get(item, {})
-        echo_value = value_data.get('echo', None)
-        stuiver_value = value_data.get('stuiver', None)
+        echo_value = value_data.get(Item.Echo, None)
+        stuiver_value = value_data.get(Item.Stuiver, None)
 
         count = int(count)
         count_per_run = count / num_runs
@@ -1979,4 +2058,4 @@ def simulate_runs(num_runs):
     total_per_action = all_currency_total / total_steps if total_steps > 0 else 0
     print(f"{'Echoes/Stuivers Per Action':<30} {'':<10} {total_per_action:.4f} E")
 
-simulate_runs(20_000)
+simulate_runs(2_000)

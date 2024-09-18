@@ -76,6 +76,12 @@ Group actions
         Both options
             - depends on HitL
 
+    A Flowering Gallery
+        Keep going
+            - depends on HitL
+
+            
+
 # Progress + noise
     A Black Gallery
         Light a lantern
@@ -98,7 +104,6 @@ Group actions
 - An Atrium
 - A Discarded Ladder
 - An Index
-- A Flowering Gallery
 - A Terrible Shushing
 
 
@@ -233,6 +238,7 @@ simple_ev_gain_key = 200
 simple_ev_map_room = 100
 simple_first_noise_ev = 1
 simple_ev_frag = 0
+simple_ev_route = 2
 
 ev_echo = 1
 ev_stuiver = ev_echo * 0.05
@@ -240,43 +246,56 @@ ev_tant = ev_stuiver * 2
 ev_wounds = -1 * ev_echo
 ev_nightmares = -1 * ev_echo
 
+simple_ev_echo = 1
+# simple_evs = {
+#     Item.Echo: simple_ev_echo,
+#     Item.TantalisingPossibility: simple_ev_echo * 0.1
+#     Item.LibraryKey: simple_ev_echo
+# }
+
+
 item_values = {
     # Stacks items
-    Item.LibraryKey: {"echo": 0.01, "stuiver": 0},
-    Item.RouteTracedThroughTheLibrary: {"echo": 0.01, "stuiver": 0},
-    Item.FragmentaryOntology: {"echo": 0.01, "stuiver": 0},
-    Item.DispositionOfTheCardinal: {"echo": 0.0, "stuiver": 0},
+    Item.LibraryKey: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.RouteTracedThroughTheLibrary: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.FragmentaryOntology: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.DispositionOfTheCardinal: {Item.Echo: 0.0, Item.Stuiver: 0},
 
     # Econ items
-    Item.TantalisingPossibility: {"echo": 0.1, "stuiver": 2},
-    Item.RatOnAString: {"echo": 0.01, "stuiver": 0},
-    Item.DeepZeeCatch: {"echo": 0.5, "stuiver": 0},
+    Item.TantalisingPossibility: {Item.Echo: 0.1, Item.Stuiver: 2},
+    Item.RatOnAString: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.DeepZeeCatch: {Item.Echo: 0.5, Item.Stuiver: 0},
 
-    Item.FinBonesCollected: {"echo": 0.5, "stuiver": 0, "bone": 0.5},
-    Item.TempestuousTale: {"echo": 0, "stuiver": 10},
-    Item.PartialMap: {"echo": 2.5, "stuiver": 0},
-    Item.PuzzlingMap: {"echo": 12.5, "stuiver": 0},
-    Item.FlaskOfAbominableSalts: {"echo": 0.1, "stuiver": 0},
+    Item.FinBonesCollected: {Item.Echo: 0.5, Item.Stuiver: 0},
+    Item.TempestuousTale: {Item.Echo: 0, Item.Stuiver: 10},
+    Item.PartialMap: {Item.Echo: 2.5, Item.Stuiver: 0},
+    Item.PuzzlingMap: {Item.Echo: 12.5, Item.Stuiver: 0},
+    Item.FlaskOfAbominableSalts: {Item.Echo: 0.1, Item.Stuiver: 0},
 
-    Item.CausticApocryphon: {"echo": 0, "stuiver": 250},
-    Item.GlimEncrustedCarapace: {"echo": 0, "stuiver": 1250, "bone": 60},
-    Item.ShardOfGlim: {"echo": 0.01, "stuiver": 0},
-    Item.RoofChart: {"echo": 2.53, "stuiver": 50},
+    Item.CausticApocryphon: {Item.Echo: 0, Item.Stuiver: 250},
+    Item.GlimEncrustedCarapace: {Item.Echo: 0, Item.Stuiver: 1250},
+    Item.ShardOfGlim: {Item.Echo: 0.01, Item.Stuiver: 0},
+    Item.RoofChart: {Item.Echo: 2.53, Item.Stuiver: 50},
 
-    # big assumption, no sale value atm
-    Item.Anticandle: {"echo": 2.5, "stuiver": 50},
-    Item.FragmentOfTheTragedyProcedures: {"echo": 62.5, "stuiver": 0},
-    Item.RelicOfTheFifthCity: {"echo": 2.5, "stuiver": 50},
-    Item.MagnificentDiamond: {"echo": 12.5, "stuiver": 0},
-    Item.OneiromanticRevelation: {"echo": 62.5, "stuiver": 0},
-    Item.StormThrenody: {"echo": 12.5, "stuiver": 0},
-    Item.VolumeOfCollatedResearch: {"echo": 2.5, "stuiver": 0},
-    Item.GlimpseOfAnathema: {"echo": 312.5, "stuiver": 6250},
+    # Big assumption, no sale value atm
+    Item.Anticandle: {Item.Echo: 2.5, Item.Stuiver: 50},
+    Item.FragmentOfTheTragedyProcedures: {Item.Echo: 62.5, Item.Stuiver: 0},
+    Item.RelicOfTheFifthCity: {Item.Echo: 2.5, Item.Stuiver: 50},
+    Item.MagnificentDiamond: {Item.Echo: 12.5, Item.Stuiver: 0},
+    Item.OneiromanticRevelation: {Item.Echo: 62.5, Item.Stuiver: 0},
+    Item.StormThrenody: {Item.Echo: 12.5, Item.Stuiver: 0},
+    Item.VolumeOfCollatedResearch: {Item.Echo: 2.5, Item.Stuiver: 0},
+    Item.GlimpseOfAnathema: {Item.Echo: 312.5, Item.Stuiver: 6250},
 
     # Menaces
-    # ballpark @ 1 action to clear 6 points with social alt
-    Item.Wounds: {"echo": -1, "stuiver": -20},
-    Item.Nightmares: {"echo": -1, "stuiver": -20}
+    # Ballpark @ 1 action to clear 6 points with social alt
+    Item.Wounds: {Item.Echo: -1, Item.Stuiver: -20, Item.Action: 1/6},
+    Item.Nightmares: {Item.Echo: -1, Item.Stuiver: -20, Item.Action: 1/6},
+
+    # Second Chances
+    # Ballpark @ 2/action @ 6 EPA
+    Item.SuddenInsight: { Item.Echo: 3, Item.Action: 0.5 },
+    Item.HastilyScrawledWarningNote: {Item.Echo: 3, Item.Action: 0.5},
 }
 
 class OutfitList:
@@ -331,18 +350,19 @@ class OutfitList:
 # not calculating this all out
 # assume each secondary stat slot costs -5 in the base stat
 f2p_min_endgame = OutfitList(False)
-f2p_min_endgame.watchful = 230 + 74
-f2p_min_endgame.shadowy = 230 + 78
+f2p_min_endgame_base_stats = 212
+f2p_min_endgame.watchful = f2p_min_endgame_base_stats + 74
+f2p_min_endgame.shadowy = f2p_min_endgame_base_stats + 78
 f2p_min_endgame.cthonosophy = 5 + 1
 f2p_min_endgame.kataleptic_toxicology = 7 + 4
 f2p_min_endgame.neathproofed_plus_inerrant = 5 + 3
-f2p_min_endgame.persuasive_plus_bizarre10 = 230 + 76 + 17 * (10 - 5)
+f2p_min_endgame.persuasive_plus_bizarre10 = f2p_min_endgame_base_stats + 76 + 17 * (10 - 5)
 f2p_min_endgame.shadowy_plus_inerrant15 = f2p_min_endgame.shadowy + (3 * (15 - 5)) 
 f2p_min_endgame.shadowy_plus_insubstantial15 = f2p_min_endgame.shadowy + (2 * (15 - 5))
 f2p_min_endgame.shadowy_plus_neathproofed15 = f2p_min_endgame.shadowy + (5 * (15 - 5)) 
 f2p_min_endgame.watchful_plus_cthonosophy15 = f2p_min_endgame.watchful + (5 * 10) + (15 - 5)
-f2p_min_endgame.watchful_plus_dangerous = f2p_min_endgame.watchful + 230
-f2p_min_endgame.watchful_plus_shadowy = f2p_min_endgame.watchful + 230
+f2p_min_endgame.watchful_plus_dangerous = f2p_min_endgame.watchful + f2p_min_endgame_base_stats
+f2p_min_endgame.watchful_plus_shadowy = f2p_min_endgame.watchful + f2p_min_endgame_base_stats
 f2p_min_endgame.watchful_plus_inerrant15 = f2p_min_endgame.watchful + (3 * (15 - 5)) 
 f2p_min_endgame.watchful_plus_monstrous10_inerrant15 = \
     f2p_min_endgame.watchful + (5 * 10) + (3 * 5) + (3 * 10)
@@ -451,7 +471,9 @@ class LibraryState:
 
             # Menaces
             Item.Wounds: 0,
-            Item.Nightmares: 0
+            Item.Nightmares: 0,
+
+            Item.HastilyScrawledWarningNote: 0
         }
         
         # Carried over
@@ -560,6 +582,16 @@ class LibraryState:
             unit_ev *= 0.2
         
         return unit_ev * val
+    
+    def ev_key_simple(self, val = 1):
+        keys = self.items[Item.LibraryKey]
+
+        if keys == 0 and self.anathema_unchained == 0:
+            unit_ev *= 2
+        elif keys > 5:
+            unit_ev *= 0.2
+        
+        return unit_ev * val    
 
     def ev_progress(self, val):
         if self.progress >= 40:
@@ -592,22 +624,19 @@ class LibraryState:
     def ev_route(self, val=1):
         # prob coulda done it the dumb way for less work & better results 
         # assume you never go below N and treat the challenges as 100%
+        # return simple_ev_route * val
 
         # need 5 to 100% TeaRoom2, +6 to buffer biggest single cost
-        target = 11
-        unit_ev = ev_route_base
+        target = 20
+        unit_ev = simple_ev_route
         current = self.items[Item.RouteTracedThroughTheLibrary]
 
-        if (self.in_search_of_lost_time == 1 and self.hour_in_the_library in [2,3]) \
-            or (self.in_search_of_lost_time == 2 and self.hour_in_the_library in [3,4]):
-            unit_ev = max(ev_route_base, ev_progress * 2.5)
+        # if (self.in_search_of_lost_time == 1 and self.hour_in_the_library in [2,3]) \
+        #     or (self.in_search_of_lost_time == 2 and self.hour_in_the_library in [3,4]):
+        #     unit_ev = max(ev_route_base, ev_progress * 2.5)
 
         if current < target:
-            unit_ev += 1
-
-        # trying to be clever w/ diminishing returns somehow tanks EPA
-        # # else:
-        #     unit_ev *= (current - target)/(max(1,current))
+            unit_ev += 10
 
         return unit_ev * val
     
@@ -656,15 +685,35 @@ class LibraryState:
         return deck_ev + unit_ev * val
 
     def ev_hand_clear(self):
-        ev = ev_hand_clear
-        if any(card.name == "A Chained Octavo" for card in self.hand): 
-            ev -= 100
-        elif self.octavo_in_deck():
-            ev += 10
-        # elif self.progress >= 35 and self.progress < 40:
-        #     ev *= 0.5
-        
-        return ev
+        ev_discard_good_card = -10
+        ev_octavo_in_deck = 10
+        # if any(card.name == "A Chained Octavo" for card in self.hand): 
+        #     ev -= 100
+
+        # not including hand clear cards themselves
+        good_cards = [
+            ReadingRoom,
+            MapRoom,
+            LibrariansOffice,
+            GaolerLibrarian,
+            ApocryphaFound,
+            ChainedOctavo,
+            BlackGallery,
+            TeaRoom
+        ]
+
+        if self.items[Item.LibraryKey] > 0:
+            good_cards.append(LockedGate)
+
+        for held_card in self.hand:
+            for good_card in good_cards:
+                if isinstance(held_card, good_card):
+                    return ev_discard_good_card
+
+        if self.octavo_in_deck():
+            return ev_hand_clear + ev_octavo_in_deck
+
+        return ev_hand_clear
     
     def octavo_in_deck(self):
         return self.in_search_of_lost_time == 1 \
@@ -1015,7 +1064,7 @@ class DeadEndAction3(Action):
         state.items[Item.TempestuousTale] += 10
 
     def success_ev(self, state: LibraryState):
-        return ev_stuiver * item_values[Item.TempestuousTale]["stuiver"] * 10
+        return ev_stuiver * item_values[Item.TempestuousTale][Item.Stuiver] * 10
 
 class DiscardedLadder(LibraryCard):
     def __init__(self):
@@ -1139,8 +1188,8 @@ class MapRoomAction2(Action):
 
 
     def success_ev(self, state: LibraryState):
-        echo_normal = item_values[Item.PartialMap]["echo"] * 2 * (1.0 - self.rare_success_rate)
-        echo_rare = item_values[Item.PuzzlingMap]["echo"] * self.rare_success_rate
+        echo_normal = item_values[Item.PartialMap][Item.Echo] * 2 * (1.0 - self.rare_success_rate)
+        echo_rare = item_values[Item.PuzzlingMap][Item.Echo] * self.rare_success_rate
 
         return (echo_normal + echo_rare) * ev_echo
     
@@ -1568,6 +1617,8 @@ class GaolerLibrarian(LibraryCard):
         super().__init__("A Gaoler-Librarian")
         self.actions = [GaolerLibrarianAction1(),
                         GaolerLibrarianAction2(),
+                        # GaolerLibrarianAction2SecondChanceRetry(),
+                        # GaolerLibrarianAction2SecondChanceBail(),
                         GaolerLibrarianAction3()]
 
     def can_draw(self, state: LibraryState):
@@ -1611,7 +1662,7 @@ class GaolerLibrarianAction2(Action):
         state.items[Item.LibraryKey] += 1
         state.gross_keys += 1
 
-    def success_ev(self, state: LibraryState):
+    def ev(self, state: LibraryState):
         # return state.ev_key()
         if state.noises >= 20:
             return 0
@@ -1623,6 +1674,53 @@ class GaolerLibrarianAction2(Action):
 
     def failure_ev(self, state: LibraryState):
         return state.ev_noises(6)
+    
+# class GaolerLibrarianAction2SecondChanceRetry(Action):
+#     def __init__(self):
+#         super().__init__("(SC + RETRY) Try to lift one of its keys")
+
+#     def pass_rate(self, state: LibraryState):
+#         rate = self.broad_success_rate(250, state.outfits.shadowy_plus_insubstantial15) 
+#         return 1.0 - (1.0 - rate) ** 2
+
+#     def perform_success(self, state: LibraryState):
+#         state.items[Item.LibraryKey] += 1
+#         state.items[Item.HastilyScrawledWarningNote] -= 1
+#         state.gross_keys += 1
+
+#     def ev(self, state: LibraryState):
+#         # return state.ev_key()
+#         if state.noises >= 30 or state.noises < 20:
+#             return 0
+#         else:
+#             return simple_ev_gain_key        
+
+#     def perform_failure(self, state: LibraryState):
+#         state.items[Item.HastilyScrawledWarningNote] -= 1
+#         state.noises += 6
+
+# class GaolerLibrarianAction2SecondChanceBail(Action):
+#     def __init__(self):
+#         super().__init__("(SC + BAIL) Try to lift one of its keys")
+
+#     def pass_rate(self, state: LibraryState):
+#         return self.broad_success_rate(250, state.outfits.shadowy_plus_insubstantial15)
+
+#     def perform_success(self, state: LibraryState):
+#         state.items[Item.LibraryKey] += 1
+#         state.items[Item.HastilyScrawledWarningNote] -= 1
+#         state.gross_keys += 1
+
+#     def ev(self, state: LibraryState):
+#         # return state.ev_key()
+#         if state.noises >= 30 or state.noises < 20:
+#             return 0
+#         else:
+#             return simple_ev_gain_key        
+        
+#     def perform_failure(self, state: LibraryState):
+#         state.items[Item.HastilyScrawledWarningNote] -= 1
+#         # state.actions -= 1 # HACK
     
 class GaolerLibrarianAction3(Action):
     def __init__(self):
@@ -1768,9 +1866,9 @@ class ShapeOfTheLabyrinthAction1(Action):
 
     def success_ev(self, state: LibraryState):
         # reduce route ev penalty since this is 2nd best use for them?
-        route_avg_ev = sum([state.ev_route(-i) for i in range(2, 6)]) / 4.0
-        route_avg_ev *= 0.5
-        return state.ev_progress(10) + route_avg_ev + state.ev_hand_clear()
+        # route_avg_ev = sum([state.ev_route(-i) for i in range(2, 6)]) / 4.0
+        # route_avg_ev *= 0.5
+        return state.ev_progress(10) + state.ev_hand_clear() + state.ev_route(-4)
 
 class ShapeOfTheLabyrinthAction2(Action):
     def __init__(self):
@@ -1901,6 +1999,7 @@ class TeaRoomAction2(Action):
         super().__init__("Consult your maps of the library")
 
     def pass_rate(self, state: LibraryState):
+        # return 1.0
         return self.narrow_success_rate(0, state.items[Item.RouteTracedThroughTheLibrary])
 
     def perform_success(self, state: LibraryState):
@@ -1908,7 +2007,7 @@ class TeaRoomAction2(Action):
         state.progress += 10
 
     def success_ev(self, state: LibraryState):
-        return state.ev_progress(10) + state.ev_route(-1)
+        return state.ev_progress(10) #+ state.ev_route(-1)
 
     def perform_failure(self, state: LibraryState):
         state.items[Item.RouteTracedThroughTheLibrary] -= 1
@@ -2098,7 +2197,7 @@ def simulate_runs(num_runs):
     print("=" * 80)
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.DeadStars
+    state.apocrypha_sought = ApocryphaSought.SomeFrenchBullshit
     state.cartographer_enabled = False
 
     # Progress bar setup
@@ -2167,9 +2266,12 @@ def simulate_runs(num_runs):
             action_success_rate = (action_success_count / total_action_count) if total_action_count > 0 else 0
 
             if action_count_per_run > 0:
-                print(f"{'':<30} {'':<10} {truncated_action_name:<40} {action_count_per_run:<10.1f} {action_success_rate * 100:.1f}%")
-            else:
-                print(f"{'':<30} {'':<10} {truncated_action_name:<40} {action_count_per_run:<10.0f}")
+                if action_count_per_run < 0.01:
+                    print(f"{'':<30} {'':<10} {truncated_action_name:<39} {'<0.01':<10} {action_success_rate * 100:.1f}%")                
+                else:
+                    print(f"{'':<30} {'':<10} {truncated_action_name:<40} {action_count_per_run:<10.2f} {action_success_rate * 100:.1f}%")
+            # else:
+            #     print(f"{'':<30} {'':<10} {truncated_action_name:<40} {action_count_per_run:<10.0f}")
 
 
             woesel_name = "(WOESEL) " + action_name
@@ -2178,6 +2280,8 @@ def simulate_runs(num_runs):
             if (woesel_count_per_run > 0):
                 truncated_woesel_name = (woesel_name[:37] + '...') if len(woesel_name) > 37 else woesel_name
                 print(f"{'':<30} {'':<10} {truncated_woesel_name:<40} {woesel_count_per_run:<15.3f}")
+
+        print()
 
     echoes_only_total = 0
     stuivers_only_total = 0
@@ -2190,8 +2294,8 @@ def simulate_runs(num_runs):
 
     for item, count in state.items.items():
         value_data = item_values.get(item, {})
-        echo_value = value_data.get('echo', None)
-        stuiver_value = value_data.get('stuiver', None)
+        echo_value = value_data.get(Item.Echo, None)
+        stuiver_value = value_data.get(Item.Stuiver, None)
 
         count = int(count)
         count_per_run = count / num_runs
