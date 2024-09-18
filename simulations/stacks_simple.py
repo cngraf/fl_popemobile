@@ -7,16 +7,232 @@ from enum import Enum, auto
 '''
 to get enums module import to work, need to run like so:
 `python3 -m simulations.stacks2`
-'''
 
+Simple version with more human-legible strategy
+
+Group actions
+
+# High progress
+    A Locked Gate
+        Use a key
+            - 1 key => 15 prog
+
+    A Librarian's Office
+        Unlock the cart
+            - 1 key => 15 prog
+            - with big surplus of keys
+
+    A Stone Gallery
+        Follow a borehole through the back of...
+            - 2 routes => 10 prog
+            - only available at certain times
+                - dead stars 2
+                - precipice 1/2
+                - carto 1
+
+    A God's Eye View
+        Focus on the path ahead
+            - 5 frags => 15 prog
+            - only worth using spare frags from Librarian's Office
+
+    A Tea Room?
+
+
+
+# Hand clear + progress
+    A Dead End?
+        Tie a rope to the railing and descend
+
+    A Grand Staircase
+        Make an informed decision
+            - costs 1 route
+
+    The Shape of the Labyrinth
+        Rethink your movements
+            - 10 progress
+            - costs between 2 and 5 routes
+
+# Econ + routes + 0 progress
+    A Map Room
+        Look for maps of the library
+    A Dead End?
+        Take advantage of the vantage point
+
+
+# Free* 5 progress
+    A Poison-Gallery
+        Use furniture as stepping stones
+
+    The Grey Cardinal
+        Offer the cardinal a furry lunch
+
+    A Gaoler-Librarian
+        An intervention from the Grey Cardinal
+
+    A Glimpse through a Window
+        Move on quickly
+
+    A Black Gallery
+        Both options
+            - depends on HitL
+
+# Progress + noise
+    A Black Gallery
+        Light a lantern
+            - Fail with woesel
+            - 2? cp noise, NO menaces
+
+    A Dead End?
+        Tie a rope to the railing and descend
+            - Fail with woesel
+            - Adds wounds
+            - Also clears hand
+        
+# Keys
+    A Gaoler-Librarian
+        - Try to lift one of its keys
+
+
+# Cards to avoid entirely
+- Both Cartographer cards
+- An Atrium
+- A Discarded Ladder
+- An Index
+- A Flowering Gallery
+- A Terrible Shushing
+
+
+
+Example output
+Progress: [==================================================] 100.00% (5000/5000)
+ApocryphaSought: ApocryphaSought.SomeFrenchBullshit
+Cartographer Enabled: False
+Total runs: 5000
+Successes: 5000 (100.00%)
+Failures: 0 (0.00%)
+Average actions per run: 23.26
+Keys collected: 6219
+Routes collected: 15279
+Frag. Ontologies collected: 1317
+
+Card and Action Play Counts:
+Card                 Per Run Played/Drawn Action                                   Per Run    Success%
+-----------------------------------------------------------------------------------------------
+The Reading Room               1.00/1.00  (100.00%)
+                                          Open the book                            1.0        100.0%
+A Dead End?                    2.27/2.27  (100.00%)
+                                          Tie a rope to the railing and descend    0.3        100.0%
+                                          (WOESEL) Tie a rope to the railing an... 0.263
+                                          Take advantage of the vantage point      1.7        63.0%
+                                          See through the Cartographer's eyes      0
+A Map Room                     2.30/2.30  (100.00%)
+                                          Look for maps of the library             2.3        83.3%
+                                          Look for maps of the Neath               0
+                                          Get a lead from the Cartographer         0
+A Librarian's Office           0.80/0.80  (100.00%)
+                                          Pick through the drawers                 0.8        89.6%
+                                          Take the opposite door                   0
+                                          Unlock the cart                          0
+A Gaoler-Librarian             1.30/1.30  (99.94%)
+                                          Distract the Gaoler                      0
+                                          Try to lift one of its keys              1.3        77.8%
+                                          An intervention from the Grey Cardina... 0.0        100.0%
+A Chained Octavo               0.07/0.07  (99.70%)
+                                          Unchain it                               0.1        100.0%
+                                          Examine this section, then move on       0.0        35.0%
+Apocrypha Found                0.94/0.94  (99.60%)
+                                          Claim the book                           0.9        100.0%
+A Stone Gallery                1.89/2.18  (86.48%)
+                                          Make your way through the silent gall... 0.4        51.2%
+                                          Stop and examine the ancient volumes     0
+                                          (WOESEL) Stop and examine the ancient... 0.002
+                                          Follow a borehole through the back of... 1.5        100.0%
+A Black Gallery                1.83/2.14  (85.45%)
+                                          Light a lantern                          0
+                                          (WOESEL) Light a lantern                 0.286
+                                          Navigate by alternate senses             1.5        100.0%
+A Glimpse through a Window     0.19/0.23  (83.97%)
+                                          Stop and look through                    0.1        100.0%
+                                          Move on quickly                          0.1        100.0%
+A Tea Room?                    1.39/1.73  (80.15%)
+                                          Take a moment to regroup                 0
+                                          Consult your maps of the library         1.3        86.7%
+                                          Try to make sense of what you've seen    0.0        59.1%
+A God's Eye View               0.05/0.06  (78.35%)
+                                          Try to hold it all in your mind at on... 0.0        55.6%
+                                          Focus on the path ahead                  0.0        100.0%
+The Grey Cardinal              1.52/1.95  (77.92%)
+                                          Offer the cardinal a furry lunch         1.5        100.0%
+                                          Offer the cardinal a tin of something... 0
+                                          Engage the Cardinal in conversation      0.0        100.0%
+A Locked Gate                  1.18/1.66  (71.42%)
+                                          Use a key                                1.2        100.0%
+The Shape of the Labyrinth     0.28/0.40  (68.75%)
+                                          Rethink your movements                   0.3        100.0%
+                                          Reject the significance of shape         0.0        60.0%
+A Poison-Gallery               0.96/1.71  (55.91%)
+                                          Use furniture as stepping stones         1.0        90.1%
+                                          Prepare an antidote                      0
+A Terrible Shushing            0.05/0.09  (55.25%)
+                                          Find a hiding place                      0.1        82.9%
+                                          Hurry along                              0
+                                          Quiet the Cartographer                   0
+A Grand Staircase              0.74/1.60  (46.60%)
+                                          Make an informed decision                0.7        100.0%
+An Atrium                      0.04/1.44  (2.70%)
+                                          Continue on the same heading             0.0        99.3%
+                                          Atrium Action 2                          0.0        59.2%
+A Discarded Ladder             0.02/1.42  (1.62%)
+                                          Climb                                    0.0        87.0%
+An Index                       0.01/0.98  (1.10%)
+                                          Search for a reference card              0.0        100.0%
+                                          Try to understand the organization of... 0
+                                          Situate yourself within the greater w... 0
+A Flowering Gallery            0
+                                          Keep going                               0
+                                          Eat the fruit of knowledge               0
+Snuffbox.png                   0
+                                          Computernofigure.png                     0
+                                          Implication.png                          0
+Compass.png                    0
+                                          Camera2.png                              0
+                                          Chart2.png                               0
+-----------------------------------------------------------------------------------------------
+Item                           Net/Run    Echoes/Action          Stuivers/Action
+-----------------------------------------------------------------------------------------------
+LibraryKey                     0.001      0.0000
+RouteTracedThroughTheLibrar... 0.001      0.0000
+FragmentaryOntology            0.001      0.0000
+TantalisingPossibility         217.201    0.9338                 18.6752
+RatOnAString                   -1.518     -0.0007
+DeepZeeCatch                   0.281      0.0060
+FinBonesCollected              0.224      0.0048
+Anticandle                     9.406      1.0109                 20.2185
+FragmentOfTheTragedyProcedu... 0.941      2.5273
+RelicOfTheFifthCity            9.406      1.0109                 20.2185
+GlimpseOfAnathema              0.059      0.7980                 15.9603
+Wounds                         0.812      -0.0349                 -0.6982
+Nightmares                     0.643      -0.0276                 -0.5525
+-----------------------------------------------------------------------------------------------
+Echoes Only Per Action                    6.2286 E
+Stuivers Only Per Action                                         73.8217 S
+Echoes/Stuivers Per Action                6.2286 E
+
+'''
 
 ev_progress = 1
 ev_key_base = ev_progress * 10
 ev_route_base = ev_progress * 2
-ev_frag_base = ev_progress * 1.2
+# ev_frag_base = ev_progress * 1.2
+ev_frag_base = 0
 ev_hand_clear = ev_progress * 1
 ev_noises_base = -1
 ev_gaoler = 3
+
+simple_ev_gain_key = 200
+simple_ev_map_room = 100
+simple_first_noise_ev = 1
+simple_ev_frag = 0
 
 ev_echo = 1
 ev_stuiver = ev_echo * 0.05
@@ -245,9 +461,6 @@ class LibraryState:
         # self.tantalizing_possibilities = 0
         # self.disposition_of_the_cardinal = 0
 
-        # TODO
-        self.librarians_office_failures = 0
-
         self.wounds = 0
         self.nightmares = 0
 
@@ -401,14 +614,15 @@ class LibraryState:
     def ev_frag(self, val):
         # need 14 to 100% atrium2 with 300 watchful
         # plus 5 for biggest single spend, round up
-        target = 25
-        unit_ev = ev_frag_base
-        current = self.items[Item.FragmentaryOntology]
+        # target = 25
+        # unit_ev = ev_frag_base
+        # current = self.items[Item.FragmentaryOntology]
 
-        if current < target:
-            unit_ev += 1
+        # if current < target:
+        #     unit_ev += 1
 
-        return unit_ev * val    
+        # return unit_ev * val
+        return simple_ev_frag * val
     
     def ev_noises(self, val):
         if val == 0: return 0
@@ -694,6 +908,9 @@ class AtriumAction2(Action):
     def can_perform(self, state: LibraryState):
         return state.in_search_of_lost_time == 1 and state.items[Item.FragmentaryOntology] > 0
 
+    def ev(self, state: LibraryState):
+        return 0
+
     def pass_rate(self, state: LibraryState):
         # return 1.0
         bonus = state.items[Item.FragmentaryOntology] * 15
@@ -747,8 +964,13 @@ class DeadEndAction1(Action):
         state.noises += random.randint(1,6)
 
     def failure_ev(self, state: LibraryState):
-        ev_noises = sum([state.ev_noises(i) for i in range(1, 7)]) / 6.0
-        return state.ev_progress(5) + ev_wounds * 2 + ev_noises + state.ev_hand_clear()
+        if state.noises == 0:
+            return state.ev_progress(5) + state.ev_hand_clear() + simple_first_noise_ev
+        else:
+            return state.ev_progress(5) - 1
+
+        # ev_noises = sum([state.ev_noises(i) for i in range(1, 7)]) / 6.0
+        # return state.ev_progress(5) + ev_wounds * 2 + ev_noises
 
 class DeadEndAction2(Action):
     def __init__(self):
@@ -762,6 +984,12 @@ class DeadEndAction2(Action):
         state.items[Item.RouteTracedThroughTheLibrary] += 2
         state.items[Item.TantalisingPossibility] += 50
         state.gross_routes += 2
+
+    def success_ev(self, state: LibraryState):
+        if state.noises > 0:
+            return simple_ev_map_room
+        else:
+            return 0
 
     def success_ev(self, state: LibraryState):
         return ev_tant * 50 + state.ev_route(2)
@@ -801,6 +1029,9 @@ class DiscardedLadderAction1(Action):
     def pass_rate(self, state: LibraryState):
         # return 0.99
         return self.broad_success_rate(200, state.outfits.watchful)
+    
+    def ev(self, state: LibraryState):
+        return 0    
 
     def perform_success(self, state: LibraryState):
         routes = random.choice([1,2])
@@ -874,6 +1105,9 @@ class MapRoomAction1(Action):
         state.items[Item.RouteTracedThroughTheLibrary] += random.choice([1,2])
         state.items[Item.TantalisingPossibility] += 50
 
+    def ev(self, state: LibraryState):
+        return simple_ev_map_room
+
     def success_ev(self, state: LibraryState):
         return (state.ev_route(1) + state.ev_route(2))/2.0 + ev_tant * 50
 
@@ -891,7 +1125,7 @@ class MapRoomAction2(Action):
     def __init__(self):
         super().__init__("Look for maps of the Neath")
         # TODO unknown, wild guess
-        self.rare_success_rate = 0.33
+        self.rare_success_rate = 0.1
 
     def pass_rate(self, state: LibraryState):
         # return 0.79
@@ -1082,6 +1316,9 @@ class IndexAction1(Action):
         # lower epa?
         return self.broad_success_rate(200, state.outfits.watchful_plus_inerrant15)
 
+    def ev(self, state: LibraryState):
+        return 0
+    
     def perform_success(self, state: LibraryState):
         routes = random.choice([1,2,3])
         state.items[Item.RouteTracedThroughTheLibrary] += routes
@@ -1115,6 +1352,9 @@ class IndexAction2(Action):
         state.items[Item.FragmentaryOntology] += frags
         state.gross_frags += frags
 
+    def ev(self, state: LibraryState):
+        return 0        
+
     def success_ev(self, state: LibraryState):
         return sum(state.ev_frag(i) for i in [1,2,3])/3.0
 
@@ -1131,6 +1371,9 @@ class IndexAction2(Action):
 class IndexAction3(Action):
     def __init__(self):
         super().__init__("Situate yourself within the greater whole")
+
+    def ev(self, state: LibraryState):
+        return 0
 
     def can_perform(self, state: LibraryState):
         return state.items[Item.FragmentaryOntology] > 0
@@ -1174,7 +1417,8 @@ class LibrariansOfficeAction1(Action):
             state.gross_frags += 1
 
     def success_ev(self, state: LibraryState):
-        return ev_tant * 40 + (state.ev_key() + state.ev_route() + state.ev_frag(1))/3.0
+        return simple_ev_gain_key
+        # return ev_tant * 40 + (state.ev_key() + state.ev_route() + state.ev_frag(1))/3.0
 
     def perform_failure(self, state: LibraryState):
         drawer = random.choice([4,5])
@@ -1368,7 +1612,11 @@ class GaolerLibrarianAction2(Action):
         state.gross_keys += 1
 
     def success_ev(self, state: LibraryState):
-        return state.ev_key()
+        # return state.ev_key()
+        if state.noises >= 20:
+            return 0
+        else:
+            return simple_ev_gain_key
 
     def perform_failure(self, state: LibraryState):
         state.noises += 6
@@ -1850,7 +2098,7 @@ def simulate_runs(num_runs):
     print("=" * 80)
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
+    state.apocrypha_sought = ApocryphaSought.DeadStars
     state.cartographer_enabled = False
 
     # Progress bar setup
@@ -1979,4 +2227,4 @@ def simulate_runs(num_runs):
     total_per_action = all_currency_total / total_steps if total_steps > 0 else 0
     print(f"{'Echoes/Stuivers Per Action':<30} {'':<10} {total_per_action:.4f} E")
 
-simulate_runs(20_000)
+simulate_runs(5_000)

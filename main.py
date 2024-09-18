@@ -219,17 +219,17 @@ player_bal_monster_hunter = Player(
     profession=Profession.MonsterHunter,
     stats={
         Stat.Watchful: 230 + 102,
-        Stat.Shadowy: 230 + 90,
+        Stat.Shadowy: 230 + 100,
         Stat.Dangerous: 230 + 101,
         Stat.Persuasive: 230 + 91
     })
 
-active_player = player_baseline_f2p
+active_player = player_bal_licentiate
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
 # most of this is bone market combinatoric shit
-var_buffer = 12_000
+var_buffer = 20_000
 num_items = max(Item, key=lambda x: x.value).value
 num_vars = num_items + 1 + var_buffer
 
@@ -302,7 +302,7 @@ london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
 
-# london.bone_market.add_trades(active_player, config)
+london.bone_market.add_trades(active_player, config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
@@ -323,7 +323,7 @@ upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(active_player, config)
 
-# upper_river.tracklayers_city.add_trades(config)
+upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
@@ -342,7 +342,7 @@ trade(1, zailing_deck.normalized_trade())
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.HinterlandScrip
+optimize_for = Item.Echo
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1

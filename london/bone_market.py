@@ -221,7 +221,7 @@ def bohemian_sculptress_payout(skeleton: Bone, zoo_multi: float = 1.0):
         }
 
 def zoo_multiplier(skeletonType = ZooType):
-    if skeletonType in (ZooType.Bird, ZooType.Amphibian, ZooType.Reptile):
+    if skeletonType in (ZooType.Bird, ZooType.Amphibian, ZooType.Reptile, ZooType.Primate):
         return 1.1
     if skeletonType in (ZooType.Fish, ZooType.Insect, ZooType.Spider):
         return 1.15
@@ -1005,6 +1005,13 @@ def add_trades(player: Player, config: Config):
         Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: 1
     })
 
+    # Break down 8 spine ribcage for parts + woesel
+    trade(10, {
+        Item.BrightBrassSkull: -8,
+        Item.NevercoldBrassSliver: -1600,
+        Item.BoneFragments: 52000
+    })
+
     # -------------------------------
     # ------ Leviathan Frame
 
@@ -1154,6 +1161,17 @@ def add_trades(player: Player, config: Config):
                 },
                 zoo_type=ZooType.Fish,
                 fluctuations=Fluctuations.Menace)
+            
+            hoarding_paleo_trade(trade, player,
+                recipe={
+                    Item.GeneralFishAction: -6,
+                    Item.LeviathanFrame: -1,
+                    skull_type: -1,
+                    Item.AmberCrustedFin: amber_fins,
+                    Item.FinBonesCollected: fin_bones_collected
+                },
+                zoo_type=ZooType.Fish,
+                fluctuations=Fluctuations.NoQuality)
 
 
     # ----------------------
@@ -1317,9 +1335,37 @@ def add_trades(player: Player, config: Config):
             Item.FailedFossilisedForelimb: -1,
             Item.FemurOfAJurassicBeast: -2
         },
-        zoo_type=ZooType.Humanoid,
+        zoo_type=ZooType.Primate,
         fluctuations=Fluctuations.Antiquity)
     
+    teller_of_terrors_trade(trade, player,
+        recipe={
+            Item.GeneralPrimateAction: -4,
+            Item.ASkeletonOfYourOwn: -1,
+            Item.DuplicatedVakeSkull: -1
+        },
+        zoo_type=ZooType.Primate,
+        fluctuations=Fluctuations.NoQuality)
+    
+    teller_of_terrors_trade(trade, player,
+        recipe={
+            Item.MenacePrimateAction: -4,
+            Item.ASkeletonOfYourOwn: -1,
+            Item.DuplicatedVakeSkull: -1
+        },
+        zoo_type=ZooType.Primate,
+        fluctuations=Fluctuations.Menace)
+    
+    teller_of_terrors_trade(trade, player,
+        recipe={
+            Item.Action: -4,
+            Item.ASkeletonOfYourOwn: -1,
+            Item.DuplicatedVakeSkull: -1
+        },
+        zoo_type=ZooType.NoType,
+        fluctuations=Fluctuations.NoQuality)    
+    
+
     # phantasist_menace_trade(trade, player,
     #     recipe={
     #         Item.HumanRibcage: -1,
@@ -1510,7 +1556,7 @@ def add_trades(player: Player, config: Config):
             Item.WitheredTentacle: -1
         },
         zoo_type=ZooType.Bird,
-        fluctuations=Fluctuations.Amalgamy, debug=True)    
+        fluctuations=Fluctuations.Amalgamy, debug=True)
 
     # Define the target sum
     seven_skulls = 7
@@ -1583,8 +1629,7 @@ def add_trades(player: Player, config: Config):
                             Item.WingOfAYoungTerrorBird: -2
                         },
                         zoo_type=ZooType.Bird,
-                        fluctuations=Fluctuations.NoQuality)
-
+                        fluctuations=Fluctuations.NoQuality)                           
 
                     zailor_particular_trade(trade, player,
                         recipe={
