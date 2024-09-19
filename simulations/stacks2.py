@@ -164,18 +164,19 @@ class OutfitList:
 # not calculating this all out
 # assume each secondary stat slot costs -5 in the base stat
 f2p_min_endgame = OutfitList(False)
-f2p_min_endgame.watchful = 230 + 74
-f2p_min_endgame.shadowy = 230 + 78
+f2p_min_endgame_base_stats = 230
+f2p_min_endgame.watchful = f2p_min_endgame_base_stats + 74
+f2p_min_endgame.shadowy = f2p_min_endgame_base_stats + 78
 f2p_min_endgame.cthonosophy = 5 + 1
 f2p_min_endgame.kataleptic_toxicology = 7 + 4
 f2p_min_endgame.neathproofed_plus_inerrant = 5 + 3
-f2p_min_endgame.persuasive_plus_bizarre10 = 230 + 76 + 17 * (10 - 5)
+f2p_min_endgame.persuasive_plus_bizarre10 = f2p_min_endgame_base_stats + 76 + 17 * (10 - 5)
 f2p_min_endgame.shadowy_plus_inerrant15 = f2p_min_endgame.shadowy + (3 * (15 - 5)) 
 f2p_min_endgame.shadowy_plus_insubstantial15 = f2p_min_endgame.shadowy + (2 * (15 - 5))
 f2p_min_endgame.shadowy_plus_neathproofed15 = f2p_min_endgame.shadowy + (5 * (15 - 5)) 
 f2p_min_endgame.watchful_plus_cthonosophy15 = f2p_min_endgame.watchful + (5 * 10) + (15 - 5)
-f2p_min_endgame.watchful_plus_dangerous = f2p_min_endgame.watchful + 230
-f2p_min_endgame.watchful_plus_shadowy = f2p_min_endgame.watchful + 230
+f2p_min_endgame.watchful_plus_dangerous = f2p_min_endgame.watchful + f2p_min_endgame_base_stats
+f2p_min_endgame.watchful_plus_shadowy = f2p_min_endgame.watchful + f2p_min_endgame_base_stats
 f2p_min_endgame.watchful_plus_inerrant15 = f2p_min_endgame.watchful + (3 * (15 - 5)) 
 f2p_min_endgame.watchful_plus_monstrous10_inerrant15 = \
     f2p_min_endgame.watchful + (5 * 10) + (3 * 5) + (3 * 10)
@@ -247,7 +248,7 @@ class LibraryState:
     def __init__(self):
 
         # self.normal_outfit = OutfitList(woesel_mode = False)
-        self.normal_outfit = f2p_min_endgame
+        self.normal_outfit = OutfitList(False)
         self.woesel_outfit = OutfitList(woesel_mode = True)
 
         self.outfits = self.normal_outfit
@@ -315,6 +316,7 @@ class LibraryState:
         self.apocrypha_sought = 0
 
         self.cartographer_enabled = False
+        self.take_alternate_reward = False
         self.in_search_of_lost_time = 1
         self.progress = 0
         self.noises = 0
@@ -521,7 +523,7 @@ class LibraryState:
         self.card_draw_counts[drawn.name] += 1
         self.hand.append(drawn)
 
-    def step(self):
+    def step(self, simple_mode = False):
         # print("Cards in hand: " + str(len(self.hand)))
         # print("Progress: " + str(self.progress))
 
@@ -537,26 +539,42 @@ class LibraryState:
         best_card, best_action, best_action_ev = None, None, -float('inf')
         use_woesel = False
 
-        if self.refill_action.can_perform(self):
-            best_action = self.refill_action
-            best_action_ev = self.refill_action.ev(self)
+        if simple_mode:
+            best_card, best_action = self.best_action_by_simple_ranking()
 
-        self.outfits = self.normal_outfit
-        for card in self.hand:
-            for action in card.actions:
-                if action.can_perform(self):
-                    action_ev = action.ev(self)
-                    if action_ev > best_action_ev:
-                        best_card, best_action, best_action_ev = card, action, action_ev
+            if (isinstance(best_action, DeadEndAction1) or isinstance(best_action, BlackGalleryAction1)) \
+                and self.noises == 0:
+                    use_woesel = True
 
-        self.outfits = self.woesel_outfit
-        for card in self.hand:
-            for action in card.actions:
-                if action.can_perform(self):
-                    action_ev = action.ev(self)
-                    if action_ev > best_action_ev:
-                        use_woesel = True
-                        best_card, best_action, best_action_ev = card, action, action_ev
+            if best_action is None:
+                # TODO log or default to other strat?
+                print("Cards in hand: " + str(len(self.hand)))
+                for card in self.hand:
+                    print(card.name)
+                print("Best action: " + best_action.name)
+                    
+        if not simple_mode or best_action is None:
+
+            if self.refill_action.can_perform(self):
+                best_action = self.refill_action
+                best_action_ev = self.refill_action.ev(self)
+
+            self.outfits = self.normal_outfit
+            for card in self.hand:
+                for action in card.actions:
+                    if action.can_perform(self):
+                        action_ev = action.ev(self)
+                        if action_ev > best_action_ev:
+                            best_card, best_action, best_action_ev = card, action, action_ev
+
+            self.outfits = self.woesel_outfit
+            for card in self.hand:
+                for action in card.actions:
+                    if action.can_perform(self):
+                        action_ev = action.ev(self)
+                        if action_ev > best_action_ev:
+                            use_woesel = True
+                            best_card, best_action, best_action_ev = card, action, action_ev
 
         if use_woesel:
             self.outfits = self.woesel_outfit
@@ -589,9 +607,130 @@ class LibraryState:
             self.in_search_of_lost_time = 1
             self.actions += 1
 
-    def run(self, steps):
+    def run(self, steps, simple_mode = False):
         while self.actions < steps:
-            self.step()
+            self.step(simple_mode)
+
+    def best_action_by_simple_ranking(self):
+        progress = self.progress
+        keys = self.items[Item.LibraryKey]
+        routes = self.items[Item.RouteTracedThroughTheLibrary]
+        frags = self.items[Item.FragmentaryOntology]
+
+        key_cap = 10
+        route_stockpile = 30
+
+        high_prio = [
+            ChainedOctavoAction1,
+        ]
+
+        # key sources
+        if keys < key_cap:
+            high_prio.extend([LibrariansOfficeAction1])
+            if self.noises < 30:
+                high_prio.append(GaolerLibrarianAction2)
+
+        # Routes + TPs
+        high_prio.append(MapRoomAction1)
+
+        # Progression
+        high_prio.extend([
+            ReadingRoomAction1,
+            ApocryphaFoundAction1,
+        ])
+
+        # 15 progress
+        if progress < 30:
+            high_prio.extend([
+                LockedGateAction1,
+                LibrariansOfficeAction3,
+                GodsEyeViewAction2
+            ])
+        
+        # Routes + more TPs, harder check
+        if routes < route_stockpile:
+            high_prio.append(DeadEndAction2)
+
+        # refill before doing low prio
+
+        low_prio = []
+        # 10 progress for 2 routes
+        if progress < 35:
+            if routes >= 5: # lower req since this card has no other good options
+                low_prio.append(TeaRoomAction2)
+            if routes >= route_stockpile:
+                low_prio.append(StoneGalleryAction3)
+                low_prio.append(ShapeOfTheLabyrinthAction1)
+
+        if keys < key_cap and self.noises == 0:
+            low_prio.extend([
+                BlackGalleryAction1,
+                DeadEndAction1
+            ])
+
+        low_prio.append(DeadEndAction1)
+
+        if routes >= route_stockpile:
+            low_prio.append(GrandStaircaseAction1)
+
+        low_prio.extend([        
+            # 5 progress free*
+            GlimpseThroughAWindowAction2,
+            FloweringGalleryAction1,
+            GreyCardinalAction1,
+            BlackGalleryAction1,
+            BlackGalleryAction2,
+            StoneGalleryAction1,
+            GaolerLibrarianAction3,
+            LibrariansOfficeAction2,
+            TerribleShushingAction2,
+            # PoisonGalleryAction1,
+
+            # fallback if few routes but bad hand
+            GrandStaircaseAction1,
+
+            # 5 progress for 1 fragment
+            ShapeOfTheLabyrinthAction2,
+            AtriumAction2,
+            IndexAction3,
+
+            # 5 progress w/ hard check
+            PoisonGalleryAction1,
+
+            # Gain routes only
+            DiscardedLadderAction1,
+            CartographerCompassAction1,
+            IndexAction1,
+
+            # 5 progress for 1 route
+            AtriumAction1,
+
+            CartographerSnuffboxAction1,
+            ChainedOctavoAction2,
+            GrandStaircaseAction2,
+            TeaRoomAction3
+        ])
+
+        # Find the best action from the ranked list that is in the hand
+        for ranked_action in high_prio:
+            for card in self.hand:
+                for card_action in card.actions:
+                    if isinstance(card_action, ranked_action) and card_action.can_perform(self):
+                        return (card, card_action)
+
+        # If no card matches, check the refill action
+        if self.refill_action.can_perform(self):
+            return (None, self.refill_action)
+        
+        for ranked_action in low_prio:
+            for card in self.hand:
+                for card_action in card.actions:
+                    if isinstance(card_action, ranked_action) and card_action.can_perform(self):
+                        return (card, card_action)
+
+
+        # If no action can be performed, return None
+        return (None, None)            
 
 class LibraryCard:
     def __init__(self, name, weight=1.0):
@@ -657,7 +796,6 @@ class ReadingRoomAction1(Action):
 
     def perform_success(self, state: LibraryState):
         # TODO separate flag for octavo to be safe
-        # TODO other reward options
 
         state.completed_normal_runs += 1
 
@@ -667,14 +805,24 @@ class ReadingRoomAction1(Action):
             state.items[Item.CausticApocryphon] += 9
             state.items[Item.TantalisingPossibility] += 35
         elif state.apocrypha_sought == ApocryphaSought.DeadStars:
-            state.items[Item.GlimEncrustedCarapace] += 1
-            state.items[Item.TantalisingPossibility] += 495
-            state.items[Item.ShardOfGlim] += 400
+            if state.take_alternate_reward:
+                state.items[Item.RoofChart] += 40
+            else:
+                state.items[Item.GlimEncrustedCarapace] += 1
+                state.items[Item.TantalisingPossibility] += 495
+                state.items[Item.ShardOfGlim] += 400
         elif state.apocrypha_sought == ApocryphaSought.SomeFrenchBullshit:
-            state.items[Item.Anticandle] += 10
-            state.items[Item.FragmentOfTheTragedyProcedures] += 1
-            state.items[Item.RelicOfTheFifthCity] += 10
-            state.items[Item.TantalisingPossibility] += 35
+            if state.take_alternate_reward:
+                state.items[Item.Anticandle] += 10
+                state.items[Item.TempestuousTale] += 10
+                state.items[Item.MagnificentDiamond] += 5
+                state.items[Item.RelicOfTheFifthCity] += 6          
+                state.items[Item.TantalisingPossibility] += 10              
+            else:            
+                state.items[Item.Anticandle] += 10
+                state.items[Item.FragmentOfTheTragedyProcedures] += 1
+                state.items[Item.RelicOfTheFifthCity] += 10
+                state.items[Item.TantalisingPossibility] += 35
         elif state.apocrypha_sought == ApocryphaSought.UnrealPlaces:
             state.items[Item.OneiromanticRevelation] += 1
             state.items[Item.StormThrenody] += 2
@@ -872,8 +1020,7 @@ class DiscardedLadderAction1(Action):
 class GrandStaircase(LibraryCard):
     def __init__(self):
         super().__init__("A Grand Staircase")
-        # TODO: other actions locked by having any Routes
-        self.actions = [GrandStaircaseAction1()]
+        self.actions = [GrandStaircaseAction1(), GrandStaircaseAction2()]
 
 class GrandStaircaseAction1(Action):
     def __init__(self):
@@ -889,6 +1036,29 @@ class GrandStaircaseAction1(Action):
 
     def success_ev(self, state: LibraryState):
         return state.ev_hand_clear() + state.ev_progress(5) + state.ev_route(-1)
+    
+class GrandStaircaseAction2(Action):
+    def __init__(self):
+        super().__init__("Go up/Go down")
+
+    def can_perform(self, state: LibraryState):
+        return state.items[Item.RouteTracedThroughTheLibrary] <= 0
+
+    def pass_rate(self, state: LibraryState):
+        return 0.5
+
+    def perform_success(self, state: LibraryState):
+        state.progress += 5
+
+    def success_ev(self, state: LibraryState):
+        return state.ev_progress(5)
+    
+    def perform_failure(self, state: LibraryState):
+        state.progress += 1
+        state.noises += 1
+    
+    def failure_ev(self, state: LibraryState):
+        return state.ev_progress(1) + state.ev_noises(1)    
 
 class LockedGate(LibraryCard):
     def __init__(self):
@@ -1928,16 +2098,19 @@ def simulate_runs(num_runs):
     print(f"{'SIMULATION RESULTS':^80}")
     print("=" * 80)
 
+    simple_mode = True
+
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.BannedWorks
+    state.apocrypha_sought = ApocryphaSought.SomeFrenchBullshit
     state.cartographer_enabled = False
+    state.take_alternate_reward = False
 
     # Progress bar setup
     progress_template = "\rProgress: [{:<50}] {:.2f}% ({}/{})"
     print(progress_template.format("", 0, 0, num_runs), end='')
 
     while state.total_runs() < num_runs:
-        state.step()
+        state.step(simple_mode=simple_mode)
         # Update progress bar
         progress = (state.total_runs() / num_runs) * 100
         bar_length = int(progress / 2)
@@ -1948,9 +2121,14 @@ def simulate_runs(num_runs):
     total_steps = state.actions
 
     total_runs = state.total_runs()
-
-    print(f"ApocryphaSought: {state.apocrypha_sought}")
+    
+    if state.apocrypha_sought in (ApocryphaSought.DeadStars, ApocryphaSought.SomeFrenchBullshit) \
+        and state.take_alternate_reward:
+        print(f"ApocryphaSought: {state.apocrypha_sought} (2nd reward option)")
+    else:
+        print(f"ApocryphaSought: {state.apocrypha_sought}")
     print(f"Cartographer Enabled: {state.cartographer_enabled}")
+    print(f"Simple Mode: {simple_mode}")
 
     # Calculate and print statistics
     print(f"Total runs: {num_runs}")
@@ -2024,12 +2202,18 @@ def simulate_runs(num_runs):
         echo_value = value_data.get(Item.Echo, None)
         stuiver_value = value_data.get(Item.Stuiver, None)
 
+        laundered = False
+        # Stuiver => Roof Chart => Moon Pearl => Echo conversion
+        if stuiver_value != 0 and echo_value == 0:
+            laundered = True
+            echo_value = stuiver_value * 2.53/100
+
         count = int(count)
         count_per_run = count / num_runs
         # Calculate echoes and stuivers per action
         echoes_per_action = (count * echo_value) / total_steps if total_steps > 0 and echo_value is not None else 0
         stuivers_per_action = (count * stuiver_value) / total_steps if total_steps > 0 and stuiver_value is not None else 0
-
+        
         # Truncate item name if it is too long
         truncated_item_name = (item.name[:27] + '...') if len(item.name) > 27 else item.name
 
@@ -2045,7 +2229,8 @@ def simulate_runs(num_runs):
             echoes_only_total += count * echo_value
             stuivers_only_total += count * stuiver_value
             all_currency_total += max(count * echo_value, count * stuiver_value * 0.05)
-            print(f"{truncated_item_name:<30} {count_per_run:<10.3f} {echoes_per_action:.4f} {'':<15} {stuivers_per_action:.4f}")
+            asterisk = "*" if laundered else ""
+            print(f"{truncated_item_name:<30} {count_per_run:<10.3f} {echoes_per_action:.4f}{asterisk} {'':<15} {stuivers_per_action:.4f}")
 
     print("-" * 95)
 
@@ -2058,4 +2243,4 @@ def simulate_runs(num_runs):
     total_per_action = all_currency_total / total_steps if total_steps > 0 else 0
     print(f"{'Echoes/Stuivers Per Action':<30} {'':<10} {total_per_action:.4f} E")
 
-simulate_runs(2_000)
+simulate_runs(20_000)

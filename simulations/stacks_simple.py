@@ -350,7 +350,7 @@ class OutfitList:
 # not calculating this all out
 # assume each secondary stat slot costs -5 in the base stat
 f2p_min_endgame = OutfitList(False)
-f2p_min_endgame_base_stats = 212
+f2p_min_endgame_base_stats = 230
 f2p_min_endgame.watchful = f2p_min_endgame_base_stats + 74
 f2p_min_endgame.shadowy = f2p_min_endgame_base_stats + 78
 f2p_min_endgame.cthonosophy = 5 + 1
@@ -442,7 +442,7 @@ class LibraryState:
         self.items = {
             # Stacks items
             Item.LibraryKey: 5,
-            Item.RouteTracedThroughTheLibrary: 11,
+            Item.RouteTracedThroughTheLibrary: 20,
             Item.FragmentaryOntology: 25,
             Item.DispositionOfTheCardinal: 5,
 
@@ -732,6 +732,111 @@ class LibraryState:
         self.card_draw_counts[drawn.name] += 1
         self.hand.append(drawn)
 
+    def best_action_by_simple_ranking(self):
+        progress = self.progress
+        keys = self.items[Item.LibraryKey]
+        routes = self.items[Item.RouteTracedThroughTheLibrary]
+        frags = self.items[Item.FragmentaryOntology]
+
+        high_prio = [
+            ChainedOctavoAction1,
+        ]
+
+        # Add actions based on the current state
+        if keys < 50:
+            high_prio.extend([LibrariansOfficeAction1])
+            if self.noises < 30:
+                high_prio.append(GaolerLibrarianAction2)
+
+        high_prio.extend([
+            ReadingRoomAction1,
+            ApocryphaFoundAction1,
+        ])
+
+        if progress < 30:
+            high_prio.extend([
+                LockedGateAction1,
+                LibrariansOfficeAction3,
+                GodsEyeViewAction2
+            ])
+
+        high_prio.append(MapRoomAction1)
+        
+        if routes < 20:
+            high_prio.append(DeadEndAction2)
+
+        # group_1.append(RefillHandAction)
+
+        low_prio = []
+        if progress < 35:
+            if routes >= 5:
+                low_prio.append(TeaRoomAction2)
+            low_prio.append(StoneGalleryAction3)
+            if routes >= 30:
+                high_prio.append(ShapeOfTheLabyrinthAction1)
+
+        if keys < 50 and self.noises == 0:
+            low_prio.extend([
+                BlackGalleryAction1Woesel,
+                DeadEndAction1Woesel
+            ])
+
+        if routes < 20:
+            low_prio.append(DeadEndAction2)        
+
+        low_prio.append(DeadEndAction1)
+
+        if routes >= 20:
+            low_prio.append(GrandStaircaseAction1)
+
+        # Basic options that are always valid
+        low_prio.extend([            
+            GlimpseThroughAWindowAction2,
+            FloweringGalleryAction1,
+            GreyCardinalAction1,
+            BlackGalleryAction1,
+            BlackGalleryAction2,
+            StoneGalleryAction1,
+            GaolerLibrarianAction3,
+            PoisonGalleryAction1,
+            LibrariansOfficeAction2,
+            TerribleShushingAction2,
+            ShapeOfTheLabyrinthAction2,
+            AtriumAction2,
+            IndexAction3,
+
+            DiscardedLadderAction1,
+
+            AtriumAction1,
+            ChainedOctavoAction2,
+            GrandStaircaseAction1,
+            GrandStaircaseAction2,
+            IndexAction1,
+            GrandStaircaseAction1,
+            TeaRoomAction3
+        ])
+
+        # Find the best action from the ranked list that is in the hand
+        for ranked_action in high_prio:
+            for card in self.hand:
+                for card_action in card.actions:
+                    if isinstance(card_action, ranked_action) and card_action.can_perform(self):
+                        return (card, card_action)
+
+        # If no card matches, check the refill action
+        if self.refill_action.can_perform(self):
+            return (None, self.refill_action)
+        
+        for ranked_action in low_prio:
+            for card in self.hand:
+                for card_action in card.actions:
+                    if isinstance(card_action, ranked_action) and card_action.can_perform(self):
+                        return (card, card_action)
+
+
+        # If no action can be performed, return None
+        return (None, None)
+
     def step(self):
         # print("Cards in hand: " + str(len(self.hand)))
         # print("Progress: " + str(self.progress))
@@ -748,27 +853,40 @@ class LibraryState:
         best_card, best_action, best_action_ev = None, None, -float('inf')
         use_woesel = False
 
-        if self.refill_action.can_perform(self):
-            best_action = self.refill_action
-            best_action_ev = self.refill_action.ev(self)
+        best_card, best_action = self.best_action_by_simple_ranking()
 
-        self.outfits = self.normal_outfit
-        for card in self.hand:
-            for action in card.actions:
-                if action.can_perform(self):
-                    action_ev = action.ev(self)
-                    if action_ev > best_action_ev:
-                        best_card, best_action, best_action_ev = card, action, action_ev
+        if (isinstance(best_action, DeadEndAction1) or isinstance(best_action, BlackGalleryAction1)) \
+            and self.noises == 0:
+                use_woesel = True
 
-        self.outfits = self.woesel_outfit
-        for card in self.hand:
-            for action in card.actions:
-                if action.can_perform(self):
-                    action_ev = action.ev(self)
-                    if action_ev > best_action_ev:
-                        use_woesel = True
-                        best_card, best_action, best_action_ev = card, action, action_ev
+        # Fallback on complex algo if simple ranking fails
+        if best_action == None:
+            if self.refill_action.can_perform(self):
+                best_action = self.refill_action
+                best_action_ev = self.refill_action.ev(self)
+            else:
+                self.outfits = self.normal_outfit
+                for card in self.hand:
+                    for action in card.actions:
+                        if action.can_perform(self):
+                            action_ev = action.ev(self)
+                            if action_ev > best_action_ev:
+                                best_card, best_action, best_action_ev = card, action, action_ev
 
+                self.outfits = self.woesel_outfit
+                for card in self.hand:
+                    for action in card.actions:
+                        if action.can_perform(self):
+                            action_ev = action.ev(self)
+                            if action_ev > best_action_ev:
+                                use_woesel = True
+                                best_card, best_action, best_action_ev = card, action, action_ev
+
+                if card is not None:
+                    print("Cards in hand: " + str(len(self.hand)))
+                    for card in self.hand:
+                        print(card.name)
+                    print("Best action: " + best_action.name)
         if use_woesel:
             self.outfits = self.woesel_outfit
             best_action.perform(self)
@@ -881,6 +999,7 @@ class ReadingRoomAction1(Action):
             state.items[Item.GlimEncrustedCarapace] += 1
             state.items[Item.TantalisingPossibility] += 495
             state.items[Item.ShardOfGlim] += 400
+            # state.items[Item.RoofChart] += 40
         elif state.apocrypha_sought == ApocryphaSought.SomeFrenchBullshit:
             state.items[Item.Anticandle] += 10
             state.items[Item.FragmentOfTheTragedyProcedures] += 1
@@ -988,11 +1107,38 @@ class DeadEnd(LibraryCard):
     def __init__(self):
         super().__init__("A Dead End?")
         self.actions = [DeadEndAction1(),
+                        DeadEndAction1Woesel(),                  
                         DeadEndAction2(),
                         DeadEndAction3()]
                         # DeadEndAction4()]
 
 class DeadEndAction1(Action):
+    def __init__(self):
+        super().__init__("(WOESEL) Tie a rope to the railing and descend")
+
+    def pass_rate(self, state: LibraryState):
+        # return 1.0
+        return self.broad_success_rate(300, state.outfits.watchful_plus_shadowy)
+
+    def perform_success(self, state: LibraryState):
+        state.progress += 5
+        state.hand.clear()
+
+    def success_ev(self, state: LibraryState):
+        return ev_progress * 5 + state.ev_hand_clear()
+
+    def perform_failure(self, state: LibraryState):
+        state.progress += 5
+        state.items[Item.Wounds] += 2
+        state.noises += random.randint(1,6)
+
+    def failure_ev(self, state: LibraryState):
+        if state.noises == 0:
+            return state.ev_progress(5) + state.ev_hand_clear() + simple_first_noise_ev
+        else:
+            return state.ev_progress(5) - 1
+
+class DeadEndAction1Woesel(Action):
     def __init__(self):
         super().__init__("Tie a rope to the railing and descend")
 
@@ -1101,7 +1247,7 @@ class GrandStaircase(LibraryCard):
     def __init__(self):
         super().__init__("A Grand Staircase")
         # TODO: other actions locked by having any Routes
-        self.actions = [GrandStaircaseAction1()]
+        self.actions = [GrandStaircaseAction1(), GrandStaircaseAction2()]
 
 class GrandStaircaseAction1(Action):
     def __init__(self):
@@ -1117,6 +1263,29 @@ class GrandStaircaseAction1(Action):
 
     def success_ev(self, state: LibraryState):
         return state.ev_hand_clear() + state.ev_progress(5) + state.ev_route(-1)
+
+class GrandStaircaseAction2(Action):
+    def __init__(self):
+        super().__init__("Go up/Go down")
+
+    def can_perform(self, state: LibraryState):
+        return state.items[Item.RouteTracedThroughTheLibrary] == 0
+
+    def pass_rate(self, state: LibraryState):
+        return 0.5
+
+    def perform_success(self, state: LibraryState):
+        state.progress += 5
+
+    def success_ev(self, state: LibraryState):
+        return state.ev_progress(5)
+    
+    def perform_failure(self, state: LibraryState):
+        state.progress += 1
+        state.noises += 1
+    
+    def failure_ev(self, state: LibraryState):
+        return state.ev_progress(1) + state.ev_noises(1)
 
 class LockedGate(LibraryCard):
     def __init__(self):
@@ -1563,6 +1732,7 @@ class BlackGallery(LibraryCard):
     def __init__(self):
         super().__init__("A Black Gallery")
         self.actions = [BlackGalleryAction1(),
+                        BlackGalleryAction1Woesel(),
                         BlackGalleryAction2()]
                         # BlackGalleryAction3()]
         
@@ -1589,6 +1759,27 @@ class BlackGalleryAction1(Action):
 
     def failure_ev(self, state: LibraryState):
         return state.ev_progress(5) + state.ev_noises(2)
+    
+class BlackGalleryAction1Woesel(Action):
+    def __init__(self):
+        super().__init__("(WOESEL) Light a lantern")
+
+    def pass_rate(self, state: LibraryState):
+        return 0.0
+        # return self.broad_success_rate(240, state.outfits.shadowy_plus_insubstantial15)
+
+    def perform_success(self, state: LibraryState):
+        state.progress += 5
+
+    def success_ev(self, state: LibraryState):
+        return state.ev_progress(5)
+
+    def perform_failure(self, state: LibraryState):
+        state.progress += 5
+        state.noises += 2
+
+    def failure_ev(self, state: LibraryState):
+        return state.ev_progress(5) + state.ev_noises(2)    
     
 class BlackGalleryAction2(Action):
     def __init__(self):
@@ -2157,7 +2348,7 @@ class ChainedOctavoAction1(Action):
         state.hour_in_the_library = (state.hour_in_the_library + 1) % 5
 
     def success_ev(self, state: LibraryState):
-        return 100
+        return 10_000
 
 class ChainedOctavoAction2(Action):
     def __init__(self):
