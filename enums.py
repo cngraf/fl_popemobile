@@ -742,16 +742,21 @@ class Item(Enum):
     CrookedCross = auto()    
 
     # Treasures
-    FalseStarOfYourOwn = auto()
-    RobeOfMrCards = auto()
     KittenSizedDiamond = auto()
+    FalseStarOfYourOwn = auto()
+
+    RobeOfMrCards = auto()
+    PalatialHolidayHomeInArcticCircle = auto()
+
     VastNetworkOfConnections = auto()
+    LongDeadPriestsOfRedBird = auto()
 
     # -----
     # Qualities
     # -----
 
     # TODO: organize this section somehow
+    ScholarOfTheCorrespondence = auto()
 
     # Weekly Stuff
     FreeEvening = auto()
@@ -774,6 +779,7 @@ class Item(Enum):
     Hedonist = auto()
 
     # Laboratory
+    ExperimentalObject = auto()
     LaboratoryResearch = auto()
     ParabolanResearch = auto()
     UnlikelyConnection = auto()
@@ -783,6 +789,7 @@ class Item(Enum):
     NumberOfWorkersInYourLaboratory = auto()
     ResearchPreparations = auto()
     UnexpectedResult = auto()
+    ExpertiseOfTheThirdCity = auto()
 
     TotalLabReserchRequired = auto()
     EquipmentForScientificExperimentation = auto()
@@ -790,10 +797,17 @@ class Item(Enum):
     NoLongerReviewingLiterature = auto()
     NoLongerFormingHypotheses = auto()
     NoLongerResupplying = auto()
+    NoLongerFatigued = auto()
 
     CorrespondenceFocus = auto()
 
     DisgruntlementAmongStudents = auto()
+
+    LaboratoryServicesOfLetticeTheMercy = auto()
+    LaboratoryServicesOfSilkCladExpert = auto()
+
+    LaboratoryServicesFromGiftedStudent = auto()
+    LaboratoryServicesFromVisionaryStudent = auto()
 
     _HandClear = auto()
 

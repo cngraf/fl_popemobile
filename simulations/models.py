@@ -8,6 +8,7 @@ class GameState:
         self.items = {}
         self.deck = []
         self.hand = []
+        self.storylets = []
 
         self.card_draw_counts = defaultdict(int)
         self.card_play_counts = defaultdict(int)
