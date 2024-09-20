@@ -737,9 +737,15 @@ class Item(Enum):
     NotchedBoneHarpoon = auto()
     ListOfAliasesWrittenInGant = auto()
     ShrineToSaintJoshua = auto()
+    SetOfCosmogoneSpectacles = auto()
+    PotOfViolantInk = auto()
+    CrookedCross = auto()    
 
     # Treasures
     FalseStarOfYourOwn = auto()
+    RobeOfMrCards = auto()
+    KittenSizedDiamond = auto()
+    VastNetworkOfConnections = auto()
 
     # -----
     # Qualities
@@ -770,6 +776,26 @@ class Item(Enum):
     # Laboratory
     LaboratoryResearch = auto()
     ParabolanResearch = auto()
+    UnlikelyConnection = auto()
+    UnavoidableEpiphany = auto()
+    UnwiseIdea = auto()
+    PrestigeOfYourLaboratory = auto()
+    NumberOfWorkersInYourLaboratory = auto()
+    ResearchPreparations = auto()
+    UnexpectedResult = auto()
+
+    TotalLabReserchRequired = auto()
+    EquipmentForScientificExperimentation = auto()
+
+    NoLongerReviewingLiterature = auto()
+    NoLongerFormingHypotheses = auto()
+    NoLongerResupplying = auto()
+
+    CorrespondenceFocus = auto()
+
+    DisgruntlementAmongStudents = auto()
+
+    _HandClear = auto()
 
     # IDK what to call these
     Casing = auto()
