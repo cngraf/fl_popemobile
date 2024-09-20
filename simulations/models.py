@@ -17,11 +17,28 @@ class GameState:
         self.action_failure_counts = defaultdict(int)
         # self.total_item_changes = defaultdict(int)
 
+        self.actions = 0
+        self.status = "InProgress"
+
     def ev_from_item(self, item, val: int):
         return 0
     
     def clear_hand(self):
         self.hand.clear()
+
+    def draw_card(self):
+        drawn, lowest = None, float('inf')
+        for card in self.deck:
+            if card not in self.hand and card.can_draw(self):
+                rand = random.random() / card.weight
+                if rand < lowest:
+                    drawn = card
+                    lowest = rand
+
+        if drawn:
+            self.card_draw_counts[drawn.name] += 1
+            self.hand.append(drawn)
+
 
 class OutfitList:
     def __init__(self, default_basic = 330, default_advanced = 16):

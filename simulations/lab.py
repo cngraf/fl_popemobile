@@ -27,6 +27,8 @@ figure out how to handle non-standard outcomes
     - how to handle
         - (preferred) assume it's 50/50 with normal success
         - ignore it
+            - need to handle it for the student cards at least
+            - otherwise assumes we can avoid disgruntlement indefinitely
         - use whatever number we pick for rare success
 - alternate failure
     - treat it the same as alternate success?
@@ -41,7 +43,7 @@ figure out how to handle non-standard outcomes
 add the rest of the experts and students
 - starting with the recommended lineup for convenience
     - visionary student
-    - meticulous student
+    - gifted student
     - silk-clad expert
     - lettice
 
@@ -54,24 +56,43 @@ crappy cards that you can remove/replace
     - unpacking crates
     - filing a report
     work with your equipment
+
+handling students
+- add graduation and hiring storylets
+
 '''
 
 class LabState(GameState):
     def __init__(self):
+        super().__init__()
+        self.status = "InProgress"
+
         self.outfit = OutfitList(300, 18)
 
         self.items = {
-            Item.TotalLabReserchRequired: 250,
+            # Experiment
+            Item.LaboratoryResearch: 0,
+            Item.TotalLabReserchRequired: 2700,
+            Item.ExperimentalObject: 820,
 
+            # Progression qualities
             Item.EquipmentForScientificExperimentation: 9,
             Item.PrestigeOfYourLaboratory: 100,
             Item.NumberOfWorkersInYourLaboratory: 4,
-            Item.ScholarOfTheCorrespondence: 21
+            Item.ScholarOfTheCorrespondence: 21,
+
+            # Workers
+            Item.LaboratoryServicesOfLetticeTheMercy: 1,
+            Item.LaboratoryServicesOfSilkCladExpert: 1,
+            Item.LaboratoryServicesFromGiftedStudent: 5,
+            Item.LaboratoryServicesFromVisionaryStudent: 5
         }
 
         self.storylets = [
             AlwaysAvailable()
         ]
+
+        self.hand = []
 
         self.deck = [
             # Short
@@ -103,6 +124,8 @@ class LabState(GameState):
             RelyOnSilkCladExpert(),
 
             # Students
+            WorkWithYourGiftedStudent(),
+            WorkWithYourVisionaryStudent()
         ]
 
     def equipment(self):
@@ -136,6 +159,80 @@ class LabState(GameState):
             return stat + 3
         else:
             return min(15, stat+4)
+        
+    def ev_from_item(self, item, val: int):
+        research_unit_ev = 1
+        if item == Item.LaboratoryResearch:
+            return val * research_unit_ev
+        elif item == Item.UnwiseIdea:
+            return 7 * research_unit_ev
+        elif item == Item.UnexpectedResult:
+            return 7 * research_unit_ev
+        elif item == Item.UnlikelyConnection:
+            return 4 * research_unit_ev
+        else:
+            return 0
+
+        
+    def step(self):
+        # TODO smart redraw
+        while len(self.hand) < 3:
+            self.draw_card()
+
+        best_card, best_action, best_action_ev = None, None, -float('inf')
+
+        for card in self.hand:
+            for action in card.actions:
+                if action.can_perform(self):
+                    action_ev = 0
+                    for i in range(1,6):
+                        zailing_bonus_estimate = i
+                        action_ev += action.ev(self)
+                    action_ev /= 5.0
+                    if action_ev > best_action_ev:
+                        best_card, best_action, best_action_ev = card, action, action_ev
+
+        # for card in self.hand:
+        #     for action in card.actions:
+        #         if action.can_perform(self):
+        #             attempts = 50
+        #             action_ev = sum(action.ev(self) for _ in range(attempts)) / attempts
+        #             if action_ev > best_action_ev:
+        #                 best_card, best_action, best_action_ev = card, action, action_ev
+
+        if best_action:
+            outcome = best_action.perform(self)
+            self.action_play_counts[best_action.name] += 1
+            self.actions += best_action.action_cost
+            # self.region_action_counts[self.current_region] += best_action.action_cost
+            # print(best_action.name)
+            if outcome == "Success":
+                self.action_success_counts[best_action.name] += 1
+            else:
+                self.action_failure_counts[best_action.name] += 1
+
+        if best_card is not None:
+            self.card_play_counts[best_card.name] += 1
+            if best_card in self.hand:
+                self.hand.remove(best_card)            
+
+        # if self.items[Item.TroubledWaters] >= 36:
+        #     self.status = "Failure"
+        # elif self.items[Item.ZailingProgress] >= self.progress_required:
+        #     self.go_to_next_region()
+
+        self.hand = [card for card in self.hand if card.can_draw(self)]
+
+        research = self.items.get(Item.LaboratoryResearch, 0)
+
+        # TODO other research types
+        if self.items.get(Item.LaboratoryResearch, 0) >= self.items.get(Item.TotalLabReserchRequired):
+            self.status = "Success"
+
+    def run(self):
+        while self.status == "InProgress":
+            self.step()
+
 ################################################################################
 ###                            Actions always available                      ###
 ################################################################################
@@ -574,8 +671,8 @@ class EngageInEmpiricalResearch(OpportunityCard):
     
     def can_draw(self, state: LabState):
         return (
-            state.items.get(Item.NoLongerFormingHypotheses, 0) == 0 and
-            state.items.get(Item.NoLongerResupplying, 0) == 0
+            state.items.get(Item.NoLongerFormingHypotheses, 0) > 0 and
+            state.items.get(Item.NoLongerResupplying, 0) > 0
         )
 
 class SimpleExperiment(Action):
@@ -612,7 +709,7 @@ class HookUpMeters(Action):
         return {
             Item.UnexpectedResult: 1,
             Item.LaboratoryResearch: 12 + 2 * state.equipment(),
-            Item.NoLongerResupplying: 0 - state.items.get(Item.NoLongerResupplying),
+            Item.NoLongerResupplying: 0 - state.items.get(Item.NoLongerResupplying, 0),
             Item._HandClear: 1
         }
     
@@ -626,7 +723,7 @@ class HookUpMeters(Action):
             Item.UnwiseIdea: 1,
             Item.UnexpectedResult: 1,
             Item.LaboratoryResearch: 12 + 2 * state.equipment(),
-            Item.NoLongerResupplying: 0 - state.items.get(Item.NoLongerResupplying),
+            Item.NoLongerResupplying: 0 - state.items.get(Item.NoLongerResupplying, 0),
             Item._HandClear: 1
         }
 
@@ -1233,7 +1330,7 @@ class RunningOutOfTerms(OpportunityCard):
     def can_draw(self, state: LabState):
         return state.items.get(Item.LaboratoryResearch, 0) >= 5000 and \
                state.items.get(Item.NoLongerFatigued, 0) > 0 and \
-               state.items.get(Item.NumberOfWorkersInLaboratory, 0) >= 2
+               state.items.get(Item.NumberOfWorkersInYourLaboratory, 0) >= 2
 
 class PullAnotherAlphabetOffTheShelf(Action):
     def __init__(self):
@@ -1589,7 +1686,7 @@ class GenericMan1Card(OpportunityCard):
         self.weight = 0.2  # Unusual Frequency
 
     def can_draw(self, state: LabState):
-        return state.items.get(Item.NumberOfWorkers, 0) >= 4
+        return state.items.get(Item.NumberOfWorkersInYourLaboratory, 0) >= 4
 
 
 class GenericMan1Resupply(Action):
@@ -1811,3 +1908,374 @@ class SilkCladExpert4(Action):
             Item.ParabolanResearch: 5,
             Item.LaboratoryResearch: 5/3 * state.equipment()
         }
+
+
+################################################################################
+###                            WorkWithYourGiftedStudent                     ###
+################################################################################
+
+class WorkWithYourGiftedStudent(OpportunityCard):
+    def __init__(self):
+        super().__init__("Work with your Gifted Student")
+        self.actions = [
+            ShepherdThroughResearch(),
+            CollaborateWithStudent(),
+            WorkWithExpertStudent(),
+            FollowUpHunch(),
+            PairWithSilkCladExpert()
+        ]
+        self.weight = 1.0  # Standard Frequency
+
+    def can_draw(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0) > 0
+
+class ShepherdThroughResearch(Action):
+    def __init__(self):
+        super().__init__("Shepherd your student through some research")
+    
+    def can_perform(self, state: LabState):
+        return 1 <= state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0) <= 2
+
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(210 - state.preparations(), state.outfit.watchful)
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 2 + state.equipment()
+        }
+
+    # TODO yeah definitely need to model this somehow
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 3 + 5/3 * state.equipment(),
+            Item.LaboratoryServicesFromGiftedStudent: min(1, 5 - state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0))
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 2 + state.equipment()
+        }
+
+class CollaborateWithStudent(Action):
+    def __init__(self):
+        super().__init__("Collaborate with your student")
+
+    def can_perform(self, state: LabState):
+        return 3 <= state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0) <= 4
+    
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(215 - state.preparations(), state.outfit.watchful)
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: math.ceil(3 + 5/3 * state.equipment())
+        }
+
+    # TODO
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: math.ceil(3 + 5/3 * state.equipment()),
+            Item.LaboratoryServicesFromGiftedStudent: min(1, 5 - state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0))
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: math.ceil(2 + state.equipment())
+        }
+
+class WorkWithExpertStudent(Action):
+    def __init__(self):
+        super().__init__("Work with your expert student")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0) >= 5
+    
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(220 - state.preparations(), state.outfit.watchful)
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 5 + 2 * state.equipment(),
+            Item.UnlikelyConnection: 1
+        }
+
+    # TODO
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 10 + 2 * state.equipment(),
+            Item.UnlikelyConnection: 1,
+            Item.DisgruntlementAmongTheStudents: 1
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: math.ceil(3 + 5/3 * state.equipment())
+        }
+
+class FollowUpHunch(Action):
+    def __init__(self):
+        super().__init__("Follow up a hunch with your student")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.UnavoidableEpiphany, 0) >= 1 and \
+               state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0) >= 5
+
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(220 - state.preparations(), state.outfit.watchful)
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.UnavoidableEpiphany: -1,
+            Item.LaboratoryResearch: 18 + 3 * state.equipment()
+        }
+
+    # TODO
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.UnavoidableEpiphany: -1,
+            Item.LaboratoryResearch: 18 + 3 * state.equipment(),
+            Item.UnexpectedResult: 1,
+            Item.DisgruntlementAmongTheStudents: 1
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 8 + 2 * state.equipment()
+        }
+
+class PairWithSilkCladExpert(Action):
+    def __init__(self):
+        super().__init__("Pair her with the Silk-Clad Expert")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0) < 5 and \
+               state.items.get(Item.ExperimentalObject, 0) in range(401, 501) and \
+               state.items.get(Item.LaboratoryServicesOfSilkCladExpert, 0) >= 1
+
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(180, state.outfit.persuasive)
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 12 + state.equipment(),
+            Item.LaboratoryServicesFromGiftedStudent: min(1, 5 - state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0))
+        }
+
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 12 + 2 * state.equipment(),
+            Item.UnexpectedResult: 1,
+            Item.UnlikelyConnection: 1
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 15 if state.equipment() == 7 else 18
+        }
+
+
+################################################################################
+###                           WorkWithYourVisionaryStudent                   ###
+################################################################################
+
+class WorkWithYourVisionaryStudent(OpportunityCard):
+    def __init__(self):
+        super().__init__("Work with your Visionary Student")
+        self.actions = [
+            ShepherdThroughVisionaryResearch(),
+            CollaborateWithVisionaryStudent(),
+            WorkWithExpertVisionaryStudent(),
+            LeaveVisionaryStudent(),
+            FollowUpVisionaryHunch(),
+            # TutorOtherStudents()
+        ]
+        self.weight = 1.0  # Standard Frequency
+
+    def can_draw(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) > 0
+
+class ShepherdThroughVisionaryResearch(Action):
+    def __init__(self):
+        super().__init__("Shepherd your student through some research")
+
+    def can_perform(self, state: LabState):
+        return 1 <= state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) <= 2
+
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(210 - state.preparations(), state.outfit.watchful)
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 4 + state.equipment()
+        }
+
+    # TODO
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 4 + state.equipment(),
+            Item.LaboratoryServicesFromVisionaryStudent: min(state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) + 1, 5)
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 3 + state.equipment()
+        }
+
+class CollaborateWithVisionaryStudent(Action):
+    def __init__(self):
+        super().__init__("Collaborate with your student")
+
+    def can_perform(self, state: LabState):
+        return 3 <= state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) <= 4
+
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(215 - state.preparations(), state.outfit.watchful)
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: math.floor(7 + 5/3 * state.equipment())
+        }
+
+    # TODO
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: math.floor(8 + 5/3 * state.equipment()),
+            Item.LaboratoryServicesFromVisionaryStudent: min(state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) + 1, 5)
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: math.floor(6 + 5/3 * state.equipment())
+        }
+
+class WorkWithExpertVisionaryStudent(Action):
+    def __init__(self):
+        super().__init__("Work with your expert student")
+
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) == 5
+
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(220 - state.preparations(), state.outfit.watchful)
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 9 + 2 * state.equipment()
+        }
+
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 10 + 2 * state.equipment(),
+            Item.DisgruntlementAmongTheStudents: 1
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 6.5 + 1.6 * state.equipment()
+        }
+
+class LeaveVisionaryStudent(Action):
+    def __init__(self):
+        super().__init__("Leave your student to their own devices")
+
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) == 5
+
+    def pass_rate(self, state: LabState):
+        return 0.5  # 50% chance
+
+    def pass_items(self, state: LabState):
+        num_workers = state.items.get(Item.NumberOfWorkersInYourLaboratory, 1)
+        return {
+            Item.UnlikelyConnection: 1,
+            Item.LaboratoryResearch: (2 + 0.2 * state.equipment()) * math.sqrt(num_workers) * state.highest_worker_level()
+        }
+
+    # TODO
+    def rare_success_items(self, state: LabState):
+        num_workers = state.items.get(Item.NumberOfWorkersInYourLaboratory, 1)
+        return {
+            Item.UnwiseIdea: 1,
+            Item.LaboratoryResearch: (2 + 0.2 * state.equipment()) * math.sqrt(num_workers) * state.highest_worker_level()
+        }
+
+    def fail_items(self, state: LabState):
+        num_workers = state.items.get(Item.NumberOfWorkersInYourLaboratory, 1)
+        return {
+            Item.UnexpectedResult: 1,
+            Item.LaboratoryResearch: (2 + 0.2 * state.equipment()) * math.sqrt(num_workers) * state.highest_worker_level()
+        }
+
+class FollowUpVisionaryHunch(Action):
+    def __init__(self):
+        super().__init__("Follow up a hunch with your student")
+
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.UnavoidableEpiphany, 0) >= 1 and \
+               state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) == 5
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.UnavoidableEpiphany: -1,
+            Item.LaboratoryResearch: 18 + 3 * state.equipment()
+        }
+
+    def rare_success_items(self, state: LabState):
+        return {
+            Item.UnavoidableEpiphany: -1,
+            Item.LaboratoryResearch: 18 + 3 * state.equipment(),
+            Item.UnwiseIdea: 1,
+            Item.DisgruntlementAmongTheStudents: 1
+        }
+
+    def fail_items(self, state: LabState):
+        return {
+            Item.LaboratoryResearch: 8 + 2 * state.equipment()
+        }
+
+# # TODO
+# class TutorOtherStudents(Action):
+#     def __init__(self):
+#         super().__init__("Let them tutor your other students")
+
+#     def can_perform(self, state: LabState):
+#         return state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) == 5 and \
+#                (state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0) > 0 or
+#                 state.items.get(Item.LaboratoryServicesFromShiftyStudent, 0) > 0 or
+#                 state.items.get(Item.LaboratoryServicesFromProfoundStudent, 0) > 0 or
+#                 state.items.get(Item.LaboratoryServicesFromMeticulousStudent, 0) > 0)
+
+#     def pass_items(self, state: LabState):
+#         return {
+#             Item.LaboratoryServicesFromGiftedStudent: min(state.items.get(Item.LaboratoryServicesFromGiftedStudent, 0) + 1, 5),
+#             Item.LaboratoryServicesFromShiftyStudent: min(state.items.get(Item.LaboratoryServicesFromShiftyStudent, 0) + 1, 5),
+#             Item.LaboratoryServicesFromProfoundStudent: min(state.items.get(Item.LaboratoryServicesFromProfoundStudent, 0) + 1, 5),
+#             Item.LaboratoryServicesFromMeticulousStudent: min(state.items.get(Item.LaboratoryServicesFromMeticulousStudent, 0) + 1, 5),
+#             Item.LaboratoryResearch: 8 + 2 * state.equipment()
+#         }
+
+#     def fail_items(self, state: LabState):
+#         return {
+#             Item.LaboratoryResearch: 8 + 2 * state.equipment(),
+#             Item.DisgruntlementAmongTheStudents: 1
+#         }
+
+# Update progress bar function
+def update_progress(progress):
+    bar_length = 40
+    block = int(round(bar_length * progress))
+    text = f"\rProgress: [{'#' * block + '-' * (bar_length - block)}] {progress * 100:.2f}%"
+    sys.stdout.write(text)
+    sys.stdout.flush()
+
+results = []
+
+for i in range(0, 100):
+    state = LabState()
+    state.run()
+    results.append(state.actions)
+    update_progress(i / 100)
+
+print()
+print(results)
+print(sum(results)/100)

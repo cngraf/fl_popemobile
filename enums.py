@@ -798,6 +798,7 @@ class Item(Enum):
     NoLongerFormingHypotheses = auto()
     NoLongerResupplying = auto()
     NoLongerFatigued = auto()
+    NoLongerWritingUp = auto()
 
     CorrespondenceFocus = auto()
 
