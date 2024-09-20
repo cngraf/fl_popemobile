@@ -11,69 +11,46 @@ def add_trades(config: Config):
     config.add({
         Item.VisitFromTimeTheHealer: -1,
 
-        Item.FavourableCircumstance: 1, # TODO
-        Item.FreeEvening: 5, # TODO
-        Item.AConsequenceOfYourAmbition: 1, # TODO
-        Item.FleetingRecollections: 1, # TODO
-        Item.AGiftFromBalmoral: 1, # TODO
-        # Item.ABeneficence: 1,
+        # Item.FavourableCircumstance: 1, # TODO
+        # Item.FreeEvening: 5, # TODO
+        # Item.AConsequenceOfYourAmbition: 1, # TODO
+        # Item.FleetingRecollections: 1, # TODO
+        # Item.AGiftFromBalmoral: 1, # TODO
+        # # Item.ABeneficence: 1,
 
-        Item.Wounds: -2,
-        Item.Nightmares: -1,
-        # Item.Suspicion: -1,
-        Item.Scandal: -1,
+        # Item.Wounds: -2,
+        # Item.Nightmares: -1,
+        # # Item.Suspicion: -1,
+        # Item.Scandal: -1,
 
-        # Item.BoneMarketExhaustion: -4, # done
+        # # Item.BoneMarketExhaustion: -4, # done
 
-        Item.RavagesOfParabolanWarfare: -10, # TODO
-        Item.RecentParticipantInAStarvedCulturalExchange: -1, # TODO
-        Item.GlowingViric: -1, # TODO
-        Item.MiredInMail: -99,
-        Item.AReportFromTheKhagansPalace: -1,
+        # Item.RavagesOfParabolanWarfare: -10, # TODO
+        # Item.RecentParticipantInAStarvedCulturalExchange: -1, # TODO
+        # Item.GlowingViric: -1, # TODO
+        # Item.MiredInMail: -99,
+        # Item.AReportFromTheKhagansPalace: -1,
 
-        Item.DelayUntilTheNextBoardMeeting: -1,
+        # Item.DelayUntilTheNextBoardMeeting: -1,
 
-        # 0 to 50k
-        Item.RatMarketWeek1ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek2ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek3ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek4ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek5ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek6ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek7ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek8ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek9ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek10ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek11ExhaustionStage1: -50_000 / 12,
-        Item.RatMarketWeek12ExhaustionStage1: -50_000 / 12,
+        # 6 weeks, 2 demands per week => refresh 1/3 capacity per week
 
-        # 50k to 80k
-        Item.RatMarketWeek1ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek2ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek3ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek4ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek5ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek6ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek7ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek8ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek9ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek10ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek11ExhaustionStage2: -30_000 / 12,
-        Item.RatMarketWeek12ExhaustionStage2: -30_000 / 12,
+        # 0 to 65k
+        Item.SoftRatMarketSaturation1: -65_000 / 3,
+        Item.SaintlyRatMarketSaturation1: -65_000 / 3,
+        Item.MaudlinRatMarketSaturation1: -65_000 / 3,
+        Item.InscrutableRatMarketSaturation1: -65_000 / 3,
+        Item.TempestuousRatMarketSaturation1: -65_000 / 3,
+        Item.IntricateRatMarketSaturation1: -65_000 / 3,
 
-        # 80k to 170k
-        Item.RatMarketWeek1ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek2ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek3ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek4ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek5ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek6ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek7ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek8ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek9ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek10ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek11ExhaustionStage3: -90_000 / 12,
-        Item.RatMarketWeek12ExhaustionStage3: -90_000 / 12,          
+        # 65k to 180k
+        Item.SoftRatMarketSaturation2: -115_000 / 3,
+        Item.SaintlyRatMarketSaturation2: -115_000 / 3,
+        Item.MaudlinRatMarketSaturation2: -115_000 / 3,
+        Item.InscrutableRatMarketSaturation2: -115_000 / 3,
+        Item.TempestuousRatMarketSaturation2: -115_000 / 3,
+        Item.IntricateRatMarketSaturation2: -115_000 / 3,        
+   
     })
 
     # free source of constraining qualities

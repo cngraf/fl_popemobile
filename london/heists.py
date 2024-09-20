@@ -52,6 +52,7 @@ def add_trades(config: Config):
     #     Item.WaswoodHeistCashOut: 1
     # })
 
+
     # most aggressive strat w/ big rat
     # 1 action to start heist
     # 2 actions + 4.8 echoes => 18 casing
@@ -65,59 +66,65 @@ def add_trades(config: Config):
     # 0.002 * (8 + 30 * 0.5)
     # that's about 0.05 addtl actions per run
 
+    avg_success_actions = 6.5
+    escape_rate = 0.0005
+    capture_rate = 0.0005
+    escape_cost_actions = 8
+    capture_cost_actions = 20
+
+    action_cost = 1 # start heist
+    action_cost += 2 # buy casing from Big Rat
+    action_cost += avg_success_actions
+    action_cost += escape_rate * escape_cost_actions
+    action_cost += capture_rate * capture_cost_actions
+    cats_per_run = 0.5
+
     add({
-        Item.Action: -(1 + 2 + 6.51 + (20 * 0.002)),
+        Item.Action: -action_cost,
         Item.Echo: -4.8,
-        Item.AppallingSecret: -6,
+        Item.AppallingSecret: -10 * cats_per_run,
         Item.HidingPlaceOfAPeculiarItem: -1,
-        Item.WaswoodHeistCashOut: 1 * 0.996
+        Item._WaswoodHeistCashOut: 1 * (1.0 - escape_rate - capture_rate)
     })
 
     # parabolan casing with no big rat
-    # 1 action to start heist
     # 4.65 actions => 28 casing (first parabola trip is free)
-    # 1 action => buy key
-    # 6.2 actions to complete heist
+    # 1 action => buy info
+    # 1 action => start heist
+    # 5.5 actions => complete heist
 
-    # add({
-    #     Item.Action: -12.85,
-    #     Item.AppallingSecret: -3,
-    #     Item.HidingPlaceOfAPeculiarItem: -1,
-    #     Item.WaswoodHeistCashOut: 1
-    # })
-
-    # optimistic semi-aggro strat
-    # 3 actions + 7.2 echoes => 27 casing
-    # 1 action => inside info
-    # 8 actions? => complete heist
-
-    # add({
-    #     Item.Action: -10.5,
-    #     Item.Echo: -4.8,
-    #     Item.HidingPlaceOfAPeculiarItem: -1,
-    #     Item.WaswoodHeistCashOut: 1
-    # })
+    # 2 info: 5.2 actions, 100% success
+    # 1 key 1 info: 5.3 actions, 99.99 success
+    # 1 info: 5.5 steps
+    # 1 key: 6.25 steps
 
     add({
-        Item.WaswoodHeistCashOut: -1,
+        Item.Action: -12.15,
+        Item.AppallingSecret: -10 * 0.24,
+        Item.HidingPlaceOfAPeculiarItem: -1,
+        Item._WaswoodHeistCashOut: 1
+    })
+
+    add({
+        Item._WaswoodHeistCashOut: -1,
         Item.FalseHagiotoponym: 1,
         Item.ApostatesPsalm: 16
     })
 
     add({
-        Item.WaswoodHeistCashOut: -1,
+        Item._WaswoodHeistCashOut: -1,
         Item.CaptivatingBallad: 1,
         Item.TouchingLoveStory: 16
     })
 
     add({
-        Item.WaswoodHeistCashOut: -1,
+        Item._WaswoodHeistCashOut: -1,
         Item.FragmentOfTheTragedyProcedures: 1,
         Item.SwornStatement: 16
     })
 
     add({
-        Item.WaswoodHeistCashOut: -1,
+        Item._WaswoodHeistCashOut: -1,
         Item.ChimericalArchive: 1,
         Item.NicatoreanRelic: 16
     })

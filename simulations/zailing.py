@@ -206,7 +206,7 @@ class OpportunityCard:
         return True
 
 class OutfitList:
-    def __init__(self, default_basic = 330, default_advanced = 18):
+    def __init__(self, default_basic = 330, default_advanced = 16):
         self.zailing_speed = 55
         self.zubmersibility = 1
         self.luxurious = 0
@@ -5202,7 +5202,32 @@ khanate_to_london = [
     ZeeRegion.SALT_STEPPES
 ]
 
+london_sheperds_mangrove = [
+    ZeeRegion.HOME_WATERS,
+    ZeeRegion.SHEPHERDS_WASH,
+    ZeeRegion.SEA_OF_VOICES
+]
+
+mangrove_shepherds_london = [
+    ZeeRegion.SEA_OF_VOICES,
+    ZeeRegion.SHEPHERDS_WASH,
+    ZeeRegion.HOME_WATERS
+]
+
+london_snares_mangrove = [
+    ZeeRegion.HOME_WATERS,
+    ZeeRegion.THE_SNARES,
+    ZeeRegion.SEA_OF_VOICES
+]
+
+mangrove_snares_london = [
+    ZeeRegion.SEA_OF_VOICES,
+    ZeeRegion.THE_SNARES,
+    ZeeRegion.HOME_WATERS
+]
+
+
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=10_000, route=khanate_to_london)
+    run_simulation(runs=10_000, route=mangrove_shepherds_london)
 

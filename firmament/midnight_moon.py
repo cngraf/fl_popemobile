@@ -8,6 +8,7 @@ from player import Player
 
 
 def add_trades(config: Config):
+    add = config.add
     trade = config.trade
 
     # trade(0, {
@@ -43,7 +44,7 @@ def add_trades(config: Config):
     ):
         trade(0, { item: -1, Item.Stuiver: sale_value })
 
-    trade(0, {
+    add({
         Item.RoofChart: -1,
         Item.MoonPearl: 253
     })

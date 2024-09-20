@@ -1,157 +1,110 @@
 from enums import *
-import config
+from config import Config 
 
 # Speculative until exact changes revealed
 
 ## ------------
 ## Rat Market
 ## ------------
-def add_trades(config: config.Config):
+
+def add_ratly_demand_trades(config : Config, saturation1, saturation, item, echo_value):
+        config.add({
+            item: -1,
+            saturation1: echo_value * 100,
+            Item.RatShilling: echo_value * 10 * 1.32
+        })
+
+        config.add({
+            item: -1,
+            saturation: echo_value * 100,
+            Item.RatShilling: echo_value * 10 * 1.12
+        })
+
+        config.add({
+            item: -1,
+            Item.RatShilling: echo_value * 10
+        })
+
+def add_trades(config: Config):
     trade = config.trade
     add = config.add
 
-    stage1_multiplier = 1.3 * 10
-    stage2_multiplier = 1.2 * 10 # approx
-    stage3_multiplier = 1.1 * 10
-
-    # # TODO: Guessing at the groupings
-    # add({
-    #     Item.RatMarketExhaustion: 12,
-    #     Item.RatMarketWeek1Exhaustion: -1,
-    #     Item.RatMarketWeek2Exhaustion: -1,
-    #     Item.RatMarketWeek3Exhaustion: -1,
-    #     Item.RatMarketWeek4Exhaustion: -1,
-    #     Item.RatMarketWeek5Exhaustion: -1,
-    #     Item.RatMarketWeek6Exhaustion: -1,
-    #     Item.RatMarketWeek7Exhaustion: -1,
-    #     Item.RatMarketWeek8Exhaustion: -1,
-    #     Item.RatMarketWeek9Exhaustion: -1,
-    #     Item.RatMarketWeek10Exhaustion: -1,
-    #     Item.RatMarketWeek11Exhaustion: -1,
-    #     Item.RatMarketWeek12Exhaustion: -1,
-    # })
-
-    for exhaustionStage1, exhaustionStage2, exhaustionStage3, tier5, tier6, tier7 in (
-        (Item.RatMarketWeek1ExhaustionStage1,
-         Item.RatMarketWeek1ExhaustionStage2,
-         Item.RatMarketWeek1ExhaustionStage3,
-         Item.UncannyIncunabulum, Item.NightWhisper, Item.CorrespondingSounder),
-
-        (Item.RatMarketWeek2ExhaustionStage1,
-         Item.RatMarketWeek2ExhaustionStage2,
-         Item.RatMarketWeek2ExhaustionStage3,
-         Item.StormThrenody, Item.NightWhisper, Item.CorrespondingSounder),
-
-        (Item.RatMarketWeek3ExhaustionStage1,
-         Item.RatMarketWeek3ExhaustionStage2,
-         Item.RatMarketWeek3ExhaustionStage3,         
-         Item.StormThrenody, Item.ParabolaLinenScrap, Item.CorrespondingSounder),
-
-        (Item.RatMarketWeek4ExhaustionStage1,
-         Item.RatMarketWeek4ExhaustionStage2,
-         Item.RatMarketWeek4ExhaustionStage3,         
-         Item.StormThrenody, Item.ParabolaLinenScrap, Item.ScrapOfIvoryOrganza),
-
-        (Item.RatMarketWeek5ExhaustionStage1,
-         Item.RatMarketWeek5ExhaustionStage2,
-         Item.RatMarketWeek5ExhaustionStage3,         
-         Item.RattyReliquary, Item.ParabolaLinenScrap, Item.ScrapOfIvoryOrganza),
-
-        (Item.RatMarketWeek6ExhaustionStage1,
-         Item.RatMarketWeek6ExhaustionStage2,
-         Item.RatMarketWeek6ExhaustionStage3,         
-         Item.RattyReliquary, None, Item.ScrapOfIvoryOrganza),
-
-        (Item.RatMarketWeek7ExhaustionStage1,
-         Item.RatMarketWeek7ExhaustionStage2,
-         Item.RatMarketWeek7ExhaustionStage3,         
-         Item.RattyReliquary, None, Item.CartographersHoard),
-
-        (Item.RatMarketWeek8ExhaustionStage1,
-         Item.RatMarketWeek8ExhaustionStage2,
-         Item.RatMarketWeek8ExhaustionStage3,         
-         Item.UnlawfulDevice, None, Item.CartographersHoard),
-
-        (Item.RatMarketWeek9ExhaustionStage1,
-         Item.RatMarketWeek9ExhaustionStage2,
-         Item.RatMarketWeek9ExhaustionStage3,         
-         Item.UnlawfulDevice, Item.CaptivatingBallad, Item.CartographersHoard),
-
-        (Item.RatMarketWeek10ExhaustionStage1,
-         Item.RatMarketWeek10ExhaustionStage2,
-         Item.RatMarketWeek10ExhaustionStage3,         
-         Item.UnlawfulDevice, Item.CaptivatingBallad, Item.ParabolanParable),
-
-        (Item.RatMarketWeek11ExhaustionStage1,
-         Item.RatMarketWeek11ExhaustionStage2,
-         Item.RatMarketWeek11ExhaustionStage3,         
-         Item.UncannyIncunabulum, Item.CaptivatingBallad, Item.ParabolanParable),
-
-        (Item.RatMarketWeek12ExhaustionStage1,
-         Item.RatMarketWeek12ExhaustionStage2,
-         Item.RatMarketWeek12ExhaustionStage3,         
-         Item.UncannyIncunabulum, Item.NightWhisper, Item.ParabolanParable),
-    ):
-        
-        # selling right before inflection point
-        # use up stage 2 range, but get stage 1 price
-        # barely moves the needle tho, like less than 1 echo/week
-        add({
-            tier7: -1,
-            Item.RatShilling: 4062,
-            exhaustionStage2: 31250 * stage1_multiplier
-        })
-
-        for exhaustion, multiplier in (
-            (exhaustionStage1, stage1_multiplier),
-            (exhaustionStage2, stage2_multiplier),
-            (exhaustionStage3, stage3_multiplier)
-        ):
-            add({
-                tier5: -1,
-                Item.RatShilling: 12.5 * multiplier,
-                exhaustion: 1250
-            })
-
-            if tier6:
-                add({
-                    tier6: -1,
-                    Item.RatShilling: 62.5 * multiplier,
-                    exhaustion: 6250
-                })
-
-            add({
-                tier7: -1,
-                Item.RatShilling: 312 * multiplier,
-                exhaustion: 31250
-            })
-
-    for tier5 in (Item.UncannyIncunabulum,
-                  Item.StormThrenody,
-                  Item.RattyReliquary,
-                  Item.UnlawfulDevice):
-        add({
-            tier5: -1,
-            Item.RatShilling: 125,
-        })
-
-    for tier6 in (Item.NightWhisper,
-                  Item.ParabolaLinenScrap,
-                #   Item.CracklingDevice,
-                  Item.CaptivatingBallad):
-        add({
-            tier6: -1,
-            Item.RatShilling: 625,
-        })
-
-    for tier7 in (Item.CorrespondingSounder,
-                  Item.ScrapOfIvoryOrganza,
-                  Item.CartographersHoard,
-                  Item.ParabolanParable):
-        add({
-            tier7: -1,
-            Item.RatShilling: 3125,
-        })
+    add_ratly_demand_trades(config,
+        saturation1=Item.SoftRatMarketSaturation1,
+        saturation=Item.SoftRatMarketSaturation2,
+        item=Item.ParabolaLinenScrap,
+        echo_value=62.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.SoftRatMarketSaturation1,
+        saturation=Item.SoftRatMarketSaturation2,
+        item=Item.ScrapOfIvoryOrganza,
+        echo_value=312.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.SaintlyRatMarketSaturation1,
+        saturation=Item.SaintlyRatMarketSaturation2,
+        item=Item.RattyReliquary,
+        echo_value=12.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.SaintlyRatMarketSaturation1,
+        saturation=Item.SaintlyRatMarketSaturation2,
+        item=Item.FalseHagiotoponym,
+        echo_value=62.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.MaudlinRatMarketSaturation1,
+        saturation=Item.MaudlinRatMarketSaturation2,
+        item=Item.CaptivatingBallad,
+        echo_value=62.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.MaudlinRatMarketSaturation1,
+        saturation=Item.MaudlinRatMarketSaturation2,
+        item=Item.ParabolanParable,
+        echo_value=312.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.InscrutableRatMarketSaturation1,
+        saturation=Item.InscrutableRatMarketSaturation2,
+        item=Item.UncannyIncunabulum,
+        echo_value=12.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.InscrutableRatMarketSaturation1,
+        saturation=Item.InscrutableRatMarketSaturation2,
+        item=Item.CartographersHoard,
+        echo_value=312.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.TempestuousRatMarketSaturation1,
+        saturation=Item.TempestuousRatMarketSaturation2,
+        item=Item.StormThrenody,
+        echo_value=12.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.TempestuousRatMarketSaturation1,
+        saturation=Item.TempestuousRatMarketSaturation2,
+        item=Item.NightWhisper,
+        echo_value=62.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.IntricateRatMarketSaturation1,
+        saturation=Item.IntricateRatMarketSaturation2,
+        item=Item.UnlawfulDevice,
+        echo_value=12.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.IntricateRatMarketSaturation1,
+        saturation=Item.IntricateRatMarketSaturation2,
+        item=Item.CorrespondingSounder,
+        echo_value=312.50)
+    
+    add({
+          Item.FourthCityEcho: -1,
+          Item.RatShilling: 125
+    })
 
     # if config.enable_all_rat_market_moons:
     #     for item, price in (
@@ -173,127 +126,173 @@ def add_trades(config: config.Config):
     # TODO: new auto-exchange is more complicated & random
     trade(0, { Item.RatShilling: -1, Item.PieceOfRostygold: 10 })
 
-    # Crow-Crease Cryptics
+    ratty_bazaar_prices = {
+        Item.InklingOfIdentity: 1,
+        Item.ManiacsPrayer: 1,
+        Item.AppallingSecret: 2,
+        Item.CompromisingDocument: 7,
+        Item.CorrespondencePlaque: 7,
+        Item.JournalOfInfamy: 7,
+        Item.TaleOfTerror: 7,
+        Item.TouchingLoveStory: 50,
+        Item.BlackmailMaterial: 250,
+        Item.RoyalBlueFeather: 8,
+        Item.SolaceFruit: 8,
+        Item.HandPickedPeppercaps: 10,
+        Item.NightsoilOfTheBazaar: 10,
+        Item.PreservedSurfaceBlooms: 25,
+        Item.CarvedBallOfStygianIvory: 45,
+        Item.CrateOfIncorruptibleBiscuits: 60,
+        Item.AmanitaSherry: 1,
+        Item.MapScrap: 1,
+        Item.PhosphorescentScarab: 1,
+        Item.FlawedDiamond: 2,
+        Item.PalimpsestScrap: 7,
+        # Item.RattusFaberRifle: 50,
+        # Item.SkyglassKnife: 63,
+        # Item.SetOfKifers: 640,
+        # Item.RavenglassKnife: 1000,
+        # Item.SetOfIntricateKifers: 3999,
+        # Item.RatworkDerringer: 4000,
+        Item.WellPlacedPawn: 2,
+        # Item.ScarletStockingsOfDubiousOrigin: 4,
+        # Item.AntiqueConstablesBadge: 30,
+        # Item.CopperCipherRing: 40,
+        # Item.RedFeatheredPin: 40,
+        # Item.TinyJewelledReliquary: 40,
+        # Item.EngravedPewterTankard: 50,
+        # Item.OldBoneSkeletonKey: 63,
+        # Item.OrnateTypewriter: 60
+    }
 
-    trade(0, {
-        Item.RatShilling: -1,
-        Item.InklingOfIdentity: 1
-    })
+    for item, price in ratty_bazaar_prices.items():
+          add({
+                item: 1,
+                Item.RatShilling: -1 * price
+          })
 
-    trade(0, {
-        Item.RatShilling: -1,
-        Item.ManiacsPrayer: 1
-    })
 
-    trade(0, {
-        Item.RatShilling: -2,
-        Item.AppallingSecret: 1
-    })
+    # # Crow-Crease Cryptics
 
-    trade(0, {
-        Item.RatShilling: -7,
-        Item.CompromisingDocument: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -1,
+    #     Item.InklingOfIdentity: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -7,
-        Item.CorrespondencePlaque: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -1,
+    #     Item.ManiacsPrayer: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -7,
-        Item.JournalOfInfamy: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -2,
+    #     Item.AppallingSecret: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -7,
-        Item.TaleOfTerror: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -7,
+    #     Item.CompromisingDocument: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -50,
-        Item.TouchingLoveStory: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -7,
+    #     Item.CorrespondencePlaque: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -250,
-        Item.BlackmailMaterial: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -7,
+    #     Item.JournalOfInfamy: 1
+    # })
 
-    # Extramurine Trading Company
+    # trade(0, {
+    #     Item.RatShilling: -7,
+    #     Item.TaleOfTerror: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -8,
-        Item.RoyalBlueFeather: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -50,
+    #     Item.TouchingLoveStory: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -8,
-        Item.SolaceFruit: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -250,
+    #     Item.BlackmailMaterial: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -10,
-        Item.HandPickedPeppercaps: 1
-    })
+    # # Extramurine Trading Company
 
-    trade(0, {
-        Item.RatShilling: -10,
-        Item.NightsoilOfTheBazaar: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -8,
+    #     Item.RoyalBlueFeather: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -25,
-        Item.PreservedSurfaceBlooms: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -8,
+    #     Item.SolaceFruit: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -45,
-        Item.CarvedBallOfStygianIvory: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -10,
+    #     Item.HandPickedPeppercaps: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -60,
-        Item.CrateOfIncorruptibleBiscuits: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -10,
+    #     Item.NightsoilOfTheBazaar: 1
+    # })
 
-    # Merru's Gun Exchange
+    # trade(0, {
+    #     Item.RatShilling: -25,
+    #     Item.PreservedSurfaceBlooms: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -1,
-        Item.AmanitaSherry: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -45,
+    #     Item.CarvedBallOfStygianIvory: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -1,
-        Item.MapScrap: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -60,
+    #     Item.CrateOfIncorruptibleBiscuits: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -1,
-        Item.PhosphorescentScarab: 1
-    })
+    # # Merru's Gun Exchange
 
-    trade(0, {
-        Item.RatShilling: -2,
-        Item.FlawedDiamond: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -1,
+    #     Item.AmanitaSherry: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -7,
-        Item.PalimpsestScrap: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -1,
+    #     Item.MapScrap: 1
+    # })
 
-    # Nightclaw's Paw-Brokers
+    # trade(0, {
+    #     Item.RatShilling: -1,
+    #     Item.PhosphorescentScarab: 1
+    # })
 
-    trade(0, {
-        Item.RatShilling: -2,
-        Item.WellPlacedPawn: 1
-    })
+    # trade(0, {
+    #     Item.RatShilling: -2,
+    #     Item.FlawedDiamond: 1
+    # })
 
-    # Tier 4
+    # trade(0, {
+    #     Item.RatShilling: -7,
+    #     Item.PalimpsestScrap: 1
+    # })
 
-    trade(0, {
-        Item.FourthCityEcho: -1,
-        Item.RatShilling: 125
-    })
+    # # Nightclaw's Paw-Brokers
+
+    # trade(0, {
+    #     Item.RatShilling: -2,
+    #     Item.WellPlacedPawn: 1
+    # })
+
+    # # Tier 4
+
+    # trade(0, {
+    #     Item.FourthCityEcho: -1,
+    #     Item.RatShilling: 125
+    # })

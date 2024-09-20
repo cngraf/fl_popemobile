@@ -66,11 +66,11 @@ def add_trades(config: config.Config):
     })
 
     trade(1, {
-        Item.Scandal: -5
+        Item.Scandal: -4
     })
 
     trade(1, {
-        Item.Suspicion: -5
+        Item.Suspicion: -4
     })
 
     trade(1, {

@@ -85,7 +85,7 @@ item_values = {
     Item.PuzzlingMap: {Item.Echo: 12.5, Item.Stuiver: 0},
     Item.FlaskOfAbominableSalts: {Item.Echo: 0.1, Item.Stuiver: 0},
 
-    Item.CausticApocryphon: {Item.Echo: 0, Item.Stuiver: 250},
+    Item.CausticApocryphon: {Item.Echo: 15.5, Item.Stuiver: 250},
     Item.GlimEncrustedCarapace: {Item.Echo: 0, Item.Stuiver: 1250},
     Item.ShardOfGlim: {Item.Echo: 0.01, Item.Stuiver: 0},
     Item.RoofChart: {Item.Echo: 2.53, Item.Stuiver: 50},
@@ -840,7 +840,7 @@ class ReadingRoomAction1(Action):
         rate = self.broad_success_rate(250, state.outfits.shadowy_plus_inerrant15)
 
         # wild guess
-        overdue_chance = min(0.5, state.items[Item.LibraryKey] * 0.02)
+        overdue_chance = min(0.5, state.items[Item.LibraryKey] * 0.10)
 
         # TODO: DC shadowy 200 + 10 DC per noises level
         second_failure_chance = 0.9
@@ -2098,7 +2098,7 @@ def simulate_runs(num_runs):
     print(f"{'SIMULATION RESULTS':^80}")
     print("=" * 80)
 
-    simple_mode = True
+    simple_mode = False
 
     state = LibraryState()
     state.apocrypha_sought = ApocryphaSought.SomeFrenchBullshit
