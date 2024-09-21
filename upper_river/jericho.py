@@ -251,3 +251,21 @@ def add_trades(config: Config):
         Item.RevisionistHistoricalNarrative: -3,
         Item.NightWhisper: 1
     })
+
+    # Library studies
+    # AFAICT no way to improve on these rates
+
+    add({
+        Item._JerichoAction: -22,
+        Item.FalseHagiotoponym: 1
+    })
+
+    add({
+        Item._JerichoAction: -22,
+        Item.OneiromanticRevelation: 1
+    })
+
+    add({
+        Item._JerichoAction: -22,
+        Item.PrimaevalHint: 1
+    })
