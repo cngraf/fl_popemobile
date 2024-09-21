@@ -11,7 +11,7 @@ def add_trades(active_player, config: Config):
     add({
         Item.Action: -10 * 2,
         Item.StashedTreasure: 3000 * 2,
-        Item.LondonKhanateRoundTrip: 1,
+        Item._LondonKhanateRoundTrip: 1,
         Item._AgentInTransit: 1,
         Item._UnassumingCratePickup: 3
     })
@@ -19,27 +19,27 @@ def add_trades(active_player, config: Config):
     # TODO: move this
     for visit_length in (10, 20, 40, 80, 160):
         add({
-            Item.LondonKhanateRoundTrip: -1,
+            Item._LondonKhanateRoundTrip: -1,
             Item.Action: -1 * visit_length,
-            Item.KhanateAction: visit_length
+            Item._KhanateAction: visit_length
         })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item._UnassumingCratePickup: -1,
         Item.FistfulOfSurfaceCurrency: -170,
         Item.UnassumingCrate: 1
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item._UnassumingCratePickup: -1,
         Item.AssortmentOfKhaganianCoinage: -10,
         Item.UnassumingCrate: 1
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item._UnassumingCratePickup: -1,
         Item.FavCriminals: -1,
         Item.UnassumingCrate: 1
@@ -71,7 +71,7 @@ def add_trades(active_player, config: Config):
     })    
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.CorrespondingSounder: -1,
         # Item.MirrorcatchBox: -1,
         # Item.ViolantMirrorcatchBox: 1,
@@ -179,55 +179,55 @@ def add_trades(active_player, config: Config):
     # -------------
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.Infiltrating: 10
     })
 
     # TODO: various restrictions
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.AssortmentOfKhaganianCoinage: -10,
         Item.Infiltrating: 16
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.WellPlacedPawn: -25,
         Item.Infiltrating: 13.5
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.QueenMate: -1,
         Item.Infiltrating: 38
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.Stalemate: -1,
         Item._InfiltratingLong: 150
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.MuchNeededGap: -1,
         Item._InfiltratingLong: 150
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.AssortmentOfKhaganianCoinage: -125,
         Item._InfiltratingLong: 150
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.OneiricPearl: -1,
         Item._InfiltratingLong: 150
     })
 
     add({
-        Item.KhanateAction: -1,
+        Item._KhanateAction: -1,
         Item.SaltSteppeAtlas: -1,
         Item._InfiltratingLong: 150
     })    
@@ -235,14 +235,14 @@ def add_trades(active_player, config: Config):
     # Intercept a cablegram
     # TODO assume these weren't buffed
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.Infiltrating: -20,
         Item.InterceptedCablegram: 5,
         Item.VitalIntelligence: 1
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.Infiltrating: -130,
 
         Item.InterceptedCablegram: 50,
@@ -252,13 +252,13 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.Infiltrating: -20,
         Item.BlackmailMaterial: 1,
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.InterceptedCablegram: -2,
         Item.Infiltrating: -130,
         Item.OneiromanticRevelation: 1,
@@ -275,7 +275,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.InterceptedCablegram: -5,
         Item.Infiltrating: -450,
         Item._InfiltratingLong: -300,
@@ -285,7 +285,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.InterceptedCablegram: -10,
         Item.Infiltrating: -450,
         Item._InfiltratingLong: -300,
@@ -296,7 +296,7 @@ def add_trades(active_player, config: Config):
 
     # TODO check if these got buffed with +1 intel on sep 2 patch
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.Infiltrating: -130,
         Item._AgentInTransit: -1,
 
@@ -304,7 +304,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.Infiltrating: -130,
         Item._AgentInTransit: -1,
 
@@ -314,7 +314,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.Infiltrating: -130,
         Item._AgentInTransit: -1,
 
@@ -330,7 +330,7 @@ def add_trades(active_player, config: Config):
 
     # 1) Agent resurfaces
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -341,7 +341,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -353,7 +353,7 @@ def add_trades(active_player, config: Config):
 
     # 2) Zailor defects
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -365,7 +365,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -378,7 +378,7 @@ def add_trades(active_player, config: Config):
 
     # 3) Codebook misplaced
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -390,7 +390,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -404,7 +404,7 @@ def add_trades(active_player, config: Config):
 
     # 4) Blueprints missing
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -419,7 +419,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -433,7 +433,7 @@ def add_trades(active_player, config: Config):
 
     # 5) Mirror
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -445,7 +445,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -459,7 +459,7 @@ def add_trades(active_player, config: Config):
     # 6) Device completed
     # TODO: confirm these are already up to date on wiki
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -474,7 +474,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -489,7 +489,7 @@ def add_trades(active_player, config: Config):
 
     # 7) Trove
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -501,7 +501,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -514,7 +514,7 @@ def add_trades(active_player, config: Config):
 
     # 8) Mirror
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -526,7 +526,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -539,7 +539,7 @@ def add_trades(active_player, config: Config):
 
     # 9) Mirror
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -551,7 +551,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -565,7 +565,7 @@ def add_trades(active_player, config: Config):
 
     # 10) Master covets
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -577,7 +577,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -590,7 +590,7 @@ def add_trades(active_player, config: Config):
 
     # 11) Master plots
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
@@ -603,7 +603,7 @@ def add_trades(active_player, config: Config):
     })
 
     add({
-        Item.KhanateAction: -2,
+        Item._KhanateAction: -2,
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 

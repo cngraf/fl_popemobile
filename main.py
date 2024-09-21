@@ -264,7 +264,7 @@ core_constraint = {
     Item.Constraint: 1,
     Item.RootAction: actions_per_cycle,
     Item.VisitFromTimeTheHealer: 1,
-    # Item.CardDraws: full_draws_per_day * 7 * 10
+    Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
@@ -318,7 +318,7 @@ parabola.add_trades(active_player, config)
 upper_river.upper_river_exchange.add_trades(config)
 upper_river.uncategorized.add_trades(active_player, config)
 upper_river.ealing_gardens.add_trades(active_player, config)
-upper_river.jericho.add_trades(active_player, config)
+upper_river.jericho.add_trades(config)
 upper_river.evenlode.add_trades(active_player, config)
 upper_river.balmoral.add_trades(active_player, config)
 upper_river.burrow.add_trades(config)

@@ -29,14 +29,14 @@ def add_trades(active_player, config):
     add({
         Item.Action: -20,
         Item.StashedTreasure: 5100,
-        Item.LondonSeaOfVoicesRoundTrip: 1
+        Item._LondonSeaOfVoicesRoundTrip: 1
     })
 
     for visit_length in (10, 20, 40, 80, 160):
         add({
-            Item.LondonSeaOfVoicesRoundTrip: -1,
+            Item._LondonSeaOfVoicesRoundTrip: -1,
             Item.Action: -visit_length,
-            Item.SeaOfVoicesAction: visit_length
+            Item._SeaOfVoicesAction: visit_length
         })
     
     trade(5, {

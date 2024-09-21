@@ -5,6 +5,7 @@ from collections import defaultdict
 from enum import Enum, auto
 
 from enums import *
+from simulations.item_conversions import conversion_rate
 from simulations.models import *
 from simulations.models import GameState
 
@@ -62,77 +63,48 @@ handling students
 
 '''
 
+research_unit_ev = 0.11 # approx echo value
+
 class LabState(GameState):
     def __init__(self):
-        super().__init__()
+        super().__init__(max_hand_size=3)
         self.status = "InProgress"
 
-        self.outfit = OutfitList(300, 18)
+        self.outfit = PlayerOutfit(300, 18)
 
         self.items = {
             # Experiment
             Item.LaboratoryResearch: 0,
-            Item.TotalLabReserchRequired: 2700,
-            Item.ExperimentalObject: 820,
+            # Item.TotalLabReserchRequired: 2700,
+            # Item.ExperimentalObject: 820,
 
-            # Progression qualities
-            Item.EquipmentForScientificExperimentation: 9,
-            Item.PrestigeOfYourLaboratory: 100,
-            Item.NumberOfWorkersInYourLaboratory: 4,
-            Item.ScholarOfTheCorrespondence: 21,
+            # # Progression qualities
+            # Item.EquipmentForScientificExperimentation: 9,
+            # Item.PrestigeOfYourLaboratory: 100,
+            # Item.NumberOfWorkersInYourLaboratory: 4,
+            # Item.ScholarOfTheCorrespondence: 21,
 
-            # Workers
-            Item.LaboratoryServicesOfLetticeTheMercy: 1,
-            Item.LaboratoryServicesOfSilkCladExpert: 1,
-            Item.LaboratoryServicesFromGiftedStudent: 5,
-            Item.LaboratoryServicesFromVisionaryStudent: 5
+            # # Workers
+            # Item.LaboratoryServicesOfLetticeTheMercy: 1,
+            # Item.LaboratoryServicesOfSilkCladExpert: 1,
+            # Item.LaboratoryServicesFromGiftedStudent: 5,
+            # Item.LaboratoryServicesFromVisionaryStudent: 5
         }
 
-        self.storylets = [
-            AlwaysAvailable()
-        ]
-
+        self.storylets = []
         self.hand = []
-
-        self.deck = [
-            # Short
-            PreparingForBriefExperiment(),
-
-            # Long
-            FormNewHypotheses(),
-            ReviewThePriorLiterature(),
-            UnorthodoxMethods(),
-            RefreshYourConsumables(),
-            DirectingYourTeam(),
-            EngageInEmpiricalResearch(),
-            WriteUpYourFindings(),
-
-            # Very long
-            RunningOutOfSteam(),
-            RunningOutOfTerms(),
-
-            # Special items
-            TheIntrusionOfAThought(),
-            Eureka(),
-            ReadBooksOthersCannot(),
-            InvolveSecretCollege(),
-            InvokeLongDeadPriests(),
-            GenericMan1Card(),
-
-            # Experts
-            RelyOnLettice(),
-            RelyOnSilkCladExpert(),
-
-            # Students
-            WorkWithYourGiftedStudent(),
-            WorkWithYourVisionaryStudent()
-        ]
+        self.deck = []
 
     def equipment(self):
         return self.items.get(Item.EquipmentForScientificExperimentation, 0)
     
     def preparations(self):
         return self.items.get(Item.ResearchPreparations, 0)
+    
+    def research_remaining(self):
+        have = self.items.get(Item.LaboratoryResearch, 0)
+        need = self.items.get(Item.TotalLabReserchRequired, 0)
+        return need - have
 
     def highest_worker_level(self):
         # assuming we always have an expert
@@ -161,34 +133,36 @@ class LabState(GameState):
             return min(15, stat+4)
         
     def ev_from_item(self, item, val: int):
-        research_unit_ev = 1
         if item == Item.LaboratoryResearch:
             return val * research_unit_ev
         elif item == Item.UnwiseIdea:
-            return 7 * research_unit_ev
+            return 10 * research_unit_ev
         elif item == Item.UnexpectedResult:
-            return 7 * research_unit_ev
+            return 15 * research_unit_ev
         elif item == Item.UnlikelyConnection:
-            return 4 * research_unit_ev
+            return 5 * research_unit_ev
+        elif item == Item._HandClear:
+            return self.ev_hand_clear()
         else:
-            return 0
+            return val * conversion_rate(item, Item.Echo)
 
+    def ev_hand_clear(self):
+        return 3 * research_unit_ev
         
     def step(self):
-        # TODO smart redraw
-        while len(self.hand) < 3:
-            self.draw_card()
-
         best_card, best_action, best_action_ev = None, None, -float('inf')
+
+        for card in self.storylets:
+            for action in card.actions:
+                if action.can_perform(self):
+                    action_ev = action.ev(self)
+                    if action_ev > best_action_ev:
+                        best_card, best_action, best_action_ev = card, action, action_ev
 
         for card in self.hand:
             for action in card.actions:
                 if action.can_perform(self):
-                    action_ev = 0
-                    for i in range(1,6):
-                        zailing_bonus_estimate = i
-                        action_ev += action.ev(self)
-                    action_ev /= 5.0
+                    action_ev = action.ev(self)
                     if action_ev > best_action_ev:
                         best_card, best_action, best_action_ev = card, action, action_ev
 
@@ -201,18 +175,12 @@ class LabState(GameState):
         #                 best_card, best_action, best_action_ev = card, action, action_ev
 
         if best_action:
-            outcome = best_action.perform(self)
-            self.action_play_counts[best_action.name] += 1
+            result = best_action.perform(self)
             self.actions += best_action.action_cost
-            # self.region_action_counts[self.current_region] += best_action.action_cost
-            # print(best_action.name)
-            if outcome == "Success":
-                self.action_success_counts[best_action.name] += 1
-            else:
-                self.action_failure_counts[best_action.name] += 1
+            self.action_result_counts[best_action][result] += 1
 
         if best_card is not None:
-            self.card_play_counts[best_card.name] += 1
+            self.card_play_counts[best_card] += 1
             if best_card in self.hand:
                 self.hand.remove(best_card)            
 
@@ -223,11 +191,9 @@ class LabState(GameState):
 
         self.hand = [card for card in self.hand if card.can_draw(self)]
 
-        research = self.items.get(Item.LaboratoryResearch, 0)
-
-        # TODO other research types
-        if self.items.get(Item.LaboratoryResearch, 0) >= self.items.get(Item.TotalLabReserchRequired):
-            self.status = "Success"
+        # for menace in (Item.Wounds, Item.Nightmares, Item.Scandal, Item.Suspicion):
+        #     if self.items.get(menace, 0) >= 36:
+        #         status = f"Failure {menace}"
 
     def run(self):
         while self.status == "InProgress":
@@ -241,14 +207,63 @@ class AlwaysAvailable(OpportunityCard):
     def __init__(self):
         super().__init__("London storylets & social actions")
         self.actions = [
+            RefillHand(),
+            CompleteRun(),
             ReduceWoundsSocial1(),
             ReduceWoundsSocial2(),
             ReduceNightmaresSocial1(),
             ReduceNightmaresSocial2(),
             ReduceScandalSocial1(),
             ReduceSuspicionSocial1(),
-            SendNameWrittenInGant()
+            SendNameWrittenInGant(),
         ]
+
+class RefillHand(Action):
+    def __init__(self):
+        super().__init__("(REFILL HAND)")
+        self.action_cost = 0
+
+    def can_perform(self, state: LabState):
+        return len(state.hand) < state.max_hand_size
+    
+    def perform(self, state: GameState):
+        while len(state.hand) < state.max_hand_size:
+            state.draw_card()
+        return ActionResult.Pass
+
+    def ev(self, state: GameState):
+        return 5
+
+class CompleteRun(Action):
+    def __init__(self):
+        super().__init__("(COMPLETE RUN)")
+
+    def can_perform(self, state: LabState):
+        # TODO other types, parabolan etc
+        return state.research_remaining() <= 0
+    
+    def perform_pass(self, state: LabState):
+        result = super().perform_pass(state)
+        state.status = "Success"
+        return result
+
+    def pass_items(self, state: GameState):
+        epiphanies = state.items.get(Item.UnavoidableEpiphany, 0)
+        ideas = state.items.get(Item.UnwiseIdea, 0)
+        connections = state.items.get(Item.UnlikelyConnection, 0)
+        results = state.items.get(Item.UnexpectedResult, 0)
+
+        volumes = (epiphanies + ideas) * 0.6 + (connections + results) * 0.2
+        return {
+            Item.VolumeOfCollatedResearch: math.floor(volumes),
+            Item.UnavoidableEpiphany: 0 - epiphanies,
+            Item.UnwiseIdea: 0 - ideas,
+            Item.UnlikelyConnection: 0 - connections,
+            Item.UnexpectedResult: 0 - results,
+        }
+    
+    def ev(self, state: GameState):
+        return 300
 
 class ReduceWoundsSocial1(Action):
     def __init__(self):
@@ -632,8 +647,9 @@ class RelateToPastEnigma(Action):
         }
         
     def perform_pass(self, state: LabState):
-        super().perform_pass(state)
+        result = super().perform_pass(state)
         state.clear_hand()  # Clears hand after the action
+        return result
 
     def fail_items(self, state: LabState):
         focus_bonus = 25 * state.items.get(Item.CorrespondenceFocus, 0)
@@ -714,8 +730,9 @@ class HookUpMeters(Action):
         }
     
     def perform_pass(self, state: LabState):
-        super().perform_pass(state)
+        result = super().perform_pass(state)
         state.clear_hand()  # Clears hand after the action
+        return result
 
     # TODO
     def rare_success_items(self, state: LabState):
@@ -1169,6 +1186,13 @@ class CirculateDraft(Action):
     def __init__(self):
         super().__init__("Circulate a draft of your findings")
 
+    # HACK not a game rule, but easier than doing it via EV
+    def can_perform(self, state: LabState):
+        target = state.research_remaining()
+        will_gain = self.pass_items(state).get(Item.LaboratoryResearch)
+        is_within_range = will_gain + 1.5 >= target
+        return super().can_perform(state) and is_within_range
+
     def pass_items(self, state: LabState):
         # Calculate the research gained based on the formula provided
         lab_research = state.items.get(Item.LaboratoryResearch, 0)
@@ -1188,6 +1212,11 @@ class CirculateDraft(Action):
         return {
             Item.Scandal: 2
         }
+
+    def pass_ev(self, state: GameState):
+        # Discount the spending of URs
+        val = super().pass_ev(state)
+        return val + 0.5 * state.items.get(Item.UnexpectedResult, 0)
 
     def pass_rate(self, state: LabState):
         return self.broad_pass_rate(200, state.outfit.watchful)
@@ -1214,7 +1243,7 @@ class OrganiseNotes(Action):
         }
 
     def pass_rate(self, state: LabState):
-        dc = 300 - 10 * state.items.get(Item.UnexpectedResult, 0) - state.preparations()
+        dc = max(1,300 - 10 * state.items.get(Item.UnexpectedResult, 0) - state.preparations())
         return self.broad_pass_rate(dc, state.outfit.watchful)
 
 
@@ -1717,8 +1746,9 @@ class GenericMan1Discard(Action):
 
     def perform_pass(self, state: LabState):
         """Custom implementation to also discard hand on pass."""
-        super().perform_pass(state)
+        result = super().perform_pass(state)
         state.clear_hand()
+        return result
 
 
 ################################################################################
@@ -1835,7 +1865,7 @@ class ApplyExpertise(Action):
 
 class RelyOnSilkCladExpert(OpportunityCard):
     def __init__(self):
-        super().__init__("Ask the Silk-Clad Expert")
+        super().__init__("Rely on the Silk-Clad Expert")
         self.actions = [
             SilkCladExpert1(),
             SilkCladExpert2(),
@@ -2260,6 +2290,7 @@ class FollowUpVisionaryHunch(Action):
 #             Item.DisgruntlementAmongTheStudents: 1
 #         }
 
+
 # Update progress bar function
 def update_progress(progress):
     bar_length = 40
@@ -2268,14 +2299,278 @@ def update_progress(progress):
     sys.stdout.write(text)
     sys.stdout.flush()
 
-results = []
+def run_simulation(runs: int, initial_values: dict):
+    total_item_changes = defaultdict(int)
 
-for i in range(0, 100):
-    state = LabState()
-    state.run()
-    results.append(state.actions)
-    update_progress(i / 100)
+    # Accumulate action stats
+    total_actions = 0
+    total_action_play_counts = defaultdict(int)
+    total_action_result_counts = defaultdict(lambda: defaultdict(int))
 
-print()
-print(results)
-print(sum(results)/100)
+    # Card stats
+    total_card_draw_counts = defaultdict(int)
+    total_card_play_counts = defaultdict(int)
+
+    # Track the number of successful and failed runs
+    successes = 0
+    failures = 0
+
+    # Run the simulation for the specified number of runs
+    for i in range(runs):
+        state = LabState()
+        for key, val in initial_values.items():
+            state.items[key] = val
+
+        state.run()
+        outfit = state.outfit
+
+        # Track success and failure of each run
+        if state.status == "Success":
+            successes += 1
+        else:
+            failures += 1
+
+        # Accumulate total actions across all runs
+        total_actions += state.actions
+
+        # Accumulate item changes for each run
+        for item, count in state.items.items():
+            total_item_changes[item] += count  
+
+        # Accumulate action play/success/failure counts
+        for action, result_counts in state.action_result_counts.items():
+            for result, count in result_counts.items():
+                total_action_result_counts[action][result] += count
+                total_action_play_counts[action] += count
+
+        # Accumulate card draw/play counts
+        for card, count in state.card_draw_counts.items():
+            total_card_draw_counts[card] += count
+
+        for card, count in state.card_play_counts.items():
+            total_card_play_counts[card] += count
+
+        update_progress((i + 1) / runs)  # Update the progress bar
+
+    avg_actions_per_run = total_actions / runs
+
+    # Print the last outfit used
+    if outfit:
+        print("\nLast Outfit Used:")
+        print(f"{'Stat':<30}{'Value':<10}")
+        print("-" * 40)
+
+        for stat, value in vars(outfit).items():  # Assuming the outfit is an object
+            print(f"{stat:<30}{value:<10}")
+
+    display_results(
+        total_item_changes=total_item_changes,
+        avg_actions_per_run=avg_actions_per_run,
+        total_action_play_counts=total_action_play_counts,
+        total_action_result_counts=total_action_result_counts,
+        total_card_draw_counts=total_card_draw_counts,
+        total_card_play_counts=total_card_play_counts,
+        deck=state.deck, 
+        total_actions=total_actions,
+        runs=runs,
+        successes=successes,
+        failures=failures
+    )
+
+def display_results(
+    total_item_changes,
+    avg_actions_per_run,
+    total_action_play_counts,
+    total_action_result_counts,
+    total_card_draw_counts,
+    total_card_play_counts,
+    deck, 
+    total_actions,
+    runs: int,
+    successes: int,
+    failures: int
+):
+
+    print()
+    # Display success and failure counts
+    print(f"Total Runs: {runs}")
+    print(f"Successes: {successes} ({(successes / runs) * 100:.2f}%)")
+    print(f"Failures: {failures} ({(failures / runs) * 100:.2f}%)")
+
+    # Card and Action results display
+    print_condensed_action_table(
+        total_action_play_counts,
+        total_action_result_counts,
+        total_card_draw_counts,
+        total_card_play_counts,
+        deck,
+        runs
+    )
+
+
+    # Display average change in items with echo values
+    print_item_summary(total_item_changes, runs, total_actions)
+
+    # Display the average actions run
+    print(f"\nAverage Actions per Run:      {avg_actions_per_run:.2f}")    
+    print()
+
+
+# Print the average change in items per run with truncated item names and sorted by echo per action
+def print_item_summary(total_item_changes, runs, total_actions):
+    max_name_length = 20  # Maximum length for item name to be displayed
+    print(f"\n{'Item':<30}{'Avg +/Run':<15}{'Echo Value':<15}{'Total Echo/Action':<20}")
+    print("-" * 85)
+
+    total_echo_value = 0.0
+    item_summaries = []
+
+    # Collect all item data into a list for sorting
+    for item, total_change in total_item_changes.items():
+        avg_change = total_change / runs
+        echo_value = conversion_rate(item, Item.Echo)
+        item_total_echo_value = echo_value * total_change
+
+        # Accumulate the total echo value across all items
+        total_echo_value += item_total_echo_value
+
+        # Truncate item name if it's too long
+        truncated_item_name = item.name if len(item.name) <= max_name_length else item.name[:max_name_length - 3] + "..."
+
+        # Only include items with non-zero average change
+        if avg_change != 0.0:
+            item_summaries.append((truncated_item_name, avg_change, echo_value, item_total_echo_value / total_actions))
+
+    # Sort the items by 'Total Echo/Action' in descending order
+    item_summaries.sort(key=lambda x: x[1], reverse=True)
+
+    # Print the sorted items
+    for item_name, avg_change, echo_value, echo_per_action in item_summaries:
+        print(f"{item_name:<30}{avg_change:<15.2f}{echo_value:<15.2f}{echo_per_action:<20.4f}")
+
+    print(f"\n{'Total Echo/Action':<45}{total_echo_value / total_actions:.4f}")
+
+# Helper function to truncate long strings
+def truncate_string(s, length=25):
+    if len(s) > length:
+        return s[:length - 3] + '...'  # Truncate and add ellipsis
+    return s
+
+def print_condensed_action_table(action_play_counts, action_result_counts, card_draw_counts, card_play_counts, deck, runs, name_length=25):
+    print(f"\n{'Card/Action':<30}{'Played/Drawn':<20}{'Draw/Play %':<15}{'Avg Plays/Run':<15}{'Success Rate':<15}")
+    print("-" * 105)
+    
+    # Sort cards by total play count (descending)
+    sorted_cards = sorted(deck, key=lambda card: card_play_counts.get(card.name, 0), reverse=True)
+
+    for card in sorted_cards:
+        card_name = truncate_string(card.name, name_length)
+        drawn = card_draw_counts.get(card.name, 0) / runs
+        played = card_play_counts.get(card.name, 0) / runs
+        play_rate = (card_play_counts.get(card.name, 0) / card_draw_counts.get(card.name, 1)) * 100 if card_draw_counts.get(card.name, 0) > 0 else 0
+
+        # First row for card drawn/played info
+        print(f"{card_name:<30}{f'{played:.2f}/{drawn:.2f}':<20}{play_rate:<15.2f}")
+
+        # Sort actions by total play count (descending)
+        sorted_actions = sorted(card.actions, key=lambda action: action_play_counts.get(action.name, 0), reverse=True)
+        
+        # Next rows for action info (for each action in the card)
+        for action in sorted_actions:
+            action_name = truncate_string(action.name, name_length)
+            action_played = action_play_counts.get(action.name, 0) / runs
+            result_counts = action_result_counts.get(action.name, {})
+            successes = result_counts.get(ActionResult.Pass, 0) + result_counts.get(ActionResult.AltSuccess, 0)
+            failures = result_counts.get(ActionResult.Failure, 0) + result_counts.get(ActionResult.AltFailure, 0)
+            total = successes + failures
+            success_rate = (successes / total) * 100 if total > 0 else 0
+            # Action rows indented under the card row
+            print(f"{'':<30}{action_name:<30}{'':<15}{action_played:<15.2f}{success_rate:.2f}%")
+
+        print("-" * 105)
+
+
+# Update progress bar function
+def update_progress(progress):
+    bar_length = 40
+    block = int(round(bar_length * progress))
+    text = f"\rProgress: [{'#' * block + '-' * (bar_length - block)}] {progress * 100:.2f}%"
+    sys.stdout.write(text)
+    sys.stdout.flush()
+
+# run_simulation(100, {
+#     Item.ExperimentalObject: 820,
+#     Item.TotalLabReserchRequired: 2700
+# })
+
+class LabSimulationRunner(SimulationRunner):
+    def __init__(self, runs: int, initial_values: dict):
+        super().__init__(runs, initial_values)
+
+        self.storylets = [
+            AlwaysAvailable()
+        ]
+
+        self.cards = [
+            # Short
+            PreparingForBriefExperiment(),
+
+            # Long
+            FormNewHypotheses(),
+            ReviewThePriorLiterature(),
+            UnorthodoxMethods(),
+            RefreshYourConsumables(),
+            DirectingYourTeam(),
+            EngageInEmpiricalResearch(),
+            WriteUpYourFindings(),
+
+            # Very long
+            RunningOutOfSteam(),
+            RunningOutOfTerms(),
+
+            # Special items
+            TheIntrusionOfAThought(),
+            Eureka(),
+            ReadBooksOthersCannot(),
+            InvolveSecretCollege(),
+            InvokeLongDeadPriests(),
+            GenericMan1Card(),
+
+            # Experts
+            RelyOnLettice(),
+            RelyOnSilkCladExpert(),
+
+            # Students
+            WorkWithYourGiftedStudent(),
+            WorkWithYourVisionaryStudent()
+        ]
+
+    def create_state(self) -> GameState:
+        return LabState()
+    
+
+simulation = LabSimulationRunner(
+    runs = 200,
+    initial_values= {
+        Item.ExperimentalObject: 820,
+        Item.TotalLabReserchRequired: 2700,
+
+        # # Experiment
+        # Item.LaboratoryResearch: 0,
+
+        # Progression qualities
+        Item.EquipmentForScientificExperimentation: 9,
+        Item.PrestigeOfYourLaboratory: 100,
+        Item.NumberOfWorkersInYourLaboratory: 4,
+        Item.ScholarOfTheCorrespondence: 21,
+
+        # Workers
+        Item.LaboratoryServicesOfLetticeTheMercy: 1,
+        Item.LaboratoryServicesOfSilkCladExpert: 1,
+        Item.LaboratoryServicesFromGiftedStudent: 5,
+        Item.LaboratoryServicesFromVisionaryStudent: 5        
+    })
+
+simulation.outfit = PlayerOutfit(330, 18)
+
+simulation.run_simulation()    

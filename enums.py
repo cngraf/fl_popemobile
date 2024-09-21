@@ -154,12 +154,14 @@ class Item(Enum):
     LondonAction = auto()
     ParabolaAction = auto()
 
-    JerichoAction = auto()
+    _JerichoAction = auto()
+    _JerichoFavourExchange = auto()
 
-    KhanateAction = auto()
-    SeaOfVoicesAction = auto()
-    PortCecilAction = auto()
-    MangroveAction = auto()
+    _KhanateAction = auto()
+
+    _SeaOfVoicesAction = auto()
+    _PortCecilAction = auto()
+    _MangroveAction = auto()
 
     # # Rat Market Hack TODO figure out real groupings
     # RatMarketWeek1ExhaustionStage1 = auto()
@@ -925,8 +927,10 @@ class Item(Enum):
     SlightedAcquaintance = auto() # newspaper
     ParabolaRoundTrip = auto()
 
-    LondonKhanateRoundTrip = auto()
-    LondonSeaOfVoicesRoundTrip = auto()
+    # Location stuff
+    _LondonKhanateRoundTrip = auto()
+    _LondonSeaOfVoicesRoundTrip = auto()
+    _UpperRiverRoundTrip = auto()
 
     DuplicatedVakeSkull = auto()
     DuplicatedCounterfeitHeadOfJohnTheBaptist = auto()

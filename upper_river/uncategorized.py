@@ -4,6 +4,13 @@ from utils import *
 def add_trades(active_player, config):
     trade = config.trade
     default_rare_success_rate = 0.05
+
+    config.add({
+        Item.Action: -2,
+        Item._UpperRiverRoundTrip: 1,
+        Item.RumourOfTheUpperRiver: 2
+    })
+
     # Sets to 3
     # In practice probably slightly better w overcap
     trade(1, {

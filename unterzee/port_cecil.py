@@ -24,10 +24,10 @@ def add_trades(active_player, config):
     # 2x (deploy cat wrangling => 30x silvered cats claw)
     #   OR (distact w wildlife => 4x withered tentacle)
 
-    trade(1, { Item.PortCecilAction: 1 })
+    trade(1, { Item._PortCecilAction: 1 })
 
     trade(0, {
-        Item.PortCecilAction: -14,
+        Item._PortCecilAction: -14,
         Item.MapScrap: 35,
         Item.KnobOfScintillack: 5,
         Item.ScrapOfIncendiaryGossip: 5,
@@ -39,7 +39,7 @@ def add_trades(active_player, config):
     })
 
     trade(0, {
-        Item.PortCecilAction: -14,
+        Item._PortCecilAction: -14,
         Item.MapScrap: 35,
         Item.KnobOfScintillack: 5,
         Item.ScrapOfIncendiaryGossip: 5,
@@ -52,7 +52,7 @@ def add_trades(active_player, config):
     })
 
     trade(0, {
-        Item.PortCecilAction: -14,
+        Item._PortCecilAction: -14,
         Item.MapScrap: 35,
         Item.KnobOfScintillack: 5,
         Item.ScrapOfIncendiaryGossip: 5,
@@ -73,7 +73,7 @@ def add_trades(active_player, config):
     # 1x distract cats w/ wildlife
 
     trade(0, {
-        Item.PortCecilAction: -14,
+        Item._PortCecilAction: -14,
         Item.ZeeZtory: 6 * 5,
         Item.ScrapOfIncendiaryGossip: 5,
         Item.RomanticNotion: 7,

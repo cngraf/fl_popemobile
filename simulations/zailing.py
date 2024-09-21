@@ -198,30 +198,31 @@ def bonus_zailing2():
 #     def narrow_pass_rate(dc, stat_value):
 #         return 0.5 + (stat_value - dc) * 0.1
 
-# class OutfitList:
-#     def __init__(self, default_basic = 330, default_advanced = 16):
-#         self.zailing_speed = 55
-#         self.zubmersibility = 1
-#         self.luxurious = 0
-#         self.reduce_tw = 0 # TODO re-implement
+class PlayerOutfit:
+    def __init__(self, default_basic = 330, default_advanced = 16):
+        self.zailing_speed = 55
+        self.zubmersibility = 1
+        self.luxurious = 0
+        self.reduce_tw = 0 # TODO re-implement
 
-#         self.dangerous = default_basic
-#         self.watchful = default_basic
-#         self.persuasive = default_basic
-#         self.shadowy = default_basic
+        self.dangerous = default_basic
+        self.watchful = default_basic
+        self.persuasive = default_basic
+        self.shadowy = default_basic
 
-#         self.player_of_chess = default_advanced
-#         self.zeefaring = default_advanced
-#         self.monstrous_anatomy = default_advanced
-#         self.mithridacy = default_advanced
-#         self.artisan_of_the_red_science = default_advanced
-#         self.kataleptic_toxicology = default_advanced
-#         self.shapeling_arts = default_advanced
-#         self.glasswork = default_advanced
+        self.player_of_chess = default_advanced
+        self.zeefaring = default_advanced
+        self.monstrous_anatomy = default_advanced
+        self.mithridacy = default_advanced
+        self.artisan_of_the_red_science = default_advanced
+        self.kataleptic_toxicology = default_advanced
+        self.shapeling_arts = default_advanced
+        self.glasswork = default_advanced
 
 class ZailingState(GameState):
     def __init__(self):
-        self.outfits = OutfitList()
+        super().__init__()
+        self.outfits = PlayerOutfit()
 
         self.items = {
             Item.TroubledWaters: 0,
@@ -325,9 +326,9 @@ class ZailingState(GameState):
             self.actions += best_action.action_cost
             self.region_action_counts[self.current_region] += best_action.action_cost
 
-            if outcome == "Success":
+            if outcome in (ActionResult.Pass, ActionResult.AltSuccess):
                 self.action_success_counts[best_action.name] += 1
-            else:
+            elif outcome in (ActionResult.Failure, ActionResult.AltFailure):
                 self.action_failure_counts[best_action.name] += 1
 
         if best_card is not None:
@@ -401,6 +402,7 @@ class ZailingState(GameState):
         elif item == Item.ChasingDownYourBounty:
             return val * 12/53
         else:
+            # print(item)
             echo_value = item_echo_values.get(item, 0)
             # TODO echo value
             return echo_value * val
@@ -4865,7 +4867,7 @@ cards = [
     SightingOfTheBounty(),
     SpitOfLand(),
     WorryingAppetite(),
-    ArchitectsDream(),
+    # ArchitectsDream(),
     # BearingWitnessToPilgrimage(), # Midnight Whale WQ
     CorneringTheBounty(),
     CreakingFromAbove(),
@@ -5214,5 +5216,5 @@ mangrove_snares_london = [
 
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=1_000, route=mangrove_shepherds_london)
+    run_simulation(runs=1_000, route=london_to_khanate)
 
