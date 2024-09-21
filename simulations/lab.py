@@ -71,7 +71,7 @@ class LabState(GameState):
         self.status = "InProgress"
 
         self.outfit = PlayerOutfit(300, 18)
-
+        self.actions = 1
         self.items = {
             # Experiment
             Item.LaboratoryResearch: 0,
@@ -143,6 +143,8 @@ class LabState(GameState):
             return 5 * research_unit_ev
         elif item == Item._HandClear:
             return self.ev_hand_clear()
+        elif item == Item.ResearchPreparations:
+            return 1 * research_unit_ev     
         else:
             return val * conversion_rate(item, Item.Echo)
 
@@ -411,7 +413,7 @@ class RelyOnBrilliance(Action):
 
     def can_perform(self, state: LabState):
         return (state.items.get(Item.EquipmentForScientificExperimentation, 0) >= 7 and 
-                state.items.get(Item.PrestigeOfLaboratory, 0) >= 20)
+                state.items.get(Item.PrestigeOfYourLaboratory, 0) >= 20)
     
     def pass_rate(self, state: LabState):
         return self.narrow_pass_rate(170, state.outfit.watchful)
@@ -1555,7 +1557,7 @@ class PursueThroughRedScience(Action):
         return state.items.get(Item.ScholarOfTheCorrespondence, 0) >= 5
 
     def pass_items(self, state: LabState):
-        art_red_sci = state.items.get(Item.ArtisanOfTheRedScience, 0)
+        art_red_sci = state.outfit.artisan_of_the_red_science
         research_gain = state.advanced_skill_formula1(art_red_sci)
         return {
             Item.LaboratoryResearch: research_gain
@@ -1565,13 +1567,13 @@ class PursueThroughRedScience(Action):
     def rare_success_items(self, state: LabState):
         return {
             Item.LaboratoryResearch: self.pass_items(state).get(Item.LaboratoryResearch, 0),
-            Item.AScholarOfTheCorrespondence: 1,
+            Item.ScholarOfTheCorrespondence: 1,
             Item.Wounds: 2.5
         }
 
     # TODO rare failure, same plus +1 SOTC
     def fail_items(self, state: LabState):
-        art_red_sci = state.items.get(Item.ArtisanOfTheRedScience, 0)
+        art_red_sci = state.outfit.artisan_of_the_red_science
         research_gain = state.advanced_skill_formula1(art_red_sci)        
         return {
             Item.LaboratoryResearch: research_gain,
@@ -1579,7 +1581,7 @@ class PursueThroughRedScience(Action):
         }
 
     def pass_rate(self, state: LabState):
-        return self.narrow_pass_rate(5, state.items.get(Item.ArtisanOfTheRedScience, 0))
+        return self.narrow_pass_rate(5, state.outfit.artisan_of_the_red_science)
 
 ################################################################################
 ###                           Involve Your Secret College                    ###
@@ -1605,7 +1607,7 @@ class WriteToSecretCollege(Action):
 
     def pass_items(self, state: LabState):
         # Using the logistic formula for calculating Laboratory Research
-        asotc = state.items.get(Item.AScholarOfTheCorrespondence, 0)
+        asotc = state.items.get(Item.ScholarOfTheCorrespondence, 0)
         equipment = state.equipment()
         research_gain = (equipment / 9) * (5 + (35 / (1 + math.exp(-0.5 * (asotc - 12)))))
         return {
@@ -1938,6 +1940,160 @@ class SilkCladExpert4(Action):
             Item.ParabolanResearch: 5,
             Item.LaboratoryResearch: 5/3 * state.equipment()
         }
+
+
+################################################################################
+###                             RelyOnHephaesta                              ###
+################################################################################
+
+class RelyOnHephaesta(OpportunityCard):
+    def __init__(self):
+        super().__init__("Rely on Hephaesta")
+        self.actions = [
+            SeekResearchOpinion(),
+            ApplyExpertise(),
+            AskHelpWithNightmares(),
+            SeekInsightOnMaps(),
+            SeekInsightOnNauticalMatters(),
+            SeekInsightOnGeology(),
+            SuperviseVisionaryStudent()
+        ]
+        self.weight = 1.0  # Standard Frequency
+    
+    def can_draw(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromHephaesta, 0) > 0
+
+class SeekResearchOpinion(Action):
+    def __init__(self):
+        super().__init__("Seek her research opinion")
+    
+    def can_perform(self, state: LabState):
+        return (state.items.get(Item.ExperimentalObject, 0) in range(1, 201) or \
+               state.items.get(Item.ExperimentalObject, 0) in range(301, 820) or \
+               state.items.get(Item.ExperimentalObject, 0) >= 821) and \
+               state.items.get(Item.NauticalFocus)
+
+    def pass_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: (5 / 3) * equipment_level
+        }
+
+class ApplyExpertise(Action):
+    def __init__(self):
+        super().__init__("Apply her particular expertise in a novel way")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.UnlikelyConnection, 0) >= 1 and \
+               state.items.get(Item.ExperimentalObject, 0) in range(0, 201) or \
+               state.items.get(Item.ExperimentalObject, 0) in range(301, 820) or \
+               state.items.get(Item.ExperimentalObject, 0) >= 821
+
+    def pass_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 7 + 2 * equipment_level,
+            Item.UnlikelyConnection: -1,
+            Item.UnexpectedResult: 1
+        }
+
+    def fail_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 5 + 2 * equipment_level,
+            Item.UnlikelyConnection: -1
+        }
+
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(220 - state.preparations(), state.outfit.watchful)
+
+class AskHelpWithNightmares(Action):
+    def __init__(self):
+        super().__init__("Ask for her help with your Nightmares")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.Nightmares, 0) >= 1
+
+    def pass_items(self, state: LabState):
+        return {
+            Item.Nightmares: -2
+        }
+
+class SeekInsightOnMaps(Action):
+    def __init__(self):
+        super().__init__("Seek her insight on maps")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.ExperimentalObject, 0) in range(201, 301)
+
+    def pass_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 8 + (1.5 * equipment_level),
+            Item.UnavoidableEpiphany: 1
+        }
+
+class SeekInsightOnNauticalMatters(Action):
+    def __init__(self):
+        super().__init__("Seek her insight on nautical matters")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.NauticalFocus, 0) > 0
+
+    def pass_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 4 + (2 * equipment_level),
+            Item.UnavoidableEpiphany: 1
+        }
+
+class SeekInsightOnGeology(Action):
+    def __init__(self):
+        super().__init__("Seek her insight on charting of geology and bone strata")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.ExperimentalObject, 0) == 820
+
+    def pass_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 4 + (2 * equipment_level),
+            Item.UnavoidableEpiphany: 1
+        }
+
+class SuperviseVisionaryStudent(Action):
+    def __init__(self):
+        super().__init__("Have Hephaesta supervise your Visionary Student")
+        self.alt_pass_rate = 0.5
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromVisionaryStudent, 0) >= 5 and \
+               (state.items.get(Item.ExperimentalObject, 0) in range(201, 301) or \
+                state.items.get(Item.ExperimentalObject, 0) == 820)
+
+    def pass_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 12 + (2 * equipment_level),
+            Item.UnexpectedResult: 1
+        }
+
+    def alt_pass_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 12 + (2 * equipment_level),
+            Item.DisgruntlementAmongStudents: 1,
+            Item.UnexpectedResult: 1
+        }
+
+    def fail_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 10 + (2 * equipment_level)
+        }
+
+    def pass_rate(self, state: LabState):
+        return self.broad_pass_rate(220 - state.preparations(), state.outfit.watchful)
 
 
 ################################################################################
@@ -2290,218 +2446,96 @@ class FollowUpVisionaryHunch(Action):
 #             Item.DisgruntlementAmongTheStudents: 1
 #         }
 
+################################################################################
+###                            DrawOnYourNauticalKnowledge                   ###
+################################################################################
 
-# Update progress bar function
-def update_progress(progress):
-    bar_length = 40
-    block = int(round(bar_length * progress))
-    text = f"\rProgress: [{'#' * block + '-' * (bar_length - block)}] {progress * 100:.2f}%"
-    sys.stdout.write(text)
-    sys.stdout.flush()
-
-def run_simulation(runs: int, initial_values: dict):
-    total_item_changes = defaultdict(int)
-
-    # Accumulate action stats
-    total_actions = 0
-    total_action_play_counts = defaultdict(int)
-    total_action_result_counts = defaultdict(lambda: defaultdict(int))
-
-    # Card stats
-    total_card_draw_counts = defaultdict(int)
-    total_card_play_counts = defaultdict(int)
-
-    # Track the number of successful and failed runs
-    successes = 0
-    failures = 0
-
-    # Run the simulation for the specified number of runs
-    for i in range(runs):
-        state = LabState()
-        for key, val in initial_values.items():
-            state.items[key] = val
-
-        state.run()
-        outfit = state.outfit
-
-        # Track success and failure of each run
-        if state.status == "Success":
-            successes += 1
-        else:
-            failures += 1
-
-        # Accumulate total actions across all runs
-        total_actions += state.actions
-
-        # Accumulate item changes for each run
-        for item, count in state.items.items():
-            total_item_changes[item] += count  
-
-        # Accumulate action play/success/failure counts
-        for action, result_counts in state.action_result_counts.items():
-            for result, count in result_counts.items():
-                total_action_result_counts[action][result] += count
-                total_action_play_counts[action] += count
-
-        # Accumulate card draw/play counts
-        for card, count in state.card_draw_counts.items():
-            total_card_draw_counts[card] += count
-
-        for card, count in state.card_play_counts.items():
-            total_card_play_counts[card] += count
-
-        update_progress((i + 1) / runs)  # Update the progress bar
-
-    avg_actions_per_run = total_actions / runs
-
-    # Print the last outfit used
-    if outfit:
-        print("\nLast Outfit Used:")
-        print(f"{'Stat':<30}{'Value':<10}")
-        print("-" * 40)
-
-        for stat, value in vars(outfit).items():  # Assuming the outfit is an object
-            print(f"{stat:<30}{value:<10}")
-
-    display_results(
-        total_item_changes=total_item_changes,
-        avg_actions_per_run=avg_actions_per_run,
-        total_action_play_counts=total_action_play_counts,
-        total_action_result_counts=total_action_result_counts,
-        total_card_draw_counts=total_card_draw_counts,
-        total_card_play_counts=total_card_play_counts,
-        deck=state.deck, 
-        total_actions=total_actions,
-        runs=runs,
-        successes=successes,
-        failures=failures
-    )
-
-def display_results(
-    total_item_changes,
-    avg_actions_per_run,
-    total_action_play_counts,
-    total_action_result_counts,
-    total_card_draw_counts,
-    total_card_play_counts,
-    deck, 
-    total_actions,
-    runs: int,
-    successes: int,
-    failures: int
-):
-
-    print()
-    # Display success and failure counts
-    print(f"Total Runs: {runs}")
-    print(f"Successes: {successes} ({(successes / runs) * 100:.2f}%)")
-    print(f"Failures: {failures} ({(failures / runs) * 100:.2f}%)")
-
-    # Card and Action results display
-    print_condensed_action_table(
-        total_action_play_counts,
-        total_action_result_counts,
-        total_card_draw_counts,
-        total_card_play_counts,
-        deck,
-        runs
-    )
-
-
-    # Display average change in items with echo values
-    print_item_summary(total_item_changes, runs, total_actions)
-
-    # Display the average actions run
-    print(f"\nAverage Actions per Run:      {avg_actions_per_run:.2f}")    
-    print()
-
-
-# Print the average change in items per run with truncated item names and sorted by echo per action
-def print_item_summary(total_item_changes, runs, total_actions):
-    max_name_length = 20  # Maximum length for item name to be displayed
-    print(f"\n{'Item':<30}{'Avg +/Run':<15}{'Echo Value':<15}{'Total Echo/Action':<20}")
-    print("-" * 85)
-
-    total_echo_value = 0.0
-    item_summaries = []
-
-    # Collect all item data into a list for sorting
-    for item, total_change in total_item_changes.items():
-        avg_change = total_change / runs
-        echo_value = conversion_rate(item, Item.Echo)
-        item_total_echo_value = echo_value * total_change
-
-        # Accumulate the total echo value across all items
-        total_echo_value += item_total_echo_value
-
-        # Truncate item name if it's too long
-        truncated_item_name = item.name if len(item.name) <= max_name_length else item.name[:max_name_length - 3] + "..."
-
-        # Only include items with non-zero average change
-        if avg_change != 0.0:
-            item_summaries.append((truncated_item_name, avg_change, echo_value, item_total_echo_value / total_actions))
-
-    # Sort the items by 'Total Echo/Action' in descending order
-    item_summaries.sort(key=lambda x: x[1], reverse=True)
-
-    # Print the sorted items
-    for item_name, avg_change, echo_value, echo_per_action in item_summaries:
-        print(f"{item_name:<30}{avg_change:<15.2f}{echo_value:<15.2f}{echo_per_action:<20.4f}")
-
-    print(f"\n{'Total Echo/Action':<45}{total_echo_value / total_actions:.4f}")
-
-# Helper function to truncate long strings
-def truncate_string(s, length=25):
-    if len(s) > length:
-        return s[:length - 3] + '...'  # Truncate and add ellipsis
-    return s
-
-def print_condensed_action_table(action_play_counts, action_result_counts, card_draw_counts, card_play_counts, deck, runs, name_length=25):
-    print(f"\n{'Card/Action':<30}{'Played/Drawn':<20}{'Draw/Play %':<15}{'Avg Plays/Run':<15}{'Success Rate':<15}")
-    print("-" * 105)
+class DrawOnYourNauticalKnowledge(OpportunityCard):
+    def __init__(self):
+        super().__init__("Draw on your nautical knowledge")
+        self.actions = [
+            ExaminePastChartsAndLogs(),
+            GetHelpFromHephaesta(),
+            RecallRecentZeeVoyage()
+        ]
+        self.weight = 1.0  # Standard Frequency
     
-    # Sort cards by total play count (descending)
-    sorted_cards = sorted(deck, key=lambda card: card_play_counts.get(card.name, 0), reverse=True)
+    def can_draw(self, state: LabState):
+        return state.items.get(Item.NauticalFocus, 0) > 0 and state.outfit.zeefaring > 0
 
-    for card in sorted_cards:
-        card_name = truncate_string(card.name, name_length)
-        drawn = card_draw_counts.get(card.name, 0) / runs
-        played = card_play_counts.get(card.name, 0) / runs
-        play_rate = (card_play_counts.get(card.name, 0) / card_draw_counts.get(card.name, 1)) * 100 if card_draw_counts.get(card.name, 0) > 0 else 0
+class ExaminePastChartsAndLogs(Action):
+    def __init__(self):
+        super().__init__("Examine your past charts and logs")
+    
+    def pass_items(self, state: LabState):
+        zeefaring = state.outfit.zeefaring
+        research_gains = state.advanced_skill_formula1(zeefaring)
+        return {
+            Item.LaboratoryResearch: research_gains
+        }
 
-        # First row for card drawn/played info
-        print(f"{card_name:<30}{f'{played:.2f}/{drawn:.2f}':<20}{play_rate:<15.2f}")
+    def fail_items(self, state: LabState):
+        zeefaring = state.outfit.zeefaring
+        research_gains = state.advanced_skill_formula2(zeefaring)
+        return {
+            Item.LaboratoryResearch: research_gains
+        }
 
-        # Sort actions by total play count (descending)
-        sorted_actions = sorted(card.actions, key=lambda action: action_play_counts.get(action.name, 0), reverse=True)
-        
-        # Next rows for action info (for each action in the card)
-        for action in sorted_actions:
-            action_name = truncate_string(action.name, name_length)
-            action_played = action_play_counts.get(action.name, 0) / runs
-            result_counts = action_result_counts.get(action.name, {})
-            successes = result_counts.get(ActionResult.Pass, 0) + result_counts.get(ActionResult.AltSuccess, 0)
-            failures = result_counts.get(ActionResult.Failure, 0) + result_counts.get(ActionResult.AltFailure, 0)
-            total = successes + failures
-            success_rate = (successes / total) * 100 if total > 0 else 0
-            # Action rows indented under the card row
-            print(f"{'':<30}{action_name:<30}{'':<15}{action_played:<15.2f}{success_rate:.2f}%")
+    def pass_rate(self, state: LabState):
+        return self.narrow_pass_rate(5, state.outfit.zeefaring)
 
-        print("-" * 105)
+class GetHelpFromHephaesta(Action):
+    def __init__(self):
+        super().__init__("Get help from Hephaesta")
+    
+    def can_perform(self, state: LabState):
+        return state.items.get(Item.LaboratoryServicesFromHephaesta, 0) > 0
+
+    def pass_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.UnavoidableEpiphany: 1,
+            Item.LaboratoryResearch: 12 + (2 * equipment_level),
+            Item.UnexpectedResult: 1
+        }
+
+    def fail_items(self, state: LabState):
+        equipment_level = state.equipment()
+        return {
+            Item.LaboratoryResearch: 5 + (2 * equipment_level)
+        }
+
+    def pass_rate(self, state: LabState):
+        return self.narrow_pass_rate(4, state.outfit.zeefaring)
 
 
-# Update progress bar function
-def update_progress(progress):
-    bar_length = 40
-    block = int(round(bar_length * progress))
-    text = f"\rProgress: [{'#' * block + '-' * (bar_length - block)}] {progress * 100:.2f}%"
-    sys.stdout.write(text)
-    sys.stdout.flush()
+class RecallRecentZeeVoyage(Action):
+    def __init__(self):
+        super().__init__("Recall a recent zee-voyage")
 
-# run_simulation(100, {
-#     Item.ExperimentalObject: 820,
-#     Item.TotalLabReserchRequired: 2700
-# })
+    def can_perform(self, state: LabState):
+        return True
+        # return state.items.get(Item.Zeefaring, 0) >= 5 and state.items.get(Item.ZeeLegs, 0) >= 5
+
+    def pass_items(self, state: LabState):
+        zeefaring = state.outfit.zeefaring
+        research_gains = state.advanced_skill_formula1(zeefaring)
+        return {
+            Item.ZeeLegs: -5,
+            Item.UnavoidableEpiphany: 1,
+            Item.LaboratoryResearch: research_gains
+        }
+
+    def fail_items(self, state: LabState):
+        zeefaring = state.outfit.zeefaring
+        research_gains = state.advanced_skill_formula2(zeefaring)
+        return {
+            Item.LaboratoryResearch: research_gains
+        }
+
+    def pass_rate(self, state: LabState):
+        return self.narrow_pass_rate(5, state.outfit.zeefaring)
+
 
 class LabSimulationRunner(SimulationRunner):
     def __init__(self, runs: int, initial_values: dict):
@@ -2539,10 +2573,14 @@ class LabSimulationRunner(SimulationRunner):
             # Experts
             RelyOnLettice(),
             RelyOnSilkCladExpert(),
+            RelyOnHephaesta(),
 
             # Students
             WorkWithYourGiftedStudent(),
-            WorkWithYourVisionaryStudent()
+            WorkWithYourVisionaryStudent(),
+
+            # Focus
+            DrawOnYourNauticalKnowledge()
         ]
 
     def create_state(self) -> GameState:
@@ -2550,10 +2588,11 @@ class LabSimulationRunner(SimulationRunner):
     
 
 simulation = LabSimulationRunner(
-    runs = 200,
+    runs = 500,
     initial_values= {
-        Item.ExperimentalObject: 820,
-        Item.TotalLabReserchRequired: 2700,
+        Item.ExperimentalObject: 260,
+        Item.TotalLabReserchRequired: 550,
+        Item.NauticalFocus: 1,
 
         # # Experiment
         # Item.LaboratoryResearch: 0,
@@ -2564,11 +2603,19 @@ simulation = LabSimulationRunner(
         Item.NumberOfWorkersInYourLaboratory: 4,
         Item.ScholarOfTheCorrespondence: 21,
 
-        # Workers
-        Item.LaboratoryServicesOfLetticeTheMercy: 1,
+        # Experts
+        # Item.LaboratoryServicesOfLetticeTheMercy: 1,
+        Item.LaboratoryServicesFromHephaesta: 1,
         Item.LaboratoryServicesOfSilkCladExpert: 1,
+
+        # Students
         Item.LaboratoryServicesFromGiftedStudent: 5,
-        Item.LaboratoryServicesFromVisionaryStudent: 5        
+        Item.LaboratoryServicesFromVisionaryStudent: 5,
+
+        # Other items
+        Item.SecretCollege: 1,
+        Item.PotOfViolantInk: 1,
+        Item.KittenSizedDiamond: 1
     })
 
 simulation.outfit = PlayerOutfit(330, 18)

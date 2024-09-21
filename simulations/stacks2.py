@@ -2098,7 +2098,7 @@ def simulate_runs(num_runs):
     print(f"{'SIMULATION RESULTS':^80}")
     print("=" * 80)
 
-    simple_mode = False
+    simple_mode = True
 
     state = LibraryState()
     state.apocrypha_sought = ApocryphaSought.SomeFrenchBullshit

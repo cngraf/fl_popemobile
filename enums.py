@@ -803,11 +803,13 @@ class Item(Enum):
     NoLongerWritingUp = auto()
 
     CorrespondenceFocus = auto()
+    NauticalFocus = auto()
 
     DisgruntlementAmongStudents = auto()
 
     LaboratoryServicesOfLetticeTheMercy = auto()
     LaboratoryServicesOfSilkCladExpert = auto()
+    LaboratoryServicesFromHephaesta = auto()
 
     LaboratoryServicesFromGiftedStudent = auto()
     LaboratoryServicesFromVisionaryStudent = auto()
@@ -961,6 +963,7 @@ class Item(Enum):
     NorthernWind = auto()
     SouthernWind = auto()
     EasternWind = auto()
+    ZeeLegs = auto()
 
     Fake_HiddenStash = auto()
     _AgentInTransit = auto()
