@@ -152,13 +152,15 @@ class Item(Enum):
     RootAction = auto()
 
     LondonAction = auto()
-    ParabolaAction = auto()
+
+    _ParabolaAction = auto()
+    _ParabolaRoundTrip = auto()
 
     _JerichoAction = auto()
     _JerichoFavourExchange = auto()
 
+    _WakefulEyeAction = auto()
     _KhanateAction = auto()
-
     _SeaOfVoicesAction = auto()
     _PortCecilAction = auto()
     _MangroveAction = auto()
@@ -927,9 +929,9 @@ class Item(Enum):
     TimeAtWakefulCourt  = auto() # tribute grind
     ZailingDraws = auto() # self-explanatory
     SlightedAcquaintance = auto() # newspaper
-    ParabolaRoundTrip = auto()
 
     # Location stuff
+    _WakefulEyeRoundTrip = auto()
     _LondonKhanateRoundTrip = auto()
     _LondonSeaOfVoicesRoundTrip = auto()
     _UpperRiverRoundTrip = auto()

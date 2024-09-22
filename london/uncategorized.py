@@ -170,7 +170,7 @@ def add_trades(_, config: Config):
     # Add Entrepreneur and vote him off
     # TODO: confirm action cost
     config.add({
-        Item.LondonAction: -7,
+        Item.Action: -7,
         Item.InCorporateDebt: -15,
         Item.HinterlandScrip: 10
     })
@@ -181,7 +181,7 @@ def add_trades(_, config: Config):
     # start at 0 debt & 4 members
     # vote dividend twice
     config.add({
-        Item.LondonAction: -1 * (6 + 6 + 1),
+        Item.Action: -1 * (6 + 6 + 1),
 
         Item.MoonPearl: 2 * (2000 + 9 * 250 + 6 * 50),
         Item.MagnificentDiamond: 4,
@@ -194,7 +194,7 @@ def add_trades(_, config: Config):
     # --- Starved cultural exchange ---
     config.uniform_random_trade(
         input={
-            Item.LondonAction: -1,
+            Item.Action: -1,
             Item.ExtraordinaryImplication: -1,
             Item.RecentParticipantInAStarvedCulturalExchange: 1
         },
@@ -229,7 +229,7 @@ def add_trades(_, config: Config):
 
     config.uniform_random_trade(
         input={
-            Item.LondonAction: -1,
+            Item.Action: -1,
             Item.BottleOfGreyfields1882: -375,
             Item.RecentParticipantInAStarvedCulturalExchange: 1
         },
@@ -258,7 +258,7 @@ def add_trades(_, config: Config):
 
     config.uniform_random_trade(
         input={
-            Item.LondonAction: -1,
+            Item.Action: -1,
             Item.PuzzleDamaskScrap: -1,
             Item.RecentParticipantInAStarvedCulturalExchange: 1
         },

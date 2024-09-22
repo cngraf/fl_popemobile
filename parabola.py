@@ -3,18 +3,23 @@ from utils import *
 
 def add_trades(active_player, config):
     trade = config.trade
+    player = config.player
     add = config.add
 
-    # TODO
     add({
-        Item.RootAction: -1,
-        Item.ParabolaAction: 1
+        Item.Action: -1,
+        Item.DropOfPrisonersHoney: -0 if player.profession == Profession.Silverer else -100,
+        Item._ParabolaRoundTrip: 1
     })
 
-    trade(1, {
-        Item.DropOfPrisonersHoney: 0 if active_player.profession == Profession.Silverer else -100,
-        Item.ParabolaRoundTrip: 1
-    })
+    for i in range(0, 11):
+        visit_length = 2 ** i
+        add({
+            Item._ParabolaRoundTrip: -1,
+            Item.Action: -visit_length,
+            Item._ParabolaAction: visit_length,
+        })
+
 
     trade(2, {
         Item.BoneFragments: -1100,
@@ -22,10 +27,10 @@ def add_trades(active_player, config):
     })
 
     # with specific BaL ending
-    # trade(2, {
-    #     Item.BoneFragments: -500,
-    #     Item.ParabolanOrangeApple: 1
-    # })
+    trade(2, {
+        Item.BoneFragments: -500,
+        Item.ParabolanOrangeApple: 1
+    })
 
     trade(2, {
         Item.BoneFragments: -100,
@@ -55,7 +60,7 @@ def add_trades(active_player, config):
     # depends on shadowy, ~4 actions @ 315
     # slightly less at high shadowy
     add({
-        Item.ParabolaAction: -4,
+        Item._ParabolaAction: -4,
         Item.Casing: 28
     })
 
@@ -75,14 +80,14 @@ def add_trades(active_player, config):
     # just do the first one since it's lower variance?
 
     add({
-        Item.ParabolaAction: -4,
+        Item._ParabolaAction: -4,
         Item.FlaskOfWaswoodSpringWater: -1,
         Item.HidingPlaceOfAPeculiarItem: 1
     })
 
     # TODO: different file
     add({
-        Item.RootAction: -1,
+        Item.Action: -1,
         Item.FlaskOfWaswoodSpringWater: -1,
         Item.DropOfPrisonersHoney: 650,
         Item.Scandal: 1

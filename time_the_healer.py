@@ -31,7 +31,7 @@ def add_trades(config: Config):
         # Item.MiredInMail: -99,
         # Item.AReportFromTheKhagansPalace: -1,
 
-        # Item.DelayUntilTheNextBoardMeeting: -1,
+        Item.DelayUntilTheNextBoardMeeting: -1,
 
         # 6 weeks, 2 demands per week => refresh 1/3 capacity per week
 

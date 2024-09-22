@@ -36,7 +36,7 @@ class Config:
         self.bounds[Item.Suspicion.value] = (None, 0)
         self.bounds[Item.Nightmares.value] = (None, 0)
 
-        self.bounds[Item.TroubledWaters.value] = (None, 35)
+        self.bounds[Item.TroubledWaters.value] = (None, 0)
 
         self.bounds[Item.BoneMarketExhaustion.value] = (-4, 0)
 

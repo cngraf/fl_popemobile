@@ -5216,5 +5216,5 @@ mangrove_snares_london = [
 
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=1_000, route=london_to_khanate)
+    run_simulation(runs=1_000, route=elder_continent_to_london)
 

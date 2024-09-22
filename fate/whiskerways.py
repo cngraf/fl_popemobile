@@ -2,7 +2,10 @@ from enums import *
 from utils import *
 from config import Config
 
+'''
 # TODO: not properly constrained
+need to revisit this later and figure out a better way to handle variable length
+'''
 
 def add_trades(config: Config):
     player = config.player

@@ -42,7 +42,7 @@ import london.heists
 
 import parabola
 
-import unterzee.zailing
+import unterzee.gaiders_mourn
 import unterzee.khanate
 import unterzee.wakeful_eye
 import unterzee.port_cecil
@@ -65,7 +65,7 @@ import firmament.midnight_moon
 
 import fate.philosofruits
 import fate.upwards
-import fate.whiskerways
+# import fate.whiskerways
 
 import numpy as np
 import pprint
@@ -133,24 +133,24 @@ crackpot idea
 - maybe go halfway and do this for the buy/sell actions and that's it
 '''
 
-# placeholder for upconversions and stuff
-# if anyone knows the real values please share
-default_rare_success_rate = 0.05
+# # placeholder for upconversions and stuff
+# # if anyone knows the real values please share
+# default_rare_success_rate = 0.05
 
-# maybe improve slightly with EPA
-zailing_epa = 3.0
+# # maybe improve slightly with EPA
+# zailing_epa = 3.0
 
 # lab research per action, somewhat optimistic
 lab_rpa = 33
 
-# for modeling actions that can grant more actions eg. the 30% success on the aunt card
-replacement_epa = 6.5
+# # for modeling actions that can grant more actions eg. the 30% success on the aunt card
+# replacement_epa = 6.5
 
-# for modeling time spent outside london
-replacement_good_card_density = 0.33
+# # for modeling time spent outside london
+# replacement_good_card_density = 0.33
 
-# for long trips outside longon/upper river
-lost_draw_cost = 0
+# # for long trips outside longon/upper river
+# lost_draw_cost = 0
 
 # # 0.85, 0.74, 0.65
 # wounds_multiplier = 0.85
@@ -241,44 +241,6 @@ config = Config(num_vars, active_player)
 
 trade = config.trade
 
-# ---------------- Decks ----------------------------
-
-# london_deck = Decks.create_london_deck(active_player, 6.5, config)
-# london_deck = decks.london_deck.create_deck_old(config)
-
-# should just have one deck for each region and dummy "card draws in X" item for each one
-zailing_deck = Decks.create_zailing_deck(active_player, Location.SaltSteppes)
-
-# ---------------- Trades ----------------------------
-
-# Plug in the basic economic contraints
-
-
-actions_per_day = 120
-full_draws_per_day = 3
-# +10 for the weekly action refresh card
-# -3 for rat market entry
-actions_per_cycle = (7 * actions_per_day) + 10 - 3
-
-core_constraint = {
-    Item.Constraint: 1,
-    Item.RootAction: actions_per_cycle,
-    Item.VisitFromTimeTheHealer: 1,
-    Item.CardDraws: full_draws_per_day * 7 * 10
-}
-
-config.add(core_constraint)
-
-config.add({
-    Item.RootAction: -1,
-    Item.Action: 1
-})
-
-config.add({
-    Item.RootAction: -1,
-    Item.LondonAction: 1
-})
-
 
 # -----------------------------------------------------
 # --- Modules
@@ -311,7 +273,7 @@ london.heists.add_trades(config)
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
 unterzee.port_cecil.add_trades(active_player, config)
-unterzee.zailing.add_trades(active_player, zailing_epa, config)
+unterzee.gaiders_mourn.add_trades(config)
 
 parabola.add_trades(active_player, config)
 
@@ -336,17 +298,46 @@ firmament.midnight_moon.add_trades(config)
 # fate.upwards.add_trades(active_player, config)
 # fate.whiskerways.add_trades(config)
 
-# --------------
-# Upper River Deck
-# -------------
-
-trade(1, zailing_deck.normalized_trade())
-
 # ------------------------------------------
 # ---------------- Optimization ------------
 # ------------------------------------------
 
-optimize_for = Item.Echo
+# ---------------- Trades ----------------------------
+
+# Plug in the basic economic contraints
+
+input_per_cycle = 7 * 120
+
+actions_per_day = 120
+full_draws_per_day = 3
+# +10 for the weekly action refresh card
+# -3 for rat market entry
+actions_per_week = (7 * actions_per_day) + 10 - 3
+
+optimize_input = Item.Action
+optimize_for = Item.HinterlandScrip
+
+input_per_cycle
+
+core_constraint = {
+    Item.Constraint: 1,
+    optimize_input: input_per_cycle,
+    # Item.RootAction: actions_per_cycle,
+    # Item.VisitFromTimeTheHealer: 1,
+    # Item.CardDraws: full_draws_per_day * 7 * 10
+}
+
+config.add(core_constraint)
+
+config.add({
+    Item.RootAction: -1,
+    Item.Action: 1
+})
+
+config.add({
+    Item.RootAction: -1,
+    Item.LondonAction: 1
+})
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1
@@ -363,23 +354,15 @@ print(opt_result)
 #     else:
 #         print(item_name + f"{'unsourced':10}")
     
-'''
-591 fragments per action
-1.28 wings per action
-
-6000 fragments => 10.15 actions
-3 wings => 2.34 actions
-'''
 pp = pprint.PrettyPrinter(indent=4)
 
 print("------Assumptions-------")
-# print(f"Core Constraint:"  {})
-print(f"Core Constraint:                  {core_constraint}")
-# print(f"Total Actions per Day:            {actions_per_day:10}")
-# print(f"Cards Drawn per Day:              {cards_seen_per_day:10}")
-# print(f"Good Card Density:                {london_good_card_density:10.3f}")
+print(f"Core Constraint:")
+for item, val in core_constraint.items():
+    print(f"|  {item.name:<30} {val}\n")
 
-print(f"Optimize For:                     {optimize_for}")
+
+print(f"Optimize For:                     {optimize_for.name}")
 print(f"-Player Stats-")
 pp.pprint(active_player.stats)
 
@@ -420,7 +403,8 @@ for i in range(0, len(opt_result.slack)):
         
         action_cost = config.A[i, Item.Action.value]
 
-        trades_used.append([marginal * min(action_cost * -1, -0.01) * actions_per_cycle, lose_items + " => " + gain_items])
+        
+        trades_used.append([marginal * min(action_cost * -1, -0.01) * input_per_cycle, lose_items + " => " + gain_items])
         # print("* " + trade_items)
         # print(f"{marginal:.3}       " + lose_items + " => " + gain_items)
         # print(f"")
@@ -444,10 +428,12 @@ print("-----Cycle-------")
 print(core_constraint)
 
 print("-----Optimization Target-------")
+items_per_input = -1.0/(input_per_cycle * opt_result.fun)
 # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
-print(f"{str(optimize_for) + ' Per Cycle ':34}{-1.0/(opt_result.fun):10.5f}")
-print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_cycle):10.5f}")
-print(f"{'Actions Per ' + str(optimize_for):34}{-(opt_result.fun * actions_per_cycle):10.5f}")
+print(f"{optimize_for.name} per {optimize_input.name}: {items_per_input:10.5f}")
+print(f"{optimize_input.name} per {optimize_for.name}: {1.0/items_per_input:10.5f}")
+# print(f"{str(optimize_for) + ' Per Action':34}{items_per_cycle:10.5f}")
+# print(f"{'Actions Per ' + str(optimize_for):34}{-(opt_result.fun * actions_per_cycle):10.5f}")
 
 print("-------------------------------")
 print("-------------------------------")
