@@ -124,7 +124,7 @@ def add_trades(active_player, config):
     trade(0, {
         Item.AnIdentityUncovered: -4,
         Item.IncisiveObservation: -1,
-        Item.CorrectiveHistorialNarrative: 1
+        Item.CorrectiveHistoricalNarrative: 1
     })
 
     trade(0, {

@@ -30,12 +30,12 @@ class Location(Enum):
     # railway
     EalingGardens = auto()
     JerichoLocks = auto()
-    TheMagistracyOfTheEvenlode = auto()
+    MagistracyOfTheEvenlode = auto()
     Balmoral = auto()
     StationVIII = auto()
     BurrowInfraMump = auto()
     Moulin = auto()
-    TheHurlers = auto()
+    Hurlers = auto()
     MarigoldStation = auto()
 
 class Deck(Enum):
@@ -165,6 +165,7 @@ class Item(Enum):
     _PortCecilAction = auto()
     _MangroveAction = auto()
 
+    _NoItem = auto()
     # # Rat Market Hack TODO figure out real groupings
     # RatMarketWeek1ExhaustionStage1 = auto()
     # RatMarketWeek2ExhaustionStage1 = auto()
@@ -221,6 +222,7 @@ class Item(Enum):
 
 
     # Bone Market Hack
+    _BoneMarketRotation = auto()
     AntiquityReptileAction = auto()
     AntiquityAmphibianAction = auto()    
     AntiquityBirdAction = auto()
@@ -270,6 +272,7 @@ class Item(Enum):
     RatMarketExhaustion = auto()
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
+    AdvancingTheLiberationOfNight = auto()
 
     # Second Chances
     SuddenInsight = auto()
@@ -298,6 +301,9 @@ class Item(Enum):
     ConnectedSummerset = auto()
     ConnectedTheDuchess = auto()
     ConnectedWidow = auto()
+    SupportingTheLiberationistTracklayers = auto()
+    SupportingThePrehistoricistTracklayers = auto()
+    SupportingTheEmancipationistTracklayers = auto()
 
     # Academic
     FoxfireCandleStub = auto()
@@ -315,7 +321,7 @@ class Item(Enum):
 
     # Book
     RevisionistHistoricalNarrative = auto()
-    CorrectiveHistorialNarrative = auto()
+    CorrectiveHistoricalNarrative = auto()
     UnusualLoveStory = auto()
     SlimVolumeOfBazaarinePoetry = auto()
 
@@ -369,7 +375,7 @@ class Item(Enum):
     OstentatiousDiamond = auto()
     MagnificentDiamond = auto()
     FabulousDiamond = auto()
-    LondondStreetSign = auto()
+    LondonStreetSign = auto()
     UseOfVillains = auto()
     ComprehensiveBribe = auto()
     MirrorcatchBox = auto()
@@ -384,6 +390,7 @@ class Item(Enum):
     AssortmentOfKhaganianCoinage = auto()
     FourthCityEcho = auto()
     JustificandeCoin = auto()
+    ForgedJustificandeCoin = auto()
 
     # Elder
     JadeFragment = auto()
@@ -612,7 +619,7 @@ class Item(Enum):
     RubberySkull = auto()
 
     # Rumour
-    ProscibedMaterial = auto()
+    ProscribedMaterial = auto()
     InklingOfIdentity = auto()
     ScrapOfIncendiaryGossip = auto()
     AnIdentityUncovered = auto()
@@ -736,6 +743,7 @@ class Item(Enum):
     ScarletStockings = auto()
     StormInATeacup = auto()
     FacetedDecanterOfDrownieEffluvia = auto()
+    InfernalMachine = auto()
 
     # Tools
     NotchedBoneHarpoon = auto()
@@ -854,6 +862,7 @@ class Item(Enum):
     HinterlandProsperity = auto()
     HidingPlaceOfAPeculiarItem = auto()
     _WaswoodHeistCashOut = auto()
+    _ApproximateEchoValue = auto()
 
     SeeingThroughTheEyesOfIcarus = auto()
     WalkingTheFallingCities = auto()

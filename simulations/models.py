@@ -30,7 +30,8 @@ class GameState:
         self.action_success_counts = defaultdict(int)
         self.action_failure_counts = defaultdict(int)
         # self.total_item_changes = defaultdict(int)
-
+        
+        self.cards_drawn = 0
         self.actions = 0
         self.status = "InProgress"
 
@@ -50,6 +51,7 @@ class GameState:
                     lowest = rand
 
         if drawn:
+            self.cards_drawn += 1
             self.card_draw_counts[drawn] += 1
             self.hand.append(drawn)
 
@@ -61,7 +63,8 @@ class GameState:
             self.items[item] += amount
 
     def run(self):
-        raise NotImplementedError
+        while self.status == "InProgress":
+            self.step()
 
 class PlayerOutfit:
     def __init__(self, default_basic = 330, default_advanced = 16):
@@ -201,21 +204,23 @@ class Action:
 
     @staticmethod
     def broad_pass_rate(dc, stat_value):
-        return 0.6 * stat_value / dc
+        return 0.6 * stat_value / dc if dc > 0 else 1.0
     
     @staticmethod
     def narrow_pass_rate(dc, stat_value):
-        return 0.5 + (stat_value - dc) * 0.1
+        return 0.5 + (stat_value - dc) * 0.1 if dc > 0 else 1.0
 
 class SimulationRunner:
     def __init__(self, runs: int, initial_values: dict):
         self.runs = runs
         self.initial_values = initial_values
         self.total_item_changes = defaultdict(int)
+
         self.total_actions = 0
         self.total_action_play_counts = defaultdict(int)
         self.total_action_result_counts = defaultdict(lambda: defaultdict(int))
 
+        self.total_draws = 0
         self.total_card_draw_counts = defaultdict(int)
         self.total_card_play_counts = defaultdict(int)
 
@@ -253,6 +258,7 @@ class SimulationRunner:
             self.outcome_counts[state.status] += 1
 
             # Accumulate total actions across all runs
+            self.total_draws += state.cards_drawn
             self.total_actions += state.actions
 
             # Accumulate item changes for each run
@@ -278,6 +284,7 @@ class SimulationRunner:
 
     def display_results(self):
         avg_actions_per_run = self.total_actions / self.runs
+        avg_draws_per_run = self.total_draws / self.runs
 
         print(f"\n\nTotal Runs: {self.runs}")
         for outcome, count in self.outcome_counts.items():
@@ -296,7 +303,8 @@ class SimulationRunner:
         self.print_condensed_action_table()
         self.print_item_summary()
 
-        print(f"\nAverage Actions per Run: {avg_actions_per_run:.2f}\n")
+        print(f"\nAverage Actions per Run: {avg_actions_per_run:.2f}")
+        print(f"Average Draws per Run:   {avg_draws_per_run:.2f}\n")
 
     def display_outfit(self, outfit):
         print("\nPlayer Max Stats:")
@@ -375,6 +383,12 @@ class SimulationRunner:
 
             avg_change = net_change / self.runs
             echo_value = simulations.item_conversions.conversion_rate(item, Item.Echo)
+
+            estimated = False
+            if echo_value == 0:
+                echo_value = simulations.item_conversions.conversion_rate(item, Item._ApproximateEchoValue)
+                estimated = True
+
             item_total_echo_value = echo_value * net_change
 
             total_echo_value += item_total_echo_value

@@ -307,7 +307,7 @@ def match_action_type(zoo_type, flux_type):
         elif flux_type == Fluctuations.Menace:
             return Item.MenaceGeneralAction
         else:
-            return Item.Action
+            return Item._NoItem # HACK
 
 suspicion_multiplier = 0.85
 
@@ -333,7 +333,8 @@ def naive_collector_trade(trade,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
-        action_type: -1 * avg_failures,
+        Item.Action: -avg_failures,
+        action_type: -avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
@@ -363,7 +364,8 @@ def bohemian_sculptress_trade(trade,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
-        action_type: -1 * avg_failures,
+        Item.Action: -avg_failures,
+        action_type: -avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
@@ -394,7 +396,8 @@ def hoarding_paleo_trade(trade,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
-        action_type: -1 * avg_failures,
+        Item.Action: -avg_failures,
+        action_type: -avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
 
@@ -426,6 +429,7 @@ def tentacled_entrepreneur_trade(config,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
+        Item.Action: -avg_failures,
         action_type: -1 * avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
@@ -459,6 +463,7 @@ def ambassador_trade(trade,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
+        Item.Action: -avg_failures,
         action_type: -1 * avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
@@ -492,6 +497,7 @@ def teller_of_terrors_trade(trade,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
+        Item.Action: -avg_failures,
         action_type: -1 * avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
@@ -529,6 +535,7 @@ def gothic_tales_trade(trade,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
+        Item.Action: -avg_failures,
         action_type: -1 * avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
@@ -566,6 +573,7 @@ def zailor_particular_trade(trade,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
+        Item.Action: -avg_failures,
         action_type: -1 * avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
@@ -603,6 +611,7 @@ def rubbery_collector_trade(config,
     action_type = match_action_type(zoo_type, fluctuations)
 
     failure_penalty = {
+        Item.Action: -avg_failures,
         action_type: -1 * avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
@@ -718,6 +727,7 @@ def enthusiast_skulls_trade(config: Config,
     action_type = match_action_type(zoo_type, Fluctuations.NoQuality)
 
     failure_penalty = {
+        Item.Action: -avg_failures,
         action_type: -1 * avg_failures,
         Item.Suspicion: 2 * avg_failures * suspicion_multiplier
     }
@@ -769,19 +779,22 @@ def add_trades(player: Player, config: Config):
         }
     }
 
+    max_bone_market_actions_per_week = 700
     action_split = {
-        Item.RootAction: -1
+        Item._BoneMarketRotation: -1
     }
 
     for category, actions in bone_market_week_actions.items():
         for creature, action in actions.items():
 
-            action_split[action] = 1/21
+            unique_weeks = 21 # 3 vibes * 7 zoo types
 
-            config.add({
-                action: -1,
-                Item.Action: 1
-            })
+            action_split[action] = max_bone_market_actions_per_week/21
+
+            # config.add({
+            #     action: -1,
+            #     Item.Action: 1
+            # })
 
             if (category == "Amalgamy"):
                 config.add({
@@ -1018,6 +1031,7 @@ def add_trades(player: Player, config: Config):
     # 3/0/6 sweet spot
     gothic_tales_trade(trade, player,
         recipe={
+            Item.Action: -6,
             Item.MenaceGeneralAction: -6,
             Item.LeviathanFrame: -1,
             Item.DuplicatedVakeSkull: -1,
@@ -1040,6 +1054,7 @@ def add_trades(player: Player, config: Config):
         # Chimera
         gothic_tales_trade(trade, player, 
             recipe={
+                Item.Action: -6,
                 Item.AntiquityGeneralAction: -6,
                 Item.LeviathanFrame: -1,
                 skull_type: -1,
@@ -1050,6 +1065,7 @@ def add_trades(player: Player, config: Config):
         
         gothic_tales_trade(trade, player, 
             recipe={
+                Item.Action: -6,
                 Item.MenaceGeneralAction: -6,
                 Item.LeviathanFrame: -1,
                 skull_type: -1,
@@ -1065,6 +1081,7 @@ def add_trades(player: Player, config: Config):
 
             ambassador_trade(trade, player,
                 recipe={
+                    Item.Action: -6,
                     Item.AntiquityFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1076,6 +1093,7 @@ def add_trades(player: Player, config: Config):
 
             tentacled_entrepreneur_trade(config,
                 recipe={
+                    Item.Action: -6,
                     Item.AmalgamyFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1087,6 +1105,7 @@ def add_trades(player: Player, config: Config):
             
             teller_of_terrors_trade(trade, player,
                 recipe={
+                    Item.Action: -6,
                     Item.MenaceFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1098,6 +1117,7 @@ def add_trades(player: Player, config: Config):
                         
             gothic_tales_trade(trade, player,
                 recipe={
+                    Item.Action: -6,
                     Item.AntiquityFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1109,6 +1129,7 @@ def add_trades(player: Player, config: Config):
                         
             gothic_tales_trade(trade, player,
                 recipe={
+                    Item.Action: -6,
                     Item.MenaceFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1120,6 +1141,7 @@ def add_trades(player: Player, config: Config):
             
             zailor_particular_trade(trade, player,
                 recipe={
+                    Item.Action: -6,
                     Item.AntiquityFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1131,6 +1153,7 @@ def add_trades(player: Player, config: Config):
 
             zailor_particular_trade(trade, player,
                 recipe={
+                    Item.Action: -6,
                     Item.AmalgamyFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1142,6 +1165,7 @@ def add_trades(player: Player, config: Config):
             
             rubbery_collector_trade(config,
                 recipe={
+                    Item.Action: -6,
                     Item.AmalgamyFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1153,6 +1177,7 @@ def add_trades(player: Player, config: Config):
 
             rubbery_collector_trade(config,
                 recipe={
+                    Item.Action: -6,
                     Item.MenaceFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1164,6 +1189,7 @@ def add_trades(player: Player, config: Config):
             
             hoarding_paleo_trade(trade, player,
                 recipe={
+                    Item.Action: -6,
                     Item.GeneralFishAction: -6,
                     Item.LeviathanFrame: -1,
                     skull_type: -1,
@@ -1191,6 +1217,7 @@ def add_trades(player: Player, config: Config):
     ):
         gothic_tales_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.AntiquityReptileAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1203,6 +1230,7 @@ def add_trades(player: Player, config: Config):
         
         gothic_tales_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.AntiquityReptileAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1215,6 +1243,7 @@ def add_trades(player: Player, config: Config):
         
         gothic_tales_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.MenaceReptileAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1227,6 +1256,7 @@ def add_trades(player: Player, config: Config):
 
         gothic_tales_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.MenaceReptileAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1239,6 +1269,7 @@ def add_trades(player: Player, config: Config):
            
         zailor_particular_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.AntiquityReptileAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1250,6 +1281,7 @@ def add_trades(player: Player, config: Config):
         
         zailor_particular_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.AmalgamyReptileAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1261,6 +1293,7 @@ def add_trades(player: Player, config: Config):
 
         zailor_particular_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.AntiquityAmphibianAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1271,6 +1304,7 @@ def add_trades(player: Player, config: Config):
         
         zailor_particular_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.AntiquityAmphibianAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1283,6 +1317,7 @@ def add_trades(player: Player, config: Config):
         
         zailor_particular_trade(trade, player,
             recipe={
+                Item.Action: -9,
                 Item.AmalgamyAmphibianAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
@@ -1328,7 +1363,8 @@ def add_trades(player: Player, config: Config):
 
     gothic_tales_trade(trade, player,
         recipe={
-            Item.AntiquityGeneralAction: -8,
+            Item.Action: -4,
+            Item.AntiquityGeneralAction: -4,
             Item.HumanRibcage: -1,
             Item.DuplicatedVakeSkull: -1,
             Item.FossilisedForelimb: -1,
@@ -1340,6 +1376,7 @@ def add_trades(player: Player, config: Config):
     
     teller_of_terrors_trade(trade, player,
         recipe={
+            Item.Action: -4,
             Item.GeneralPrimateAction: -4,
             Item.ASkeletonOfYourOwn: -1,
             Item.DuplicatedVakeSkull: -1
@@ -1349,6 +1386,7 @@ def add_trades(player: Player, config: Config):
     
     teller_of_terrors_trade(trade, player,
         recipe={
+            Item.Action: -4,
             Item.MenacePrimateAction: -4,
             Item.ASkeletonOfYourOwn: -1,
             Item.DuplicatedVakeSkull: -1
@@ -1364,7 +1402,24 @@ def add_trades(player: Player, config: Config):
         },
         zoo_type=ZooType.NoType,
         fluctuations=Fluctuations.NoQuality)    
+   
+    teller_of_terrors_trade(trade, player,
+        recipe={
+            Item.Action: -4,
+            Item.ASkeletonOfYourOwn: -1,
+            Item.DuplicatedVakeSkull: -1
+        },
+        zoo_type=ZooType.NoType,
+        fluctuations=Fluctuations.Menace)
     
+    teller_of_terrors_trade(trade, player,
+        recipe={
+            Item.Action: -4,
+            Item.ASkeletonOfYourOwn: -1,
+            Item.BrightBrassSkull: -1
+        },
+        zoo_type=ZooType.NoType,
+        fluctuations=Fluctuations.NoQuality)        
 
     # phantasist_menace_trade(trade, player,
     #     recipe={
@@ -1394,8 +1449,10 @@ def add_trades(player: Player, config: Config):
         
         for num_wings in range(0, 4):
 
+
             gothic_tales_trade(trade, player,
                 recipe={
+                    Item.Action: -8,
                     Item.MenaceGeneralAction: -8,
                     Item.HumanRibcage: -1,
                     Item.DuplicatedVakeSkull: -1,
@@ -1407,6 +1464,7 @@ def add_trades(player: Player, config: Config):
             
             gothic_tales_trade(trade, player,
                 recipe={
+                    Item.Action: -8,
                     Item.MenaceGeneralAction: -8,
                     Item.HumanRibcage: -1,
                     Item.HornedSkull: -1,
@@ -1418,6 +1476,7 @@ def add_trades(player: Player, config: Config):
             
             gothic_tales_trade(trade, player,
                 recipe={
+                    Item.Action: -8,
                     Item.MenaceGeneralAction: -8,
                     Item.HumanRibcage: -1,
                     Item.SabreToothedSkull: -1,
@@ -1429,6 +1488,7 @@ def add_trades(player: Player, config: Config):
                             
             gothic_tales_trade(trade, player,
                 recipe={
+                    Item.Action: -8,
                     Item.AntiquityGeneralAction: -8,
                     Item.HumanRibcage: -1,
                     Item.SabreToothedSkull: -1,
@@ -1537,6 +1597,7 @@ def add_trades(player: Player, config: Config):
 
     rubbery_collector_trade(config,
         recipe={
+            Item.Action: -12,
             Item.AmalgamyBirdAction: -12,
             Item.SkeletonWithSevenNecks: -1,
             Item.SkullInCoral: -7,
@@ -1547,6 +1608,7 @@ def add_trades(player: Player, config: Config):
     
     rubbery_collector_trade(config,
         recipe={
+            Item.Action: -16,
             Item.AmalgamyBirdAction: -16,
             Item.RibcageWithABoutiqueOfEightSpines: -1,
             Item.SkullInCoral: -8,
@@ -1596,6 +1658,7 @@ def add_trades(player: Player, config: Config):
                     # Memory of Distant Shores & Volumes of Collated Research
                     tentacled_entrepreneur_trade(config,
                         recipe={
+                            Item.Action: -12,
                             Item.AmalgamyBirdAction: -12,
                             Item.SkeletonWithSevenNecks: -1,
                             Item.BrightBrassSkull: -1 * brass_skulls,
@@ -1608,6 +1671,7 @@ def add_trades(player: Player, config: Config):
                     
                     tentacled_entrepreneur_trade(config,
                         recipe={
+                            Item.Action: -12,
                             Item.GeneralBirdAction: -12,
                             Item.SkeletonWithSevenNecks: -1,
                             Item.BrightBrassSkull: -1 * brass_skulls,
@@ -1621,6 +1685,7 @@ def add_trades(player: Player, config: Config):
                     # Bone Fragments
                     hoarding_paleo_trade(trade, player,
                         recipe={
+                            Item.Action: -12,
                             Item.GeneralBirdAction: -12,
                             Item.SkeletonWithSevenNecks: -1,
                             Item.BrightBrassSkull: -1 * brass_skulls,
@@ -1633,6 +1698,7 @@ def add_trades(player: Player, config: Config):
 
                     zailor_particular_trade(trade, player,
                         recipe={
+                            Item.Action: -12,
                             Item.GeneralBirdAction: -12,
                             Item.SkeletonWithSevenNecks: -1,
                             Item.BrightBrassSkull: -1 * brass_skulls,
@@ -1646,6 +1712,7 @@ def add_trades(player: Player, config: Config):
 
                     naive_collector_trade(trade, player,
                         recipe={
+                            Item.Action: -12,
                             Item.GeneralBirdAction: -12,
                             Item.SkeletonWithSevenNecks: -1,
                             Item.BrightBrassSkull: -1 * brass_skulls,
@@ -1664,6 +1731,7 @@ def add_trades(player: Player, config: Config):
     # 6/3/3 recipe
     gothic_tales_trade(trade, player,
         recipe={
+            Item.Action: -9,
             Item.AntiquityBirdAction: -9,
             Item.ThornedRibcage: -1,
             Item.DoubledSkull: -1,
@@ -1676,6 +1744,7 @@ def add_trades(player: Player, config: Config):
     
     zailor_particular_trade(trade, player,
         recipe={
+            Item.Action: -9,
             Item.AntiquityBirdAction: -9,
             Item.ThornedRibcage: -1,
             Item.DoubledSkull: -1,
@@ -1688,6 +1757,7 @@ def add_trades(player: Player, config: Config):
 
     zailor_particular_trade(trade, player,
         recipe={
+            Item.Action: -9,
             Item.AntiquityGeneralAction: -9,
             Item.ThornedRibcage: -1,
             Item.DoubledSkull: -1,
@@ -1749,6 +1819,7 @@ def add_trades(player: Player, config: Config):
 
     # TODO require spider week
     trade(0, {
+        Item.Action: -11,
         Item.GeneralArachnidAction: -11,
         Item.GlimEncrustedCarapace: -1,
         Item.HolyRelicOfTheThighOfStFiacre: -8,
@@ -1776,6 +1847,7 @@ def add_trades(player: Player, config: Config):
 
     gothic_tales_trade(trade, player,
         recipe={
+            Item.Action: -11,
             Item.AntiquityFishAction: -11, # might be 10?
             Item.PrismaticFrame: -1,
             Item.SabreToothedSkull: -1,
@@ -1788,6 +1860,7 @@ def add_trades(player: Player, config: Config):
     
     gothic_tales_trade(trade, player,
         recipe={
+            Item.Action: -11,
             Item.MenaceFishAction: -11,
             Item.PrismaticFrame: -1,
             Item.SabreToothedSkull: -1,
@@ -1800,6 +1873,7 @@ def add_trades(player: Player, config: Config):
     
     gothic_tales_trade(trade, player,
         recipe={
+            Item.Action: -11,
             Item.MenaceFishAction: -11,
             Item.PrismaticFrame: -1,
             Item.DuplicatedVakeSkull: -1,
@@ -1812,6 +1886,7 @@ def add_trades(player: Player, config: Config):
     
     rubbery_collector_trade(config,
         recipe={
+            Item.Action: -11,
             Item.MenaceFishAction: -11,
             Item.PrismaticFrame: -1,
             Item.DuplicatedVakeSkull: -1,
@@ -1824,6 +1899,7 @@ def add_trades(player: Player, config: Config):
 
     gothic_tales_trade(trade, player,
         recipe={
+            Item.Action: -11,
             Item.GeneralFishAction: -11,
             Item.PrismaticFrame: -1,
             Item.SabreToothedSkull: -1,

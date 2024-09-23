@@ -33,8 +33,9 @@ def add_trades(config: Config):
 
         Item.DelayUntilTheNextBoardMeeting: -1,
 
-        # 6 weeks, 2 demands per week => refresh 1/3 capacity per week
+        # Item._BoneMarketRotation: 1,
 
+        # 6 weeks, 2 demands per week => refresh 1/3 capacity per week
         # 0 to 65k
         Item.SoftRatMarketSaturation1: -65_000 / 3,
         Item.SaintlyRatMarketSaturation1: -65_000 / 3,

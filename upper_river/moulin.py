@@ -10,7 +10,7 @@ def add_trades(active_player, config):
     trade(1, {
         Item.AnIdentityUncovered: -4,
         Item.IncisiveObservation: -1,
-        Item.CorrectiveHistorialNarrative: 1
+        Item.CorrectiveHistoricalNarrative: 1
     })
 
     trade(1, {
@@ -46,7 +46,7 @@ def add_trades(active_player, config):
 
     # Upper Layer
     trade(distance * 2 + 4 + lucky_finds, {
-        Item.ProscibedMaterial: (net_wages - 1250) * 0.25,
+        Item.ProscribedMaterial: (net_wages - 1250) * 0.25,
         Item.SilveredCatsClaw: 50 * lucky_finds * 0.25,
         Item.NicatoreanRelic: 3 * lucky_finds * 0.25,
         Item.FirstCityCoin: 20 * lucky_finds * 0.25,
@@ -132,7 +132,7 @@ def add_trades(active_player, config):
     })
 
     trade(1, {
-        Item.ProscibedMaterial: -200,
+        Item.ProscribedMaterial: -200,
         Item.PalimpsestScrap: -8,
         Item.MonographCautionary: 1
     })

@@ -110,7 +110,7 @@ def add_trades(player, config, default_rare_success_rate = 0.05):
     # ----- Rumor
 
     trade(1, {
-        Item.ProscibedMaterial: -250,
+        Item.ProscribedMaterial: -250,
         Item.InklingOfIdentity: 105
     })
 
@@ -122,7 +122,7 @@ def add_trades(player, config, default_rare_success_rate = 0.05):
     trade(1, {
         Item.ScrapOfIncendiaryGossip: -50,
         Item.AnIdentityUncovered: 10,
-        Item.ProscibedMaterial: 13 * normal_upconvert_success_rate,
+        Item.ProscribedMaterial: 13 * normal_upconvert_success_rate,
         Item.FavourInHighPlaces: 2 * default_rare_success_rate
     })
 

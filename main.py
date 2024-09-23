@@ -235,6 +235,7 @@ active_player = player_bal_licentiate
 # most of this is bone market combinatoric shit
 var_buffer = 20_000
 num_items = max(Item, key=lambda x: x.value).value
+print(num_items)
 num_vars = num_items + 1 + var_buffer
 
 config = Config(num_vars, active_player)
@@ -268,7 +269,7 @@ london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
 
-# london.bone_market.add_trades(active_player, config)
+london.bone_market.add_trades(active_player, config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
@@ -315,15 +316,15 @@ full_draws_per_day = 3
 actions_per_week = (7 * actions_per_day) + 10 - 3
 
 optimize_input = Item.Action
-optimize_for = Item.HinterlandScrip
+optimize_for = Item.ConsignmentOfScintillackSnuff
 
 input_per_cycle
 
 core_constraint = {
     Item.Constraint: 1,
     optimize_input: input_per_cycle,
-    # Item.RootAction: actions_per_cycle,
     # Item.VisitFromTimeTheHealer: 1,
+    # Item._BoneMarketRotation: 1
     # Item.CardDraws: full_draws_per_day * 7 * 10
 }
 

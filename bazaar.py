@@ -57,7 +57,7 @@ def add_trades(config: Config):
     trade(0, { Item.MagnificentDiamond: -1, Item.Echo: 12.50 })
     trade(0, { Item.FabulousDiamond: -1, Item.Echo: 312.12 })
 
-    buy_sell(config, Item.LondondStreetSign, -5, 2.5)
+    buy_sell(config, Item.LondonStreetSign, -5, 2.5)
 
     trade(0, { Item.UseOfVillains: -1, Item.Echo: 6 })
     trade(0, { Item.ComprehensiveBribe: -1, Item.Echo: 12.5 })
@@ -210,7 +210,7 @@ def add_trades(config: Config):
 
 
     # Rumour ---------------------
-    buy_sell(config, Item.ProscibedMaterial, -0.08, 0.04)
+    buy_sell(config, Item.ProscribedMaterial, -0.08, 0.04)
     trade(0, { Item.InklingOfIdentity: -1, Item.Echo: 0.1 })
     trade(0, { Item.ScrapOfIncendiaryGossip: -1, Item.Echo: 0.5 })
     trade(0, { Item.AnIdentityUncovered: -1, Item.Echo: 2.5 })

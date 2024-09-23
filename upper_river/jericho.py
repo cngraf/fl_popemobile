@@ -241,13 +241,13 @@ def add_trades(config: Config):
     
     add({
         Item._JerichoAction: -1,
-        Item.CorrectiveHistorialNarrative: -1,
+        Item.CorrectiveHistoricalNarrative: -1,
         Item.HinterlandScrip: 30
     })
 
     add({
         Item._JerichoAction: -1,
-        Item.CorrectiveHistorialNarrative: -2,
+        Item.CorrectiveHistoricalNarrative: -2,
         Item.RevisionistHistoricalNarrative: -3,
         Item.NightWhisper: 1
     })
