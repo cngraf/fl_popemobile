@@ -62,9 +62,53 @@ class GameState:
 
             self.items[item] += amount
 
+    def get(self, item: Item):
+        return self.items.get(item, 0)
+
     def run(self):
         while self.status == "InProgress":
             self.step()
+
+    def step(self):
+        best_card, best_action, best_action_ev = self.find_best_action()
+
+    def find_best_action(self):
+        best_card, best_action, best_action_ev = None, None, -float('inf')
+
+        for card in self.storylets:
+            for action in card.actions:
+                if action.can_perform(self):
+                    action_ev = action.ev(self)
+                    if action_ev > best_action_ev:
+                        best_card, best_action, best_action_ev = card, action, action_ev
+
+        for card in self.hand:
+            # HACK until I think of a better way to handle autofire cards
+            autofire_bonus = 1_000_000 if card.autofire else 0
+            for action in card.actions:
+                if action.can_perform(self):
+                    action_ev = action.ev(self) + autofire_bonus
+                    if action_ev > best_action_ev:
+                        best_card, best_action, best_action_ev = card, action, action_ev
+
+        return (best_card, best_action, best_action_ev)
+    
+    def play_card_action(self, best_card, best_action):
+        result = best_action.perform(self)
+        self.actions += best_action.action_cost
+        self.action_result_counts[best_action][result] += 1
+
+        if best_card is not None:
+            self.card_play_counts[best_card] += 1
+            if best_card in self.hand:
+                self.hand.remove(best_card)
+
+    def update_game_state(self):
+        self.hand = [card for card in self.hand if card.can_draw(self)]
+
+        if self.actions >= 100:
+            self.status = "Complete"
+
 
 class PlayerOutfit:
     def __init__(self, default_basic = 330, default_advanced = 16):
@@ -100,6 +144,7 @@ class OpportunityCard:
 
         #
         self.free_discard = False
+        self.autofire = False
 
     def can_draw(self, state: 'GameState'):
         return True

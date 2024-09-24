@@ -4,7 +4,10 @@ from typing import Tuple, Dict
 def pyramid(n): return n * (n+1) / 2
 def clamp(n, floor, ceiling): return min(ceiling, max(floor, n))
 
-def broad_challenge_success_rate(stat, difficulty): return clamp(0.6 * stat/difficulty, 0.0, 1.0)
+def broad_challenge_success_rate(stat, difficulty):
+    if difficulty <= 0:
+        return 1.0
+    return clamp(0.6 * stat/difficulty, 0.0, 1.0)
 
 def narrow_challenge_success_rate(stat, difficulty): return clamp(0.5 + (stat - difficulty)/10, 0.1, 1.0)
 

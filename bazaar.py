@@ -112,7 +112,7 @@ def add_trades(config: Config):
     trade(0, { Item.BrilliantSoul: -1, Item.Echo: 0.5 })
     trade(0, { Item.MuscariaBrandy: -1, Item.Echo: 2.5 })
     trade(0, { Item.BrassRing: -1, Item.Echo: 12.5 })
-    trade(0, { Item.DevilboneDice: -1, Item.Echo: 0.9 })
+    trade(0, { Item.DevilboneDie: -1, Item.Echo: 0.9 })
     trade(0, { Item.QueerSoul: -1, Item.Echo: 2.5 })
     trade(0, { Item.SilentSoul: -1, Item.Echo: 12.5 })
     trade(0, { Item.PortfolioOfSouls: -1, Item.Echo: 12.5 })

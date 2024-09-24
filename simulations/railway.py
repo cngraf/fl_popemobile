@@ -14,9 +14,13 @@ class RailwayState(GameState):
     def __init__(self, location: Location):
         super().__init__(max_hand_size=5)
         self.location = location
-        self.ev_threshold = 5.0
+        self.ev_threshold = 5.25
 
     def ev_from_item(self, item, val: int):
+        # if item == Item.SeeingBanditryInTheUpperRiver:
+        #     if self.banditry_level() > 5:
+        #         return val * -3
+
         scrip_value = conversion_rate(item, Item.HinterlandScrip)
         echo_value = conversion_rate(item, Item.Echo)
         scrip_to_echo_value = scrip_value * 63.5/125
@@ -31,29 +35,15 @@ class RailwayState(GameState):
         return utils.pyramid(self.items.get(Item.SeeingBanditryInTheUpperRiver, 0))
 
     def step(self):
-        best_card, best_action, best_action_ev = None, None, -float('inf')
-
         # TODO implement refill as a general action w/ discard logic
         if len(self.hand) == 0:
             while len(self.hand) < self.max_hand_size:
-                self.draw_card()            
+                self.draw_card()
 
-        for card in self.storylets:
-            for action in card.actions:
-                if action.can_perform(self):
-                    action_ev = action.ev(self)
-                    if action_ev > best_action_ev:
-                        best_card, best_action, best_action_ev = card, action, action_ev
-
-        for card in self.hand:
-            for action in card.actions:
-                if action.can_perform(self):
-                    action_ev = action.ev(self)
-                    if action_ev > best_action_ev:
-                        best_card, best_action, best_action_ev = card, action, action_ev
+        best_card, best_action, best_action_ev = self.find_best_action()
 
         if best_action:
-            if best_action_ev >= self.ev_threshold:
+            if best_action_ev >= self.ev_threshold or best_card.autofire:
                 result = best_action.perform(self)
                 self.actions += best_action.action_cost
                 self.action_result_counts[best_action][result] += 1
@@ -844,7 +834,7 @@ class AssistRobber(Action):
     
     def pass_items(self, state: RailwayState):
         return {
-            Item.SeeingBanditryInTheUpperRiver: 1 if state.banditry_level() < 36 else 0,
+            Item.SeeingBanditryInTheUpperRiver: 1,
             Item.PieceOfRostygold: 450,
         }
 
@@ -1022,6 +1012,7 @@ class RisingReportsOfBanditry(UpperRiverCard):
             GHRWarehousesAreBeingTargeted()
         ]
         self.weight = 0.8  # Infrequent Frequency
+        self.autofire = True
     
     def can_draw(self, state: RailwayState):
         return state.items.get(Item.SeeingBanditryInTheUpperRiver, 0) >= 36
@@ -1277,6 +1268,147 @@ class SellPropaganda(Action):
 #             Item.JustificandeCoin: (1, 5)  # Gain 1 to 5 Justificande Coins
 #         }
 
+
+class AdjustLightingInEalingGardens(UpperRiverCard):
+    def __init__(self):
+        super().__init__("Adjust the Lighting in Ealing Gardens")
+        self.actions = [
+            RefreshWatchtowerEaling(),
+            BreakLampEaling(),
+            ImpassionedSpeechForLightAndBeautyEaling(),
+            ImpassionedSpeechOnFreedomAndDarknessEaling(),
+            CalculatedSpeechOnFreedomAndDarknessEaling(),
+            LeaveLightAsIsEaling()
+        ]
+        self.weight = 1.0  # Standard Frequency
+    
+    def can_draw(self, state: RailwayState):
+        # Check specific conditions for drawing this card
+        return state.location == Location.EalingGardens and \
+            state.get(Item.EalingGardensDarkness) < utils.pyramid(7) and \
+            state.get(Item.ColourAtTheChessboard) < 3
+
+
+class RefreshWatchtowerEaling(Action):
+    def __init__(self):
+        super().__init__("Refresh the Watchtower")
+    
+    def pass_rate(self, state: RailwayState):
+        return self.broad_pass_rate(100, state.outfit.dangerous)
+
+    def pass_items(self, state: RailwayState):
+        return {
+            Item.EalingGardensDarkness: -1,  # CP drop
+            Item.AdvancingTheLiberationOfNight: -1,  # CP drop
+        }
+
+    def fail_items(self, state: RailwayState):
+        return {
+            Item.Wounds: 2  # Wounds increase on failure
+        }
+
+
+class BreakLampEaling(Action):
+    def __init__(self):
+        super().__init__("Break a lamp")
+    
+    def pass_rate(self, state: RailwayState):
+        banditry_level = state.banditry_level()
+        return self.broad_pass_rate(400 - (50 * banditry_level), state.outfit.shadowy)
+
+    def pass_items(self, state: RailwayState):
+        return {
+            Item.EalingGardensDarkness: 2,  # CP increase
+            Item.AdvancingTheLiberationOfNight: 2  # CP increase
+        }
+
+    def fail_items(self, state: RailwayState):
+        return {
+            Item.Suspicion: 2  # Suspicion increase on failure
+        }
+
+
+class ImpassionedSpeechForLightAndBeautyEaling(Action):
+    def __init__(self):
+        super().__init__("Make an impassioned speech for Light and Beauty")
+        self.alt_pass_rate = 0.05 # TODO
+
+    def can_perform(self, state: GameState):
+        return state.get(Item.ColourAtTheChessboard) != 2
+
+    def pass_rate(self, state: RailwayState):
+        dc = 150 + state.get(Item.SupportingTheLiberationistTracklayers) * 25
+        return self.broad_pass_rate(dc, state.outfit.persuasive)
+
+    def pass_items(self, state: RailwayState):
+        return {
+            Item.RomanticNotion: 5,
+            Item.AdvancingTheLiberationOfNight: -3,
+            Item.WhisperedHint: 200
+        }
+
+    def alt_pass_items(self, state: RailwayState):
+        return {
+            Item.RomanticNotion: 5,
+            Item.AdvancingTheLiberationOfNight: -3,
+            Item.WhisperedHint: 200,
+            Item.MirrorcatchBox: 1  # Rare success
+        }
+
+    def fail_items(self, state: RailwayState):
+        return {
+            Item.Scandal: 2  # Scandal increase on failure
+        }
+
+class ImpassionedSpeechOnFreedomAndDarknessEaling(Action):
+    def __init__(self):
+        super().__init__("Give an impassioned speech on Freedom and Darkness")
+
+    def pass_rate(self, state: RailwayState):
+        dc = 400 - 50 * state.get(Item.SupportingTheLiberationistTracklayers)
+        return self.broad_pass_rate(dc, state.outfit.persuasive)
+    
+    def pass_items(self, state: RailwayState):
+        return {
+            Item.RomanticNotion: 5,
+            Item.AdvancingTheLiberationOfNight: 3,
+            Item.WhisperedHint: 200
+        }
+
+    def fail_items(self, state: RailwayState):
+        return {
+            Item.Scandal: 2  # Scandal increase on failure
+        }
+
+
+class CalculatedSpeechOnFreedomAndDarknessEaling(Action):
+    def __init__(self):
+        super().__init__("Give a calculated speech on Freedom and Darkness")
+
+    def pass_rate(self, state: RailwayState):
+        return self.narrow_pass_rate(5, state.outfit.mithridacy)
+
+    def pass_items(self, state: RailwayState):
+        return {
+            Item.AdvancingTheLiberationOfNight: 2
+        }
+
+    def fail_items(self, state: RailwayState):
+        return {
+            Item.Scandal: 2,
+            Item.Wounds: 1
+        }
+
+class LeaveLightAsIsEaling(Action):
+    def __init__(self):
+        super().__init__("Leave the light as it is")
+
+    def pass_items(self, state: RailwayState):
+        return {
+            Item.RumourOfTheUpperRiver: 1
+        }
+
+
 class RailwaySimulationRunner(SimulationRunner):
     def __init__(self, runs: int, initial_values: dict, location: Location):
         super().__init__(runs, initial_values)
@@ -1300,6 +1432,9 @@ class RailwaySimulationRunner(SimulationRunner):
             RailwayAndTheGreatGame(),
             UrchinsGames(),
             WhichMeeting(),
+
+            # Ealing
+            AdjustLightingInEalingGardens()
         ]
 
     def create_state(self) -> GameState:

@@ -316,29 +316,30 @@ full_draws_per_day = 3
 actions_per_week = (7 * actions_per_day) + 10 - 3
 
 optimize_input = Item.Action
-optimize_for = Item.ConsignmentOfScintillackSnuff
+optimize_for = Item.Echo
 
-input_per_cycle
+# input_per_cycle
 
 core_constraint = {
     Item.Constraint: 1,
     optimize_input: input_per_cycle,
+    Item.MenaceGeneralAction: input_per_cycle,
     # Item.VisitFromTimeTheHealer: 1,
-    # Item._BoneMarketRotation: 1
+    Item._BoneMarketRotation: 1,
     # Item.CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
 
-config.add({
-    Item.RootAction: -1,
-    Item.Action: 1
-})
+# config.add({
+#     Item.RootAction: -1,
+#     Item.Action: 1
+# })
 
-config.add({
-    Item.RootAction: -1,
-    Item.LondonAction: 1
-})
+# config.add({
+#     Item.RootAction: -1,
+#     Item.LondonAction: 1
+# })
 
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1

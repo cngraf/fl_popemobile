@@ -259,6 +259,43 @@ class Item(Enum):
     GeneralInsectAction = auto()    
     GeneralPrimateAction = auto()    
 
+    AntiquityReptileExhaustion = auto()
+    AntiquityAmphibianExhaustion = auto()    
+    AntiquityBirdExhaustion = auto()
+    AntiquityFishExhaustion = auto()
+    AntiquityArachnidExhaustion = auto()
+    AntiquityInsectExhaustion = auto()
+    AntiquityPrimateExhaustion = auto()
+
+    AmalgamyReptileExhaustion = auto()
+    AmalgamyAmphibianExhaustion = auto()    
+    AmalgamyBirdExhaustion = auto()
+    AmalgamyFishExhaustion = auto()
+    AmalgamyArachnidExhaustion = auto()
+    AmalgamyInsectExhaustion = auto()
+    AmalgamyPrimateExhaustion = auto()
+
+    MenaceReptileExhaustion = auto()
+    MenaceAmphibianExhaustion = auto()    
+    MenaceBirdExhaustion = auto()
+    MenaceFishExhaustion = auto()
+    MenaceArachnidExhaustion = auto()
+    MenaceInsectExhaustion = auto()      
+    MenacePrimateExhaustion = auto()      
+
+    AntiquityGeneralExhaustion = auto()
+    AmalgamyGeneralExhaustion = auto()
+    MenaceGeneralExhaustion = auto()
+
+    GeneralReptileExhaustion = auto()
+    GeneralAmphibianExhaustion = auto()    
+    GeneralBirdExhaustion = auto()
+    GeneralFishExhaustion = auto()
+    GeneralArachnidExhaustion = auto()
+    GeneralInsectExhaustion = auto()    
+    GeneralPrimateExhaustion = auto()   
+
+
     # Menaces
     Wounds = auto()
     Scandal = auto()
@@ -446,12 +483,14 @@ class Item(Enum):
     BrilliantSoul = auto()
     MuscariaBrandy = auto()
     BrassRing = auto()
-    DevilboneDice = auto()
+    DevilboneDie = auto()
     PortfolioOfSouls = auto()
     QueerSoul = auto()
     SilentSoul = auto()
     BrightBrassSkull = auto()
+    DevilishProbabilityDistributor = auto()
     DiscordantSoul = auto()
+    InfernalMachine = auto()
     CoruscatingSoul = auto()
     ReportedLocationOfAOneTimePrinceOfHell = auto()
 
@@ -743,7 +782,6 @@ class Item(Enum):
     ScarletStockings = auto()
     StormInATeacup = auto()
     FacetedDecanterOfDrownieEffluvia = auto()
-    InfernalMachine = auto()
 
     # Tools
     NotchedBoneHarpoon = auto()
@@ -864,6 +902,8 @@ class Item(Enum):
     _WaswoodHeistCashOut = auto()
     _ApproximateEchoValue = auto()
 
+    ColourAtTheChessboard = auto()
+
     SeeingThroughTheEyesOfIcarus = auto()
     WalkingTheFallingCities = auto()
 
@@ -876,6 +916,26 @@ class Item(Enum):
     RosyColours = auto()
 
     # Upper River
+    EalingGardensCommemorativeDevelopment = auto()
+    JerichoLocksCommemorativeDevelopment = auto()
+    MagistracyOfEvenlodeCommemorativeDevelopment = auto()
+    BalmoralCommemorativeDevelopment = auto()
+    BurrowInfraMumpCommemorativeDevelopment = auto()
+    MoulinCommemorativeDevelopment = auto()
+    StationVIIICommemorativeDevelopment = auto()
+    HurlersCommemorativeDevelopment = auto()
+    MarigoldCommemorativeDevelopment = auto()
+
+    EalingGardensDarkness = auto()
+    JerichoLocksDarkness = auto()
+    MagistracyOfEvenlodeDarkness = auto()
+    BalmoralDarkness = auto()
+    BurrowInfraMumpDarkness = auto()
+    MoulinDarkness = auto()
+    StationVIIIDarkness = auto()
+    HurlersDarkness = auto()
+    MarigoldDarkness = auto()
+
     FittingInAtHeliconHouse = auto()
     TimeRemainingAtHeliconHouseTwoThruFive = auto()
     TimeRemainingAtHeliconHouseExactlyOne = auto()

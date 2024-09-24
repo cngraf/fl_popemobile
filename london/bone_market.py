@@ -6,7 +6,7 @@ import utils
 from config import Config
 from player import Player
 
-class Fluctuations(Enum):
+class Flux(Enum):
     NoQuality = 0
     Antiquity = auto()
     Amalgamy = auto()
@@ -230,92 +230,389 @@ def zoo_multiplier(skeletonType = ZooType):
     
 def match_action_type(zoo_type, flux_type):
     if zoo_type == ZooType.Reptile:
-        if flux_type == Fluctuations.Antiquity:
+        if flux_type == Flux.Antiquity:
             return Item.AntiquityReptileAction
-        elif flux_type == Fluctuations.Amalgamy:
+        elif flux_type == Flux.Amalgamy:
             return Item.AmalgamyReptileAction
-        elif flux_type == Fluctuations.Menace:
+        elif flux_type == Flux.Menace:
             return Item.MenaceReptileAction
         else:
             return Item.GeneralReptileAction
     
     elif zoo_type == ZooType.Amphibian:
-        if flux_type == Fluctuations.Antiquity:
+        if flux_type == Flux.Antiquity:
             return Item.AntiquityAmphibianAction
-        elif flux_type == Fluctuations.Amalgamy:
+        elif flux_type == Flux.Amalgamy:
             return Item.AmalgamyAmphibianAction
-        elif flux_type == Fluctuations.Menace:
+        elif flux_type == Flux.Menace:
             return Item.MenaceAmphibianAction
         else:
             return Item.GeneralAmphibianAction        
 
     elif zoo_type == ZooType.Bird:
-        if flux_type == Fluctuations.Antiquity:
+        if flux_type == Flux.Antiquity:
             return Item.AntiquityBirdAction
-        elif flux_type == Fluctuations.Amalgamy:
+        elif flux_type == Flux.Amalgamy:
             return Item.AmalgamyBirdAction
-        elif flux_type == Fluctuations.Menace:
+        elif flux_type == Flux.Menace:
             return Item.MenaceBirdAction
         else:
             return Item.GeneralBirdAction
         
     elif zoo_type == ZooType.Fish:
-        if flux_type == Fluctuations.Antiquity:
+        if flux_type == Flux.Antiquity:
             return Item.AntiquityFishAction
-        elif flux_type == Fluctuations.Amalgamy:
+        elif flux_type == Flux.Amalgamy:
             return Item.AmalgamyFishAction
-        elif flux_type == Fluctuations.Menace:
+        elif flux_type == Flux.Menace:
             return Item.MenaceFishAction
         else:
             return Item.GeneralFishAction        
 
     elif zoo_type == ZooType.Spider:
-        if flux_type == Fluctuations.Antiquity:
+        if flux_type == Flux.Antiquity:
             return Item.AntiquityArachnidAction
-        elif flux_type == Fluctuations.Amalgamy:
+        elif flux_type == Flux.Amalgamy:
             return Item.AmalgamyArachnidAction
-        elif flux_type == Fluctuations.Menace:
+        elif flux_type == Flux.Menace:
             return Item.MenaceArachnidAction
         else:
             return Item.GeneralArachnidAction        
 
     elif zoo_type == ZooType.Insect:
-        if flux_type == Fluctuations.Antiquity:
+        if flux_type == Flux.Antiquity:
             return Item.AntiquityInsectAction
-        elif flux_type == Fluctuations.Amalgamy:
+        elif flux_type == Flux.Amalgamy:
             return Item.AmalgamyInsectAction
-        elif flux_type == Fluctuations.Menace:
+        elif flux_type == Flux.Menace:
             return Item.MenaceInsectAction
         else:
             return Item.GeneralInsectAction
         
     elif zoo_type == ZooType.Primate:
-        if flux_type == Fluctuations.Antiquity:
+        if flux_type == Flux.Antiquity:
             return Item.AntiquityPrimateAction
-        elif flux_type == Fluctuations.Amalgamy:
+        elif flux_type == Flux.Amalgamy:
             return Item.AmalgamyPrimateAction
-        elif flux_type == Fluctuations.Menace:
+        elif flux_type == Flux.Menace:
             return Item.MenacePrimateAction
         else:
             return Item.GeneralPrimateAction
 
     else:
-        if flux_type == Fluctuations.Antiquity:
+        if flux_type == Flux.Antiquity:
             return Item.AntiquityGeneralAction
-        elif flux_type == Fluctuations.Amalgamy:
+        elif flux_type == Flux.Amalgamy:
             return Item.AmalgamyGeneralAction
-        elif flux_type == Fluctuations.Menace:
+        elif flux_type == Flux.Menace:
             return Item.MenaceGeneralAction
+        else:
+            return Item._NoItem # HACK
+
+def reverse_match_action_type(item):
+    # Check for Reptile actions
+    if item == Item.AntiquityReptileAction:
+        return ZooType.Reptile, Flux.Antiquity
+    elif item == Item.AmalgamyReptileAction:
+        return ZooType.Reptile, Flux.Amalgamy
+    elif item == Item.MenaceReptileAction:
+        return ZooType.Reptile, Flux.Menace
+    elif item == Item.GeneralReptileAction:
+        return ZooType.Reptile, Flux.NoQuality
+    
+    # Check for Amphibian actions
+    elif item == Item.AntiquityAmphibianAction:
+        return ZooType.Amphibian, Flux.Antiquity
+    elif item == Item.AmalgamyAmphibianAction:
+        return ZooType.Amphibian, Flux.Amalgamy
+    elif item == Item.MenaceAmphibianAction:
+        return ZooType.Amphibian, Flux.Menace
+    elif item == Item.GeneralAmphibianAction:
+        return ZooType.Amphibian, Flux.NoQuality
+
+    # Check for Bird actions
+    elif item == Item.AntiquityBirdAction:
+        return ZooType.Bird, Flux.Antiquity
+    elif item == Item.AmalgamyBirdAction:
+        return ZooType.Bird, Flux.Amalgamy
+    elif item == Item.MenaceBirdAction:
+        return ZooType.Bird, Flux.Menace
+    elif item == Item.GeneralBirdAction:
+        return ZooType.Bird, Flux.NoQuality
+
+    # Check for Fish actions
+    elif item == Item.AntiquityFishAction:
+        return ZooType.Fish, Flux.Antiquity
+    elif item == Item.AmalgamyFishAction:
+        return ZooType.Fish, Flux.Amalgamy
+    elif item == Item.MenaceFishAction:
+        return ZooType.Fish, Flux.Menace
+    elif item == Item.GeneralFishAction:
+        return ZooType.Fish, Flux.NoQuality
+
+    # Check for Spider actions
+    elif item == Item.AntiquityArachnidAction:
+        return ZooType.Spider, Flux.Antiquity
+    elif item == Item.AmalgamyArachnidAction:
+        return ZooType.Spider, Flux.Amalgamy
+    elif item == Item.MenaceArachnidAction:
+        return ZooType.Spider, Flux.Menace
+    elif item == Item.GeneralArachnidAction:
+        return ZooType.Spider, Flux.NoQuality
+
+    # Check for Insect actions
+    elif item == Item.AntiquityInsectAction:
+        return ZooType.Insect, Flux.Antiquity
+    elif item == Item.AmalgamyInsectAction:
+        return ZooType.Insect, Flux.Amalgamy
+    elif item == Item.MenaceInsectAction:
+        return ZooType.Insect, Flux.Menace
+    elif item == Item.GeneralInsectAction:
+        return ZooType.Insect, Flux.NoQuality
+
+    # Check for Primate actions
+    elif item == Item.AntiquityPrimateAction:
+        return ZooType.Primate, Flux.Antiquity
+    elif item == Item.AmalgamyPrimateAction:
+        return ZooType.Primate, Flux.Amalgamy
+    elif item == Item.MenacePrimateAction:
+        return ZooType.Primate, Flux.Menace
+    elif item == Item.GeneralPrimateAction:
+        return ZooType.Primate, Flux.NoQuality
+
+    # Check for General actions
+    elif item == Item.AntiquityGeneralAction:
+        return None, Flux.Antiquity
+    elif item == Item.AmalgamyGeneralAction:
+        return None, Flux.Amalgamy
+    elif item == Item.MenaceGeneralAction:
+        return None, Flux.Menace
+    # elif item == Item._NoItem:
+    #     return None, Fluctuations.NoQuality
+
+    else:
+        # raise ValueError(f"Unrecognized item: {item}")
+        return ZooType.NoType, Flux.NoQuality
+
+
+def match_exhaustion_type(zoo_type, flux_type):
+    if zoo_type == ZooType.Reptile:
+        if flux_type == Flux.Antiquity:
+            return Item.AntiquityReptileExhaustion
+        elif flux_type == Flux.Amalgamy:
+            return Item.AmalgamyReptileExhaustion
+        elif flux_type == Flux.Menace:
+            return Item.MenaceReptileExhaustion
+        else:
+            return Item.GeneralReptileExhaustion
+    
+    elif zoo_type == ZooType.Amphibian:
+        if flux_type == Flux.Antiquity:
+            return Item.AntiquityAmphibianExhaustion
+        elif flux_type == Flux.Amalgamy:
+            return Item.AmalgamyAmphibianExhaustion
+        elif flux_type == Flux.Menace:
+            return Item.MenaceAmphibianExhaustion
+        else:
+            return Item.GeneralAmphibianExhaustion        
+
+    elif zoo_type == ZooType.Bird:
+        if flux_type == Flux.Antiquity:
+            return Item.AntiquityBirdExhaustion
+        elif flux_type == Flux.Amalgamy:
+            return Item.AmalgamyBirdExhaustion
+        elif flux_type == Flux.Menace:
+            return Item.MenaceBirdExhaustion
+        else:
+            return Item.GeneralBirdExhaustion
+        
+    elif zoo_type == ZooType.Fish:
+        if flux_type == Flux.Antiquity:
+            return Item.AntiquityFishExhaustion
+        elif flux_type == Flux.Amalgamy:
+            return Item.AmalgamyFishExhaustion
+        elif flux_type == Flux.Menace:
+            return Item.MenaceFishExhaustion
+        else:
+            return Item.GeneralFishExhaustion        
+
+    elif zoo_type == ZooType.Spider:
+        if flux_type == Flux.Antiquity:
+            return Item.AntiquityArachnidExhaustion
+        elif flux_type == Flux.Amalgamy:
+            return Item.AmalgamyArachnidExhaustion
+        elif flux_type == Flux.Menace:
+            return Item.MenaceArachnidExhaustion
+        else:
+            return Item.GeneralArachnidExhaustion        
+
+    elif zoo_type == ZooType.Insect:
+        if flux_type == Flux.Antiquity:
+            return Item.AntiquityInsectExhaustion
+        elif flux_type == Flux.Amalgamy:
+            return Item.AmalgamyInsectExhaustion
+        elif flux_type == Flux.Menace:
+            return Item.MenaceInsectExhaustion
+        else:
+            return Item.GeneralInsectExhaustion
+        
+    elif zoo_type == ZooType.Primate:
+        if flux_type == Flux.Antiquity:
+            return Item.AntiquityPrimateExhaustion
+        elif flux_type == Flux.Amalgamy:
+            return Item.AmalgamyPrimateExhaustion
+        elif flux_type == Flux.Menace:
+            return Item.MenacePrimateExhaustion
+        else:
+            return Item.GeneralPrimateExhaustion
+
+    else:
+        if flux_type == Flux.Antiquity:
+            return Item.AntiquityGeneralExhaustion
+        elif flux_type == Flux.Amalgamy:
+            return Item.AmalgamyGeneralExhaustion
+        elif flux_type == Flux.Menace:
+            return Item.MenaceGeneralExhaustion
         else:
             return Item._NoItem # HACK
 
 suspicion_multiplier = 0.85
 
+class Buyer():
+    def __init__(self, name, zoo_type: ZooType, flux: Flux, impl_dc: 0):
+        self.name = name
+        self.zoo_type = zoo_type
+        self.flux = flux
+        self.implausibility_dc = impl_dc
+
+    def add_trade(self, config, recipe):
+        weekly_action_type = match_action_type(self.zoo_type, self.flux)
+        weekly_action_cost = {
+            weekly_action_type: recipe[Item.Action]
+        }
+
+        skeleton = create_skeleton(recipe)
+        primary = self.primary_payout(skeleton)
+        secondary = self.secondary_payout(skeleton)
+
+        failures = self.expected_failed_sell_attempts(config, skeleton)
+        failure_penalty = {
+            Item.Action: -1 * failures,
+            weekly_action_type: -1 * failures,
+             # TODO check if consistent for all buyers
+            Item.Suspicion: 2 * suspicion_multiplier * failures
+        }
+
+        total = utils.sum_dicts(
+            recipe,
+            weekly_action_cost,
+            skeleton.addtl_costs,
+            primary,
+            secondary,
+            failure_penalty)
+        config.add(total)
+
+    def primary_payout(self, skeleton: Bone):
+        return {}
+    
+    def secondary_payout(self, skeleton: Bone):
+        return {}
+    
+    def expected_failed_sell_attempts(self, config: Config, skeleton: Bone):
+        shadowy = config.player.stats[Stat.Shadowy]
+        impl = skeleton.implausibility
+        if self.zoo_type == ZooType.Chimera:
+            impl += 3
+        
+        dc = self.implausibility_dc * (skeleton.implausibility)
+    
+        pass_rate = max(0.01, utils.broad_challenge_success_rate(shadowy, dc))
+        return (1.0 / pass_rate) - 1
+     
+
+    @staticmethod
+    def zoo_multiplier(skeletonType = ZooType):
+        if skeletonType in (ZooType.Bird, ZooType.Amphibian, ZooType.Reptile, ZooType.Primate):
+            return 1.1
+        if skeletonType in (ZooType.Fish, ZooType.Insect, ZooType.Spider):
+            return 1.15
+        else:
+            return 1.0
+
+
+class AuthorOfGothicTales(Buyer):
+    def __init__(self, zoo_type: ZooType, flux: Flux):
+        super().__init__("An Author of Gothic Tales", zoo_type, flux, 75)
+
+    def primary_payout(self, skeleton: Bone):
+        multi = self.zoo_multiplier(self.zoo_type)
+        return {
+            Item.HinterlandScrip: 5 + (skeleton.echo_value * 2 * multi) 
+        }
+    
+    def secondary_payout(self, skeleton: Bone):
+        menace_bonus = 0.5 if self.flux == Flux.Menace else 0
+        antiquity_bonus = 0.5 if self.flux == Flux.Antiquity else 0
+        exhaustion_type = match_exhaustion_type(self.zoo_type, self.flux)
+        qty = (skeleton.antiquity + menace_bonus) * (skeleton.menace + antiquity_bonus)
+        exhaution = math.floor(skeleton.antiquity * skeleton.menace * 0.05)
+
+        return {
+            exhaustion_type: exhaution,
+            Item.CarvedBallOfStygianIvory: qty,
+        }
+
+class ZailorWithParticularInterests(Buyer):
+    def __init__(self, zoo_type: ZooType, flux: Flux):
+        super().__init__("A Zailor with Particular Interests", zoo_type, flux, 75)
+
+    def primary_payout(self, skeleton: Bone):
+        multi = self.zoo_multiplier(self.zoo_type)
+        return {
+            Item.NoduleOfWarmAmber: 25 + (skeleton.echo_value * 10 * multi) 
+        }
+    
+    def secondary_payout(self, skeleton: Bone):
+        amalgamy_bonus = 0.5 if self.flux == Flux.Amalgamy else 0
+        antiquity_bonus = 0.5 if self.flux == Flux.Antiquity else 0
+        exhaustion_type = match_exhaustion_type(self.zoo_type, self.flux)
+        qty = (skeleton.antiquity + amalgamy_bonus) * (skeleton.amalgamy + antiquity_bonus)
+        exhaution = math.floor(skeleton.antiquity * skeleton.amalgamy * 0.05)
+
+        return {
+            exhaustion_type: exhaution,
+            Item.KnobOfScintillack: qty,
+        }
+
+class RubberyCollector(Buyer):
+    def __init__(self, zoo_type: ZooType, flux: Flux):
+        super().__init__("A Rubbery Collector", zoo_type, flux, 75)
+
+    def primary_payout(self, skeleton: Bone):
+        multi = self.zoo_multiplier(self.zoo_type)
+        return {
+            Item.NightsoilOfTheBazaar: 5 + (skeleton.echo_value * 2 * multi) 
+        }
+    
+    def secondary_payout(self, skeleton: Bone):
+        amalgamy_bonus = 0.5 if self.flux == Flux.Amalgamy else 0
+        menace_bonus = 0.5 if self.flux == Flux.Menace else 0
+        exhaustion_type = match_exhaustion_type(self.zoo_type, self.flux)
+        qty = (skeleton.menace + amalgamy_bonus) * (skeleton.amalgamy + menace_bonus)
+        exhaution = math.floor(skeleton.menace * skeleton.amalgamy * 0.05)
+
+        return {
+            exhaustion_type: exhaution,
+            Item.BasketOfRubberyPies: qty,
+        }
+
+
+
 def naive_collector_trade(trade,
                         player: Player,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Flux = Flux.NoQuality):
     payout = {}
 
     skeleton = create_skeleton(recipe)
@@ -345,7 +642,7 @@ def bohemian_sculptress_trade(trade,
                         player: Player,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Flux = Flux.NoQuality):
     payout = {}
 
     skeleton = create_skeleton(recipe)
@@ -377,7 +674,7 @@ def hoarding_paleo_trade(trade,
                         player: Player,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Flux = Flux.NoQuality):
     payout = {}
 
     skeleton = create_skeleton(recipe)
@@ -404,23 +701,24 @@ def hoarding_paleo_trade(trade,
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     trade(0, totals)
 
-exhaustion_hard_cap = 6
+exhaustion_hard_cap = 4
 
 def tentacled_entrepreneur_trade(config,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Flux = Flux.NoQuality):
     payout = {}
 
     skeleton = create_skeleton(recipe)
     prop_a = skeleton.amalgamy
-    flux_power = 2.1 if fluctuations == Fluctuations.Amalgamy else 2.0
+    flux_power = 2.1 if fluctuations == Flux.Amalgamy else 2.0
+    exhaustion = match_exhaustion_type(zoo_type, fluctuations)
 
     if prop_a >= 1:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor((prop_a ** 2)/25),
+            exhaustion: math.floor((prop_a ** 2)/25),
             Item.MemoryOfDistantShores: 5 + (skeleton.echo_value * zoo_multi * 2),
             Item.FinalBreath: 4 * (prop_a ** flux_power)
         }
@@ -436,25 +734,26 @@ def tentacled_entrepreneur_trade(config,
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
     config.trade(0, totals)
  
 def ambassador_trade(trade,
                         player: Player,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Flux = Flux.NoQuality):
     payout = {}
 
     skeleton = create_skeleton(recipe)
     prop_a = skeleton.antiquity
-    flux_power = 2.1 if fluctuations == Fluctuations.Antiquity else 2.0
+    flux_power = 2.1 if fluctuations == Flux.Antiquity else 2.0
+    exhaustion = match_exhaustion_type(zoo_type, fluctuations)
 
     if prop_a >= 1:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor((prop_a ** 2)/25),
+            exhaustion: math.floor((prop_a ** 2)/25),
             Item.MemoryOfLight: 5 + (skeleton.echo_value * zoo_multi * 2),
             Item.TailfeatherBrilliantAsFlame: 0.8 * (prop_a ** flux_power)
         }
@@ -470,25 +769,26 @@ def ambassador_trade(trade,
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
     trade(0, totals)
 
 def teller_of_terrors_trade(trade,
                         player: Player,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Flux = Flux.NoQuality):
     payout = {}
 
     skeleton = create_skeleton(recipe)
     prop_a = skeleton.menace
-    flux_power = 2.1 if fluctuations == Fluctuations.Menace else 2.0
+    flux_power = 2.1 if fluctuations == Flux.Menace else 2.0
+    exhaustion = match_exhaustion_type(zoo_type, fluctuations)
 
     if prop_a >= 1:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor((prop_a ** 2)/25),
+            exhaustion: math.floor((prop_a ** 2)/25),
             Item.BottelofMorelways1872: 25 + (skeleton.echo_value * zoo_multi * 10),
             Item.RoyalBlueFeather: 4 * (prop_a ** flux_power)
         }
@@ -504,7 +804,7 @@ def teller_of_terrors_trade(trade,
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
 
     trade(0, totals)
 
@@ -512,21 +812,23 @@ def gothic_tales_trade(trade,
                         player: Player,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Flux = Flux.NoQuality):
     payout = {}
 
     skeleton = create_skeleton(recipe)
     prop_a = skeleton.antiquity
     prop_b = skeleton.menace
 
-    bonus_a = 0.5 if fluctuations == Fluctuations.Antiquity else 0
-    bonus_b = 0.5 if fluctuations == Fluctuations.Menace else 0
+    bonus_a = 0.5 if fluctuations == Flux.Antiquity else 0
+    bonus_b = 0.5 if fluctuations == Flux.Menace else 0
+    exhaustion = match_exhaustion_type(zoo_type, fluctuations)
+
 
     if prop_a >= 1 and prop_b >= 1:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor(prop_a * prop_b/20),
+            exhaustion: math.floor(prop_a * prop_b/20),
             Item.HinterlandScrip: 5 + (skeleton.echo_value * zoo_multi * 2),
             Item.CarvedBallOfStygianIvory: (prop_a + bonus_b) * (prop_b + bonus_a)
         }
@@ -542,7 +844,7 @@ def gothic_tales_trade(trade,
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
 
     trade(0, totals)
 
@@ -550,21 +852,23 @@ def zailor_particular_trade(trade,
                         player: Player,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality):
+                       fluctuations: Flux = Flux.NoQuality):
     payout = {}
 
     skeleton = create_skeleton(recipe)
     prop_a = skeleton.antiquity
     prop_b = skeleton.amalgamy
 
-    bonus_a = 0.5 if fluctuations == Fluctuations.Antiquity else 0
-    bonus_b = 0.5 if fluctuations == Fluctuations.Amalgamy else 0
+    bonus_a = 0.5 if fluctuations == Flux.Antiquity else 0
+    bonus_b = 0.5 if fluctuations == Flux.Amalgamy else 0
+
+    exhaustion = match_exhaustion_type(zoo_type, fluctuations)
 
     if prop_a >= 1 and prop_b >= 1:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor(prop_a * prop_b/20),
+            exhaustion: math.floor(prop_a * prop_b/20),
             Item.NoduleOfWarmAmber: 25 + (skeleton.echo_value * zoo_multi * 10),
             Item.KnobOfScintillack: (prop_a + bonus_b) * (prop_b + bonus_a)
         }
@@ -580,14 +884,14 @@ def zailor_particular_trade(trade,
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
 
     trade(0, totals)
 
 def rubbery_collector_trade(config,
                        recipe: dict,
                        zoo_type: ZooType = ZooType.NoType,
-                       fluctuations: Fluctuations = Fluctuations.NoQuality,
+                       fluctuations: Flux = Flux.NoQuality,
                        debug: bool = False):
     payout = {}
 
@@ -595,14 +899,16 @@ def rubbery_collector_trade(config,
     prop_a = skeleton.amalgamy
     prop_b = skeleton.menace
 
-    bonus_a = 0.5 if fluctuations == Fluctuations.Amalgamy else 0
-    bonus_b = 0.5 if fluctuations == Fluctuations.Menace else 0
+    bonus_a = 0.5 if fluctuations == Flux.Amalgamy else 0
+    bonus_b = 0.5 if fluctuations == Flux.Menace else 0
+    exhaustion = match_exhaustion_type(zoo_type, fluctuations)
+
 
     if prop_a >= 1 and prop_b >= 1:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor(prop_a * prop_b/20),
+            exhaustion: math.floor(prop_a * prop_b/20),
             Item.NightsoilOfTheBazaar: 5 + (skeleton.echo_value * zoo_multi * 2),
             Item.BasketOfRubberyPies: (prop_a + bonus_b) * (prop_b + bonus_a)
         }
@@ -620,7 +926,7 @@ def rubbery_collector_trade(config,
     #     print(payout)
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
 
     config.trade(0, totals)
 
@@ -634,19 +940,21 @@ def phantasist_amalgamy_trade(config: Config,
     skeleton = create_skeleton(recipe)
     prop = skeleton.amalgamy
     imp = skeleton.implausibility
+    exhaustion = match_exhaustion_type(zoo_type, flux_type=Flux.NoQuality)
+
 
     if prop >= 4 and imp >= 2:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor((imp * prop + 1)/20),
+            exhaustion: math.floor((imp * prop + 1)/20),
             Item.HinterlandScrip: 2 + (skeleton.echo_value * zoo_multi * 2),
             Item.SlimVolumeOfBazaarinePoetry: 1 + imp * prop
         }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
 
     config.trade(0, totals)    
 
@@ -660,19 +968,20 @@ def phantasist_antiquity_trade(config: Config,
     skeleton = create_skeleton(recipe)
     prop = skeleton.antiquity
     imp = skeleton.implausibility
+    exhaustion = match_exhaustion_type(zoo_type, flux_type=Flux.NoQuality)
 
     if prop >= 4 and imp >= 2:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor((imp * prop + 1)/20),
+            exhaustion: math.floor((imp * prop + 1)/20),
             Item.MemoryOfLight: 2 + (skeleton.echo_value * zoo_multi * 2),
             Item.KnobOfScintillack: 1 + imp * prop
         }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
 
     config.trade(0, totals)
 
@@ -687,18 +996,20 @@ def phantasist_menace_trade(config: Config,
     skeleton = create_skeleton(recipe)
     prop = skeleton.menace
     imp = skeleton.implausibility
+    exhaustion = match_exhaustion_type(zoo_type, flux_type=Flux.NoQuality)
+ 
     if prop >= 4 and imp >= 2:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor((imp * prop + 1)/20),
+            exhaustion: math.floor((imp * prop + 1)/20),
             Item.HinterlandScrip: 2 + (skeleton.echo_value * zoo_multi * 2),
             Item.CarvedBallOfStygianIvory: 1 + imp * prop
         }
 
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
 
     config.trade(0, totals)
 
@@ -711,12 +1022,13 @@ def enthusiast_skulls_trade(config: Config,
 
     skeleton = create_skeleton(recipe)
     skulls = skeleton.skulls
+    exhaustion = match_exhaustion_type(zoo_type, flux_type=Flux.NoQuality)
 
     if skulls >= 2:
         zoo_multi = zoo_multiplier(zoo_type)
 
         payout = {
-            Item.BoneMarketExhaustion: math.floor(((skulls - 1) ** 1.8)/4),
+            exhaustion: math.floor(((skulls - 1) ** 1.8)/4),
             Item.PieceOfRostygold: (skeleton.echo_value * zoo_multi * 100),
             Item.VitalIntelligence: math.floor((skulls - 1) ** 1.8)
         }
@@ -724,7 +1036,7 @@ def enthusiast_skulls_trade(config: Config,
     avg_failures = expected_failed_sell_attempts(player, skeleton,
                                                 zoo_type == ZooType.Chimera,
                                                 dc_per_point=60)
-    action_type = match_action_type(zoo_type, Fluctuations.NoQuality)
+    action_type = match_action_type(zoo_type, Flux.NoQuality)
 
     failure_penalty = {
         Item.Action: -avg_failures,
@@ -735,13 +1047,15 @@ def enthusiast_skulls_trade(config: Config,
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs, failure_penalty)
     totals = utils.sum_dicts(recipe, payout, skeleton.addtl_costs)
 
-    if (totals.get(Item.BoneMarketExhaustion, 0) > exhaustion_hard_cap): return
+    if (totals.get(exhaustion, 0) > exhaustion_hard_cap): return
 
     config.trade(0, totals)
 
 def expected_failed_sell_attempts(player, skeleton: Bone, is_chimera: bool = False, dc_per_point: int = 75):
-    challenge_dc = dc_per_point * (skeleton.implausibility)
-    if is_chimera: challenge_dc += 3
+    imp = skeleton.implausibility
+    if is_chimera:
+        imp += 3
+    challenge_dc = dc_per_point * (imp)
     
     pass_rate = utils.pass_rate(player, Stat.Shadowy, challenge_dc)
     return (1.0 / pass_rate) - 1
@@ -779,7 +1093,8 @@ def add_trades(player: Player, config: Config):
         }
     }
 
-    max_bone_market_actions_per_week = 700
+    max_bone_market_actions_per_week = 700 # HACK
+    exhaustion_per_week = -4
     action_split = {
         Item._BoneMarketRotation: -1
     }
@@ -789,8 +1104,11 @@ def add_trades(player: Player, config: Config):
 
             unique_weeks = 21 # 3 vibes * 7 zoo types
 
-            action_split[action] = max_bone_market_actions_per_week/21
+            action_split[action] = max_bone_market_actions_per_week/unique_weeks
+            zoo_type, flux_type = reverse_match_action_type(action)
+            exhaustion_type = match_exhaustion_type(zoo_type, flux_type)
 
+            action_split[exhaustion_type] = exhaustion_per_week/unique_weeks
             # config.add({
             #     action: -1,
             #     Item.Action: 1
@@ -799,62 +1117,113 @@ def add_trades(player: Player, config: Config):
             if (category == "Amalgamy"):
                 config.add({
                     action: -1,
-                    Item.AmalgamyGeneralAction: 1
+                    Item.AmalgamyGeneralAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.AmalgamyGeneralExhaustion: exhaustion_per_week,
                 })
 
             if (category == "Antiquity"):
                 config.add({
                     action: -1,
-                    Item.AntiquityGeneralAction: 1
+                    Item.AntiquityGeneralAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.AntiquityGeneralExhaustion: exhaustion_per_week,
                 })
 
             if (category == "Menace"):
                 config.add({
                     action: -1,
-                    Item.MenaceGeneralAction: 1
+                    Item.MenaceGeneralAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.MenaceGeneralExhaustion: exhaustion_per_week,
                 })
 
             if (creature == "Amphibian"):
                 config.add({
                     action: -1,
-                    Item.GeneralAmphibianAction: 1
+                    Item.GeneralAmphibianAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.GeneralAmphibianExhaustion: exhaustion_per_week,
                 })
 
             if (creature == "Arachnid"):
                 config.add({
                     action: -1,
-                    Item.GeneralArachnidAction: 1
+                    Item.GeneralArachnidAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.GeneralArachnidExhaustion: exhaustion_per_week,
                 })
 
             if (creature == "Bird"):
                 config.add({
                     action: -1,
-                    Item.GeneralBirdAction: 1
+                    Item.GeneralBirdAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.GeneralBirdExhaustion: exhaustion_per_week,
                 })
 
             if (creature == "Fish"):
                 config.add({
                     action: -1,
-                    Item.GeneralFishAction: 1
+                    Item.GeneralFishAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.GeneralFishExhaustion: exhaustion_per_week,
                 })
 
             if (creature == "Insect"):
                 config.add({
                     action: -1,
-                    Item.GeneralInsectAction: 1
+                    Item.GeneralInsectAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.GeneralInsectExhaustion: exhaustion_per_week,
                 })
 
             if (creature == "Reptile"):
                 config.add({
                     action: -1,
-                    Item.GeneralReptileAction: 1
+                    Item.GeneralReptileAction: 1,
+                })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.GeneralReptileExhaustion: exhaustion_per_week,
                 })
 
             if (creature == "Primate"):
                 config.add({
                     action: -1,
-                    Item.GeneralPrimateAction: 1
+                    Item.GeneralPrimateAction: 1,
                 })
+
+                config.add({
+                    exhaustion_type: -exhaustion_per_week,
+                    Item.GeneralPrimateExhaustion: exhaustion_per_week,
+                })
+
 
     config.add(action_split)
 
@@ -1025,20 +1394,33 @@ def add_trades(player: Player, config: Config):
         Item.BoneFragments: 52000
     })
 
+    # Buyers
+    
+    gothic_chimera_menace = AuthorOfGothicTales(ZooType.Chimera, Flux.Menace)
+    gothic_chimera_antiquity = AuthorOfGothicTales(ZooType.Chimera, Flux.Menace)
+    gothic_fish_antiquity = AuthorOfGothicTales(ZooType.Fish, Flux.Menace)
+    gothic_fish_menace = AuthorOfGothicTales(ZooType.Fish, Flux.Menace)
+
+    zailor_fish_antiquity = ZailorWithParticularInterests(ZooType.Fish, Flux.Antiquity)
+    zailor_fish_amalgamy = ZailorWithParticularInterests(ZooType.Fish, Flux.Amalgamy)
+
+    rubbery_collector_fish_amalgamy = RubberyCollector(ZooType.Fish, Flux.Amalgamy)
+    rubbery_collector_fish_menace = RubberyCollector(ZooType.Fish, Flux.Menace)
+    
     # -------------------------------
     # ------ Leviathan Frame
 
-    # 3/0/6 sweet spot
-    gothic_tales_trade(trade, player,
-        recipe={
-            Item.Action: -6,
-            Item.MenaceGeneralAction: -6,
-            Item.LeviathanFrame: -1,
-            Item.DuplicatedVakeSkull: -1,
-            Item.WingOfAYoungTerrorBird: -2
-        },
-        zoo_type=ZooType.Chimera,
-        fluctuations=Fluctuations.Menace)
+    # # 3/0/6 sweet spot
+    # gothic_tales_trade(trade, player,
+    #     recipe={
+    #         Item.Action: -6,
+    #         Item.MenaceGeneralAction: -6,
+    #         Item.LeviathanFrame: -1,
+    #         Item.DuplicatedVakeSkull: -1,
+    #         Item.WingOfAYoungTerrorBird: -2
+    #     },
+    #     zoo_type=ZooType.Chimera,
+    #     fluctuations=Flux.Menace)
 
     for skull_type in (
         Item.BrightBrassSkull,
@@ -1051,33 +1433,51 @@ def add_trades(player: Player, config: Config):
         Item.FailedHornedSkull,
         Item.FailedSabreToothedSkull):
 
-        # Chimera
-        gothic_tales_trade(trade, player, 
-            recipe={
-                Item.Action: -6,
-                Item.AntiquityGeneralAction: -6,
-                Item.LeviathanFrame: -1,
-                skull_type: -1,
-                Item.WingOfAYoungTerrorBird: -2
-            },
-            zoo_type=ZooType.Chimera,
-            fluctuations=Fluctuations.Antiquity)
+        chimera_levi_recipe = {
+            Item.Action: -6,
+            Item.LeviathanFrame: -1,
+            skull_type: -1,
+            Item.WingOfAYoungTerrorBird: -2
+        }
+
+        gothic_chimera_menace.add_trade(config, chimera_levi_recipe)
+        gothic_chimera_antiquity.add_trade(config, chimera_levi_recipe)
+
+        # # Chimera
+        # gothic_tales_trade(trade, player, 
+        #     recipe={
+        #         Item.Action: -6,
+        #         Item.AntiquityGeneralAction: -6,
+        #         Item.LeviathanFrame: -1,
+        #         skull_type: -1,
+        #         Item.WingOfAYoungTerrorBird: -2
+        #     },
+        #     zoo_type=ZooType.Chimera,
+        #     fluctuations=Flux.Antiquity)
         
-        gothic_tales_trade(trade, player, 
-            recipe={
-                Item.Action: -6,
-                Item.MenaceGeneralAction: -6,
-                Item.LeviathanFrame: -1,
-                skull_type: -1,
-                Item.WingOfAYoungTerrorBird: -2
-            },
-            zoo_type=ZooType.Chimera,
-            fluctuations=Fluctuations.Menace)   
+        # gothic_tales_trade(trade, player, 
+        #     recipe={
+        #         Item.Action: -6,
+        #         Item.MenaceGeneralAction: -6,
+        #         Item.LeviathanFrame: -1,
+        #         skull_type: -1,
+        #         Item.WingOfAYoungTerrorBird: -2
+        #     },
+        #     zoo_type=ZooType.Chimera,
+        #     fluctuations=Flux.Menace)   
 
         # Fish
         for i in range(0, 3):
             amber_fins = -1 * i
             fin_bones_collected = -2 -amber_fins
+
+            levi_fish_recipe = {
+                Item.Action: -6,
+                Item.LeviathanFrame: -1,
+                skull_type: -1,
+                Item.AmberCrustedFin: amber_fins,
+                Item.FinBonesCollected: fin_bones_collected                
+            }
 
             ambassador_trade(trade, player,
                 recipe={
@@ -1089,7 +1489,7 @@ def add_trades(player: Player, config: Config):
                     Item.FinBonesCollected: fin_bones_collected
                 },
                 zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Antiquity)
+                fluctuations=Flux.Antiquity)
 
             tentacled_entrepreneur_trade(config,
                 recipe={
@@ -1101,7 +1501,7 @@ def add_trades(player: Player, config: Config):
                     Item.FinBonesCollected: fin_bones_collected
                 },
                 zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Amalgamy)
+                fluctuations=Flux.Amalgamy)
             
             teller_of_terrors_trade(trade, player,
                 recipe={
@@ -1113,79 +1513,87 @@ def add_trades(player: Player, config: Config):
                     Item.FinBonesCollected: fin_bones_collected
                 },
                 zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Menace)
-                        
-            gothic_tales_trade(trade, player,
-                recipe={
-                    Item.Action: -6,
-                    Item.AntiquityFishAction: -6,
-                    Item.LeviathanFrame: -1,
-                    skull_type: -1,
-                    Item.AmberCrustedFin: amber_fins,
-                    Item.FinBonesCollected: fin_bones_collected
-                },
-                zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Antiquity)            
-                        
-            gothic_tales_trade(trade, player,
-                recipe={
-                    Item.Action: -6,
-                    Item.MenaceFishAction: -6,
-                    Item.LeviathanFrame: -1,
-                    skull_type: -1,
-                    Item.AmberCrustedFin: amber_fins,
-                    Item.FinBonesCollected: fin_bones_collected
-                },
-                zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Menace)            
-            
-            zailor_particular_trade(trade, player,
-                recipe={
-                    Item.Action: -6,
-                    Item.AntiquityFishAction: -6,
-                    Item.LeviathanFrame: -1,
-                    skull_type: -1,
-                    Item.AmberCrustedFin: amber_fins,
-                    Item.FinBonesCollected: fin_bones_collected
-                },
-                zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Antiquity)
+                fluctuations=Flux.Menace)
 
-            zailor_particular_trade(trade, player,
-                recipe={
-                    Item.Action: -6,
-                    Item.AmalgamyFishAction: -6,
-                    Item.LeviathanFrame: -1,
-                    skull_type: -1,
-                    Item.AmberCrustedFin: amber_fins,
-                    Item.FinBonesCollected: fin_bones_collected
-                },
-                zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Amalgamy)
+            gothic_fish_antiquity.add_trade(config, levi_fish_recipe)
+            gothic_fish_menace.add_trade(config, levi_fish_recipe)
+            # gothic_tales_trade(trade, player,
+            #     recipe={
+            #         Item.Action: -6,
+            #         Item.AntiquityFishAction: -6,
+            #         Item.LeviathanFrame: -1,
+            #         skull_type: -1,
+            #         Item.AmberCrustedFin: amber_fins,
+            #         Item.FinBonesCollected: fin_bones_collected
+            #     },
+            #     zoo_type=ZooType.Fish,
+            #     fluctuations=Flux.Antiquity)            
+                        
+            # gothic_tales_trade(trade, player,
+            #     recipe={
+            #         Item.Action: -6,
+            #         Item.MenaceFishAction: -6,
+            #         Item.LeviathanFrame: -1,
+            #         skull_type: -1,
+            #         Item.AmberCrustedFin: amber_fins,
+            #         Item.FinBonesCollected: fin_bones_collected
+            #     },
+            #     zoo_type=ZooType.Fish,
+            #     fluctuations=Flux.Menace)            
             
-            rubbery_collector_trade(config,
-                recipe={
-                    Item.Action: -6,
-                    Item.AmalgamyFishAction: -6,
-                    Item.LeviathanFrame: -1,
-                    skull_type: -1,
-                    Item.AmberCrustedFin: amber_fins,
-                    Item.FinBonesCollected: fin_bones_collected
-                },
-                zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Amalgamy)         
+            zailor_fish_antiquity.add_trade(config, levi_fish_recipe)
+            zailor_fish_amalgamy.add_trade(config, levi_fish_recipe)
 
-            rubbery_collector_trade(config,
-                recipe={
-                    Item.Action: -6,
-                    Item.MenaceFishAction: -6,
-                    Item.LeviathanFrame: -1,
-                    skull_type: -1,
-                    Item.AmberCrustedFin: amber_fins,
-                    Item.FinBonesCollected: fin_bones_collected
-                },
-                zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.Menace)
+            # zailor_particular_trade(trade, player,
+            #     recipe={
+            #         Item.Action: -6,
+            #         Item.AntiquityFishAction: -6,
+            #         Item.LeviathanFrame: -1,
+            #         skull_type: -1,
+            #         Item.AmberCrustedFin: amber_fins,
+            #         Item.FinBonesCollected: fin_bones_collected
+            #     },
+            #     zoo_type=ZooType.Fish,
+            #     fluctuations=Flux.Antiquity)
+
+            # zailor_particular_trade(trade, player,
+            #     recipe={
+            #         Item.Action: -6,
+            #         Item.AmalgamyFishAction: -6,
+            #         Item.LeviathanFrame: -1,
+            #         skull_type: -1,
+            #         Item.AmberCrustedFin: amber_fins,
+            #         Item.FinBonesCollected: fin_bones_collected
+            #     },
+            #     zoo_type=ZooType.Fish,
+            #     fluctuations=Flux.Amalgamy)
+            
+            rubbery_collector_fish_amalgamy.add_trade(config, levi_fish_recipe)
+            rubbery_collector_fish_menace.add_trade(config, levi_fish_recipe)
+
+            # rubbery_collector_trade(config,
+            #     recipe={
+            #         Item.Action: -6,
+            #         Item.AmalgamyFishAction: -6,
+            #         Item.LeviathanFrame: -1,
+            #         skull_type: -1,
+            #         Item.AmberCrustedFin: amber_fins,
+            #         Item.FinBonesCollected: fin_bones_collected
+            #     },
+            #     zoo_type=ZooType.Fish,
+            #     fluctuations=Flux.Amalgamy)         
+
+            # rubbery_collector_trade(config,
+            #     recipe={
+            #         Item.Action: -6,
+            #         Item.MenaceFishAction: -6,
+            #         Item.LeviathanFrame: -1,
+            #         skull_type: -1,
+            #         Item.AmberCrustedFin: amber_fins,
+            #         Item.FinBonesCollected: fin_bones_collected
+            #     },
+            #     zoo_type=ZooType.Fish,
+            #     fluctuations=Flux.Menace)
             
             hoarding_paleo_trade(trade, player,
                 recipe={
@@ -1197,7 +1605,7 @@ def add_trades(player: Player, config: Config):
                     Item.FinBonesCollected: fin_bones_collected
                 },
                 zoo_type=ZooType.Fish,
-                fluctuations=Fluctuations.NoQuality)
+                fluctuations=Flux.NoQuality)
 
 
     # ----------------------
@@ -1226,7 +1634,7 @@ def add_trades(player: Player, config: Config):
                 Item.JetBlackStinger: -1
             },
             zoo_type=ZooType.Reptile,
-            fluctuations=Fluctuations.Antiquity)
+            fluctuations=Flux.Antiquity)
         
         gothic_tales_trade(trade, player,
             recipe={
@@ -1239,7 +1647,7 @@ def add_trades(player: Player, config: Config):
                 Item.FailedJetBlackStinger: -1
             },
             zoo_type=ZooType.Reptile,
-            fluctuations=Fluctuations.Antiquity)        
+            fluctuations=Flux.Antiquity)        
         
         gothic_tales_trade(trade, player,
             recipe={
@@ -1252,7 +1660,7 @@ def add_trades(player: Player, config: Config):
                 Item.JetBlackStinger: -1
             },
             zoo_type=ZooType.Reptile,
-            fluctuations=Fluctuations.Menace)
+            fluctuations=Flux.Menace)
 
         gothic_tales_trade(trade, player,
             recipe={
@@ -1265,7 +1673,7 @@ def add_trades(player: Player, config: Config):
                 Item.FailedJetBlackStinger: -1
             },
             zoo_type=ZooType.Reptile,
-            fluctuations=Fluctuations.Menace)           
+            fluctuations=Flux.Menace)           
            
         zailor_particular_trade(trade, player,
             recipe={
@@ -1277,7 +1685,7 @@ def add_trades(player: Player, config: Config):
                 Item.ObsidianChitinTail: -1
             },
             zoo_type=ZooType.Reptile,
-            fluctuations=Fluctuations.Antiquity)
+            fluctuations=Flux.Antiquity)
         
         zailor_particular_trade(trade, player,
             recipe={
@@ -1289,7 +1697,7 @@ def add_trades(player: Player, config: Config):
                 Item.ObsidianChitinTail: -1
             },
             zoo_type=ZooType.Reptile,
-            fluctuations=Fluctuations.Amalgamy)        
+            fluctuations=Flux.Amalgamy)        
 
         zailor_particular_trade(trade, player,
             recipe={
@@ -1300,7 +1708,7 @@ def add_trades(player: Player, config: Config):
                 Item.FemurOfAJurassicBeast: -4,
             },
             zoo_type=ZooType.Amphibian,
-            fluctuations=Fluctuations.Antiquity)
+            fluctuations=Flux.Antiquity)
         
         zailor_particular_trade(trade, player,
             recipe={
@@ -1313,7 +1721,7 @@ def add_trades(player: Player, config: Config):
                 Item.HolyRelicOfTheThighOfStFiacre: -1
             },
             zoo_type=ZooType.Amphibian,
-            fluctuations=Fluctuations.Antiquity)
+            fluctuations=Flux.Antiquity)
         
         zailor_particular_trade(trade, player,
             recipe={
@@ -1326,7 +1734,7 @@ def add_trades(player: Player, config: Config):
                 Item.HolyRelicOfTheThighOfStFiacre: -1
             },
             zoo_type=ZooType.Amphibian,
-            fluctuations=Fluctuations.Amalgamy)                
+            fluctuations=Flux.Amalgamy)                
 
     # trade(9, {
     #     Item.MammothRibcage: -1,
@@ -1361,18 +1769,6 @@ def add_trades(player: Player, config: Config):
     #     Item.CarvedBallOfStygianIvory: 21,
     # })
 
-    gothic_tales_trade(trade, player,
-        recipe={
-            Item.Action: -4,
-            Item.AntiquityGeneralAction: -4,
-            Item.HumanRibcage: -1,
-            Item.DuplicatedVakeSkull: -1,
-            Item.FossilisedForelimb: -1,
-            Item.FailedFossilisedForelimb: -1,
-            Item.FemurOfAJurassicBeast: -2
-        },
-        zoo_type=ZooType.Primate,
-        fluctuations=Fluctuations.Antiquity)
     
     teller_of_terrors_trade(trade, player,
         recipe={
@@ -1382,8 +1778,33 @@ def add_trades(player: Player, config: Config):
             Item.DuplicatedVakeSkull: -1
         },
         zoo_type=ZooType.Primate,
-        fluctuations=Fluctuations.NoQuality)
+        fluctuations=Flux.NoQuality)
+
+    gothic_tales_trade(trade, player,
+        recipe={
+            Item.Action: -8,
+            Item.AntiquityGeneralAction: -8,
+            Item.HumanRibcage: -1,
+            Item.DuplicatedVakeSkull: -1,
+            Item.FossilisedForelimb: -1,
+            Item.FailedFossilisedForelimb: -1,
+            Item.FemurOfAJurassicBeast: -2
+        },
+        zoo_type=ZooType.Primate,
+        fluctuations=Flux.Antiquity)
     
+    # Exhaustion 1
+    teller_of_terrors_trade(trade, player,
+        recipe={
+            Item.Action: -8,
+            Item.MenaceGeneralAction: -8,
+            Item.HumanRibcage: -1,
+            Item.DuplicatedVakeSkull: -1,
+            Item.WingOfAYoungTerrorBird: -4,
+        },
+        zoo_type=ZooType.Chimera,
+        fluctuations=Flux.Menace)    
+
     teller_of_terrors_trade(trade, player,
         recipe={
             Item.Action: -4,
@@ -1392,7 +1813,7 @@ def add_trades(player: Player, config: Config):
             Item.DuplicatedVakeSkull: -1
         },
         zoo_type=ZooType.Primate,
-        fluctuations=Fluctuations.Menace)
+        fluctuations=Flux.Menace)
     
     teller_of_terrors_trade(trade, player,
         recipe={
@@ -1401,7 +1822,7 @@ def add_trades(player: Player, config: Config):
             Item.DuplicatedVakeSkull: -1
         },
         zoo_type=ZooType.NoType,
-        fluctuations=Fluctuations.NoQuality)    
+        fluctuations=Flux.NoQuality)    
    
     teller_of_terrors_trade(trade, player,
         recipe={
@@ -1410,7 +1831,7 @@ def add_trades(player: Player, config: Config):
             Item.DuplicatedVakeSkull: -1
         },
         zoo_type=ZooType.NoType,
-        fluctuations=Fluctuations.Menace)
+        fluctuations=Flux.Menace)
     
     teller_of_terrors_trade(trade, player,
         recipe={
@@ -1419,7 +1840,7 @@ def add_trades(player: Player, config: Config):
             Item.BrightBrassSkull: -1
         },
         zoo_type=ZooType.NoType,
-        fluctuations=Fluctuations.NoQuality)        
+        fluctuations=Flux.NoQuality)        
 
     # phantasist_menace_trade(trade, player,
     #     recipe={
@@ -1449,6 +1870,13 @@ def add_trades(player: Player, config: Config):
         
         for num_wings in range(0, 4):
 
+            gothic_chimera_menace.add_trade(config, {
+                    Item.Action: -8,
+                    Item.HumanRibcage: -1,
+                    Item.DuplicatedVakeSkull: -1,
+                    Item.WingOfAYoungTerrorBird: -1 * num_wings,
+                    filler_limb: -4 + num_wings                
+            })
 
             gothic_tales_trade(trade, player,
                 recipe={
@@ -1460,7 +1888,7 @@ def add_trades(player: Player, config: Config):
                     filler_limb: -4 + num_wings
                 },
                 zoo_type=ZooType.Chimera,
-                fluctuations=Fluctuations.Menace)
+                fluctuations=Flux.Menace)
             
             gothic_tales_trade(trade, player,
                 recipe={
@@ -1472,7 +1900,7 @@ def add_trades(player: Player, config: Config):
                     filler_limb: -4 + num_wings
                 },
                 zoo_type=ZooType.Chimera,
-                fluctuations=Fluctuations.Menace)
+                fluctuations=Flux.Menace)
             
             gothic_tales_trade(trade, player,
                 recipe={
@@ -1484,7 +1912,7 @@ def add_trades(player: Player, config: Config):
                     filler_limb: -4 + num_wings
                 },
                 zoo_type=ZooType.Chimera,
-                fluctuations=Fluctuations.Menace)
+                fluctuations=Flux.Menace)
                             
             gothic_tales_trade(trade, player,
                 recipe={
@@ -1496,7 +1924,7 @@ def add_trades(player: Player, config: Config):
                     filler_limb: -4 + num_wings
                 },
                 zoo_type=ZooType.Chimera,
-                fluctuations=Fluctuations.Antiquity)
+                fluctuations=Flux.Antiquity)
 
         # # # 3/?/6
         # # trade(7 + actions_to_sell_chimera, {
@@ -1595,6 +2023,37 @@ def add_trades(player: Player, config: Config):
     #     },
     #     zoo_type=ZooType.Bird)
 
+    # Exhaustion 4
+    teller_of_terrors_trade(config.trade, config.player,
+        recipe={
+            Item.Action: -12,
+            Item.MenaceBirdAction: -12,
+            Item.SkeletonWithSevenNecks: -1,
+            Item.HornedSkull: -2,
+            Item.SabreToothedSkull: -1,
+            Item.DuplicatedVakeSkull: -1,
+            Item.BrightBrassSkull: -3,
+            Item.WingOfAYoungTerrorBird: -2
+        },
+        zoo_type=ZooType.Bird,
+        fluctuations=Flux.Menace)
+
+    # Exhaustion 4
+    teller_of_terrors_trade(config.trade, config.player,
+        recipe={
+            Item.Action: -12,
+            Item.MenaceBirdAction: -12,
+            Item.SkeletonWithSevenNecks: -1,
+            Item.HornedSkull: -2,
+            Item.SabreToothedSkull: -1,
+            Item.DuplicatedVakeSkull: -1,
+            Item.BrightBrassSkull: -3,
+            Item.WingOfAYoungTerrorBird: -2
+        },
+        zoo_type=ZooType.NoType,
+        fluctuations=Flux.Menace)
+
+
     rubbery_collector_trade(config,
         recipe={
             Item.Action: -12,
@@ -1604,7 +2063,7 @@ def add_trades(player: Player, config: Config):
             Item.AlbatrossWing: -2
         },
         zoo_type=ZooType.Bird,
-        fluctuations=Fluctuations.Amalgamy, debug=True)
+        fluctuations=Flux.Amalgamy, debug=True)
     
     rubbery_collector_trade(config,
         recipe={
@@ -1618,7 +2077,7 @@ def add_trades(player: Player, config: Config):
             Item.WitheredTentacle: -1
         },
         zoo_type=ZooType.Bird,
-        fluctuations=Fluctuations.Amalgamy, debug=True)
+        fluctuations=Flux.Amalgamy, debug=True)
 
     # Define the target sum
     seven_skulls = 7
@@ -1667,7 +2126,7 @@ def add_trades(player: Player, config: Config):
                             Item.AlbatrossWing: -2
                         },
                         zoo_type=ZooType.Bird,
-                        fluctuations=Fluctuations.Amalgamy)
+                        fluctuations=Flux.Amalgamy)
                     
                     tentacled_entrepreneur_trade(config,
                         recipe={
@@ -1680,7 +2139,7 @@ def add_trades(player: Player, config: Config):
                             Item.WingOfAYoungTerrorBird: -2
                         },
                         zoo_type=ZooType.Bird,
-                        fluctuations=Fluctuations.NoQuality)            
+                        fluctuations=Flux.NoQuality)            
 
                     # Bone Fragments
                     hoarding_paleo_trade(trade, player,
@@ -1694,7 +2153,7 @@ def add_trades(player: Player, config: Config):
                             Item.WingOfAYoungTerrorBird: -2
                         },
                         zoo_type=ZooType.Bird,
-                        fluctuations=Fluctuations.NoQuality)                           
+                        fluctuations=Flux.NoQuality)                           
 
                     zailor_particular_trade(trade, player,
                         recipe={
@@ -1707,7 +2166,7 @@ def add_trades(player: Player, config: Config):
                             Item.WingOfAYoungTerrorBird: -2
                         },
                         zoo_type=ZooType.Bird,
-                        fluctuations=Fluctuations.NoQuality)
+                        fluctuations=Flux.NoQuality)
 
 
                     naive_collector_trade(trade, player,
@@ -1721,7 +2180,7 @@ def add_trades(player: Player, config: Config):
                             Item.WingOfAYoungTerrorBird: -2
                         },
                         zoo_type=ZooType.Bird,
-                        fluctuations=Fluctuations.NoQuality)       
+                        fluctuations=Flux.NoQuality)       
 
 
     # ------------------------------------------------
@@ -1740,7 +2199,7 @@ def add_trades(player: Player, config: Config):
             Item.ObsidianChitinTail: -1
         },
         zoo_type=ZooType.Bird,
-        fluctuations=Fluctuations.Antiquity)
+        fluctuations=Flux.Antiquity)
     
     zailor_particular_trade(trade, player,
         recipe={
@@ -1753,7 +2212,7 @@ def add_trades(player: Player, config: Config):
             Item.ObsidianChitinTail: -1
         },
         zoo_type=ZooType.Bird,
-        fluctuations=Fluctuations.Antiquity)
+        fluctuations=Flux.Antiquity)
 
     zailor_particular_trade(trade, player,
         recipe={
@@ -1767,7 +2226,7 @@ def add_trades(player: Player, config: Config):
             Item.TombLionsTail: -1
         },
         zoo_type=ZooType.Chimera,
-        fluctuations=Fluctuations.Antiquity)       
+        fluctuations=Flux.Antiquity)       
 
     # ------------------------------------------------
     # ------------ Segmented Ribcage -----------------
@@ -1856,7 +2315,7 @@ def add_trades(player: Player, config: Config):
             Item.JetBlackStinger: -1,
         },
         zoo_type=ZooType.Fish,
-        fluctuations=Fluctuations.Antiquity)
+        fluctuations=Flux.Antiquity)
     
     gothic_tales_trade(trade, player,
         recipe={
@@ -1869,7 +2328,7 @@ def add_trades(player: Player, config: Config):
             Item.JetBlackStinger: -1,
         },
         zoo_type=ZooType.Fish,
-        fluctuations=Fluctuations.Menace)
+        fluctuations=Flux.Menace)
     
     gothic_tales_trade(trade, player,
         recipe={
@@ -1882,7 +2341,7 @@ def add_trades(player: Player, config: Config):
             Item.JetBlackStinger: -1,
         },
         zoo_type=ZooType.Fish,
-        fluctuations=Fluctuations.Menace)     
+        fluctuations=Flux.Menace)     
     
     rubbery_collector_trade(config,
         recipe={
@@ -1895,7 +2354,7 @@ def add_trades(player: Player, config: Config):
             Item.JetBlackStinger: -1,
         },
         zoo_type=ZooType.Fish,
-        fluctuations=Fluctuations.Menace)         
+        fluctuations=Flux.Menace)         
 
     gothic_tales_trade(trade, player,
         recipe={
@@ -1908,7 +2367,7 @@ def add_trades(player: Player, config: Config):
             Item.JetBlackStinger: -1,
         },
         zoo_type=ZooType.Fish,
-        fluctuations=Fluctuations.NoQuality)    
+        fluctuations=Flux.NoQuality)    
     
     # # 3/0/6/0/3 chimera => gothic w/ menace
     # trade(5 + actions_to_sell_chimera, {

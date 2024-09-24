@@ -22,8 +22,26 @@ def conversion_rate(from_item: Item, to_item: Item) -> float:
     # If no conversion is possible, return 0
     return 0
 
+action_echo_value = 6
+
 # TODO clean this up or sth
 item_conversion_rates = {
+
+    ################################################################################
+    ###                                 Menaces                                  ###
+    ################################################################################
+    # With social action from an alt
+    Item.Wounds: { Item._ApproximateEchoValue: -action_echo_value/6 },
+    Item.Nightmares: { Item._ApproximateEchoValue: -action_echo_value/6},
+    Item.Scandal: { Item._ApproximateEchoValue: -action_echo_value/5 },
+    Item.Suspicion: { Item._ApproximateEchoValue: -action_echo_value/4 },
+
+    Item.InCorporateDebt: { Item._ApproximateEchoValue: -(12.5 + action_echo_value)/3 },
+
+    ################################################################################
+    ###                                 The Stacks                               ###
+    ################################################################################
+
     # Stacks items
     Item.LibraryKey: {Item.Echo: 0.0, Item.Stuiver: 0},
     Item.RouteTracedThroughTheLibrary: {Item.Echo: 0.0, Item.Stuiver: 0},
@@ -69,11 +87,6 @@ item_conversion_rates = {
         Item.MoonPearl: 10,
         Item.JadeFragment: 13
     },
-
-    # # Menaces
-    # # Ballpark @ 1 action to clear 6 points with social alt
-    # Item.Wounds: {Item.Echo: -1, Item.Stuiver: -20, Item.Action: 1/6},
-    # Item.Nightmares: {Item.Echo: -1, Item.Stuiver: -20, Item.Action: 1/6},
 
     # # Second Chances
     # # Ballpark @ 2/action @ 6 EPA
@@ -122,6 +135,10 @@ item_conversion_rates = {
     ################################################################################
     ###                                  Goods                                   ###
     ################################################################################
+    Item.NevercoldBrassSliver: {
+        Item.Echo: 0.01
+    },
+
     Item.PieceOfRostygold: {
         Item.Echo: 0.01
     },
@@ -143,11 +160,11 @@ item_conversion_rates = {
     Item.PerfumedGunpowder: {
         Item._ApproximateEchoValue: 2.5 # TODO
     },
-
-    # TODO move category, better estimate
-    Item.ConsignmentOfScintillackSnuff: {
-        Item._ApproximateEchoValue: 12.5
+    
+    Item.RailwaySteel: {
+        Item.HinterlandScrip: 19
     },
+
     ################################################################################
     ###                        Great Game                                        ###
     ################################################################################
@@ -246,7 +263,138 @@ item_conversion_rates = {
     },
     Item.EdictsOfTheFirstCity: {
         Item.Echo: 312.5
-    }
+    },
+
+    ################################################################################
+    ###                                 Infernal                                ###
+    ################################################################################
+
+    # Items with regular Echo values
+    Item.Soul: { Item.Echo: 0.02 },
+    Item.AmanitaSherry: { Item.Echo: 0.10 },
+    Item.BrilliantSoul: { Item.Echo: 0.50 },
+    Item.MuscariaBrandy: { Item.Echo: 2.50 },
+    Item.BrassRing: { Item.Echo: 12.50 },
+    Item.DevilboneDie: { Item.Echo: 0.90 },
+    Item.QueerSoul: { Item.Echo: 2.50 },
+    Item.SilentSoul: { Item.Echo: 12.50 },
+    Item.PortfolioOfSouls: { Item.Echo: 12.50 },
+    Item.BrightBrassSkull: { Item.Echo: 60.00 },
+    Item.DevilishProbabilityDistributor: { Item.Echo: 62.50 },
+    Item.CoruscatingSoul: { Item.Echo: 312.50 },
+    Item.ReportedLocationOfAOneTimePrinceOfHell: { Item.Echo: 1560.00 },
+
+    # Items with approximate Echo values
+    Item.DiscordantSoul: { Item._ApproximateEchoValue: 62.50 },
+    Item.InfernalMachine: { Item._ApproximateEchoValue: 66.00 },
+
+    ################################################################################
+    ###                                 Rumour                                   ###
+    ################################################################################
+
+    # Items with regular Echo values
+    Item.ProscribedMaterial: { Item.Echo: 0.04 },
+    Item.InklingOfIdentity: { Item.Echo: 0.10 },
+    Item.ScrapOfIncendiaryGossip: { Item.Echo: 0.50 },
+    Item.AnIdentityUncovered: { Item.Echo: 2.50 },
+    Item.BlackmailMaterial: { Item.Echo: 12.50 },
+    Item.NightOnTheTown: { Item.Echo: 2.50 },
+    Item.RumourOfTheUpperRiver: { Item.Echo: 2.50 },
+    Item.DiaryOfTheDead: { Item.Echo: 60.00 },
+    Item.IntriguersCompendium: { Item.Echo: 312.50 },
+    Item.RumourmongersNetwork: { Item.Echo: 1560.00 },
+
+    # Items with approximate Echo values
+    Item.MortificationOfAGreatPower: { Item._ApproximateEchoValue: 62.50 },
+
+    ################################################################################
+    ###                              Zee-Treasures                               ###
+    ################################################################################
+    
+    Item.MoonPearl: {
+        Item.Echo: 0.01,
+    },
+
+    Item.DeepZeeCatch: {
+        Item.Echo: 0.5,
+        Item.AssortmentOfKhaganianCoinage: 1
+    },
+
+    Item.RoyalBlueFeather: {
+        Item.Echo: 0.5,
+        Item.HinterlandScrip: 1
+    },
+
+    Item.AmbiguousEolith: {
+        Item.Echo: 0.5,
+        Item.HinterlandScrip: 1
+    },
+
+    Item.CarvedBallOfStygianIvory: {
+        Item.Echo: 2.5,
+        Item.AssortmentOfKhaganianCoinage: 5,
+        Item.HinterlandScrip: 5
+    },
+
+    Item.LiveSpecimen: {
+        Item.Echo: 2.5,
+    },
+
+    Item.MemoryOfAShadowInVarchas: {
+        Item.HinterlandScrip: 25,
+    },
+
+    Item.OneiricPearl: {
+        Item.AssortmentOfKhaganianCoinage: 125,
+    },
+
+    # Weapons
+
+    Item.ConsignmentOfScintillackSnuff: {
+        # Manufacture in lab
+        # ~22.5e in materials + 1 action = 2 units
+        Item._ApproximateEchoValue: 14
+    },
+
+
+    # Favours
+
+    Item.FavBohemians: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavChurch: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavConstables: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavCriminals: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavDocks: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavGreatGame: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavHell: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavRevolutionaries: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavRubberyMen: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavSociety: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavTombColonies: {
+        Item._ApproximateEchoValue: 5
+    },
+    Item.FavUrchins: {
+        Item._ApproximateEchoValue: 5
+    },
 }
 
 def estimated_conversion_rate(from_item: Item, to_item: Item) -> float:

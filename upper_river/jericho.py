@@ -18,6 +18,14 @@ def add_trades(config: Config):
             Item._JerichoFavourExchange: 1
         })
 
+    add({
+        Item.Action: -1,
+        Item.Echo: -20 * 2.5,
+        Item.TinnedHam: -1,
+        Item.WinsomeDispossessedOrphan: 2
+    })
+
+
     # --------- Canal Cruising
 
     if player.profession == Profession.CrookedCross:

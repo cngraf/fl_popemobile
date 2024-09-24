@@ -40,6 +40,43 @@ class Config:
 
         self.bounds[Item.BoneMarketExhaustion.value] = (-4, 0)
 
+        self.bounds[Item.AntiquityReptileExhaustion.value] = (-4, 0)
+        self.bounds[Item.AntiquityAmphibianExhaustion.value] = (-4, 0)
+        self.bounds[Item.AntiquityBirdExhaustion.value] = (-4, 0)
+        self.bounds[Item.AntiquityFishExhaustion.value] = (-4, 0)
+        self.bounds[Item.AntiquityArachnidExhaustion.value] = (-4, 0)
+        self.bounds[Item.AntiquityInsectExhaustion.value] = (-4, 0)
+        self.bounds[Item.AntiquityPrimateExhaustion.value] = (-4, 0)
+
+        self.bounds[Item.AmalgamyReptileExhaustion.value] = (-4, 0)
+        self.bounds[Item.AmalgamyAmphibianExhaustion.value] = (-4, 0)
+        self.bounds[Item.AmalgamyBirdExhaustion.value] = (-4, 0)
+        self.bounds[Item.AmalgamyFishExhaustion.value] = (-4, 0)
+        self.bounds[Item.AmalgamyArachnidExhaustion.value] = (-4, 0)
+        self.bounds[Item.AmalgamyInsectExhaustion.value] = (-4, 0)
+        self.bounds[Item.AmalgamyPrimateExhaustion.value] = (-4, 0)
+
+        self.bounds[Item.MenaceReptileExhaustion.value] = (-4, 0)
+        self.bounds[Item.MenaceAmphibianExhaustion.value] = (-4, 0)
+        self.bounds[Item.MenaceBirdExhaustion.value] = (-4, 0)
+        self.bounds[Item.MenaceFishExhaustion.value] = (-4, 0)
+        self.bounds[Item.MenaceArachnidExhaustion.value] = (-4, 0)
+        self.bounds[Item.MenaceInsectExhaustion.value] = (-4, 0)
+        self.bounds[Item.MenacePrimateExhaustion.value] = (-4, 0)
+
+        self.bounds[Item.AntiquityGeneralExhaustion.value] = (-4, 0)
+        self.bounds[Item.AmalgamyGeneralExhaustion.value] = (-4, 0)
+        self.bounds[Item.MenaceGeneralExhaustion.value] = (-4, 0)
+
+        self.bounds[Item.GeneralReptileExhaustion.value] = (-4, 0)
+        self.bounds[Item.GeneralAmphibianExhaustion.value] = (-4, 0)
+        self.bounds[Item.GeneralBirdExhaustion.value] = (-4, 0)
+        self.bounds[Item.GeneralFishExhaustion.value] = (-4, 0)
+        self.bounds[Item.GeneralArachnidExhaustion.value] = (-4, 0)
+        self.bounds[Item.GeneralInsectExhaustion.value] = (-4, 0)
+        self.bounds[Item.GeneralPrimateExhaustion.value] = (-4, 0)
+
+
         self.bounds[Item.Hedonist.value] = (0, 55)
 
         self.bounds[Item.InCorporateDebt.value] = (None, 15)
