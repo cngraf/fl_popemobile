@@ -1,7 +1,12 @@
 from enums import *
 from typing import Tuple, Dict
+import math
 
 def pyramid(n): return n * (n+1) / 2
+
+def level_to_cp(n): return pyramid(n)
+def cp_to_level(n): return math.floor(math.sqrt(2 * n)) if n > 0 else 0
+
 def clamp(n, floor, ceiling): return min(ceiling, max(floor, n))
 
 def broad_challenge_success_rate(stat, difficulty):

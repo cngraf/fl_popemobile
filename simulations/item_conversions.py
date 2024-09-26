@@ -27,6 +27,12 @@ action_echo_value = 6
 # TODO clean this up or sth
 item_conversion_rates = {
 
+    # Tinned Ham laundering
+    Item.HinterlandScrip: { Item.Echo: 63.5/125, Item.HinterlandScrip: 1 },
+    
+    # Moon Pearl laundering
+    Item.Stuiver: { Item.Echo: 2.53/100, Item.Stuiver: 1 },
+
     ################################################################################
     ###                                 Menaces                                  ###
     ################################################################################
@@ -49,9 +55,7 @@ item_conversion_rates = {
     Item.DispositionOfTheCardinal: {Item.Echo: 0.0, Item.Stuiver: 0},
 
     # Econ items
-    Item.TantalisingPossibility: {Item.Echo: 0.1, Item.Stuiver: 2},
     Item.RatOnAString: {Item.Echo: 0.01, Item.Stuiver: 0},
-    Item.DeepZeeCatch: {Item.Echo: 0.5, Item.Stuiver: 0},
 
     Item.FinBonesCollected: {Item.Echo: 0.5, Item.Stuiver: 0},
     Item.TempestuousTale: {Item.Echo: 0, Item.Stuiver: 10},
@@ -59,7 +63,6 @@ item_conversion_rates = {
     Item.PuzzlingMap: {Item.Echo: 12.5, Item.Stuiver: 0},
     Item.FlaskOfAbominableSalts: {Item.Echo: 0.1, Item.Stuiver: 0},
 
-    Item.CausticApocryphon: {Item.Echo: 15.5, Item.Stuiver: 250},
     Item.GlimEncrustedCarapace: {Item.Echo: 0, Item.Stuiver: 1250},
     Item.ShardOfGlim: {Item.Echo: 0.01, Item.Stuiver: 0},
     Item.RoofChart: {Item.Echo: 2.53, Item.Stuiver: 50},
@@ -133,29 +136,30 @@ item_conversion_rates = {
     },
 
     ################################################################################
+    ###                                  Curiosity                               ###
+    ################################################################################    
+
+    Item.VenomRuby: { Item.Echo: 0.10 },
+    Item.Sapphire: { Item.Echo: 0.12 },
+    Item.StrongBackedLabour: { Item.Echo: 2.5 },
+
+    # TODO these all give 1 action 7 CP menace reduction, worth >1 action
+    Item.ShrivelledBall: { Item.Echo: 0.30 },
+    Item.RingOfStone: { Item.Echo: 0.30 },
+    Item.DoveMaskShard: { Item.Echo: 0.30 },
+    Item.FragmentOfWhiteGold: { Item.Echo: 0.30 },
+
+    ################################################################################
     ###                                  Goods                                   ###
     ################################################################################
-    Item.NevercoldBrassSliver: {
-        Item.Echo: 0.01
-    },
 
-    Item.PieceOfRostygold: {
-        Item.Echo: 0.01
-    },
+    Item.NevercoldBrassSliver: { Item.Echo: 0.01 },
+    Item.PieceOfRostygold: { Item.Echo: 0.01 },
+    Item.NightsoilOfTheBazaar: { Item.HinterlandScrip: 1 },
 
-    Item.NightsoilOfTheBazaar: {
-        Item.HinterlandScrip: 1
-    },
+    Item.PreservedSurfaceBlooms: { Item.Echo: 2.5, Item.HinterlandScrip: 3 },
 
-    Item.PreservedSurfaceBlooms: {
-        Item.Echo: 2.5,
-        Item.HinterlandScrip: 3
-    },
-
-    Item.KnobOfScintillack: {
-        Item.Echo: 2.5,
-        Item.HinterlandScrip: 5
-    },
+    Item.KnobOfScintillack: { Item.Echo: 2.5, Item.HinterlandScrip: 5 },
 
     Item.PerfumedGunpowder: {
         Item._ApproximateEchoValue: 2.5 # TODO
@@ -289,6 +293,84 @@ item_conversion_rates = {
     Item.InfernalMachine: { Item._ApproximateEchoValue: 66.00 },
 
     ################################################################################
+    ###                               Mysteries                                  ###
+    ################################################################################
+
+    Item.WhisperedHint: { Item.Echo: 0.01 },
+    Item.CrypticClue: { Item.Echo: 0.02 },
+    Item.TantalisingPossibility: { Item.Echo: 0.1, Item.Stuiver: 2 },
+    Item.AppallingSecret: { Item.Echo: 0.15 },
+    Item.JournalOfInfamy: { Item.Echo: 0.50 },
+    Item.TaleOfTerror: { Item.Echo: 0.50 },
+    Item.ExtraordinaryImplication: { Item.Echo: 2.50 },
+    Item.UncannyIncunabulum: { Item.Echo: 12.50 },
+    Item.DirefulReflection: { Item.Echo: 12.50 },
+    Item.MemoryOfAMuchStrangerSelf: { Item.Stuiver: 250 },
+    Item.SearingEnigma: { Item.Echo: 62.50 },
+    Item.DreadfulSurmise: { Item.Echo: 312.50 },
+    Item.ImpossibleTheorem: { Item.Echo: 1562.60 },
+
+    # Echo value from Oneiropomp conversion
+    Item.CausticApocryphon: { Item.Echo: 15.5, Item.Stuiver: 250 },
+    Item.GlimpseOfAnathema: {Item.Echo: 312.5, Item.Stuiver: 6250},
+
+    Item.MemoryOfMuchLesserSelf: { Item._ApproximateEchoValue: 2.50 },
+
+    ################################################################################
+    ###                               Nostalgia                                  ###
+    ################################################################################
+
+    Item.DropOfPrisonersHoney: { Item.Echo: 0.02 },
+    Item.RomanticNotion: { Item.Echo: 0.10 },
+    Item.VisionOfTheSurface: { Item.Echo: 0.50 },
+    Item.TouchingLoveStory: { Item.Echo: 2.5 },
+    Item.BazaarPermit: { Item.Echo: 12.50 },
+    Item.EmeticRevelation: { Item.CrypticClue: 625, Item.Echo: 12.5 },
+    Item.CaptivatingBallad: { Item.Echo: 62.50, Item.AssortmentOfKhaganianCoinage: 125 },
+
+    ################################################################################
+    ###                               Osteology                                  ###
+    ################################################################################
+    
+    Item.AlbatrossWing: { Item.Echo: 12.50 },
+    Item.BoneFragments: { Item.Echo: 0.01 },
+
+    Item.FemurOfAJurassicBeast: { Item.HinterlandScrip: 2 },
+    Item.FemurOfASurfaceDeer: { Item.Echo: 0.1 },
+    Item.FossilisedForelimb: { Item.HinterlandScrip: 25 },
+    Item.GlimEncrustedCarapace: { Item.Stuiver: 1250 },
+    Item.HelicalThighbone: { Item.HinterlandScrip: 2 },
+    Item.IvoryHumerus: { Item.HinterlandScrip: 25 },
+    Item.UnidentifiedThighBone: { Item.HinterlandScrip: 1 },
+    Item.SurveyOfTheNeathsBones: { Item.HinterlandScrip: 1 },
+
+
+    ################################################################################
+    ###                                 Rag Trade                                ###
+    ################################################################################
+    
+    Item.SilkScrap: { Item.Echo: 0.01 },
+    Item.SurfaceSilkScrap: { Item.Echo: 0.10 },
+    Item.WhisperSatinScrap: { Item.Echo: 0.50 },
+    Item.ThirstyBombazineScrap: { Item.Echo: 2.50 },
+    Item.PuzzleDamaskScrap: { Item.Echo: 12.50 },
+    Item.ParabolaLinenScrap: { Item.Echo: 62.50 },
+    Item.ScrapOfIvoryOrganza: { Item.Echo: 312.50 },
+
+
+    ################################################################################
+    ###                                 Rubbery                                  ###
+    ################################################################################
+
+    Item.NoduleOfDeepAmber: { Item.Echo: 0.01 },
+    Item.NoduleOfWarmAmber: { Item.Stuiver: 1 },
+    Item.UnearthlyFossil: { Item.Echo: 2.5 },
+    Item.NoduleOfTremblingAmber: { Item.Echo: 12.50 },
+    Item.NoduleOfPulsatingAmber: { Item.Echo: 62.5 },
+    Item.NoduleOfFecundAmber: { Item.Echo: 62.5 },
+    Item.FlukeCore: { Item.Echo: 1560.00 },
+
+    ################################################################################
     ###                                 Rumour                                   ###
     ################################################################################
 
@@ -306,6 +388,46 @@ item_conversion_rates = {
 
     # Items with approximate Echo values
     Item.MortificationOfAGreatPower: { Item._ApproximateEchoValue: 62.50 },
+
+    ################################################################################
+    ###                                 Sustenance                               ###
+    ################################################################################
+
+    # Items with regular Echo values
+
+    Item.JasmineLeaves: {
+        Item.Echo: 0.1,
+        Item.MoonPearl: 10,
+        Item.JadeFragment: 13 # Widow bulk card
+    },
+
+    Item.PotOfVenisonMarrow: { Item.Echo: 0.50, Item.HinterlandScrip: 1 },
+    Item.SolaceFruit: { Item.Echo: 0.50, Item.HinterlandScrip: 1 },
+    Item.DarkDewedCherry: { Item.Echo: 0.70 },
+    Item.BasketOfRubberyPies: { Item.Echo: 2.50 },
+    Item.CrateOfIncorruptibleBiscuits: { Item.Echo: 2.50, Item.HinterlandScrip: 5 },
+    Item.HellwormMilk: { Item._ApproximateEchoValue: 62.50 },
+    Item.TinOfZzoup: { Item.Echo: 2.50, Item.HinterlandScrip: 2 },
+    Item.SausageAboutWhichNoOneComplains: { Item.Echo: 12.50, Item.HinterlandScrip: 5 },
+    Item.TinnedHam: { Item.Echo: 63.50, Item.HinterlandScrip: 62 },
+    Item.HandPickedPeppercaps: { Item.HinterlandScrip: 1 },
+    Item.MagisterialLager: { Item.HinterlandScrip: 1 },
+
+    ################################################################################
+    ###                             Theological
+    ################################################################################
+
+    Item.PalimpsestScrap: { Item.Echo: 0.50 },
+    Item.ApostatesPsalm: { Item.Echo: 2.50 },
+    Item.VerseOfCounterCreed: { Item._ApproximateEchoValue: 12.50 },
+    Item.FalseHagiotoponym: { Item.Echo: 62.50 },
+    Item.LegendaCosmogone: { Item.Echo: 312.50 },
+
+    ################################################################################
+    ###                             Wines
+    ################################################################################
+    
+
 
     ################################################################################
     ###                              Zee-Treasures                               ###
@@ -358,44 +480,51 @@ item_conversion_rates = {
 
 
     # Favours
-
-    Item.FavBohemians: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavChurch: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavConstables: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavCriminals: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavDocks: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavGreatGame: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavHell: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavRevolutionaries: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavRubberyMen: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavSociety: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavTombColonies: {
-        Item._ApproximateEchoValue: 5
-    },
-    Item.FavUrchins: {
-        Item._ApproximateEchoValue: 5
-    },
 }
+
+# 4 favours + 1 action = 30E turn in at jericho
+# 3 turn ins per 2-action jericho round trip + 2 rumours
+favour_eev = (2.5 * 2 + 30 * 3)/(5 * 3 + 2)
+for favour in FAVOUR_ITEMS:
+    item_conversion_rates[favour] = { Item._ApproximateEchoValue: favour_eev }
+
+#     Item.FavBohemians: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavChurch: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavConstables: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavCriminals: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavDocks: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavGreatGame: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavHell: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavRevolutionaries: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavRubberyMen: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavSociety: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavTombColonies: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+#     Item.FavUrchins: {
+#         Item._ApproximateEchoValue: 5.5
+#     },
+# }
 
 def estimated_conversion_rate(from_item: Item, to_item: Item) -> float:
     if from_item in estimated_conversions and to_item in estimated_conversions[from_item]:

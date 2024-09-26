@@ -37,7 +37,7 @@ def add_trades(active_player, config):
         Item.CrypticClue: 100, # carpenter's granddaughter
         Item.FinBonesCollected: 3, # palaeo companion
         Item.WitheredTentacle: 3, # carnival
-        Item.UnidentifiedThighbone: 2, # university
+        Item.UnidentifiedThighBone: 2, # university
         Item.JetBlackStinger: 3, # ??? can also be tentacles?
         Item.PlasterTailBones: 1, # stalls
         Item.ResearchOnAMorbidFad: 6

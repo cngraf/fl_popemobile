@@ -41,7 +41,7 @@ def add_trades(active_player, config):
 
     trade(0, {
         Item.HinterlandScrip: -2,
-        Item.UnidentifiedThighbone: 1,
+        Item.UnidentifiedThighBone: 1,
     })
 
     trade(0, {
@@ -97,7 +97,7 @@ def add_trades(active_player, config):
     })
 
     trade(0, {
-        Item.UnidentifiedThighbone: -1,
+        Item.UnidentifiedThighBone: -1,
         Item.HinterlandScrip: 1
     })
 

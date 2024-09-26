@@ -26,7 +26,7 @@ def add_trades(config: Config):
     trade(1, {
         Item.HinterlandProsperity: -1050 + efficiency,
         Item.AmbiguousEolith: 15,
-        Item.UnidentifiedThighbone: 5
+        Item.UnidentifiedThighBone: 5
     })
 
     trade(1, {

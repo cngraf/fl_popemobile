@@ -59,7 +59,7 @@ def add_trades(active_player, config: Config):
         Item.ConnectedWidow: -2,
 
         Item.Wounds: 0.2,
-        Item.UnidentifiedThighbone: 0.1,
+        Item.UnidentifiedThighBone: 0.1,
         Item.HumanArm: 0.1,
         Item.ConsignmentOfScintillackSnuff: 0.1,
         Item.SilentSoul: 0.1,

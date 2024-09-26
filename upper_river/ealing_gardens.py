@@ -303,7 +303,7 @@ def add_trades(active_player: Player, config):
         Item.NoduleOfWarmAmber: -125,
         Item.SabreToothedSkull: 1,
         Item.FemurOfASurfaceDeer: 0.5,
-        Item.UnidentifiedThighbone: 0.5
+        Item.UnidentifiedThighBone: 0.5
     })
 
     trade(1, {

@@ -316,7 +316,7 @@ full_draws_per_day = 3
 actions_per_week = (7 * actions_per_day) + 10 - 3
 
 optimize_input = Item.Action
-optimize_for = Item.Echo
+optimize_for = Item.MoonPearl
 
 # input_per_cycle
 

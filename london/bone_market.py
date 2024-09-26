@@ -93,7 +93,7 @@ def bone_table():
         Bone(Item.IvoryHumerus, 15),
         Bone(Item.FossilisedForelimb, 27.5, anitquity=2),
         Bone(Item.FemurOfASurfaceDeer, 0.1, menace=-1),
-        Bone(Item.UnidentifiedThighbone, 1),
+        Bone(Item.UnidentifiedThighBone, 1),
         Bone(Item.FemurOfAJurassicBeast, 3, anitquity=1),
         Bone(Item.HelicalThighbone, 3, amalgamy=2),
         Bone(Item.HolyRelicOfTheThighOfStFiacre, 12.5),
@@ -1229,7 +1229,7 @@ def add_trades(player: Player, config: Config):
 
     trade(0, {
         Item.HinterlandScrip: -2,
-        Item.UnidentifiedThighbone: 1
+        Item.UnidentifiedThighBone: 1
     })
 
     trade(1, {
@@ -1860,7 +1860,7 @@ def add_trades(player: Player, config: Config):
     for filler_limb in (
         Item.KnottedHumerus,
         Item.IvoryHumerus,
-        Item.UnidentifiedThighbone,
+        Item.UnidentifiedThighBone,
         Item.HelicalThighbone,
         Item.HolyRelicOfTheThighOfStFiacre,
         Item.IvoryFemur,
@@ -2073,7 +2073,7 @@ def add_trades(player: Player, config: Config):
             Item.SkullInCoral: -8,
             Item.AlbatrossWing: -2,
             Item.FemurOfASurfaceDeer: -1,
-            Item.UnidentifiedThighbone: -1,
+            Item.UnidentifiedThighBone: -1,
             Item.WitheredTentacle: -1
         },
         zoo_type=ZooType.Bird,

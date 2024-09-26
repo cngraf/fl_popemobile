@@ -370,6 +370,11 @@ class Item(Enum):
     WhirringContraption = auto()
     CracklingDevice = auto()
     CounterfeitHeadOfJohnTheBaptist = auto()
+    ShrivelledBall = auto()
+    RingOfStone = auto()
+    DoveMaskShard = auto()
+    FragmentOfWhiteGold = auto()
+    HorseheadAmulet = auto()
 
     # Curiosity - reagents
     ObliviscereMori = auto()
@@ -593,7 +598,7 @@ class Item(Enum):
     SurveyOfTheNeathsBones = auto()
     ThornedRibcage = auto()
     TombLionsTail = auto()
-    UnidentifiedThighbone = auto()
+    UnidentifiedThighBone = auto()
     WarblerSkeleton = auto()
     WingOfAYoungTerrorBird = auto()
     WitheredTentacle = auto()
@@ -691,6 +696,7 @@ class Item(Enum):
     ApostatesPsalm = auto()
     VerseOfCounterCreed = auto()
     FalseHagiotoponym = auto()
+    LegendaCosmogone = auto()
 
     # Wines
     BottleOfGreyfields1879 = auto()
@@ -839,7 +845,10 @@ class Item(Enum):
     NumberOfWorkersInYourLaboratory = auto()
     ResearchPreparations = auto()
     UnexpectedResult = auto()
+    ExpertiseOfTheFourthCity = auto()
     ExpertiseOfTheThirdCity = auto()
+    ExpertiseOfTheSecondCity = auto()
+    ExpertiseOfTheFirstCity = auto()
 
     TotalLabReserchRequired = auto()
     EquipmentForScientificExperimentation = auto()
@@ -901,6 +910,9 @@ class Item(Enum):
     HidingPlaceOfAPeculiarItem = auto()
     _WaswoodHeistCashOut = auto()
     _ApproximateEchoValue = auto()
+    _SkeletonPennyValue = auto()
+
+    TracklayersDispleasure = auto()
 
     ColourAtTheChessboard = auto()
 
@@ -916,6 +928,10 @@ class Item(Enum):
     RosyColours = auto()
 
     # Upper River
+    TrainDefences = auto()    
+    TrainLuxuries = auto()    
+    TrainBaggageAccomodations = auto()
+
     EalingGardensCommemorativeDevelopment = auto()
     JerichoLocksCommemorativeDevelopment = auto()
     MagistracyOfEvenlodeCommemorativeDevelopment = auto()
@@ -1219,3 +1235,18 @@ class Item(Enum):
     InsideInformation = auto()
     CatlikeTread = auto()
     EscapeRoute = auto()
+
+FAVOUR_ITEMS = [
+    Item.FavBohemians,
+    Item.FavChurch,
+    Item.FavConstables,
+    Item.FavCriminals,
+    Item.FavDocks,
+    Item.FavGreatGame,
+    Item.FavHell,
+    Item.FavRevolutionaries,
+    Item.FavRubberyMen,
+    Item.FavSociety,
+    Item.FavTombColonies,
+    Item.FavUrchins
+]

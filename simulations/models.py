@@ -4,6 +4,7 @@ from enum import Enum, auto
 from collections import defaultdict
 import simulations.item_conversions
 from enums import Item
+import utils
 
 class ActionResult(Enum):
     NotAllowed = auto()
@@ -36,6 +37,8 @@ class GameState:
         self.status = "InProgress"
 
     def ev_from_item(self, item, val: int):
+        if item == Item.Echo:
+            return val * item 
         return val * simulations.item_conversions.conversion_rate(item, Item.Echo)
     
     def clear_hand(self):
@@ -64,6 +67,9 @@ class GameState:
 
     def get(self, item: Item):
         return self.items.get(item, 0)
+    
+    def get_pyramidal_level(self, item: Item):
+        return utils.cp_to_level(self.items.get(item, 0))    
 
     def run(self):
         while self.status == "InProgress":
@@ -249,11 +255,17 @@ class Action:
 
     @staticmethod
     def broad_pass_rate(dc, stat_value):
-        return 0.6 * stat_value / dc if dc > 0 else 1.0
+        if dc is not None and dc > 0:
+            return 0.6 * stat_value / dc
+        else:
+            return 1.0
     
     @staticmethod
     def narrow_pass_rate(dc, stat_value):
-        return 0.5 + (stat_value - dc) * 0.1 if dc > 0 else 1.0
+        if dc is not None and dc > 0:
+            return 0.5 + (stat_value - dc) * 0.1
+        else:
+            return 1.0        
 
 class SimulationRunner:
     def __init__(self, runs: int, initial_values: dict):
@@ -374,7 +386,7 @@ class SimulationRunner:
         print("-" * 105)
 
         # Sort cards by total play count (descending)
-        sorted_cards = sorted(self.total_card_play_counts.keys(), key=lambda card: self.total_card_play_counts.get(card, 0), reverse=True)
+        sorted_cards = sorted(self.total_card_draw_counts.keys(), key=lambda card: self.total_card_play_counts.get(card, 0), reverse=True)
 
         for card in sorted_cards:
             card_name = self.truncate_string(card.name)

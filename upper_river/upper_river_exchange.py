@@ -12,7 +12,7 @@ def add_trades(config: Config):
         # (Item.PairOfBalmoralBoots, -250, 125)
 
         (Item.AmbiguousEolith, -2, 1),
-        (Item.UnidentifiedThighbone, -2, 1),
+        (Item.UnidentifiedThighBone, -2, 1),
         # (Item.LithificationLiquid, -25, 12),
         # (Item.PatentOsteologicalSandAndWax, -25, 12),
         (Item.FossilisedForelimb, -85, 25)
