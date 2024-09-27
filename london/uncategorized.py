@@ -33,10 +33,9 @@ def add_trades(_, config: Config):
     ## Various London Carousels?
     ## ------------
 
-    # overnight trip
-    trade(40, {
+    trade(100, {
         Item.ApostatesPsalm: 3,
-        Item.NevercoldBrassSliver: ((38 * 40) - 50) * 10
+        Item.NevercoldBrassSliver: ((38 * 100) - 50) * 10
     })
 
     # 50:51 Cross-Conversion Carousel

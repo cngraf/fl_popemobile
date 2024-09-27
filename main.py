@@ -7,6 +7,9 @@ from scipy.sparse import csc_matrix
 from scipy.optimize import linprog
 from enum import Enum, auto
 from itertools import count
+import pprint
+from tabulate import tabulate
+from termcolor import colored
 
 from config import *
 
@@ -33,12 +36,12 @@ import rat_market
 import professional_activities
 
 import london.uncategorized
-
 import london.laboratory
 import london.newspaper
-import london.bone_market
 import london.hearts_game
 import london.heists
+
+import bone_market.trades
 
 import parabola
 
@@ -269,7 +272,7 @@ london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
 
-london.bone_market.add_trades(active_player, config)
+bone_market.trades.add_trades(config)
 
 unterzee.khanate.add_trades(active_player, config)
 unterzee.wakeful_eye.add_trades(active_player, config)
@@ -316,14 +319,13 @@ full_draws_per_day = 3
 actions_per_week = (7 * actions_per_day) + 10 - 3
 
 optimize_input = Item.Action
-optimize_for = Item.MoonPearl
+optimize_for = Item.Echo
 
 # input_per_cycle
 
 core_constraint = {
     Item.Constraint: 1,
     optimize_input: input_per_cycle,
-    Item.MenaceGeneralAction: input_per_cycle,
     # Item.VisitFromTimeTheHealer: 1,
     Item._BoneMarketRotation: 1,
     # Item.CardDraws: full_draws_per_day * 7 * 10
@@ -331,48 +333,17 @@ core_constraint = {
 
 config.add(core_constraint)
 
-# config.add({
-#     Item.RootAction: -1,
-#     Item.Action: 1
-# })
-
-# config.add({
-#     Item.RootAction: -1,
-#     Item.LondonAction: 1
-# })
-
 c = np.zeros(num_vars)
 c[optimize_for.value] = -1
 
 opt_result = linprog(c, A_ub=config.A.toarray(), b_ub=config.b, bounds=config.bounds, method='highs')
-print(opt_result)
+# print(opt_result)
 
-# results = sorted(zip(Item, opt_result.x), key=lambda x: x[1])
-# for item, quantity in results:
-#     item_name = f"{item.name:40}"
-#     if quantity > 0:
-#         print(item_name
-#         + f"{1/(quantity * actions_per_day):10.5}")
-#     else:
-#         print(item_name + f"{'unsourced':10}")
-    
-pp = pprint.PrettyPrinter(indent=4)
+# Printing
 
-print("------Assumptions-------")
-print(f"Core Constraint:")
-for item, val in core_constraint.items():
-    print(f"|  {item.name:<30} {val}\n")
-
-
-print(f"Optimize For:                     {optimize_for.name}")
-print(f"-Player Stats-")
-pp.pprint(active_player.stats)
-
-print("------Summary-------")
-# print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
-# print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
 trades_used = []
+free_item_conversions = []
 # actions_per_cycle = core_constraint[Item.Action]
 
 items_gained = []
@@ -384,32 +355,36 @@ for i in range(0, len(opt_result.slack)):
     if (slack < 1.0 and marginal != 0):
         lose_items = ""
         gain_items = ""
+        count_terms = 0
         for ii in range(0, num_items):
             quantity = round(config.A[i, ii],2)
             item = Item(ii)
             if int(quantity) == quantity:
                 quantity = int(quantity)
             if quantity < 0:
-                lose_items += str(item) + ":" + str(quantity) + "; "
+                count_terms += 1
+                lose_items += item.name + ":" + str(quantity) + "; "
                 if item not in items_consumed:
                     items_consumed.append(item)
             if quantity > 0:
-                gain_items += str(item) + ":" + str(quantity) + "; "
+                count_terms += 1
+                gain_items += item.name + ":" + str(quantity) + "; "
                 if item not in items_gained:
                     items_gained.append(item)
         # trade_items = lose_items + " => " + gain_items            
         # trade_items = trade_items.replace("Item.","")
 
-        lose_items = lose_items.replace("Item.","")
-        gain_items = gain_items.replace("Item.","")
+        # lose_items = lose_items.replace("Item.","")
+        # gain_items = gain_items.replace("Item.","")
         
         action_cost = config.A[i, Item.Action.value]
+        trade = [marginal * 1000, lose_items, gain_items]
 
-        
-        trades_used.append([marginal * min(action_cost * -1, -0.01) * input_per_cycle, lose_items + " => " + gain_items])
-        # print("* " + trade_items)
-        # print(f"{marginal:.3}       " + lose_items + " => " + gain_items)
-        # print(f"")
+        if count_terms == 2 and action_cost == 0:
+            free_item_conversions.append(trade)
+        else:
+            # trades_used.append([marginal * min(action_cost * -1, -0.01) * input_per_cycle, lose_items + " => " + gain_items])
+            trades_used.append([marginal, lose_items, gain_items])
 
 trades_used.sort()
 
@@ -418,13 +393,31 @@ for i in items_gained:
     if i not in (items_consumed):
         items_surplus.append(str(i))
 
+pp = pprint.PrettyPrinter(indent=4)
+
+# print("------Assumptions-------")
+# print(f"Core Constraint:")
+# for item, val in core_constraint.items():
+#     print(f"|  {item.name:<30} {val}\n")
+
+
+print(f"Optimize For:                     {optimize_for.name}")
+print(f"-Player Stats-")
+pp.pprint(active_player.stats)
+
+print("------Summary-------")
+# print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
+# print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
+
+
 print("-----Gained & Unused-------")
 for i in items_surplus:
     print(i)
 
 print("-----Trades In Grind-------")
 for i in trades_used:
-    print(f"{i[0]:.3}       " + i[1])
+    # print(f"{i[0]:.3}       " + i[1])
+    print(f"{i[0]:<10.3}{i[1]:<20} => {i[2]}")
 
 print("-----Cycle-------")
 print(core_constraint)
@@ -438,7 +431,72 @@ print(f"{optimize_input.name} per {optimize_for.name}: {1.0/items_per_input:10.5
 # print(f"{'Actions Per ' + str(optimize_for):34}{-(opt_result.fun * actions_per_cycle):10.5f}")
 
 print("-------------------------------")
-print("-------------------------------")
 
-# print(london_deck.normalized_trade())
-# print(zailing_deck.normalized_trade())
+
+# Optional: Colorized output using termcolor (you can replace with colorama)
+
+# Header with color
+print(colored("\n------ Assumptions -------", "green", attrs=['bold']))
+print(f"Core Constraint:")
+# for item, val in core_constraint.items():
+#     print(f"|  {item.name:<30} : {val}")
+pp.pprint(core_constraint.items())
+
+# Optimize For section with color
+print(colored(f"\nOptimize For: {optimize_for.name}", "cyan", attrs=['bold']))
+print("\n-Player Stats-")
+pp.pprint(active_player.stats)
+
+# Summary section
+print(colored("\n------ Summary -------", "green", attrs=['bold']))
+
+def wrap_text(text, width=50):
+    items = text.split('; ')  # Split the text by '; '
+    wrapped_items = []
+    for item in items:
+        # Wrap long items
+        if len(item) > width:
+            wrapped_items.append('\n'.join([item[i:i+width] for i in range(0, len(item), width)]))
+        else:
+            wrapped_items.append(item)
+    return '\n'.join(wrapped_items)  # Rejoin with ';\n' to place each item on a new line
+
+# Format trade data for table
+conversion_data = []
+for trade in free_item_conversions:
+    wrapped_loss = wrap_text(trade[1], width=40)
+    wrapped_gain = wrap_text(trade[2], width=40)
+    conversion_data.append([f"{trade[0]:.3f}", wrapped_loss, wrapped_gain])
+
+# Use a simpler table format for better readability
+print("\n----- Conversions -------")
+print(tabulate(conversion_data, headers=["Marginal", "Loss", "Gain"], tablefmt="fancy_grid"))
+
+# Format trade data for table
+trade_data = []
+for trade in trades_used:
+    wrapped_loss = wrap_text(trade[1], width=40)
+    wrapped_gain = wrap_text(trade[2], width=40)
+    trade_data.append([f"{trade[0]:.3f}", wrapped_loss, wrapped_gain])
+
+# Use a simpler table format for better readability
+print("\n----- Actions -------")
+print(tabulate(trade_data, headers=["Marginal", "Loss", "Gain"], tablefmt="fancy_grid"))
+
+# Surplus items
+print(colored("\n----- Gained & Unused Items -------", "cyan", attrs=['bold']))
+for i in items_surplus:
+    print(i)
+
+# Cycle information
+print(colored("\n----- Constraint (per week) -------", "green", attrs=['bold']))
+pp.pprint(core_constraint)
+
+# Optimization results
+print(colored("\n----- Optimization Target -------", "green", attrs=['bold']))
+items_per_input = -1.0 / (input_per_cycle * opt_result.fun)
+print(f"{optimize_for.name} per Week:   {-1.0 / opt_result.fun:10.5f}")
+print(f"{optimize_for.name} per {optimize_input.name}: {items_per_input:10.5f}")
+print(f"{optimize_input.name} per {optimize_for.name}: {1.0 / items_per_input:10.5f}")
+
+print(colored("\n-------------------------------", "yellow", attrs=['bold']))

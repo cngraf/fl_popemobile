@@ -1,153 +1,11 @@
 import math
 from enum import Enum, auto
-
 from enums import *
 import utils
 from config import Config
 from player import Player
+from bone_market.models import *
 
-class Flux(Enum):
-    NoQuality = 0
-    Antiquity = auto()
-    Amalgamy = auto()
-    Menace = auto()
-
-class ZooType(Enum):
-    NoType = auto()
-    Chimera = auto()
-    Humanoid = auto()
-    Ape = auto()
-    Moneky = auto()
-    Bird = auto()
-    Amphibian = auto()
-    Reptile = auto()
-    Fish = auto()
-    Insect = auto()
-    Spider = auto()
-    Curator = auto()
-    Primate = auto()
-
-class Bone():
-    def __init__(self,
-                 item: Item,
-                 echo_value: int,
-                 anitquity: int = 0,
-                 amalgamy: int = 0,
-                 menace: int = 0,
-                 theology: int = 0,
-                 implausibility: int = 0,
-                 skulls: int = 0,
-                 addtl_costs: dict = {}):
-        self.item = item
-        self.echo_value = echo_value
-        self.antiquity = anitquity
-        self.amalgamy = amalgamy
-        self.menace = menace
-        self.theology = theology
-        self.implausibility = implausibility
-        self.skulls = skulls
-        self.addtl_costs = addtl_costs
-
-def bone_table():
-    dictionary = {}
-    for bone in (
-        Bone(Item.HeadlessSkeleton, 2.50),
-        Bone(Item.ASkeletonOfYourOwn, 2.50),
-        Bone(Item.HumanRibcage, 12.50),
-        Bone(Item.ThornedRibcage, 12.50, amalgamy=1, menace=1),
-        Bone(Item.SegmentedRibcage, 2.50),
-        Bone(Item.SkeletonWithSevenNecks, 62.5, amalgamy=2, menace=1),
-        Bone(Item.FlourishingRibcage, 12.5, amalgamy=2),
-        Bone(Item.MammothRibcage, 62.5, anitquity=2),
-        Bone(Item.RibcageWithABoutiqueOfEightSpines, 312.5, amalgamy=1,menace=2),
-        Bone(Item.LeviathanFrame, 312.5, anitquity=1, menace=1),
-        Bone(Item.PrismaticFrame, 312.5, anitquity=2, amalgamy=2),
-        Bone(Item.FivePointedRibcage, 312.5, amalgamy=2, menace=1),
-
-        Bone(Item.VictimsSkull, 2.5, skulls=1),
-        Bone(Item.CarvedBallOfStygianIvory, 2.5),
-        Bone(Item.RubberySkull, 6, amalgamy=1, skulls=1),
-        Bone(Item.HornedSkull, 12.5, anitquity=1, menace=2, skulls=1),
-        Bone(Item.PentagrammicSkull, 12.5, amalgamy=2, menace=2, skulls=1),
-        Bone(Item.DuplicatedCounterfeitHeadOfJohnTheBaptist, 12.5, theology=1, skulls=1),
-        Bone(Item.SkullInCoral, 17.5, amalgamy=2, skulls=1, addtl_costs={Item.KnobOfScintillack: -1}),
-        Bone(Item.PlatedSkull, 25, menace=2, skulls=1),
-        Bone(Item.EyelessSkull, 30, menace=2, skulls=1),
-        Bone(Item.DoubledSkull, 30, anitquity=2, amalgamy=1, skulls=2),
-        Bone(Item.SabreToothedSkull, 62.5, anitquity=1, menace=1, skulls=1),
-        Bone(Item.BrightBrassSkull, 65, implausibility=2, skulls=1, addtl_costs={Item.NevercoldBrassSliver: -200}),
-        Bone(Item.DuplicatedVakeSkull, 65, menace=3, skulls=1),
-
-        Bone(Item.FailedStygianIvorySkull, 2.5, implausibility=2, skulls=1),
-        Bone(Item.FailedHornedSkull, 12.5, anitquity=1, menace=1, skulls=1),
-        Bone(Item.FailedPentagrammaticSkull, 12.5, amalgamy=1, menace=1, skulls=1),
-        Bone(Item.FailedSkullInCoral, 17.5, amalgamy=1, implausibility=1, skulls=1, addtl_costs={Item.KnobOfScintillack: -1}),
-        Bone(Item.FailedPlatedSkull, 25, menace=1, skulls=1),
-        Bone(Item.FailedDoubledSkull, 30, anitquity=1, amalgamy=1, skulls=2),
-        Bone(Item.FailedSabreToothedSkull, 30, anitquity=1, skulls=1),
-        Bone(Item.FailedBrightBrassSkull, 65, implausibility=6, skulls=1),
-
-        Bone(Item.CrustaceanPincer, 0, menace=1),
-        Bone(Item.KnottedHumerus, 3, amalgamy=1),
-        Bone(Item.HumanArm, 2.5, menace=-1),
-        Bone(Item.IvoryHumerus, 15),
-        Bone(Item.FossilisedForelimb, 27.5, anitquity=2),
-        Bone(Item.FemurOfASurfaceDeer, 0.1, menace=-1),
-        Bone(Item.UnidentifiedThighBone, 1),
-        Bone(Item.FemurOfAJurassicBeast, 3, anitquity=1),
-        Bone(Item.HelicalThighbone, 3, amalgamy=2),
-        Bone(Item.HolyRelicOfTheThighOfStFiacre, 12.5),
-        Bone(Item.IvoryFemur, 65),
-
-        Bone(Item.FailedKnottedHumerus, 0.1, amalgamy=1, implausibility=2),
-        Bone(Item.FailedFossilisedForelimb, 27.5, anitquity=1),
-        Bone(Item.FailedIvoryHumerus, 15, implausibility=2),
-        Bone(Item.FailedFemurOfAJurassicBeast, 3, anitquity=1, implausibility=2),
-        Bone(Item.FailedHelicalThighbone, 3, amalgamy=1),
-        Bone(Item.FailedHolyRelicOfTheThighOfStFiacre, 12.5, implausibility=2),
-        Bone(Item.FailedIvoryFemur, 65, implausibility=4),        
-
-        Bone(Item.BatWing, 0.01, menace=-1),
-        Bone(Item.WingOfAYoungTerrorBird, 2.5, anitquity=1, menace=1),
-        Bone(Item.AlbatrossWing, 12.5, amalgamy=1),
-        Bone(Item.FinBonesCollected, 0.5),
-        Bone(Item.AmberCrustedFin, 15, amalgamy=1, menace=1),
-
-        Bone(Item.FailedBatWing, 0.01, menace=-1, implausibility=2),
-        Bone(Item.FailedWingOfAYoungTerrorBird, 2.5, anitquity=1, menace=1, implausibility=2),
-        Bone(Item.FailedAlbatrossWing, 12.5, amalgamy=1, implausibility=2), # TODO: confirm
-        Bone(Item.FailedFinBonesCollected, 0.5, implausibility=2),
-        Bone(Item.FailedAmberCrustedFin, 15, amalgamy=1, implausibility=2),
-
-        Bone(Item.WitheredTentacle, 2.5, anitquity=-1),
-        Bone(Item.JetBlackStinger, 2.5, menace=2),
-        Bone(Item.PlasterTailBones, 2.5, implausibility=1),
-        Bone(Item.TombLionsTail, 2.5, anitquity=1),
-        Bone(Item.ObsidianChitinTail, 5, amalgamy=1),
-
-        Bone(Item.FailedWitheredTentacleLimb, 0.5, anitquity=-1, implausibility=1),
-        Bone(Item.FailedWitheredTentacleTail, 2.5, anitquity=-1, implausibility=2),
-        Bone(Item.FailedJetBlackStinger, 2.5, menace=1),
-        Bone(Item.FailedPlasterTailBones, 2.5, implausibility=4),
-        Bone(Item.FailedTombLionsTail, 2.5),
-        Bone(Item.FailedObsidianChitinTail, 5),
-
-        # TODO: modifications
-        # Bone(Item.FourMoreJoints, 0, amalgamy=2),
-    ):
-        dictionary[bone.item] = bone
-
-    return dictionary
-
-# class Skeleton():
-#     def __init__(self,
-#                  zooType: ZooType,
-#                  recipe: dict):
-#         self.zooType = zooType
-#         self.recipe = recipe
-#         self.bone_totals = create_skeleton(recipe)
-
-# bleh should just make a Skeleton class
 def create_skeleton(recipe: dict):
     bones = bone_table()
 
@@ -484,6 +342,7 @@ class Buyer():
         self.zoo_type = zoo_type
         self.flux = flux
         self.implausibility_dc = impl_dc
+        self.suspicion_on_failure = 2
 
     def add_trade(self, config, recipe):
         weekly_action_type = match_action_type(self.zoo_type, self.flux)
@@ -499,8 +358,7 @@ class Buyer():
         failure_penalty = {
             Item.Action: -1 * failures,
             weekly_action_type: -1 * failures,
-             # TODO check if consistent for all buyers
-            Item.Suspicion: 2 * suspicion_multiplier * failures
+            Item.Suspicion: self.suspicion_on_failure * suspicion_multiplier * failures
         }
 
         total = utils.sum_dicts(
@@ -606,7 +464,26 @@ class RubberyCollector(Buyer):
             Item.BasketOfRubberyPies: qty,
         }
 
+class Constable(Buyer):
+    def __init__(self, zoo_type):
+        super().__init__("A Constable", zoo_type, Flux.NoQuality, 50)
+        self.suspicion_on_failure = 3
 
+    def primary_payout(self, skeleton: Bone):
+        multi = self.zoo_multiplier(self.zoo_type)
+        return {
+            Item.HinterlandScrip: 20 + (skeleton.echo_value * 2 * multi)
+        }
+    
+class Theologian(Buyer):
+    def __init__(self, zoo_type):
+        super().__init__("A Theologian of the Old School", zoo_type, Flux.NoQuality, 50)
+
+    def primary_payout(self, skeleton: Bone):
+        multi = self.zoo_multiplier(self.zoo_type)
+        return {
+            Item.CrateOfIncorruptibleBiscuits: 4 + (skeleton.echo_value * 1/2.5 * multi)
+        }    
 
 def naive_collector_trade(trade,
                         player: Player,
@@ -1060,170 +937,96 @@ def expected_failed_sell_attempts(player, skeleton: Bone, is_chimera: bool = Fal
     pass_rate = utils.pass_rate(player, Stat.Shadowy, challenge_dc)
     return (1.0 / pass_rate) - 1
 
-def add_trades(player: Player, config: Config):
+def add_trades(config: Config):
+    player = config.player
     trade = config.trade
 
+    # HACK
+    config.trade(0, { Item._NoItem: 1})
+
     bone_market_week_actions = {
-        "Antiquity": {
-            "Reptile": Item.AntiquityReptileAction,
-            "Amphibian": Item.AntiquityAmphibianAction,
-            "Bird": Item.AntiquityBirdAction,
-            "Fish": Item.AntiquityFishAction,
-            "Arachnid": Item.AntiquityArachnidAction,
-            "Insect": Item.AntiquityInsectAction,
-            "Primate": Item.AntiquityPrimateAction,
+        Flux.Antiquity: {
+            ZooType.Reptile: Item.AntiquityReptileAction,
+            ZooType.Amphibian: Item.AntiquityAmphibianAction,
+            ZooType.Bird: Item.AntiquityBirdAction,
+            ZooType.Fish: Item.AntiquityFishAction,
+            ZooType.Spider: Item.AntiquityArachnidAction,
+            ZooType.Insect: Item.AntiquityInsectAction,
+            ZooType.Primate: Item.AntiquityPrimateAction,
+            ZooType.NoType: Item.AntiquityGeneralAction
         },
-        "Amalgamy": {
-            "Reptile": Item.AmalgamyReptileAction,
-            "Amphibian": Item.AmalgamyAmphibianAction,
-            "Bird": Item.AmalgamyBirdAction,
-            "Fish": Item.AmalgamyFishAction,
-            "Arachnid": Item.AmalgamyArachnidAction,
-            "Insect": Item.AmalgamyInsectAction,
-            "Primate": Item.AmalgamyPrimateAction,
+        Flux.Amalgamy: {
+            ZooType.Reptile: Item.AmalgamyReptileAction,
+            ZooType.Amphibian: Item.AmalgamyAmphibianAction,
+            ZooType.Bird: Item.AmalgamyBirdAction,
+            ZooType.Fish: Item.AmalgamyFishAction,
+            ZooType.Spider: Item.AmalgamyArachnidAction,
+            ZooType.Insect: Item.AmalgamyInsectAction,
+            ZooType.Primate: Item.AmalgamyPrimateAction,
+            ZooType.NoType: Item.AmalgamyGeneralAction
         },
-        "Menace": {
-            "Reptile": Item.MenaceReptileAction,
-            "Amphibian": Item.MenaceAmphibianAction,
-            "Bird": Item.MenaceBirdAction,
-            "Fish": Item.MenaceFishAction,
-            "Arachnid": Item.MenaceArachnidAction,
-            "Insect": Item.MenaceInsectAction,
-            "Primate": Item.MenacePrimateAction,
+        Flux.Menace: {
+            ZooType.Reptile: Item.MenaceReptileAction,
+            ZooType.Amphibian: Item.MenaceAmphibianAction,
+            ZooType.Bird: Item.MenaceBirdAction,
+            ZooType.Fish: Item.MenaceFishAction,
+            ZooType.Spider: Item.MenaceArachnidAction,
+            ZooType.Insect: Item.MenaceInsectAction,
+            ZooType.Primate: Item.MenacePrimateAction,
+            ZooType.NoType: Item.MenaceGeneralAction
+        },
+        Flux.NoQuality: {
+            ZooType.Reptile: Item.GeneralReptileAction,
+            ZooType.Amphibian: Item.GeneralAmphibianAction,
+            ZooType.Bird: Item.GeneralBirdAction,
+            ZooType.Fish: Item.GeneralFishAction,
+            ZooType.Spider: Item.GeneralArachnidAction,
+            ZooType.Insect: Item.GeneralInsectAction,
+            ZooType.Primate: Item.GeneralPrimateAction,
+            # ZooType.NoType: None
         }
     }
 
-    max_bone_market_actions_per_week = 700 # HACK
+    # TODO get this from config
+    max_bone_market_actions_per_week = 700  # HACK hidden parameter
     exhaustion_per_week = -4
+    unique_weeks = 21  # 3 vibes * 7 zoo types
+
     action_split = {
         Item._BoneMarketRotation: -1
     }
 
-    for category, actions in bone_market_week_actions.items():
-        for creature, action in actions.items():
+    for flux_type, zoo_actions in bone_market_week_actions.items():
+        if (flux_type == Flux.NoQuality):
+            continue
 
-            unique_weeks = 21 # 3 vibes * 7 zoo types
+        generic_flux_action = zoo_actions[ZooType.NoType]
+        generic_flux_exhaustion = match_exhaustion_type(ZooType.NoType, flux_type)
 
-            action_split[action] = max_bone_market_actions_per_week/unique_weeks
-            zoo_type, flux_type = reverse_match_action_type(action)
+        for zoo_type, weekly_action in zoo_actions.items():
+            if zoo_type == ZooType.NoType:
+                continue
+
+            generic_zoo_action = bone_market_week_actions[Flux.NoQuality][zoo_type]
+            generic_zoo_exhaustion = match_exhaustion_type(zoo_type, Flux.NoQuality)
+
             exhaustion_type = match_exhaustion_type(zoo_type, flux_type)
 
-            action_split[exhaustion_type] = exhaustion_per_week/unique_weeks
-            # config.add({
-            #     action: -1,
-            #     Item.Action: 1
-            # })
+            action_split[weekly_action] = max_bone_market_actions_per_week / unique_weeks
+            action_split[exhaustion_type] = exhaustion_per_week / unique_weeks
 
-            if (category == "Amalgamy"):
-                config.add({
-                    action: -1,
-                    Item.AmalgamyGeneralAction: 1,
-                })
+            config.add({ weekly_action: -1, generic_flux_action: 1 })
+            config.add({ weekly_action: -1, generic_zoo_action: 1 })
 
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.AmalgamyGeneralExhaustion: exhaustion_per_week,
-                })
+            config.add({
+                exhaustion_type: -exhaustion_per_week,
+                generic_zoo_exhaustion: exhaustion_per_week
+            })
 
-            if (category == "Antiquity"):
-                config.add({
-                    action: -1,
-                    Item.AntiquityGeneralAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.AntiquityGeneralExhaustion: exhaustion_per_week,
-                })
-
-            if (category == "Menace"):
-                config.add({
-                    action: -1,
-                    Item.MenaceGeneralAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.MenaceGeneralExhaustion: exhaustion_per_week,
-                })
-
-            if (creature == "Amphibian"):
-                config.add({
-                    action: -1,
-                    Item.GeneralAmphibianAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.GeneralAmphibianExhaustion: exhaustion_per_week,
-                })
-
-            if (creature == "Arachnid"):
-                config.add({
-                    action: -1,
-                    Item.GeneralArachnidAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.GeneralArachnidExhaustion: exhaustion_per_week,
-                })
-
-            if (creature == "Bird"):
-                config.add({
-                    action: -1,
-                    Item.GeneralBirdAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.GeneralBirdExhaustion: exhaustion_per_week,
-                })
-
-            if (creature == "Fish"):
-                config.add({
-                    action: -1,
-                    Item.GeneralFishAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.GeneralFishExhaustion: exhaustion_per_week,
-                })
-
-            if (creature == "Insect"):
-                config.add({
-                    action: -1,
-                    Item.GeneralInsectAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.GeneralInsectExhaustion: exhaustion_per_week,
-                })
-
-            if (creature == "Reptile"):
-                config.add({
-                    action: -1,
-                    Item.GeneralReptileAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.GeneralReptileExhaustion: exhaustion_per_week,
-                })
-
-            if (creature == "Primate"):
-                config.add({
-                    action: -1,
-                    Item.GeneralPrimateAction: 1,
-                })
-
-                config.add({
-                    exhaustion_type: -exhaustion_per_week,
-                    Item.GeneralPrimateExhaustion: exhaustion_per_week,
-                })
-
+            config.add({
+                exhaustion_type: -exhaustion_per_week,
+                generic_flux_exhaustion: exhaustion_per_week
+            })
 
     config.add(action_split)
 
@@ -1287,6 +1090,8 @@ def add_trades(player: Player, config: Config):
 
     trade(0, { Item.WitheredTentacle: -1, Item.FailedWitheredTentacleLimb: 1 })
     trade(0, { Item.WitheredTentacle: -1, Item.FailedWitheredTentacleTail: 1 })
+
+    trade(1, { Item.HeadlessSkeleton: 1 })
 
     # -----------------
     # Sell To Patrons
@@ -1406,6 +1211,12 @@ def add_trades(player: Player, config: Config):
 
     rubbery_collector_fish_amalgamy = RubberyCollector(ZooType.Fish, Flux.Amalgamy)
     rubbery_collector_fish_menace = RubberyCollector(ZooType.Fish, Flux.Menace)
+
+    constable_primate = Constable(ZooType.Primate)
+    constable_generic = Constable(ZooType.NoType)
+
+    theologial_primate = Theologian(ZooType.Primate)
+    theologian_generic = Theologian(ZooType.NoType)
     
     # -------------------------------
     # ------ Leviathan Frame
@@ -1769,17 +1580,6 @@ def add_trades(player: Player, config: Config):
     #     Item.CarvedBallOfStygianIvory: 21,
     # })
 
-    
-    teller_of_terrors_trade(trade, player,
-        recipe={
-            Item.Action: -4,
-            Item.GeneralPrimateAction: -4,
-            Item.ASkeletonOfYourOwn: -1,
-            Item.DuplicatedVakeSkull: -1
-        },
-        zoo_type=ZooType.Primate,
-        fluctuations=Flux.NoQuality)
-
     gothic_tales_trade(trade, player,
         recipe={
             Item.Action: -8,
@@ -1804,6 +1604,55 @@ def add_trades(player: Player, config: Config):
         },
         zoo_type=ZooType.Chimera,
         fluctuations=Flux.Menace)    
+
+
+
+    # ==============================================================
+    #                   Skeleton of Your Own
+    # ==============================================================
+    brass_lollipop_licentiate_recipe = {
+        Item.Action: -4,
+        Item.ASkeletonOfYourOwn: -1,
+        Item.BrightBrassSkull: -1
+    }
+
+    brass_lollipop_headless_recipe = {
+        Item.Action: -4,
+        Item.HeadlessSkeleton: -1,
+        Item.BrightBrassSkull: -1
+    }    
+
+    # constable_generic.add_trade(config, brass_lollipop_licentiate_recipe)
+    # constable_primate.add_trade(config, brass_lollipop_licentiate_recipe)
+
+    # theologian_generic.add_trade(config, brass_lollipop_licentiate_recipe)
+    # theologial_primate.add_trade(config, brass_lollipop_licentiate_recipe)
+
+    constable_generic.add_trade(config, brass_lollipop_headless_recipe)
+    constable_primate.add_trade(config, brass_lollipop_headless_recipe)
+
+    theologian_generic.add_trade(config, brass_lollipop_headless_recipe)
+    theologial_primate.add_trade(config, brass_lollipop_headless_recipe)
+
+    teller_of_terrors_trade(trade, player,
+        recipe={
+            Item.Action: -4,
+            Item.GeneralPrimateAction: -4,
+            Item.ASkeletonOfYourOwn: -1,
+            Item.DuplicatedVakeSkull: -1
+        },
+        zoo_type=ZooType.Primate,
+        fluctuations=Flux.NoQuality)
+
+
+    teller_of_terrors_trade(trade, player,
+        recipe={
+            Item.Action: -4,
+            Item.ASkeletonOfYourOwn: -1,
+            Item.BrightBrassSkull: -1
+        },
+        zoo_type=ZooType.NoType,
+        fluctuations=Flux.NoQuality)        
 
     teller_of_terrors_trade(trade, player,
         recipe={
@@ -1832,15 +1681,7 @@ def add_trades(player: Player, config: Config):
         },
         zoo_type=ZooType.NoType,
         fluctuations=Flux.Menace)
-    
-    teller_of_terrors_trade(trade, player,
-        recipe={
-            Item.Action: -4,
-            Item.ASkeletonOfYourOwn: -1,
-            Item.BrightBrassSkull: -1
-        },
-        zoo_type=ZooType.NoType,
-        fluctuations=Flux.NoQuality)        
+
 
     # phantasist_menace_trade(trade, player,
     #     recipe={
