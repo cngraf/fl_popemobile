@@ -107,7 +107,7 @@ class Config:
 
         self.bounds[Item.DelayUntilTheNextBoardMeeting.value] = (-1, 0)
 
-        self.bounds[Item.CoverTiesGeneric.value] = (0, 1)
+        self.bounds[Item._CoverTiesGeneric.value] = (0, 1)
         self.bounds[Item.CoverTiesSurface.value] = (0, 1)
         self.bounds[Item.CoverTiesBazaar.value] = (0, 1)
         self.bounds[Item.CoverTiesDispossessed.value] = (0, 1)

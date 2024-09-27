@@ -231,7 +231,7 @@ player_bal_monster_hunter = Player(
         Stat.Persuasive: 230 + 91
     })
 
-active_player = player_bal_licentiate
+active_player = player_third_city_silverer
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -327,7 +327,8 @@ core_constraint = {
     Item.Constraint: 1,
     optimize_input: input_per_cycle,
     # Item.VisitFromTimeTheHealer: 1,
-    Item._BoneMarketRotation: 1,
+    # Item._BoneMarketRotation: 1,
+    Item._RatMarketRotation: 1
     # Item.CardDraws: full_draws_per_day * 7 * 10
 }
 

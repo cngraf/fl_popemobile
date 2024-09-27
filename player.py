@@ -302,6 +302,9 @@ class Player:
         self.profession = profession
         self.specialization = Specialization.NoSpecializaiton
         self.treasure = treasure
+        self.initial_items = {
+
+        }
 
         advanced_value = 17
 
@@ -361,13 +364,12 @@ class Player:
     # scandal_multiplier = menace_multiplier(player.scandal_reduction)    
     # nightmares_multiplier = menace_multiplier(player.nightmares_reduction)
 
-
-class Challenge:
-    def __init__(self, stat: Stat, dc: int, on_pass: dict, on_fail: dict):
-        self.stat = stat
-        self.dc = dc
-        self.on_pass = on_pass
-        self.on_fail = on_fail
+# class Challenge:
+#     def __init__(self, stat: Stat, dc: int, on_pass: dict, on_fail: dict):
+#         self.stat = stat
+#         self.dc = dc
+#         self.on_pass = on_pass
+#         self.on_fail = on_fail
 
     # def get_trade(self, player: Player):
     #     pass_rate = player.pass_rate(self.stat, self.dc)

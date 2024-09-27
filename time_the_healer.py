@@ -34,23 +34,23 @@ def add_trades(config: Config):
         Item.DelayUntilTheNextBoardMeeting: -1,
 
         # Item._BoneMarketRotation: 1,
+        
+        # # 6 weeks, 2 demands per week => refresh 1/3 capacity per week
+        # # 0 to 65k
+        # Item.SoftRatMarketSaturation1: -65_000 / 3,
+        # Item.SaintlyRatMarketSaturation1: -65_000 / 3,
+        # Item.MaudlinRatMarketSaturation1: -65_000 / 3,
+        # Item.InscrutableRatMarketSaturation1: -65_000 / 3,
+        # Item.TempestuousRatMarketSaturation1: -65_000 / 3,
+        # Item.IntricateRatMarketSaturation1: -65_000 / 3,
 
-        # 6 weeks, 2 demands per week => refresh 1/3 capacity per week
-        # 0 to 65k
-        Item.SoftRatMarketSaturation1: -65_000 / 3,
-        Item.SaintlyRatMarketSaturation1: -65_000 / 3,
-        Item.MaudlinRatMarketSaturation1: -65_000 / 3,
-        Item.InscrutableRatMarketSaturation1: -65_000 / 3,
-        Item.TempestuousRatMarketSaturation1: -65_000 / 3,
-        Item.IntricateRatMarketSaturation1: -65_000 / 3,
-
-        # 65k to 180k
-        Item.SoftRatMarketSaturation2: -115_000 / 3,
-        Item.SaintlyRatMarketSaturation2: -115_000 / 3,
-        Item.MaudlinRatMarketSaturation2: -115_000 / 3,
-        Item.InscrutableRatMarketSaturation2: -115_000 / 3,
-        Item.TempestuousRatMarketSaturation2: -115_000 / 3,
-        Item.IntricateRatMarketSaturation2: -115_000 / 3,        
+        # # 65k to 180k
+        # Item.SoftRatMarketSaturation2: -115_000 / 3,
+        # Item.SaintlyRatMarketSaturation2: -115_000 / 3,
+        # Item.MaudlinRatMarketSaturation2: -115_000 / 3,
+        # Item.InscrutableRatMarketSaturation2: -115_000 / 3,
+        # Item.TempestuousRatMarketSaturation2: -115_000 / 3,
+        # Item.IntricateRatMarketSaturation2: -115_000 / 3,        
    
     })
 

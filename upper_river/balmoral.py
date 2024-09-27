@@ -6,6 +6,7 @@ from config import Config
 
 def add_trades(active_player, config: Config):
     trade = config.trade
+    add = config.add
     player = config.player
 
     # each starts with same 3 actions:
@@ -104,13 +105,21 @@ def add_trades(active_player, config: Config):
     # ---------------------------------
     # TODO: check for leftovers on various sales
 
+    for ties in (
+        Item.CoverTiesBazaar,
+        Item.CoverTiesDispossessed,
+        Item.CoverTiesSurface,
+    ):
+        add({ ties: -1, Item._CoverTiesGeneric: 1 })
+
     trade(1, {
-        Item.CoverTiesGeneric: 1
+        Item._CoverTiesGeneric: 1
     })
+
+    # --- Surface ties ---
 
     trade(1, {
         Item.FavGreatGame: -1,
-
         Item.CoverTiesSurface: 1,
         Item.CoverElaboration: 1,
     })
@@ -118,7 +127,6 @@ def add_trades(active_player, config: Config):
     # Canny Cuttlefish
     trade(1, {
         Item.CrypticClue: -250,
-
         Item.CoverTiesSurface: 1,
         Item.CoverElaboration: 1,
         Item.CoverBackstory: 1
@@ -138,9 +146,10 @@ def add_trades(active_player, config: Config):
             Item.CoverWitnessnes: 1
         })
 
+    # --- Bazaar ties ---
+
     trade(1, {
         Item.FavSociety: -1,
-
         Item.CoverTiesBazaar: 1,
         Item.CoverElaboration: 1
     })
@@ -148,15 +157,14 @@ def add_trades(active_player, config: Config):
     # Surveiling Spindlewolf
     trade(1, {
         Item.CrypticClue: -250,
-
         Item.CoverTiesSurface: 1,
         Item.CoverElaboration: 1,
         Item.CoverBackstory: 1
     })
 
+    # --- Dispossessed ties ---
     trade(1, {
         Item.FavUrchins: -1,
-
         Item.CoverTiesDispossessed: 1,
         Item.CoverElaboration: 1
     })
@@ -281,24 +289,24 @@ def add_trades(active_player, config: Config):
     #     # TODO: Document for deciphering
     # })
 
-    # Card
+    # Respectable Passengers card
     trade(1, {
         Item.CoverElaboration: -10,
         Item.CoverCredentials: -5,
         Item.CoverBackstory: -100,
-
         Item.EdictsOfTheFirstCity: 1
     })
 
+    # University
     trade(1, {
         Item.CoverElaboration: -10,
         Item.CoverCredentials: -4,
         Item.CoverNuance: -6,
         Item.CoverBackstory: -100,
-
         Item.DreadfulSurmise: 1
     })
 
+    # TODO must sell full identity, so this is too permissive
     # Elaboration conversion
     trade(0, {
         Item.CoverElaboration: -1,
@@ -409,7 +417,7 @@ def add_trades(active_player, config: Config):
 
     trade(1, {
         Item.Casing: -10,
-        Item.CoverTiesGeneric: -1,
+        Item._CoverTiesGeneric: -1,
         Item.CoverBackstory: -80,
         Item.CoverElaboration: -10,
         Item.CoverNuance: -5,
