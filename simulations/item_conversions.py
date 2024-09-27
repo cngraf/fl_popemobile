@@ -27,6 +27,8 @@ action_echo_value = 6
 # TODO clean this up or sth
 item_conversion_rates = {
 
+    Item.Echo: { Item.Echo: 1},
+
     # Tinned Ham laundering
     Item.HinterlandScrip: { Item.Echo: 63.5/125, Item.HinterlandScrip: 1 },
     
@@ -58,7 +60,6 @@ item_conversion_rates = {
     Item.RatOnAString: {Item.Echo: 0.01, Item.Stuiver: 0},
 
     Item.FinBonesCollected: {Item.Echo: 0.5, Item.Stuiver: 0},
-    Item.TempestuousTale: {Item.Echo: 0, Item.Stuiver: 10},
     Item.PartialMap: {Item.Echo: 2.5, Item.Stuiver: 0},
     Item.PuzzlingMap: {Item.Echo: 12.5, Item.Stuiver: 0},
     Item.FlaskOfAbominableSalts: {Item.Echo: 0.1, Item.Stuiver: 0},
@@ -422,6 +423,21 @@ item_conversion_rates = {
     Item.VerseOfCounterCreed: { Item._ApproximateEchoValue: 12.50 },
     Item.FalseHagiotoponym: { Item.Echo: 62.50 },
     Item.LegendaCosmogone: { Item.Echo: 312.50 },
+
+    ################################################################################
+    ###                             Wild Words
+    ################################################################################
+    
+    Item.PrimordialShriek: { Item.Echo: 0.02 },
+    Item.ManiacsPrayer: { Item.Echo: 0.10 },
+    Item.CorrespondencePlaque: { Item.Echo: 0.50 },
+    Item.AeolianScream: { Item.Echo: 2.50 },
+    Item.TempestuousTale: { Item.Stuiver: 10 },
+    Item.StormThrenody: { Item.Stuiver: 12.50 },
+    Item.NightWhisper: { Item.Echo: 62.5 },
+    Item.StarstoneDemark: { Item.Echo: 312.5 },
+    Item.BreathOfTheVoid: { Item.Echo: 15600.0 },
+
 
     ################################################################################
     ###                             Wines

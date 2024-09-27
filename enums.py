@@ -900,6 +900,11 @@ class Item(Enum):
     ServicesConstables = auto()
     ServicesClay = auto()    
 
+    # Hellworm
+    InTheCompanyOfAHellworm = auto()
+    HellwormSaddle = auto()
+    DispositionOfYourHellworm = auto()
+    
     # miscellaneous
     ResearchOnAMorbidFad = auto()
     ApproximateValueOfYourSkeletonInPennies = auto()

@@ -33,6 +33,9 @@ class RailwayState(GameState):
         # if item == Item.FavCriminals:
         #     scrip_value = 10
 
+        if item == Item.DispositionOfYourHellworm:
+            return val * 7
+
         if item == Item.SeeingBanditryInTheUpperRiver:
             return val * -2
 
@@ -1344,6 +1347,63 @@ class SellPropaganda(Action):
 #             Item.ForgedJustificandeCoin: (1, 3),  # Gain 1 to 3 Forged Justificande Coins
 #             Item.JustificandeCoin: (1, 5)  # Gain 1 to 5 Justificande Coins
 #         }
+
+# ==============================================================
+#                   Your Very Own Hellworm
+# ==============================================================
+
+class YourVeryOwnHellworm(UpperRiverCard):
+    def __init__(self):
+        super().__init__("Your Very Own Hellworm")
+        self.actions = [
+            PlayWithYourHellworm(),
+            RideYourHellworm(),
+            MilkYourHellworm()
+        ]
+        self.weight = 2.0  # Frequent Frequency
+    
+    def can_draw(self, state: RailwayState):
+        return state.get(Item.InTheCompanyOfAHellworm) > 0
+
+
+class PlayWithYourHellworm(Action):
+    def __init__(self):
+        super().__init__("Play with your hellworm")
+
+    def pass_items(self, state: RailwayState):
+        return {
+            Item.Nightmares: -4.5, #-self.random_cp(1, 8),
+            Item.DispositionOfYourHellworm: 1
+        }
+
+class RideYourHellworm(Action):
+    def __init__(self):
+        super().__init__("Ride your hellworm")
+
+    def can_perform(self, state: RailwayState):
+        return state.get(Item.HellwormSaddle) > 0
+
+    def pass_items(self, state: RailwayState):
+        return {
+            Item.Scandal: 1,
+            # Item.NotToBeTrifledWith: 1,
+            Item.AeolianScream: 2,
+            Item.DispositionOfYourHellworm: 1.5 #self.random_cp(1, 2)
+        }
+
+class MilkYourHellworm(Action):
+    def __init__(self):
+        super().__init__("Milk your hellworm")
+
+    def can_perform(self, state: RailwayState):
+        return state.get(Item.DispositionOfYourHellworm) >= 7
+
+    def pass_items(self, state: RailwayState):
+        # avg per wiki
+        return {
+            Item.Echo: 73, #self.random_cp(1, 33),
+            Item.DispositionOfYourHellworm: -7
+        }
 
 
 ################################################################################
@@ -4234,6 +4294,7 @@ class RailwaySimulationRunner(SimulationRunner):
             RailwayAndTheGreatGame(),
             UrchinsGames(),
             WhichMeeting(),
+            YourVeryOwnHellworm(),
 
             # Ealing
             AdjustLightingInEalingGardens(),
@@ -4341,7 +4402,7 @@ class RailwaySimulationRunner(SimulationRunner):
 
 simulation = RailwaySimulationRunner(
     runs = 100,
-    location = Location.MarigoldStation,
+    location = Location.Balmoral,
 
     initial_values= {
         Item.ColourAtTheChessboard: 1,
@@ -4352,7 +4413,9 @@ simulation = RailwaySimulationRunner(
         Item.SeeingBanditryInTheUpperRiver: 0,
 
         Item.MoonPearl: 20_000,
-
+        Item.InTheCompanyOfAHellworm: 1,
+        # Item.HellwormSaddle: 1,
+    
         Item.EalingGardensCommemorativeDevelopment: 99,
         Item.JerichoLocksCommemorativeDevelopment: 99,
         Item.MagistracyOfEvenlodeCommemorativeDevelopment: 99,
