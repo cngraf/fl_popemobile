@@ -294,7 +294,7 @@ class Item(Enum):
     Irrigo = auto()
     TroubledWaters = auto()
 
-    BoneMarketExhaustion = auto()
+    GenericBoneMarketExhaustion = auto()
     RatMarketExhaustion = auto()
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
