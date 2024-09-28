@@ -11,24 +11,24 @@ suspicion_multiplier = 0.85
 exhaustion_hard_cap = 4
 
 class Buyer():
-    def __init__(self, name, zoo_type: ZooType, flux: Flux, impl_dc: 0):
+    def __init__(self, name, impl_dc: 0):
         self.name = name
-        self.zoo_type = zoo_type
-        self.flux = flux
+        # zoo_type = zoo_type
+        # flux = flux
         self.implausibility_dc = impl_dc
         self.suspicion_on_failure = 2
 
-    def add_trade(self, config, recipe):
-        weekly_action_type = self.match_action_type(self.zoo_type, self.flux)
+    def add_trade(self, config, flux, zoo_type, recipe):
+        weekly_action_type = self.match_action_type(zoo_type, flux)
         weekly_action_cost = {
             weekly_action_type: recipe[Item.Action]
         }
 
         skeleton = Bone.create_skeleton(recipe)
-        primary = self.primary_payout(skeleton)
-        secondary = self.secondary_payout(skeleton)
+        primary = self.primary_payout(flux, zoo_type, skeleton)
+        secondary = self.secondary_payout(flux, zoo_type, skeleton)
 
-        failures = self.expected_failed_sell_attempts(config, skeleton)
+        failures = self.expected_failed_sell_attempts(config, zoo_type, skeleton)
         failure_penalty = {
             Item.Action: -1 * failures,
             weekly_action_type: -1 * failures,
@@ -43,20 +43,20 @@ class Buyer():
             secondary,
             failure_penalty)
         
-        exhaustion_type = self.match_exhaustion_type(self.zoo_type, self.flux)
+        exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
         if total.get(exhaustion_type, 0) <= exhaustion_hard_cap:
             config.add(total)
 
-    def primary_payout(self, skeleton: Bone):
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
         return {}
     
-    def secondary_payout(self, skeleton: Bone):
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
         return {}
     
-    def expected_failed_sell_attempts(self, config: Config, skeleton: Bone):
+    def expected_failed_sell_attempts(self, config: Config, zoo_type, skeleton: Bone):
         shadowy = config.player.qualities[Item.Shadowy]
         impl = skeleton.implausibility
-        if self.zoo_type == ZooType.Chimera:
+        if zoo_type == ZooType.Chimera:
             impl += 3
         
         dc = self.implausibility_dc * (skeleton.implausibility)
@@ -244,19 +244,19 @@ class Buyer():
     suspicion_multiplier = 0.85
 
 class AuthorOfGothicTales(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("An Author of Gothic Tales", zoo_type, flux, 75)
+    def __init__(self):
+        super().__init__("An Author of Gothic Tales", 75)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.HinterlandScrip: 5 + (skeleton.echo_value * 2 * multi) 
         }
     
-    def secondary_payout(self, skeleton: Bone):
-        menace_bonus = 0.5 if self.flux == Flux.Menace else 0
-        antiquity_bonus = 0.5 if self.flux == Flux.Antiquity else 0
-        exhaustion_type = self.match_exhaustion_type(self.zoo_type, self.flux)
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
+        menace_bonus = 0.5 if flux == Flux.Menace else 0
+        antiquity_bonus = 0.5 if flux == Flux.Antiquity else 0
+        exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
         qty = (skeleton.antiquity + menace_bonus) * (skeleton.menace + antiquity_bonus)
         exhaution = math.floor(skeleton.antiquity * skeleton.menace * 0.05)
 
@@ -266,19 +266,19 @@ class AuthorOfGothicTales(Buyer):
         }
 
 class ZailorWithParticularInterests(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("A Zailor with Particular Interests", zoo_type, flux, 75)
+    def __init__(self):
+        super().__init__("A Zailor with Particular Interests", 75)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.NoduleOfWarmAmber: 25 + (skeleton.echo_value * 10 * multi) 
         }
     
-    def secondary_payout(self, skeleton: Bone):
-        amalgamy_bonus = 0.5 if self.flux == Flux.Amalgamy else 0
-        antiquity_bonus = 0.5 if self.flux == Flux.Antiquity else 0
-        exhaustion_type = self.match_exhaustion_type(self.zoo_type, self.flux)
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
+        amalgamy_bonus = 0.5 if flux == Flux.Amalgamy else 0
+        antiquity_bonus = 0.5 if flux == Flux.Antiquity else 0
+        exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
         qty = (skeleton.antiquity + amalgamy_bonus) * (skeleton.amalgamy + antiquity_bonus)
         exhaution = math.floor(skeleton.antiquity * skeleton.amalgamy * 0.05)
 
@@ -288,19 +288,19 @@ class ZailorWithParticularInterests(Buyer):
         }
 
 class RubberyCollector(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("A Rubbery Collector", zoo_type, flux, 75)
+    def __init__(self):
+        super().__init__("A Rubbery Collector", 75)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.NightsoilOfTheBazaar: 5 + (skeleton.echo_value * 2 * multi) 
         }
     
-    def secondary_payout(self, skeleton: Bone):
-        amalgamy_bonus = 0.5 if self.flux == Flux.Amalgamy else 0
-        menace_bonus = 0.5 if self.flux == Flux.Menace else 0
-        exhaustion_type = self.match_exhaustion_type(self.zoo_type, self.flux)
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
+        amalgamy_bonus = 0.5 if flux == Flux.Amalgamy else 0
+        menace_bonus = 0.5 if flux == Flux.Menace else 0
+        exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
         qty = (skeleton.menace + amalgamy_bonus) * (skeleton.amalgamy + menace_bonus)
         exhaution = math.floor(skeleton.menace * skeleton.amalgamy * 0.05)
 
@@ -310,41 +310,41 @@ class RubberyCollector(Buyer):
         }
 
 class Constable(Buyer):
-    def __init__(self, zoo_type):
-        super().__init__("A Constable", zoo_type, Flux.NoQuality, 50)
+    def __init__(self):
+        super().__init__("A Constable", 50)
         self.suspicion_on_failure = 3
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.HinterlandScrip: 20 + (skeleton.echo_value * 2 * multi)
         }
     
-class Theologian(Buyer):
-    def __init__(self, zoo_type):
-        super().__init__("A Theologian of the Old School", zoo_type, Flux.NoQuality, 50)
+class TheologianOfTheOldSchool(Buyer):
+    def __init__(self):
+        super().__init__("A Theologian of the Old School", 50)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.CrateOfIncorruptibleBiscuits: 4 + (skeleton.echo_value * 1/2.5 * multi)
         }    
 
 class TellerOfTerrors(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("A Teller of Terrors", zoo_type, flux, 75)
+    def __init__(self):
+        super().__init__("A Teller of Terrors", 75)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.BottelofMorelways1872: 25 + (skeleton.echo_value * 10 * multi) 
         }
     
-    def secondary_payout(self, skeleton: Bone):
-        exhaustion_type = self.match_exhaustion_type(self.zoo_type, self.flux)
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
+        exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
         exhaution = math.floor((skeleton.menace ** 2)/25)
 
-        exponent = 2.1 if self.flux == Flux.Menace else 2.0
+        exponent = 2.1 if flux == Flux.Menace else 2.0
         qty = 4 * skeleton.menace ** exponent 
 
         return {
@@ -353,20 +353,20 @@ class TellerOfTerrors(Buyer):
         }    
 
 class TentacledEntrepreneur(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("A Tentacled Entrepreneur", zoo_type, flux, 75)
+    def __init__(self):
+        super().__init__("A Tentacled Entrepreneur", 75)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.MemoryOfDistantShores: 5 + (skeleton.echo_value * 2 * multi) 
         }
     
-    def secondary_payout(self, skeleton: Bone):
-        exhaustion_type = self.match_exhaustion_type(self.zoo_type, self.flux)
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
+        exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
         exhaution = math.floor((skeleton.amalgamy ** 2)/25)
 
-        exponent = 2.1 if self.flux == Flux.Amalgamy else 2.0
+        exponent = 2.1 if flux == Flux.Amalgamy else 2.0
         qty = 4 * skeleton.amalgamy ** exponent 
 
         return {
@@ -375,20 +375,20 @@ class TentacledEntrepreneur(Buyer):
         }    
 
 class InvestmedMindedAmbassador(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("An Investment-minded Ambassador", zoo_type, flux, 75)
+    def __init__(self):
+        super().__init__("An Investment-minded Ambassador", 75)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.MemoryOfLight: 5 + (skeleton.echo_value * 2 * multi) 
         }
     
-    def secondary_payout(self, skeleton: Bone):
-        exhaustion_type = self.match_exhaustion_type(self.zoo_type, self.flux)
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
+        exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
         exhaution = math.floor((skeleton.antiquity ** 2)/25)
 
-        exponent = 2.1 if self.flux == Flux.Antiquity else 2.0
+        exponent = 2.1 if flux == Flux.Antiquity else 2.0
         qty = 0.8 * skeleton.antiquity ** exponent 
 
         return {
@@ -397,38 +397,68 @@ class InvestmedMindedAmbassador(Buyer):
         }    
 
 class HoardingPalaeontologist(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("A Palaeontologist with Hoarding Propensities", zoo_type, flux, 40)
+    def __init__(self):
+        super().__init__("A Palaeontologist with Hoarding Propensities", 40)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.UnearthlyFossil: 2,
             Item.BoneFragments: 5 + (skeleton.echo_value * 100 * multi) 
         }
 
 class NaiveCollector(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("A Palaeontologist with Hoarding Propensities", zoo_type, flux, 40)
+    def __init__(self):
+        super().__init__("A Naive Collector", 40)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.ThirstyBombazineScrap: (skeleton.echo_value * multi) / 2.5 
         }
 
 class BohemianSculptress(Buyer):
-    def __init__(self, zoo_type: ZooType, flux: Flux):
-        super().__init__("A Palaeontologist with Hoarding Propensities", zoo_type, flux, 50)
+    def __init__(self):
+        super().__init__("A Familiar Bohemian Sculptress", 50)
 
-    def primary_payout(self, skeleton: Bone):
-        multi = self.zoo_multiplier(self.zoo_type)
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
         return {
             Item.PreservedSurfaceBlooms: 4 + (skeleton.echo_value * 1/2.5 * multi)
         }
     
-    def secondary_payout(self, skeleton: Bone):
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
         qty = skeleton.theology
         return {
             Item.RumourOfTheUpperRiver: qty
+        }
+
+# TODO
+# - many variants
+# - weekly quality not tied to normal bone market, but does share exhaustion
+class TriflingDiplomatTripleQuality(Buyer):
+    def __init__(self):
+        super().__init__("The Trifling Diplomat", 50)
+
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        return {
+            Item.AssortmentOfKhaganianCoinage: 1 + (skeleton.echo_value * 2)
+        }
+    
+    # triple sum weeks:
+    # 0 ex @ <= 24
+    # 1 ex @ <= 33
+    # 2 ex @ <= 40
+    # 3 ex @ <= 45
+    # 4 ex @ <= 50
+    def secondary_payout(self, flux, zoo_type, skeleton: Bone):
+        sum_quals = skeleton.antiquity + skeleton.amalgamy + skeleton.menace
+        payout = (sum_quals ** 2.2)/3
+
+        # TODO
+        # exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
+        exhaustion = math.foor(((sum_quals / 3) ** 2.2) / 100)
+        return {
+            Item.CompromisingDocument: payout,
+            Item.GenericBoneMarketExhaustion: exhaustion
         }

@@ -265,75 +265,84 @@ def add_trades(config: Config):
     })
 
     # Buyers
-    gothic_tales_buyers = {}
-    zailor_particular_buyers = {}
-    rubbery_collector_buyers = {}
-    teller_buyers = {}
-    entrepreneur_buyers = {}
-    ambassador_buyers = {}
-    paleo_buyers = {}
-    naive_buyers = {}
+    gothic_tales_buyers = AuthorOfGothicTales()
+    zailor_particular_buyers = ZailorWithParticularInterests()
+    rubbery_collector_buyers = RubberyCollector()
 
-    for flux_type in (Flux.Antiquity, Flux.Amalgamy, Flux.Menace, Flux.NoQuality):
-        gothic_tales_buyers[flux_type] = {}
-        zailor_particular_buyers[flux_type] = {}
-        rubbery_collector_buyers[flux_type] = {}
-        teller_buyers[flux_type] = {}
-        entrepreneur_buyers[flux_type] = {}
-        ambassador_buyers[flux_type] = {}
-        paleo_buyers[flux_type] = {}
-        naive_buyers[flux_type] = {}
+    teller_buyers = TellerOfTerrors()
+    entrepreneur_buyers = TentacledEntrepreneur()
+    ambassador_buyers = InvestmedMindedAmbassador()
 
-        for zoo_type in (
-            ZooType.Amphibian,
-            ZooType.Bird,
-            ZooType.Chimera,
-            ZooType.Fish,
-            ZooType.Insect,
-            ZooType.Primate,
-            ZooType.Reptile,
-            ZooType.Spider,
-            ZooType.NoType
-        ):
-            gothic_tales_buyers[flux_type][zoo_type] = AuthorOfGothicTales(zoo_type, flux_type)
-            zailor_particular_buyers[flux_type][zoo_type] = ZailorWithParticularInterests(zoo_type, flux_type)
-            rubbery_collector_buyers[flux_type][zoo_type] = RubberyCollector(zoo_type, flux_type)
-            teller_buyers[flux_type][zoo_type] = TellerOfTerrors(zoo_type, flux_type)
-            entrepreneur_buyers[flux_type][zoo_type] = TentacledEntrepreneur(zoo_type, flux_type)
-            ambassador_buyers[flux_type][zoo_type] = InvestmedMindedAmbassador(zoo_type, flux_type)
-            paleo_buyers[flux_type][zoo_type] = HoardingPalaeontologist(zoo_type, flux_type)
-            naive_buyers[flux_type][zoo_type] = NaiveCollector(zoo_type, flux_type)
+    paleo_buyers = HoardingPalaeontologist()
+    naive_buyers = NaiveCollector()
 
+    constable_buyer = Constable()
+    theologial_buyer = TheologianOfTheOldSchool()
 
-    gothic_chimera_menace = AuthorOfGothicTales(ZooType.Chimera, Flux.Menace)
-    gothic_chimera_antiquity = AuthorOfGothicTales(ZooType.Chimera, Flux.Menace)
-    gothic_fish_antiquity = AuthorOfGothicTales(ZooType.Fish, Flux.Menace)
-    gothic_fish_menace = AuthorOfGothicTales(ZooType.Fish, Flux.Menace)
+    sculptress_buyer = BohemianSculptress()
 
-    zailor_fish_antiquity = ZailorWithParticularInterests(ZooType.Fish, Flux.Antiquity)
-    zailor_fish_amalgamy = ZailorWithParticularInterests(ZooType.Fish, Flux.Amalgamy)
+    diplomat_triple_buyer = TriflingDiplomatTripleQuality()
 
-    rubbery_collector_fish_amalgamy = RubberyCollector(ZooType.Fish, Flux.Amalgamy)
-    rubbery_collector_fish_menace = RubberyCollector(ZooType.Fish, Flux.Menace)
+    # for flux_type in (Flux.Antiquity, Flux.Amalgamy, Flux.Menace, Flux.NoQuality):
+    #     gothic_tales_buyers[flux_type] = {}
+    #     zailor_particular_buyers[flux_type] = {}
+    #     rubbery_collector_buyers[flux_type] = {}
+    #     teller_buyers[flux_type] = {}
+    #     entrepreneur_buyers[flux_type] = {}
+    #     ambassador_buyers[flux_type] = {}
+    #     paleo_buyers[flux_type] = {}
+    #     naive_buyers[flux_type] = {}
 
-    teller_fish_menace = TellerOfTerrors(ZooType.Fish, Flux.Menace)
-
-    entrepreneur_fish_amalgamy = TentacledEntrepreneur(ZooType.Fish, Flux.Amalgamy)
-
-    ambassador_fish_antiquity = InvestmedMindedAmbassador(ZooType.Fish, Flux.Antiquity)
+    #     for zoo_type in (
+    #         ZooType.Amphibian,
+    #         ZooType.Bird,
+    #         ZooType.Chimera,
+    #         ZooType.Fish,
+    #         ZooType.Insect,
+    #         ZooType.Primate,
+    #         ZooType.Reptile,
+    #         ZooType.Spider,
+    #         ZooType.NoType
+    #     ):
+    #         gothic_tales_buyers[flux_type][zoo_type] = AuthorOfGothicTales(zoo_type, flux_type)
+    #         zailor_particular_buyers[flux_type][zoo_type] = ZailorWithParticularInterests(zoo_type, flux_type)
+    #         rubbery_collector_buyers[flux_type][zoo_type] = RubberyCollector(zoo_type, flux_type)
+    #         teller_buyers[flux_type][zoo_type] = TellerOfTerrors(zoo_type, flux_type)
+    #         entrepreneur_buyers[flux_type][zoo_type] = TentacledEntrepreneur(zoo_type, flux_type)
+    #         ambassador_buyers[flux_type][zoo_type] = InvestmedMindedAmbassador(zoo_type, flux_type)
+    #         paleo_buyers[flux_type][zoo_type] = HoardingPalaeontologist(zoo_type, flux_type)
+    #         naive_buyers[flux_type][zoo_type] = NaiveCollector(zoo_type, flux_type)
 
 
-    constable_primate = Constable(ZooType.Primate)
-    constable_generic = Constable(ZooType.NoType)
+    # gothic_chimera_menace = AuthorOfGothicTales(ZooType.Chimera, Flux.Menace)
+    # gothic_chimera_antiquity = AuthorOfGothicTales(ZooType.Chimera, Flux.Menace)
+    # gothic_fish_antiquity = AuthorOfGothicTales(ZooType.Fish, Flux.Menace)
+    # gothic_fish_menace = AuthorOfGothicTales(ZooType.Fish, Flux.Menace)
 
-    theologial_primate = Theologian(ZooType.Primate)
-    theologian_generic = Theologian(ZooType.NoType)
+    # zailor_fish_antiquity = ZailorWithParticularInterests(ZooType.Fish, Flux.Antiquity)
+    # zailor_fish_amalgamy = ZailorWithParticularInterests(ZooType.Fish, Flux.Amalgamy)
+
+    # rubbery_collector_fish_amalgamy = RubberyCollector(ZooType.Fish, Flux.Amalgamy)
+    # rubbery_collector_fish_menace = RubberyCollector(ZooType.Fish, Flux.Menace)
+
+    # teller_fish_menace = TellerOfTerrors(ZooType.Fish, Flux.Menace)
+
+    # entrepreneur_fish_amalgamy = TentacledEntrepreneur(ZooType.Fish, Flux.Amalgamy)
+
+    # ambassador_fish_antiquity = InvestmedMindedAmbassador(ZooType.Fish, Flux.Antiquity)
+
+
+    # constable_primate = Constable(ZooType.Primate)
+    # constable_generic = Constable(ZooType.NoType)
+
+    # theologial_primate = Theologian(ZooType.Primate)
+    # theologian_generic = Theologian(ZooType.NoType)
     
     # -------------------------------
     #        Leviathan Frame
 
     # 7 antiquity, 1 ex
-    ambassador_buyers[Flux.Antiquity][ZooType.Chimera].add_trade(config,
+    ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Chimera,
         recipe={
             Item.Action: -6,
             Item.LeviathanFrame: -1,
@@ -360,8 +369,8 @@ def add_trades(config: Config):
             Item.WingOfAYoungTerrorBird: -2
         }
 
-        gothic_chimera_menace.add_trade(config, chimera_levi_recipe)
-        gothic_chimera_antiquity.add_trade(config, chimera_levi_recipe)
+        gothic_tales_buyers.add_trade(config, Flux.Menace, ZooType.Chimera, chimera_levi_recipe)
+        gothic_tales_buyers.add_trade(config, Flux.Antiquity, ZooType.Chimera, chimera_levi_recipe)
 
         # Fish
         for i in range(0, 3):
@@ -376,29 +385,29 @@ def add_trades(config: Config):
                 Item.FinBonesCollected: fin_bones_collected                
             }
 
-            ambassador_fish_antiquity.add_trade(config, levi_fish_recipe)
+            entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Fish, levi_fish_recipe)
 
-            entrepreneur_fish_amalgamy.add_trade(config, levi_fish_recipe)
+            ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Fish, levi_fish_recipe)
+            
+            teller_buyers.add_trade(config, Flux.Menace, ZooType.Fish, levi_fish_recipe)
+            
+            gothic_tales_buyers.add_trade(config, Flux.Antiquity, ZooType.Fish, levi_fish_recipe)
+            gothic_tales_buyers.add_trade(config, Flux.Menace, ZooType.Fish, levi_fish_recipe)
+            
+            zailor_particular_buyers.add_trade(config, Flux.Antiquity, ZooType.Fish, levi_fish_recipe)
+            zailor_particular_buyers.add_trade(config, Flux.Amalgamy, ZooType.Fish, levi_fish_recipe)
 
-            teller_fish_menace.add_trade(config, levi_fish_recipe)
+            rubbery_collector_buyers.add_trade(config, Flux.Amalgamy, ZooType.Fish, levi_fish_recipe)
+            rubbery_collector_buyers.add_trade(config, Flux.Menace, ZooType.Fish, levi_fish_recipe)
 
-            gothic_fish_antiquity.add_trade(config, levi_fish_recipe)
-            gothic_fish_menace.add_trade(config, levi_fish_recipe)
-     
-            zailor_fish_antiquity.add_trade(config, levi_fish_recipe)
-            zailor_fish_amalgamy.add_trade(config, levi_fish_recipe)
-
-            rubbery_collector_fish_amalgamy.add_trade(config, levi_fish_recipe)
-            rubbery_collector_fish_menace.add_trade(config, levi_fish_recipe)
-
-            paleo_buyers[Flux.NoQuality][ZooType.Fish].add_trade(config, levi_fish_recipe)
-
+            paleo_buyers.add_trade(config, Flux.NoQuality, ZooType.Fish, levi_fish_recipe)
 
     # ----------------------
     # ---- Mammoth Ribcage
             
     for skull in (Item.HornedSkull, Item.SabreToothedSkull):
-        ambassador_buyers[Flux.Antiquity][ZooType.Bird].add_trade(config,
+
+        ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Bird,
             recipe={
                 Item.Action: -9,
                 Item.MammothRibcage: -1,
@@ -411,7 +420,7 @@ def add_trades(config: Config):
             })   
 
     for zoo_type in (ZooType.Reptile, ZooType.NoType):
-        ambassador_buyers[Flux.Antiquity][zoo_type].add_trade(config,
+        ambassador_buyers.add_trade(config, Flux.Antiquity, zoo_type,
             recipe={
                 Item.Action: -9,
                 Item.MammothRibcage: -1,
@@ -421,7 +430,7 @@ def add_trades(config: Config):
                 Item.TombLionsTail: -1
             })   
 
-    ambassador_buyers[Flux.Antiquity][ZooType.Bird].add_trade(config,
+    ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Bird,
         recipe={
             Item.Action: -9,
             Item.MammothRibcage: -1,
@@ -432,7 +441,7 @@ def add_trades(config: Config):
             Item.TombLionsTail: -1
         })
     
-    ambassador_buyers[Flux.Antiquity][ZooType.NoType].add_trade(config,
+    ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.NoType,
         recipe={
             Item.Action: -9,
             Item.MammothRibcage: -1,
@@ -465,8 +474,9 @@ def add_trades(config: Config):
                 tail: -1
             }
 
-            gothic_tales_buyers[Flux.Antiquity][ZooType.Reptile].add_trade(config, some_mammoth_recipe)
-            gothic_tales_buyers[Flux.Menace][ZooType.Reptile].add_trade(config, some_mammoth_recipe)
+
+            gothic_tales_buyers.add_trade(config, Flux.Antiquity, ZooType.Reptile, some_mammoth_recipe)
+            gothic_tales_buyers.add_trade(config, Flux.Menace, ZooType.Reptile, some_mammoth_recipe)
 
         for tail in (Item.ObsidianChitinTail, Item._NoItem):
             some_mammoth_recipe = {
@@ -478,10 +488,11 @@ def add_trades(config: Config):
                 tail: -1                
             }
            
-            zailor_particular_buyers[Flux.Antiquity][ZooType.Reptile].add_trade(config, some_mammoth_recipe)
-            zailor_particular_buyers[Flux.Antiquity][ZooType.Amphibian].add_trade(config, some_mammoth_recipe)
-            zailor_particular_buyers[Flux.Amalgamy][ZooType.Reptile].add_trade(config, some_mammoth_recipe)
-            zailor_particular_buyers[Flux.Amalgamy][ZooType.Amphibian].add_trade(config, some_mammoth_recipe)
+            zailor_particular_buyers.add_trade(config, Flux.Antiquity, ZooType.Reptile, some_mammoth_recipe)
+            zailor_particular_buyers.add_trade(config, Flux.Antiquity, ZooType.Amphibian, some_mammoth_recipe)
+           
+            zailor_particular_buyers.add_trade(config, Flux.Amalgamy, ZooType.Reptile, some_mammoth_recipe)
+            zailor_particular_buyers.add_trade(config, Flux.Amalgamy, ZooType.Amphibian, some_mammoth_recipe)
         
         mammoth_recipe2 = {
             Item.Action: -9,
@@ -493,14 +504,13 @@ def add_trades(config: Config):
             Item.HolyRelicOfTheThighOfStFiacre: -1
         }
 
-        zailor_particular_buyers[Flux.Antiquity][ZooType.Amphibian].add_trade(config, mammoth_recipe2)
-        zailor_particular_buyers[Flux.Amalgamy][ZooType.Amphibian].add_trade(config, mammoth_recipe2)
-        
+        zailor_particular_buyers.add_trade(config, Flux.Antiquity, ZooType.Amphibian, mammoth_recipe2)
+        zailor_particular_buyers.add_trade(config, Flux.Amalgamy, ZooType.Amphibian, mammoth_recipe2)
 
     # -------------------------------
     # ----- Human Ribcage -----------
     # -------------------------------
-    gothic_tales_buyers[Flux.Antiquity][ZooType.Primate].add_trade(config,
+    gothic_tales_buyers.add_trade(config, Flux.Antiquity, ZooType.Primate,
         recipe={
             Item.Action: -8,
             Item.HumanRibcage: -1,
@@ -511,7 +521,7 @@ def add_trades(config: Config):
         })
     
     # 7 menace
-    teller_buyers[Flux.Menace][ZooType.Chimera].add_trade(config,
+    teller_buyers.add_trade(config, Flux.Menace, ZooType.Chimera,
         recipe={
             Item.Action: -8,
             Item.HumanRibcage: -1,
@@ -520,7 +530,7 @@ def add_trades(config: Config):
         })
     
     # 7 Amalgamy
-    entrepreneur_buyers[Flux.Amalgamy][ZooType.Chimera].add_trade(config,
+    entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Chimera,
         recipe={
             Item.Action: -8,
             Item.HumanRibcage: -1,
@@ -530,7 +540,7 @@ def add_trades(config: Config):
             Item.AlbatrossWing: -1
         })
     
-    entrepreneur_buyers[Flux.Amalgamy][ZooType.Chimera].add_trade(config,
+    entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Chimera,
         recipe={
             Item.Action: -8,
             Item.HumanRibcage: -1,
@@ -540,7 +550,7 @@ def add_trades(config: Config):
             Item.FailedHelicalThighbone: -1
         })    
     
-    entrepreneur_buyers[Flux.Amalgamy][ZooType.Chimera].add_trade(config,
+    entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Chimera,
         recipe={
             Item.Action: -8,
             Item.HumanRibcage: -1,
@@ -551,7 +561,7 @@ def add_trades(config: Config):
         })
     
     # 7 Antiquity
-    ambassador_buyers[Flux.Antiquity][ZooType.Chimera].add_trade(config,
+    ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Chimera,
         recipe={
             Item.Action: -8,
             Item.HumanRibcage: -1,
@@ -562,7 +572,7 @@ def add_trades(config: Config):
         })    
 
     for skull in (Item.HornedSkull, Item.SabreToothedSkull):
-        ambassador_buyers[Flux.Antiquity][ZooType.Chimera].add_trade(config,
+        ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Chimera,
             recipe={
                 Item.Action: -8,
                 Item.HumanRibcage: -1,
@@ -585,16 +595,16 @@ def add_trades(config: Config):
                 skull: -1
             }
 
-            constable_generic.add_trade(config, lollipop_recipe)
-            constable_primate.add_trade(config, lollipop_recipe)
+            constable_buyer.add_trade(config, Flux.NoQuality, ZooType.NoType, lollipop_recipe)
+            constable_buyer.add_trade(config, Flux.NoQuality, ZooType.Primate, lollipop_recipe)
 
-            theologian_generic.add_trade(config, lollipop_recipe)
-            theologial_primate.add_trade(config, lollipop_recipe)
+            theologial_buyer.add_trade(config, Flux.NoQuality, ZooType.NoType, lollipop_recipe)
+            theologial_buyer.add_trade(config, Flux.NoQuality, ZooType.Primate, lollipop_recipe)
 
-            teller_buyers[Flux.Menace][ZooType.Primate].add_trade(config, lollipop_recipe)
-            teller_buyers[Flux.Menace][ZooType.NoType].add_trade(config, lollipop_recipe)
-            teller_buyers[Flux.NoQuality][ZooType.Primate].add_trade(config, lollipop_recipe)
-            teller_buyers[Flux.NoQuality][ZooType.NoType].add_trade(config, lollipop_recipe)
+            teller_buyers.add_trade(config, Flux.Menace, ZooType.Primate, lollipop_recipe)
+            teller_buyers.add_trade(config, Flux.NoQuality, ZooType.Primate, lollipop_recipe)
+            teller_buyers.add_trade(config, Flux.Menace, ZooType.NoType, lollipop_recipe)
+            teller_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, lollipop_recipe)
 
     '''
     "Biblically Inaccurate Angel"
@@ -625,8 +635,8 @@ def add_trades(config: Config):
                     filler_limb: -4 + num_wings
                 }
 
-            gothic_chimera_menace.add_trade(config, filler_cherub_recipe)
-            gothic_chimera_antiquity.add_trade(config, filler_cherub_recipe)
+            gothic_tales_buyers.add_trade(config, Flux.Menace, ZooType.Chimera, filler_cherub_recipe)
+            gothic_tales_buyers.add_trade(config, Flux.Antiquity, ZooType.Chimera, filler_cherub_recipe)
 
 
     # wtf was I thinking with this recipe
@@ -641,8 +651,9 @@ def add_trades(config: Config):
         Item.BrightBrassSkull: -3,
         Item.WingOfAYoungTerrorBird: -2
     }
-    teller_buyers[Flux.Menace][ZooType.Bird].add_trade(config, menace_4ex_bird_recipe)
-    teller_buyers[Flux.Menace][ZooType.NoType].add_trade(config, menace_4ex_bird_recipe)
+    
+    teller_buyers.add_trade(config, Flux.Menace, ZooType.Bird, menace_4ex_bird_recipe)
+    teller_buyers.add_trade(config, Flux.Menace, ZooType.NoType, menace_4ex_bird_recipe)
 
     # # Exhaustion 4
     # teller_of_terrors_trade(config.trade, config.player,
@@ -680,8 +691,8 @@ def add_trades(config: Config):
         Item.SkullInCoral: -7,
         Item.AlbatrossWing: -2
     }
-    rubbery_collector_buyers[Flux.Amalgamy][ZooType.Bird].add_trade(config, coral_bird_seven_recipe)
 
+    rubbery_collector_buyers.add_trade(config, Flux.Amalgamy, ZooType.Bird, coral_bird_seven_recipe)
 
     coral_bird_eight_recipe ={
         Item.Action: -16,
@@ -693,7 +704,7 @@ def add_trades(config: Config):
         Item.WitheredTentacle: -1
     }
 
-    rubbery_collector_buyers[Flux.Amalgamy][ZooType.Bird].add_trade(config, coral_bird_eight_recipe)
+    rubbery_collector_buyers.add_trade(config, Flux.Amalgamy, ZooType.Bird, coral_bird_eight_recipe)
 
     # rubbery_collector_trade(config,
     #     recipe={
@@ -753,20 +764,18 @@ def add_trades(config: Config):
     ]
 
     for recipe in brass_bird_recipes:
-        entrepreneur_buyers[Flux.Amalgamy][ZooType.Bird].add_trade(config, recipe)
-        entrepreneur_buyers[Flux.NoQuality][ZooType.Bird].add_trade(config, recipe)
-        # entrepreneur_buyers[Flux.Amalgamy][ZooType.NoType].add_trade(config, generator_bird_recipe)
-        entrepreneur_buyers[Flux.NoQuality][ZooType.NoType].add_trade(config, recipe)
-        
-        paleo_buyers[Flux.NoQuality][ZooType.Bird].add_trade(config, recipe)
-        paleo_buyers[Flux.NoQuality][ZooType.NoType].add_trade(config, recipe)        
-        
-        zailor_particular_buyers[Flux.NoQuality][ZooType.Bird].add_trade(config, recipe)
-        zailor_particular_buyers[Flux.NoQuality][ZooType.NoType].add_trade(config, recipe)
-        
-        naive_buyers[Flux.NoQuality][ZooType.Bird].add_trade(config, recipe)
-        naive_buyers[Flux.NoQuality][ZooType.NoType].add_trade(config, recipe)
+        entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Bird, recipe)
+        entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.NoType, recipe)
+        entrepreneur_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
 
+        paleo_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
+        paleo_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
+        
+        zailor_particular_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
+        zailor_particular_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
+
+        naive_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
+        naive_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
 
     # ------------------------------------------------
     # ------------ Thorned Ribcage ---------------
@@ -781,8 +790,8 @@ def add_trades(config: Config):
         Item.ObsidianChitinTail: -1
     }
 
-    gothic_tales_buyers[Flux.Antiquity][ZooType.Bird].add_trade(config, thorned_jurassic_bird_recipe)
-    zailor_particular_buyers[Flux.Antiquity][ZooType.Bird].add_trade(config, thorned_jurassic_bird_recipe)
+    gothic_tales_buyers.add_trade(config, Flux.Antiquity, ZooType.Bird, thorned_jurassic_bird_recipe)
+    zailor_particular_buyers.add_trade(config, Flux.Antiquity, ZooType.Bird, thorned_jurassic_bird_recipe)
 
     # use other items from doubled skull farm
     # 7 amalgamy humanoid
@@ -794,14 +803,14 @@ def add_trades(config: Config):
         Item.HelicalThighbone: -2,
     }
 
-    entrepreneur_buyers[Flux.Amalgamy][ZooType.Primate].add_trade(config, thorned_humanoid_recipe)
+    entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Primate, thorned_humanoid_recipe)
 
     # 7 amalgamy reptile
     for tail_type in (Item.JetBlackStinger, Item.PlasterTailBones, Item.TombLionsTail):
         thorned_reptile_recipe = utils.sum_dicts(thorned_humanoid_recipe, {
             Item.JetBlackStinger: -1,
         })
-        entrepreneur_buyers[Flux.Amalgamy][ZooType.Reptile].add_trade(config, thorned_reptile_recipe)
+        entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Reptile, thorned_reptile_recipe)
 
     # wtf is this
     # oh right trying to use all the parts of the fox sighting
@@ -823,16 +832,26 @@ def add_trades(config: Config):
     #                   Glim-encrusted Carapace
     # ==============================================================    
 
-    # TODO require spider week
-    trade(0, {
-        Item.Action: -11,
-        Item.GeneralArachnidAction: -11,
-        Item.GlimEncrustedCarapace: -1,
-        Item.HolyRelicOfTheThighOfStFiacre: -8,
 
-        Item.PreservedSurfaceBlooms: 78,
-        Item.RumourOfTheUpperRiver: 40
-    })
+    # trade(0, {
+    #     Item.Action: -11,
+    #     Item.GeneralArachnidAction: -11,
+    #     Item.GlimEncrustedCarapace: -1,
+    #     Item.HolyRelicOfTheThighOfStFiacre: -8,
+
+    #     Item.PreservedSurfaceBlooms: 78,
+    #     Item.RumourOfTheUpperRiver: 40
+    # })
+
+    sculptress_buyer.add_trade(config, Flux.NoQuality, ZooType.Spider,
+        # TODO confirm this all ties out
+        recipe={
+            Item.Action: -12,
+            Item.GlimEncrustedCarapace: -1,
+            Item.CarvedBallOfStygianIvory: -1,
+            Item.HolyRelicOfTheThighOfStFiacre: -8
+        })
+
 
     # ==============================================================
     #                   Prismatic Frame
@@ -855,10 +874,10 @@ def add_trades(config: Config):
                 Item.JetBlackStinger: -1
             }
 
-            gothic_tales_buyers[Flux.Antiquity][ZooType.Fish].add_trade(config, prismatic_fish)
-            gothic_tales_buyers[Flux.Menace][ZooType.Fish].add_trade(config, prismatic_fish)
+            gothic_tales_buyers.add_trade(config, Flux.Antiquity, ZooType.Fish, prismatic_fish)
+            gothic_tales_buyers.add_trade(config, Flux.Menace, ZooType.Fish, prismatic_fish)
 
-            rubbery_collector_buyers[Flux.Menace][ZooType.Fish].add_trade(config, prismatic_fish)
+            rubbery_collector_buyers.add_trade(config, Flux.Menace, ZooType.Fish, prismatic_fish)
 
 
     ##################################################################
