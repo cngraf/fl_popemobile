@@ -58,7 +58,7 @@ def add_trades(config: Config):
     # without this, model sees them as required costs for TtH
     for lockout_quality in (
         Item.RavagesOfParabolanWarfare,
-        Item.BoneMarketExhaustion,
+        Item.GenericBoneMarketExhaustion,
         Item.RecentParticipantInAStarvedCulturalExchange,
         Item.GlowingViric,
         Item.MiredInMail,

@@ -38,7 +38,7 @@ class Config:
 
         self.bounds[Item.TroubledWaters.value] = (None, 0)
 
-        self.bounds[Item.BoneMarketExhaustion.value] = (-4, 0)
+        self.bounds[Item.GenericBoneMarketExhaustion.value] = (-4, 0)
 
         self.bounds[Item.AntiquityReptileExhaustion.value] = (-4, 0)
         self.bounds[Item.AntiquityAmphibianExhaustion.value] = (-4, 0)

@@ -204,7 +204,7 @@ active_player = player.player_third_city_silverer
 # hack
 # `IndexError: list assignment index out of range` => increase this number
 # most of this is bone market combinatoric shit
-var_buffer = 20_000
+var_buffer = 10_000
 num_items = max(Item, key=lambda x: x.value).value
 print(num_items)
 num_vars = num_items + 1 + var_buffer
@@ -374,32 +374,32 @@ print(f"Optimize For:                     {optimize_for.name}")
 print(f"-Player Stats-")
 pp.pprint(active_player.qualities)
 
-print("------Summary-------")
-# print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
-# print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
+# print("------Summary-------")
+# # print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
+# # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
 
 
-print("-----Gained & Unused-------")
-for i in items_surplus:
-    print(i)
+# print("-----Gained & Unused-------")
+# for i in items_surplus:
+#     print(i)
 
-print("-----Trades In Grind-------")
-for i in trades_used:
-    # print(f"{i[0]:.3}       " + i[1])
-    print(f"{i[0]:<10.3}{i[1]:<20} => {i[2]}")
+# print("-----Trades In Grind-------")
+# for i in trades_used:
+#     # print(f"{i[0]:.3}       " + i[1])
+#     print(f"{i[0]:<10.3}{i[1]:<20} => {i[2]}")
 
-print("-----Cycle-------")
-print(core_constraint)
+# print("-----Cycle-------")
+# print(core_constraint)
 
-print("-----Optimization Target-------")
-items_per_input = -1.0/(input_per_cycle * opt_result.fun)
-# print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
-print(f"{optimize_for.name} per {optimize_input.name}: {items_per_input:10.5f}")
-print(f"{optimize_input.name} per {optimize_for.name}: {1.0/items_per_input:10.5f}")
-# print(f"{str(optimize_for) + ' Per Action':34}{items_per_cycle:10.5f}")
-# print(f"{'Actions Per ' + str(optimize_for):34}{-(opt_result.fun * actions_per_cycle):10.5f}")
+# print("-----Optimization Target-------")
+# items_per_input = -1.0/(input_per_cycle * opt_result.fun)
+# # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
+# print(f"{optimize_for.name} per {optimize_input.name}: {items_per_input:10.5f}")
+# print(f"{optimize_input.name} per {optimize_for.name}: {1.0/items_per_input:10.5f}")
+# # print(f"{str(optimize_for) + ' Per Action':34}{items_per_cycle:10.5f}")
+# # print(f"{'Actions Per ' + str(optimize_for):34}{-(opt_result.fun * actions_per_cycle):10.5f}")
 
-print("-------------------------------")
+# print("-------------------------------")
 
 
 # Optional: Colorized output using termcolor (you can replace with colorama)
