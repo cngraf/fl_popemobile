@@ -16,11 +16,11 @@ class RailwayState(GameState):
     def __init__(self, location: Location):
         super().__init__(max_hand_size=5)
         self.location = location
-        self.ev_threshold = 5.5
-        self.scrip_threshold_multiplier = 1.2
+        self.ev_threshold = 5.68
+        self.scrip_threshold_multiplier = 1.0
 
         self.skip_favour_inputs = False
-        self.skip_econ_inputs = True
+        self.skip_econ_inputs = False
 
     def ev_from_item(self, item, val: int):
         # if item == Item.SeeingBanditryInTheUpperRiver:
@@ -85,7 +85,7 @@ class RailwayState(GameState):
 
         self.hand = [card for card in self.hand if card.can_draw(self)]
 
-        if self.actions >= 200:
+        if self.actions >= 1000:
             self.status = "Complete"
 
 
@@ -4402,7 +4402,7 @@ class RailwaySimulationRunner(SimulationRunner):
 
 simulation = RailwaySimulationRunner(
     runs = 100,
-    location = Location.BurrowInfraMump,
+    location = Location.JerichoLocks,
 
     initial_values= {
         Item.ColourAtTheChessboard: 1,

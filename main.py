@@ -62,6 +62,7 @@ import upper_river.moulin
 import upper_river.hurlers
 import upper_river.marigold
 import upper_river.tracklayers_city
+import upper_river.decks
 
 import firmament.hallows_throat
 import firmament.midnight_moon
@@ -231,7 +232,7 @@ professional_activities.add_trades(config)
 
 InventoryConversions.add_trades(active_player, config)
 
-decks.london_deck.add_trades(config)
+# decks.london_deck.add_trades(config)
 
 london.uncategorized.add_trades(active_player, config)
 london.newspaper.add_trades(active_player, config)
@@ -260,6 +261,7 @@ upper_river.station_viii.add_trades(active_player, config)
 upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(config)
+upper_river.decks.add_trades(config)
 
 upper_river.tracklayers_city.add_trades(config)
 
@@ -297,7 +299,7 @@ core_constraint = {
     # Item.VisitFromTimeTheHealer: 1,
     # Item._BoneMarketRotation: 1,
     Item._RatMarketRotation: 1,
-    # Item._CardDraws: full_draws_per_day * 7 * 10
+    Item._CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)

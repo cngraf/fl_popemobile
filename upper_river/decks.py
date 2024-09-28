@@ -124,12 +124,12 @@ def add_trades(config):
     })
 
     add({
-        Item._JerichoAction: -1000,
-        Item._CardDraws: -4100,
+        Item._JerichoAction: -10.00,
+        Item._CardDraws: -41.00,
         
-        Item.ProscribedMaterial: 38400,
-        Item.StrongBackedLabour: 2435,
-        Item.FavChurch: 24
+        Item.ProscribedMaterial: 38.400,
+        Item.StrongBackedLabour: 24.35,
+        Item.FavChurch: 0.24
     })
 
     add({
@@ -222,4 +222,57 @@ def add_trades(config):
         Item.HandPickedPeppercaps: 870,
         Item.MovesInTheGreatGame: 500,
         Item.Nightmares: 7,
-    })    
+    })
+
+    # Same ratios as Burrow, but with statue instead of lighting
+    add({
+        Item._MoulinAction: -200,
+        Item._CardDraws: -375,
+        Item.NightsoilOfTheBazaar: -414,
+        Item.VerseOfCounterCreed: -53,
+        
+        Item.HinterlandScrip: 1910,
+        Item.HandPickedPeppercaps: 870,
+        Item.MovesInTheGreatGame: 500,
+        Item.FavTombColonies: 53,
+        Item.Nightmares: 7,
+    })        
+
+    # ealing split
+    add({
+        Item._EalingAction: -200,
+        Item._CardDraws: -700,
+        Item.VerseOfCounterCreed: -72,
+        Item.NightsoilOfTheBazaar: -560,
+        
+        Item.HinterlandScrip: 2600,
+        Item.HandPickedPeppercaps: 1176,
+        Item.MovesInTheGreatGame: 685,
+        Item.Nightmares: 10,
+    })
+
+    # ealing split
+    add({
+        Item._HurlersAction: -200,
+        Item._CardDraws: -510,
+        Item.VerseOfCounterCreed: -72,
+        Item.NightsoilOfTheBazaar: -560,
+        
+        Item.HinterlandScrip: 2600,
+        Item.HandPickedPeppercaps: 1176,
+        Item.MovesInTheGreatGame: 685,
+        Item.Nightmares: 10,
+    })
+
+    # ealing split
+    add({
+        Item._MarigoldAction: -200,
+        Item._CardDraws: -430,
+        Item.VerseOfCounterCreed: -72,
+        Item.NightsoilOfTheBazaar: -560,
+        
+        Item.HinterlandScrip: 2600,
+        Item.HandPickedPeppercaps: 1176,
+        Item.MovesInTheGreatGame: 685,
+        Item.Nightmares: 10,
+    })

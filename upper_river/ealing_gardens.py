@@ -362,7 +362,7 @@ def add_trades(active_player: Player, config):
 
     trade(1, {
         Item.StrongBackedLabour: -1,
-        Item.SurveyOfTheNeathsBones: 175,
+        Item.SurveyOfTheNeathsBones: -175,
         Item.MagisterialLager: -10,
         Item.PalaeontologicalDiscovery: 7,
         Item.RustedStirrup: 63
