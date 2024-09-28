@@ -107,30 +107,30 @@ List of Mutually-Exclusive Item & Quality Groups (WIP)
 
 def baseline_stats():
     return {
-        Stat.Watchful:      230,
-        Stat.Shadowy:       230,
-        Stat.Dangerous:     230,
-        Stat.Persuasive:    230,
+        Item.Watchful:      230,
+        Item.Shadowy:       230,
+        Item.Dangerous:     230,
+        Item.Persuasive:    230,
 
-        Stat.Respectable: 0,
-        Stat.Dreaded: 0,
-        Stat.Bizarre: 0,
+        Item.Respectable: 0,
+        Item.Dreaded: 0,
+        Item.Bizarre: 0,
 
-        Stat.KatalepticToxicology: 7,
-        Stat.MonstrousAnatomy: 7,
-        Stat.APlayerOfChess: 7,
-        Stat.Glasswork: 7,
-        Stat.ShapelingArts: 7,
-        Stat.ArtisanOfTheRedScience: 7,
-        Stat.Mithridacy: 7,
+        Item.KatalepticToxicology: 7,
+        Item.MonstrousAnatomy: 7,
+        Item.APlayerOfChess: 7,
+        Item.Glasswork: 7,
+        Item.ShapelingArts: 7,
+        Item.ArtisanOfTheRedScience: 7,
+        Item.Mithridacy: 7,
 
-        Stat.StewardOfTheDiscordance: 7, # 6?
-        Stat.Zeefaring: 7,
-        Stat.Chthonosophy: 2,
+        Item.StewardOfTheDiscordance: 7, # 6?
+        Item.Zeefaring: 7,
+        Item.Chthonosophy: 2,
 
-        Stat.Inerrant: 0,
-        Stat.Insubstantial: 0,
-        Stat.Neathproofed: 0,
+        Item.Inerrant: 0,
+        Item.Insubstantial: 0,
+        Item.Neathproofed: 0,
     }
 
 def min_endgame_f2p_bonuses():
@@ -159,55 +159,55 @@ def min_endgame_f2p_bonuses():
     # - Firmanent
     # - non-seasonal HG items
     return {
-        Stat.Watchful: 8 + 11 + 8 + 8 + 10 + 7 + 10 + 5 + 7, # 74
-        Stat.Shadowy: 6 + 6 + 7 + 10 + 10 + 10 + 6 + 10 + 5 + 8, # 78
-        Stat.Dangerous:  6 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 8 + 4, # 73
-        Stat.Persuasive: 10 + 10 + 8 + 5 + 10 + 5 + 10 + 2 + 8 + 8, # 76
+        Item.Watchful: 8 + 11 + 8 + 8 + 10 + 7 + 10 + 5 + 7, # 74
+        Item.Shadowy: 6 + 6 + 7 + 10 + 10 + 10 + 6 + 10 + 5 + 8, # 78
+        Item.Dangerous:  6 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 8 + 4, # 73
+        Item.Persuasive: 10 + 10 + 8 + 5 + 10 + 5 + 10 + 2 + 8 + 8, # 76
 
-        Stat.Bizarre: 1 + 2 + 2 + 2 + 1 + 1 + 1 + 2 + 1 + 2 + 2, # 17
-        Stat.Dreaded: 2 + 2 + 1 + 1 + 1 + 1 + 1 + 4 + 2 + 2, # 17
-        Stat.Respectable: 1 + 1 + 2 + 1 + 1 + 1 + 1 + 4 + 2 + 2, # 16
+        Item.Bizarre: 1 + 2 + 2 + 2 + 1 + 1 + 1 + 2 + 1 + 2 + 2, # 17
+        Item.Dreaded: 2 + 2 + 1 + 1 + 1 + 1 + 1 + 4 + 2 + 2, # 17
+        Item.Respectable: 1 + 1 + 2 + 1 + 1 + 1 + 1 + 4 + 2 + 2, # 16
 
         # Labcoat or Shell, Work Gloves, Butcher's Tool, Perfumer's Arts
-        Stat.KatalepticToxicology: 4,
+        Item.KatalepticToxicology: 4,
 
         # Illuminating Cap, Shell or Ribcage, Naturalist's Map
-        Stat.MonstrousAnatomy: 3,
+        Item.MonstrousAnatomy: 3,
 
         # Director's Overcoat, Infiltrator's Footsteps, FFG's Address Book
-        Stat.APlayerOfChess: 3,
+        Item.APlayerOfChess: 3,
 
         # Parabola Suit or Viric Frock, VC's Collar, Honey-Mazed Bear, OP Stave (+2)
-        Stat.Glasswork: 5,
+        Item.Glasswork: 5,
 
         # Tunip, Amber Vision
-        Stat.ShapelingArts: 2,
+        Item.ShapelingArts: 2,
 
         # Misplaced Ring, Flower from Hell, Lowell's Locks and Cages
-        Stat.ArtisanOfTheRedScience: 3,
+        Item.ArtisanOfTheRedScience: 3,
 
         # Viscount's Collar, Stalking Shadow, Memory of Much Greater Self
-        Stat.Mithridacy: 3,
+        Item.Mithridacy: 3,
 
         # imp is from an exclusive set
-        Stat.StewardOfTheDiscordance: 0,
+        Item.StewardOfTheDiscordance: 0,
 
         # Captain's or Admiral's Hat, Mostly-Cooperative Chart, Blue Prophet,
         # HMS Ramilies, Amber Vision
-        Stat.Zeefaring: 5,
+        Item.Zeefaring: 5,
 
         # earring not obtainable
-        Stat.Chthonosophy: 0,
+        Item.Chthonosophy: 0,
 
         # Glim Earring, Carpetbag, Cinnabar Compass
-        Stat.Inerrant: 3,
+        Item.Inerrant: 3,
 
         # Carryall or Suitcase, Nod from Mr Hearts
-        Stat.Insubstantial: 2,
+        Item.Insubstantial: 2,
 
         # Illuminating Cap or Hymn, Ratskin Suit, Devil's Dictionary, Ratskin Boots,
         # Indestructible Trunk
-        Stat.Neathproofed: 5,
+        Item.Neathproofed: 5,
     }
 
 def advanced_endgame_f2p_bonuses():
@@ -218,54 +218,54 @@ def advanced_endgame_f2p_bonuses():
     # - unburdened imp
 
     return {
-        Stat.Watchful: 8 + 11 + 8 + 8 + 10 + 7 + 20 + 5 + 3 + 8,
-        Stat.Shadowy: 8 + 6 + 7 + 10 + 10 + 10 + 6 + 10 + 5 + 4 + 8,
-        Stat.Dangerous:  8 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 4 + 8 + 4,
-        Stat.Persuasive: 10 + 10 + 8 + 8 + 10 + 5 + 10 + 5 + 8 + 8,
+        Item.Watchful: 8 + 11 + 8 + 8 + 10 + 7 + 20 + 5 + 3 + 8,
+        Item.Shadowy: 8 + 6 + 7 + 10 + 10 + 10 + 6 + 10 + 5 + 4 + 8,
+        Item.Dangerous:  8 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 4 + 8 + 4,
+        Item.Persuasive: 10 + 10 + 8 + 8 + 10 + 5 + 10 + 5 + 8 + 8,
         # done
 
-        Stat.Bizarre: 4 + 2 + 2 + 2 + 3 + 1 + 1 + 3 + 4 + 3 + 2,
-        Stat.Dreaded: 4 + 2 + 1 + 2 + 2 + 1 + 1 + 3 + 4 + 2 + 2,
-        Stat.Respectable: 4 + 4 + 2 + 2 + 2 + 1 + 1 + 3 + 4 + 2 + 2,
+        Item.Bizarre: 4 + 2 + 2 + 2 + 3 + 1 + 1 + 3 + 4 + 3 + 2,
+        Item.Dreaded: 4 + 2 + 1 + 2 + 2 + 1 + 1 + 3 + 4 + 2 + 2,
+        Item.Respectable: 4 + 4 + 2 + 2 + 2 + 1 + 1 + 3 + 4 + 2 + 2,
 
         # Hat, Clothes, Gloves, Weapon, Boots, Companion, Affil, Transport, HC
-        Stat.KatalepticToxicology: 9,
+        Item.KatalepticToxicology: 9,
 
         # Hat, Clothes, Gloves, Wep, Boots, Comp, Transport, HC
-        Stat.MonstrousAnatomy: 8,
+        Item.MonstrousAnatomy: 8,
 
         # Hat, Clothes, Gloves, Wep, Boots, Luggage, Comp, Affil, Trans
-        Stat.APlayerOfChess: 9,
+        Item.APlayerOfChess: 9,
 
         # Hat, Clothes, Adorn, Gloves, Wep, Boots, Comp+2, HC+2
-        Stat.Glasswork: 10,
+        Item.Glasswork: 10,
 
         # Hat, Wep, Booys, Comp, Affil, HC
-        Stat.ShapelingArts: 6,
+        Item.ShapelingArts: 6,
 
         # Hat, Clo, Adorn, Gloves, Wep, Boots, Comp+2, Affil, Trans, HC
-        Stat.ArtisanOfTheRedScience: 11,
+        Item.ArtisanOfTheRedScience: 11,
 
         # Hat, Adorn, Wep, Boots, Comp, Affil, Trans, HC
-        Stat.Mithridacy: 8,
+        Item.Mithridacy: 8,
 
         # Companion
-        Stat.StewardOfTheDiscordance: 1,
+        Item.StewardOfTheDiscordance: 1,
 
         # Hat, Clo, Gloves, Wep, Boots, Comp, Affil, Trans, HC
-        Stat.Zeefaring: 9,
+        Item.Zeefaring: 9,
 
         # Companion
-        Stat.Chthonosophy: 1,
+        Item.Chthonosophy: 1,
 
         # Weapon, Luggage, HC
-        Stat.Inerrant: 3,
+        Item.Inerrant: 3,
 
         # Luggage, Affil
-        Stat.Insubstantial: 2,
+        Item.Insubstantial: 2,
 
         # Hat, Clo+2, Gloves, Wep, Boots, Lugg, Comp
-        Stat.Neathproofed: 8,
+        Item.Neathproofed: 8,
     }
 
 
@@ -302,31 +302,31 @@ class Player:
         self.profession = profession
         self.specialization = Specialization.NoSpecializaiton
         self.treasure = treasure
-        self.initial_items = {
+        self.qualities = {
 
         }
 
         advanced_value = 17
 
-        self.stats = {
-            Stat.Watchful:      230 + 92,
-            Stat.Shadowy:       230 + 73,
-            Stat.Dangerous:     230 + 83,
-            Stat.Persuasive:    230 + 85,
+        self.qualities = {
+            Item.Watchful:      230 + 92,
+            Item.Shadowy:       230 + 73,
+            Item.Dangerous:     230 + 83,
+            Item.Persuasive:    230 + 85,
 
-            Stat.KatalepticToxicology: advanced_value,
-            Stat.MonstrousAnatomy: advanced_value,
-            Stat.APlayerOfChess: advanced_value,
-            Stat.Glasswork: advanced_value,
-            Stat.ShapelingArts: advanced_value,
-            Stat.ArtisanOfTheRedScience: advanced_value,
-            Stat.Mithridacy: advanced_value,
-            Stat.StewardOfTheDiscordance: 8,
-            Stat.Zeefaring: advanced_value
+            Item.KatalepticToxicology: advanced_value,
+            Item.MonstrousAnatomy: advanced_value,
+            Item.APlayerOfChess: advanced_value,
+            Item.Glasswork: advanced_value,
+            Item.ShapelingArts: advanced_value,
+            Item.ArtisanOfTheRedScience: advanced_value,
+            Item.Mithridacy: advanced_value,
+            Item.StewardOfTheDiscordance: 8,
+            Item.Zeefaring: advanced_value
         }
 
         for key, value in stats.items():
-            self.stats[key] = value
+            self.qualities[key] = value
 
         self.wounds_reduction = 2
         self.scandal_reduction = 2
@@ -334,13 +334,16 @@ class Player:
         self.nightmares_reduction = 2
         self.troubled_waters_reduction = 2
 
+    def get(self, item: Item):
+        return self.qualities.get(item, 0)
+
     # TOOD: add a threshold to auto-use a second chance item?
     def pass_rate(self, stat, difficulty):
-        player_level = self.stats[stat]
-        if stat in (Stat.Watchful, Stat.Shadowy, Stat.Dangerous, Stat.Persuasive):
-            return utils.broad_challenge_success_rate(player_level, difficulty)
+        player_level = self.qualities[stat]
+        if stat in (Item.Watchful, Item.Shadowy, Item.Dangerous, Item.Persuasive):
+            return utils.broad_challenge_pass_rate(player_level, difficulty)
         else:
-            return utils.narrow_challenge_success_rate(player_level, difficulty)
+            return utils.narrow_challenge_pass_rate(player_level, difficulty)
         
     # def challenge_ev(self, stat, difficulty, on)
 
@@ -376,3 +379,69 @@ class Player:
     #     return utils.weighted_exchange(
     #         ()
     #     )
+
+# utils.sum
+player_baseline_f2p = Player(
+    stats = utils.sum_dicts(baseline_stats(), min_endgame_f2p_bonuses())
+    )
+
+player_advanced_f2p = Player(
+    stats = utils.sum_dicts(baseline_stats(), advanced_endgame_f2p_bonuses())
+    )
+
+player_generic = Player(stats = {
+    Item.Watchful: 330,
+    Item.Shadowy: 330,
+    Item.Dangerous: 330,
+    Item.Persuasive: 330
+})
+
+player_generic_monster_hunter = Player(
+    profession=Profession.MonsterHunter
+)
+
+# aka "cosmogone silvererhand"
+player_third_city_silverer = Player(
+    ambition=Ambition.BagALegend,
+    treasure=Treasure.LongDeadPriestsOfTheRedBird,
+    profession=Profession.Silverer,
+    stats={
+        Item.Watchful: Player.baseline_watchful + 13,
+        Item.Shadowy: Player.baseline_shadowy + 6,
+        Item.Dangerous: Player.baseline_dangerous,
+        Item.Persuasive: Player.baseline_persuasive
+    })
+
+player_bal_licentiate = Player(
+    ambition=Ambition.BagALegend,
+    treasure=Treasure.WingedAndTalonedSteed,
+    profession=Profession.Licentiate,
+    stats={
+        Item.Watchful: Player.baseline_watchful,
+        Item.Shadowy: 230 + 97,
+        Item.Dangerous: Player.baseline_dangerous + 6 + 13,
+        Item.Persuasive: Player.baseline_persuasive
+    })
+
+player_generic_licentiate = Player(
+    ambition=Ambition.NoAmbition,
+    treasure=Treasure.NoTreasure,
+    profession=Profession.Licentiate,
+    stats={
+        Item.Watchful: Player.baseline_watchful,
+        Item.Shadowy: Player.baseline_shadowy + 6,
+        Item.Dangerous: Player.baseline_dangerous,
+        Item.Persuasive: Player.baseline_persuasive
+    })
+
+# aka my PC
+player_bal_monster_hunter = Player(
+    ambition=Ambition.BagALegend,
+    treasure=Treasure.WingedAndTalonedSteed,
+    profession=Profession.MonsterHunter,
+    stats={
+        Item.Watchful: 230 + 102,
+        Item.Shadowy: 230 + 100,
+        Item.Dangerous: 230 + 101,
+        Item.Persuasive: 230 + 91
+    })

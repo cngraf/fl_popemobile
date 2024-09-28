@@ -186,7 +186,7 @@ def create_deck(config: Config, location: Location):
             grade=Grade.Good,
             discardable=False,
             exchange=config.challenge_ev(
-                stat=Stat.Persuasive,
+                stat=Item.Persuasive,
                 dc=160,
                 on_pass={
                     Item.TroubledWaters: -2,
@@ -206,7 +206,7 @@ def create_deck(config: Config, location: Location):
             grade=Grade.Good,
             discardable=False,
             exchange=config.challenge_ev(
-                stat=Stat.MonstrousAnatomy,
+                stat=Item.MonstrousAnatomy,
                 dc=3,
                 on_pass={
                     Item.TroubledWaters: -2,
@@ -237,7 +237,7 @@ def create_deck(config: Config, location: Location):
             grade=Grade.Excellent,
             discardable=False,
             exchange=config.challenge_ev(
-                stat=Stat.Zeefaring,
+                stat=Item.Zeefaring,
                 dc=5,
                 on_pass={
                     Item.TroubledWaters: 2,
@@ -264,7 +264,7 @@ def create_deck(config: Config, location: Location):
             grade=Grade.Excellent,
             discardable=False,
             exchange=config.challenge_ev(
-                stat=Stat.Shadowy,
+                stat=Item.Shadowy,
                 dc=260,
                 on_pass={
                     Item.ChasingDownYourBounty: region.chasing_gain_basic,
@@ -284,7 +284,7 @@ def create_deck(config: Config, location: Location):
             grade=Grade.Good,
             discardable=False,
             exchange=config.challenge_ev(
-                stat=Stat.Dangerous,
+                stat=Item.Dangerous,
                 dc=160,
                 on_pass={
                     Item.TroubledWaters: 2,
@@ -313,7 +313,7 @@ def create_deck(config: Config, location: Location):
             grade=Grade.Good,
             discardable=False,
             exchange=config.challenge_ev(
-                stat=Stat.MonstrousAnatomy,
+                stat=Item.MonstrousAnatomy,
                 dc=13,
                 on_pass={
                     Item.TroubledWaters: 2,

@@ -97,6 +97,22 @@ item_conversion_rates = {
     # Item.SuddenInsight: { Item.Echo: 3, Item.Action: 0.5 },
     # Item.HastilyScrawledWarningNote: {Item.Echo: 3, Item.Action: 0.5},
 
+
+    ################################################################################
+    ###                                 Academic                                 ###
+    ################################################################################
+    Item.FoxfireCandleStub: { Item.Echo: 0.01 },
+    Item.FlaskOfAbominableSalts: { Item.Echo: 0.10 },
+    Item.MemoryOfDistantShores: { Item.Echo: 0.50 },
+    Item.IncisiveObservation: { Item.Echo: 0.50 },
+    Item.UnprovenancedArtefact: { Item.Echo: 2.50 },
+    Item.VolumeOfCollatedResearch: { Item.Echo: 2.50 },
+    Item.MirthlessCompendium: { Item.Echo: 12.50 },
+    Item.BreakthroughInCurrencyDesign: { Item.Echo: 12.50 },
+    Item.JudgementsEgg: { Item.Echo: 62.50 },
+
+    Item.MemoryOfDiscordance: { Item._ApproximateEchoValue: 12.50 },
+
     ################################################################################
     ###                                 Contraband                               ###
     ################################################################################

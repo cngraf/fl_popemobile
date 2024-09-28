@@ -55,33 +55,33 @@ def add_trades(active_player, config):
     # Revenge cards -----------
     # Ignores cost to acquaintance
     trade(1, {
-        Item.CardDraws: -1,
+        Item._CardDraws: -1,
         Item.SlightedAcquaintance: -1,
         Item.PuzzleDamaskScrap: 1
     })
 
     trade(1, {
-        Item.CardDraws: -1,
+        Item._CardDraws: -1,
         Item.SlightedAcquaintance: -1,
         Item.NoduleOfTremblingAmber: 1
     })
 
     trade(1, {
-        Item.CardDraws: -1,
+        Item._CardDraws: -1,
         Item.SlightedAcquaintance: -1,
         Item.MagnificentDiamond: 1
     })
 
     # FATE Johnny Croak
     trade(1, {
-        Item.CardDraws: -1,
+        Item._CardDraws: -1,
         Item.SlightedAcquaintance: -1,
         Item.PuzzlingMap: 1
     })
 
     # FATE Johnny Croak
     trade(1, {
-        Item.CardDraws: -1,
+        Item._CardDraws: -1,
         Item.SlightedAcquaintance: -1,
         Item.AntiqueMystery: 1
     })

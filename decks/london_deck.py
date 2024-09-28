@@ -114,7 +114,7 @@ def add_trades(config: Config):
         draw_rate = card.freq.value / (deck_size - Rarity.Standard.value * 4)
         draw_conversion[card.item] = draw_rate
 
-    config.trade(0, {Item.CardDraws: -1, Item.LondonDraw: 1})
+    config.trade(0, {Item._CardDraws: -1, Item.LondonDraw: 1})
     config.trade(0, draw_conversion)
 
     base_watchful = 230
@@ -411,7 +411,7 @@ def add_trades(config: Config):
     })
 
     config.challenge_trade(
-        stat=Stat.APlayerOfChess,
+        stat=Item.APlayerOfChess,
         dc=9,
         cost={
             Item.Action: -1,
@@ -468,7 +468,7 @@ def add_trades(config: Config):
     })
 
     config.challenge_trade(
-        stat=Stat.Persuasive,
+        stat=Item.Persuasive,
         dc=220,
         cost={
             Item.CL_OnesPublic: -1,
@@ -1026,7 +1026,7 @@ def create_london_deck(config: Config):
             freq= Rarity.Standard,
             grade= Grade.Good,
             exchange= config.challenge_ev(
-                Stat.Dangerous,
+                Item.Dangerous,
                 60,
                 {
                     Item.CertifiableScrap: 1,
@@ -1045,7 +1045,7 @@ def create_london_deck(config: Config):
         freq=Rarity.Standard,
         grade= Grade.Good,        
         exchange=config.challenge_ev(
-            Stat.Shadowy,
+            Item.Shadowy,
             40,
             on_pass = weighted_exchange(
                 (knives_rare_success_rate, {
@@ -1066,7 +1066,7 @@ def create_london_deck(config: Config):
             freq = Rarity.Frequent,
             grade= Grade.Good,
             exchange = config.challenge_ev(
-                stat = Stat.Persuasive,
+                stat = Item.Persuasive,
                 dc = 80,
                 on_pass = {
                     Item.Scandal: 2 * scandal_multiplier,
@@ -1088,7 +1088,7 @@ def create_london_deck(config: Config):
             freq= Rarity.Standard,
             grade= Grade.Good,
             exchange= config.challenge_ev(
-                stat=Stat.APlayerOfChess,
+                stat=Item.APlayerOfChess,
                 dc=9,
                 on_pass={
                     Item.TouchingLoveStory: 1.5,
@@ -1496,7 +1496,7 @@ def create_london_deck(config: Config):
         freq=Rarity.Standard,
         grade= Grade.Bad,
         exchange=config.challenge_ev(
-            stat=Stat.Persuasive,
+            stat=Item.Persuasive,
             dc=220,
             on_pass={
                 Item.PieceOfRostygold: 20,
@@ -1835,7 +1835,7 @@ def monte_carlo(config, runs, draws_per_run):
     for key, value in cummulative.items():
         per_draw[key] = value / total_draws
 
-    per_draw[Item.CardDraws] = -1
+    per_draw[Item._CardDraws] = -1
     return per_draw
 
 

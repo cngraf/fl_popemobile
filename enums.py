@@ -54,6 +54,7 @@ class Rarity(Enum):
     Abundant = 500
     Ubiquitous = 1000
 
+# TODO obsolete
 class Grade(Enum):
     Avoid = -100
     Bad = 0
@@ -94,31 +95,31 @@ class Ambition(Enum):
     LightFingers = auto()
     Nemesis = auto()
 
-class Stat(Enum):
-    Watchful = auto()
-    Shadowy = auto()
-    Dangerous = auto()
-    Persuasive = auto()
+# class Item(Enum):
+#     Watchful = auto()
+#     Shadowy = auto()
+#     Dangerous = auto()
+#     Persuasive = auto()
 
-    KatalepticToxicology = auto()
-    MonstrousAnatomy = auto()
-    APlayerOfChess = auto()
-    Glasswork = auto()
-    ShapelingArts = auto()
-    ArtisanOfTheRedScience = auto()
-    Mithridacy = auto()
+#     KatalepticToxicology = auto()
+#     MonstrousAnatomy = auto()
+#     APlayerOfChess = auto()
+#     Glasswork = auto()
+#     ShapelingArts = auto()
+#     ArtisanOfTheRedScience = auto()
+#     Mithridacy = auto()
 
-    StewardOfTheDiscordance = auto()
-    Zeefaring = auto()
-    Chthonosophy = auto()
+#     StewardOfTheDiscordance = auto()
+#     Zeefaring = auto()
+#     Chthonosophy = auto()
 
-    Respectable = auto()
-    Dreaded = auto()
-    Bizarre = auto()
+#     Respectable = auto()
+#     Dreaded = auto()
+#     Bizarre = auto()
 
-    Inerrant = auto()
-    Insubstantial = auto()
-    Neathproofed  = auto()
+#     Inerrant = auto()
+#     Insubstantial = auto()
+#     Neathproofed  = auto()
 
 class Treasure(Enum):
     NoTreasure = auto()
@@ -142,21 +143,24 @@ class Treasure(Enum):
 
 class Item(Enum):
     Constraint = 0
+
     Echo = auto()
 
     Action = auto()
-    CardDraws = auto() # Fake item
-    # DayOfCardDraws = 3 # Fake item
-
-    # Actions
-    RootAction = auto()
-
-    LondonAction = auto()
+    _CardDraws = auto()
 
     _ParabolaAction = auto()
     _ParabolaRoundTrip = auto()
 
+    _EalingAction = auto()
     _JerichoAction = auto()
+    _BalmoralAction = auto()
+    _StationViiiAction = auto()
+    _BurrowAction = auto()
+    _MoulinAction = auto()
+    _HurlersAction = auto()
+    _MarigoldAction = auto()
+    
     _JerichoFavourExchange = auto()
 
     _WakefulEyeAction = auto()
@@ -192,6 +196,13 @@ class Item(Enum):
     Inerrant = auto()
     Insubstantial = auto()
     Neathproofed  = auto()
+
+    # Ambition
+    BagALegend = auto()
+    HeartsDesire = auto()
+    LightFingers = auto()
+    Nemesis = auto()
+
 
     # Rat Market
     _RatMarketRotation = auto()
@@ -791,10 +802,18 @@ class Item(Enum):
     FalseStarOfYourOwn = auto()
 
     RobeOfMrCards = auto()
+    NewlyCastCrownOfTheCityOfLondon = auto()
+    LeaseholdOnAllOfLondon = auto()    
     PalatialHolidayHomeInArcticCircle = auto()
+    TheMarvellous = auto()
 
     VastNetworkOfConnections = auto()
+    WingedAndTalonedSteed = auto()
+    SocietyOfTheThreeFingeredHand = auto()    
     LongDeadPriestsOfRedBird = auto()
+
+    YourLovedOneReturned = auto() # any differences?
+    BloodiedTravellingCoatOfMrCups = auto()    
 
     # -----
     # Qualities

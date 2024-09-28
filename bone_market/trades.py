@@ -377,14 +377,14 @@ class Buyer():
         return {}
     
     def expected_failed_sell_attempts(self, config: Config, skeleton: Bone):
-        shadowy = config.player.stats[Stat.Shadowy]
+        shadowy = config.player.qualities[Item.Shadowy]
         impl = skeleton.implausibility
         if self.zoo_type == ZooType.Chimera:
             impl += 3
         
         dc = self.implausibility_dc * (skeleton.implausibility)
     
-        pass_rate = max(0.01, utils.broad_challenge_success_rate(shadowy, dc))
+        pass_rate = max(0.01, utils.broad_challenge_pass_rate(shadowy, dc))
         return (1.0 / pass_rate) - 1
      
 
@@ -934,7 +934,7 @@ def expected_failed_sell_attempts(player, skeleton: Bone, is_chimera: bool = Fal
         imp += 3
     challenge_dc = dc_per_point * (imp)
     
-    pass_rate = utils.pass_rate(player, Stat.Shadowy, challenge_dc)
+    pass_rate = utils.broad_challenge_pass_rate(player.qualities[Item.Shadowy], challenge_dc)
     return (1.0 / pass_rate) - 1
 
 def add_trades(config: Config):
@@ -1049,11 +1049,11 @@ def add_trades(config: Config):
     # Buy from patrons
 
     trade(1, {
-        Item.HinterlandScrip: utils.challenge_ev(player.stats[Stat.Persuasive], 200, success= -120, failure= -125),
+        Item.HinterlandScrip: utils.challenge_ev(player.qualities[Item.Persuasive], 200, success= -120, failure= -125),
         Item.SabreToothedSkull: 1
     })
 
-    trade(1 + utils.expected_failures(utils.broad_challenge_success_rate(player.stats[Stat.Persuasive], 210)), {
+    trade(1 + utils.expected_failures(utils.broad_challenge_pass_rate(player.qualities[Item.Persuasive], 210)), {
         Item.ParabolanOrangeApple: -1,
         Item.IvoryHumerus: 1
     })
@@ -1090,8 +1090,6 @@ def add_trades(config: Config):
 
     trade(0, { Item.WitheredTentacle: -1, Item.FailedWitheredTentacleLimb: 1 })
     trade(0, { Item.WitheredTentacle: -1, Item.FailedWitheredTentacleTail: 1 })
-
-    trade(1, { Item.HeadlessSkeleton: 1 })
 
     # -----------------
     # Sell To Patrons
@@ -1175,7 +1173,7 @@ def add_trades(config: Config):
     if (player.ambition == Ambition.BagALegend):
         # min 1 action is baked into recipes, this only adds for failure
         # ignores other failure costs bc lazy
-        success_rate = utils.narrow_challenge_success_rate(player.stats[Stat.ArtisanOfTheRedScience], 5)
+        success_rate = utils.narrow_challenge_pass_rate(player.qualities[Item.ArtisanOfTheRedScience], 5)
         failures = 1.0/success_rate - 1 if success_rate < 1.0 else 0
         trade(failures, {
             Item.BoneFragments: -6000,

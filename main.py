@@ -17,7 +17,7 @@ from enums import *
 import fate.whiskerways
 import london.arbor
 from utils import *
-from player import *
+import player as player
 
 import decks.deck as Decks
 
@@ -107,26 +107,60 @@ London
 - model Airs somehow
 
 Laboratory
-- monte carlo sim
+- add more experiments & workers to monte carlo sim
 
 Parabola
 - most parabolan hunts
 - waswood shores?
     - figure out the odds
 - basically everything else
+- do a sim of parabolan war?
+    - wiki calc seems pretty good tho
 
 Zailing
 - plug the monte carlo results into the rest of the model
 
 Khanate
-- update w/ zailing monte carlo results
-- smuggling
-- intrigues
+- mostly done?
 
 Railway
-- TONS of shit
-- opportunity deck
-
+- deck monte carlo sim is done!
+    - gotta plug into the optimizer now
+- let's see what are we still missing
+- Ealing
+    - helicon house: OK, not perfect
+    - butcher: done
+    - spa: TODO low prio
+    - passenger area: TODO?
+- Jericho
+    - canal cruising: DONE
+    - curio stall: done?
+    - library: DONE
+    - favours: done
+- Balmoral
+    - Crathie: idk
+    - Castle: TODO just add to TtH
+    - woods: done? might be missing fox
+    - smuggler: not econ
+    - clay highwayman: TODO bandit carousel
+    - cabinet noir
+        - deciphering: TODO?
+        - cover identities: OK, bit hacky
+- Station VIII
+    - kitchen: partially done? TODO
+    - alchemy: TODO
+- Burrow
+    - nothing repeatable afaik
+- Moulin
+    - expeditions: partial, TODO monte carlo sim
+    - monographs: very simplified, TODO
+- Hurlers
+    - adulterine castle: TODO
+    - digging: TODO
+    - goatball: TODO
+    - any other repeatable discordance stuff: TODO
+- Marigold
+    - wtf do they even have here
 bone market exhaustion
 
 crackpot idea
@@ -165,73 +199,7 @@ lab_rpa = 33
 # -------------- Player Config ---------------
 # --------------------------------------------
 
-# utils.sum
-player_baseline_f2p = Player(
-    stats = utils.sum_dicts(baseline_stats(), min_endgame_f2p_bonuses())
-    )
-
-player_advanced_f2p = Player(
-    stats = utils.sum_dicts(baseline_stats(), advanced_endgame_f2p_bonuses())
-    )
-
-player_generic = Player(stats = {
-    Stat.Watchful: 330,
-    Stat.Shadowy: 330,
-    Stat.Dangerous: 330,
-    Stat.Persuasive: 330
-})
-
-player_generic_monster_hunter = Player(
-    profession=Profession.MonsterHunter
-)
-
-# aka "cosmogone silvererhand"
-player_third_city_silverer = Player(
-    ambition=Ambition.BagALegend,
-    treasure=Treasure.LongDeadPriestsOfTheRedBird,
-    profession=Profession.Silverer,
-    stats={
-        Stat.Watchful: Player.baseline_watchful + 13,
-        Stat.Shadowy: Player.baseline_shadowy + 6,
-        Stat.Dangerous: Player.baseline_dangerous,
-        Stat.Persuasive: Player.baseline_persuasive
-    })
-
-player_bal_licentiate = Player(
-    ambition=Ambition.BagALegend,
-    treasure=Treasure.WingedAndTalonedSteed,
-    profession=Profession.Licentiate,
-    stats={
-        Stat.Watchful: Player.baseline_watchful,
-        Stat.Shadowy: 230 + 97,
-        Stat.Dangerous: Player.baseline_dangerous + 6 + 13,
-        Stat.Persuasive: Player.baseline_persuasive
-    })
-
-player_generic_licentiate = Player(
-    ambition=Ambition.NoAmbition,
-    treasure=Treasure.NoTreasure,
-    profession=Profession.Licentiate,
-    stats={
-        Stat.Watchful: Player.baseline_watchful,
-        Stat.Shadowy: Player.baseline_shadowy + 6,
-        Stat.Dangerous: Player.baseline_dangerous,
-        Stat.Persuasive: Player.baseline_persuasive
-    })
-
-# aka my PC
-player_bal_monster_hunter = Player(
-    ambition=Ambition.BagALegend,
-    treasure=Treasure.WingedAndTalonedSteed,
-    profession=Profession.MonsterHunter,
-    stats={
-        Stat.Watchful: 230 + 102,
-        Stat.Shadowy: 230 + 100,
-        Stat.Dangerous: 230 + 101,
-        Stat.Persuasive: 230 + 91
-    })
-
-active_player = player_third_city_silverer
+active_player = player.player_third_city_silverer
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -259,7 +227,7 @@ Bazaar.add_trades(config)
 
 rat_market.add_trades(config)
 
-professional_activities.add_trades(active_player, config)
+professional_activities.add_trades(config)
 
 InventoryConversions.add_trades(active_player, config)
 
@@ -291,9 +259,9 @@ upper_river.burrow.add_trades(config)
 upper_river.station_viii.add_trades(active_player, config)
 upper_river.moulin.add_trades(active_player, config)
 upper_river.hurlers.add_trades(active_player, config)
-upper_river.marigold.add_trades(active_player, config)
+upper_river.marigold.add_trades(config)
 
-# upper_river.tracklayers_city.add_trades(config)
+upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
@@ -328,8 +296,8 @@ core_constraint = {
     optimize_input: input_per_cycle,
     # Item.VisitFromTimeTheHealer: 1,
     # Item._BoneMarketRotation: 1,
-    Item._RatMarketRotation: 1
-    # Item.CardDraws: full_draws_per_day * 7 * 10
+    Item._RatMarketRotation: 1,
+    # Item._CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)
@@ -404,7 +372,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 print(f"Optimize For:                     {optimize_for.name}")
 print(f"-Player Stats-")
-pp.pprint(active_player.stats)
+pp.pprint(active_player.qualities)
 
 print("------Summary-------")
 # print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
@@ -446,7 +414,7 @@ pp.pprint(core_constraint.items())
 # Optimize For section with color
 print(colored(f"\nOptimize For: {optimize_for.name}", "cyan", attrs=['bold']))
 print("\n-Player Stats-")
-pp.pprint(active_player.stats)
+pp.pprint(active_player.qualities)
 
 # Summary section
 print(colored("\n------ Summary -------", "green", attrs=['bold']))

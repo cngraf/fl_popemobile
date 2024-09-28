@@ -20,7 +20,7 @@ class Deck:
 
     def normalized_trade(self):
         trade = {}
-        trade[Item.CardDraws] = -1
+        trade[Item._CardDraws] = -1
         for item, value in self.total_items.items():
             trade[item] = value / self.deck_size
         return trade
@@ -142,10 +142,10 @@ def plunder_ev(region, isAdvanced, player_stat, rare_success_rate = 0.1):
 
     if isAdvanced:
         gain_on_success = gain_from_advanced
-        success_rate = narrow_challenge_success_rate(player_stat, advanced_challenge)
+        success_rate = narrow_challenge_pass_rate(player_stat, advanced_challenge)
     else:
         gain_on_success = gain_from_basic
-        success_rate = broad_challenge_success_rate(player_stat, basic_challenge)
+        success_rate = broad_challenge_pass_rate(player_stat, basic_challenge)
 
     # why did we add a plunder var
     return success_rate * (gain_on_success + (50 * rare_success_rate))

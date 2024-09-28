@@ -62,7 +62,7 @@ def create_deck(config: Config):
 
     card_altarful = Card("An altarful of strangers", Rarity.Standard,
                         exchange= config.challenge_ev(
-                            stat = Stat.Persuasive,
+                            stat = Item.Persuasive,
                             dc = 200,
                             on_pass= {
                                 Item.Irrigo: 1,
@@ -74,7 +74,7 @@ def create_deck(config: Config):
                         ))
     
     # TODO: second chance is pretty valuable here
-    garden_pass_rate = utils.pass_rate(config.player, Stat.Persuasive, 1000)
+    garden_pass_rate = utils.broad_challenge_pass_rate(config.player.qualities[Item.Persuasive], 1000)
     garden_pass_rate_with_second_chance = 1.0 - (1.0 - garden_pass_rate) ** 2
     card_unlikely_garden = Card(
         name= "An Unlikely Garden",

@@ -67,9 +67,9 @@ import config
 
 #     return list
 
-def add_trades(active_player: Player, config: config.Config):
+def add_trades(config: config.Config):
     trade = config.trade
-    profession = active_player.profession
+    active_player = config.player
     spec = active_player.specialization
 
     trade(0, {
@@ -93,6 +93,7 @@ def add_trades(active_player: Player, config: config.Config):
         Item.FlourishingRibcage: 2 * 1/6
     })
 
+    # TODO refactor to use special _Action types
     trade(10, {
         Item.AirsOfIndustry1to10: 1,
         Item.AirsOfIndustry11to20: 1,
@@ -120,9 +121,11 @@ def add_trades(active_player: Player, config: config.Config):
         ]
 
 
-    if (profession == Profession.Silverer):
+    if active_player.get(Item.SetOfCosmogoneSpectacles):
         for airs in airs_list[0:4]:
-            pass_rate = active_player.pass_rate(Stat.Dangerous, 90) * active_player.pass_rate(Stat.Glasswork, 0)
+            rate1 = broad_challenge_pass_rate(active_player.qualities[Item.Dangerous], 90)
+            rate2 = narrow_challenge_pass_rate(active_player.qualities[Item.Glasswork], 0)
+            pass_rate = rate1 * rate2
             config.add_weighted_trade(0, 
                 (pass_rate, {
                     airs: -1,

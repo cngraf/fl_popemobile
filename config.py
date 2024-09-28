@@ -187,7 +187,7 @@ class Config:
         net_trade = utils.sum_dicts(cost, weighted_outcome)
         self.trade(0, net_trade)
 
-    def challenge_ev(self, stat: Stat, dc: int, on_pass: dict, on_fail: dict):
+    def challenge_ev(self, stat: Item, dc: int, on_pass: dict, on_fail: dict):
         pass_rate = self.player.pass_rate(stat, dc)
 
         return utils.weighted_exchange(
@@ -195,7 +195,7 @@ class Config:
             (1.0 - pass_rate, on_fail)
         )
     
-    def challenge_trade(self, stat: Stat, dc: int, cost, on_pass, on_fail):
+    def challenge_trade(self, stat: Item, dc: int, cost, on_pass, on_fail):
         pass_rate = self.player.pass_rate(stat, dc)
 
         self.weighted_trade(

@@ -9,30 +9,31 @@ def cp_to_level(n): return math.floor(math.sqrt(2 * n)) if n > 0 else 0
 
 def clamp(n, floor, ceiling): return min(ceiling, max(floor, n))
 
-def broad_challenge_success_rate(stat, difficulty):
+def broad_challenge_pass_rate(stat_value, difficulty):
     if difficulty <= 0:
         return 1.0
-    return clamp(0.6 * stat/difficulty, 0.0, 1.0)
+    return clamp(0.6 * stat_value/difficulty, 0.0, 1.0)
 
-def narrow_challenge_success_rate(stat, difficulty): return clamp(0.5 + (stat - difficulty)/10, 0.1, 1.0)
+def narrow_challenge_pass_rate(stat, difficulty): return clamp(0.5 + (stat - difficulty)/10, 0.1, 1.0)
 
 def expected_failures(success_rate): return 1.0/success_rate - 1 if success_rate < 1.0 else 0
 
 def menace_multiplier(reduction_points):
     # formula per wiki
-    return 1 - (0.6 * (1 - 0.75**reduction_points))
+    # return 1 - (0.6 * (1 - 0.75**reduction_points))
+    return 0.85**reduction_points
 
-def pass_rate(player, stat, difficulty, modifier = 0):
-    player_level = player.stats[stat] + modifier
-    if difficulty <= 0:
-        return 1.0
-    elif stat in (Stat.Watchful, Stat.Shadowy, Stat.Dangerous, Stat.Persuasive):
-        return broad_challenge_success_rate(player_level, difficulty)
-    else:
-        return narrow_challenge_success_rate(player_level, difficulty)
+# def pass_rate(player, stat, difficulty, modifier = 0):
+#     player_level = player.qualities[stat] + modifier
+#     if difficulty <= 0:
+#         return 1.0
+#     elif stat in (Item.Watchful, Item.Shadowy, Item.Dangerous, Item.Persuasive):
+#         return broad_challenge_pass_rate(player_level, difficulty)
+#     else:
+#         return narrow_challenge_pass_rate(player_level, difficulty)
 
 def challenge_ev(player_stat, difficulty, success, failure):
-    success_rate = broad_challenge_success_rate(player_stat, difficulty)
+    success_rate = broad_challenge_pass_rate(player_stat, difficulty)
     return success_rate * success + (1.0 - success_rate) * failure
 
 def weighted_exchange(*weighted_trades: Tuple[float, Dict]):

@@ -199,9 +199,9 @@ def bonus_zailing2():
 #         return 0.5 + (stat_value - dc) * 0.1
 
 class PlayerOutfit:
-    def __init__(self, default_basic = 330, default_advanced = 16):
+    def __init__(self, default_basic = 0, default_advanced = 0):
         self.zailing_speed = 55
-        self.zubmersibility = 1
+        self.zubmersibility = 0
         self.luxurious = 0
         self.reduce_tw = 0 # TODO re-implement
 
@@ -241,7 +241,7 @@ class ZailingState(GameState):
 
         self.unwelcome_on_the_waters = 0
         self.progress_required = 180
-        self.piracy_enabled = True
+        self.piracy_enabled = False
 
         self.deck = []
         self.hand = []
@@ -626,7 +626,7 @@ class ExchangePleasantries(Action):
         super().__init__("Exchange pleasantries via semaphore")
 
     def can_perform(self, state: ZailingState):
-        return state.items[Item.Suspicion] < 15
+        return state.items.get(Item.Suspicion, 0) < 15
     
     def pass_items(self, state: 'ZailingState'):
         return {
@@ -639,7 +639,7 @@ class TheyreNotSlowing(Action):
         super().__init__("They're not slowing")
 
     def can_perform(self, state: ZailingState):
-        return state.items[Item.Suspicion] >= 15
+        return state.items.get(Item.Suspicion, 0) >= 15
 
     def pass_items(self, state: 'ZailingState'):
         return {
@@ -5177,13 +5177,13 @@ london_to_polythreme = [
     ZeeRegion.SEA_OF_VOICES
 ]
 
-london_to_khanate = [
+london_snares_khanate = [
     ZeeRegion.HOME_WATERS,
     ZeeRegion.THE_SNARES,
     ZeeRegion.SALT_STEPPES
 ]
 
-khanate_to_london = [
+khanate_snares_london = [
     ZeeRegion.HOME_WATERS,
     ZeeRegion.THE_SNARES,
     ZeeRegion.SALT_STEPPES
@@ -5213,8 +5213,14 @@ mangrove_snares_london = [
     ZeeRegion.HOME_WATERS
 ]
 
+london_to_khanate_long_route = [
+    ZeeRegion.HOME_WATERS,
+    ZeeRegion.SHEPHERDS_WASH,
+    ZeeRegion.SEA_OF_VOICES,
+    ZeeRegion.SALT_STEPPES
+]
 
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=1_000, route=elder_continent_to_london)
+    run_simulation(runs=1_000, route=london_to_khanate_long_route)
 

@@ -16,11 +16,11 @@ class RailwayState(GameState):
     def __init__(self, location: Location):
         super().__init__(max_hand_size=5)
         self.location = location
-        self.ev_threshold = 5.68
+        self.ev_threshold = 5.5
         self.scrip_threshold_multiplier = 1.2
 
         self.skip_favour_inputs = False
-        self.skip_econ_inputs = False
+        self.skip_econ_inputs = True
 
     def ev_from_item(self, item, val: int):
         # if item == Item.SeeingBanditryInTheUpperRiver:
@@ -37,7 +37,7 @@ class RailwayState(GameState):
             return val * 7
 
         if item == Item.SeeingBanditryInTheUpperRiver:
-            return val * -2
+            return val * -1
 
         if item == Item.HinterlandScrip:
             scrip_value = 1
@@ -85,7 +85,7 @@ class RailwayState(GameState):
 
         self.hand = [card for card in self.hand if card.can_draw(self)]
 
-        if self.actions >= 100:
+        if self.actions >= 200:
             self.status = "Complete"
 
 
@@ -2857,7 +2857,7 @@ class DigAtCrossroads(Action):
         return state.items.get(Item.SurveyOfTheNeathsBones, 0) >= 1
     
     def pass_rate(self, state: RailwayState):
-        darkness_level = state.items.get(Item.MagistracyOfTheEvenlodeDarkness, 0)
+        darkness_level = state.items.get(Item.MagistracyOfEvenlodeDarkness, 0)
         return self.broad_pass_rate(40 * darkness_level, state.outfit.watchful)
 
     def pass_items(self, state: RailwayState):
@@ -2996,7 +2996,7 @@ class RepairLampEvenlode(Action):
     
     def pass_items(self, state: RailwayState):
         return {
-            Item.MagistracyOfTheEvenlodeDarkness: -2
+            Item.MagistracyOfEvenlodeDarkness: -2
         }
 
     def fail_items(self, state: RailwayState):
@@ -3090,7 +3090,7 @@ class CallInFavoursWithWidow(Action):
         super().__init__("Call in favours with the Gracious Widow")
     
     def can_perform(self, state: RailwayState):
-        return state.skip_favour_inputs or state.items.get(Item.FavUrchins) >= 4
+        return state.skip_favour_inputs or state.get(Item.FavUrchins) >= 4
         
     def pass_items(self, state: RailwayState):
         return {
@@ -3106,7 +3106,7 @@ class ReceiveOfferingFromClayHighwayman(Action):
         super().__init__("Receive an offering from the Clay Highwayman")
     
     def can_perform(self, state: RailwayState):
-        return state.skip_favour_inputs or state.items.get(Item.FavCriminals) >= 2
+        return state.skip_favour_inputs or state.get(Item.FavCriminals) >= 2
     
     def pass_items(self, state: RailwayState):
         return {
@@ -3274,7 +3274,7 @@ class HeadUphillS8(Action):
         super().__init__("Head uphill")
     
     def can_perform(self, state: RailwayState):
-        return state.skip_econ_inputs or state.get(Item.SurveyOfTheNeathBones) >= 40
+        return state.skip_econ_inputs or state.get(Item.SurveyOfTheNeathsBones) >= 40
     
     def pass_rate(self, state: RailwayState):
         base_difficulty = 175 + (25 * state.get(Item.StationVIIIDarkness))
@@ -3282,7 +3282,7 @@ class HeadUphillS8(Action):
     
     def pass_items(self, state: RailwayState):
         return {
-            Item.SurveyOfTheNeathBones: -40,
+            Item.SurveyOfTheNeathsBones: -40,
             Item.PalaeontologicalDiscovery: 2
         }
     
@@ -3360,7 +3360,7 @@ class ReadTheGraffitiS8(Action):
         super().__init__("Read the graffiti on the Statue to (subject)")
     
     def pass_rate(self, state: RailwayState):
-        correspondence_level = state.get(Item.AScholarOfTheCorrespondence)
+        correspondence_level = state.get(Item.ScholarOfTheCorrespondence)
         watchful_dc = 125 + (25 * state.get(Item.StationVIIIDarkness))
         # Either pass based on Watchful or A Scholar of the Correspondence
         return self.broad_pass_rate(watchful_dc, state.outfit.watchful) * \
@@ -3383,12 +3383,12 @@ class WriteSearingMessageS8(Action):
     def can_perform(self, state: RailwayState):
         # return state.items.get(Item.PotOfViolantInk, 0) > 0 and \
         return state.skip_econ_inputs or (
-               state.items.get(Item.CorrespondencePlaques, 0) >= 4 and \
+               state.items.get(Item.CorrespondencePlaque, 0) >= 4 and \
                state.items.get(Item.AeolianScream, 0) >= 3)
     
     def pass_items(self, state: RailwayState):
         return {
-            Item.CorrespondencePlaques: -4,
+            Item.CorrespondencePlaque: -4,
             Item.AeolianScream: -3,
             Item.StormThrenody: 1
         }
@@ -3537,9 +3537,9 @@ class DinnerWithCurate(Action):
     
     def pass_items(self, state: RailwayState):
         return {
-            Item.FavoursSociety: 1,
+            Item.FavSociety: 1,
             Item.BottleOfGreyfields1868FirstSporing: -1,
-            Item.FavoursTheChurch: -1
+            Item.FavChurch: -1
         }
 
 # # TODO spicy but complicated
@@ -3969,7 +3969,7 @@ class FeedPeppercapsToGoatDemons(Action):
     def pass_items(self, state: RailwayState):
         return {
             Item.HandPickedPeppercaps: -5,
-            Item.FavoursHell: 1
+            Item.FavHell: 1
         }
 
 
@@ -4168,7 +4168,7 @@ class AskHeptagoatToPerformTrick(Action):
     def pass_items(self, state: RailwayState):
         return {
             Item.TracklayersDispleasure: -1,  # TODO unknown value
-            Item.FavoursHell: -7,
+            Item.FavHell: -7,
             Item.PrimordialShriek: 777
         }
 
@@ -4402,7 +4402,7 @@ class RailwaySimulationRunner(SimulationRunner):
 
 simulation = RailwaySimulationRunner(
     runs = 100,
-    location = Location.Balmoral,
+    location = Location.BurrowInfraMump,
 
     initial_values= {
         Item.ColourAtTheChessboard: 1,
@@ -4410,10 +4410,10 @@ simulation = RailwaySimulationRunner(
         Item.TrainLuxuries: 6,
         Item.TrainDefences: 6,
         Item.TrainBaggageAccomodations: 6,
-        Item.SeeingBanditryInTheUpperRiver: 0,
+        Item.SeeingBanditryInTheUpperRiver: 0, # utils.pyramid(),
 
-        Item.MoonPearl: 20_000,
-        Item.InTheCompanyOfAHellworm: 1,
+        # Item.MoonPearl: 20_000,
+        # Item.InTheCompanyOfAHellworm: 1,
         # Item.HellwormSaddle: 1,
     
         Item.EalingGardensCommemorativeDevelopment: 99,
@@ -4432,7 +4432,7 @@ simulation = RailwaySimulationRunner(
         Item.BalmoralDarkness: utils.pyramid(1),
         Item.StationVIIIDarkness: utils.pyramid(1),
         Item.BurrowInfraMumpDarkness: utils.pyramid(5),
-        Item.MoulinCommemorativeDevelopment: utils.pyramid(5),
+        Item.MoulinDarkness: utils.pyramid(5),
         Item.HurlersDarkness: utils.pyramid(5),
         # Item.MarigoldDarkness: utils.pyramid(2),
     })

@@ -111,7 +111,7 @@ def add_trades(config: Config):
 
     # Needs 15 in 3 advanced stats to 100%
 
-    def commune(stat: Stat, dc: int, reward: Item):
+    def commune(stat: Item, dc: int, reward: Item):
         config.challenge_trade(stat, dc,
             cost={
                 Item.Action: -1
@@ -124,17 +124,17 @@ def add_trades(config: Config):
             }
         )
 
-    commune(Stat.MonstrousAnatomy, 10, Item.TheMindsAscent1)
-    commune(Stat.ShapelingArts, 10, Item.TheMindsAscent1)
-    commune(Stat.KatalepticToxicology, 10, Item.TheMindsAscent1)
+    commune(Item.MonstrousAnatomy, 10, Item.TheMindsAscent1)
+    commune(Item.ShapelingArts, 10, Item.TheMindsAscent1)
+    commune(Item.KatalepticToxicology, 10, Item.TheMindsAscent1)
 
-    commune(Stat.ArtisanOfTheRedScience, 10, Item.TheMindsAscent2)
-    commune(Stat.Zeefaring, 10, Item.TheMindsAscent2)
-    commune(Stat.StewardOfTheDiscordance, 4, Item.TheMindsAscent2)
+    commune(Item.ArtisanOfTheRedScience, 10, Item.TheMindsAscent2)
+    commune(Item.Zeefaring, 10, Item.TheMindsAscent2)
+    commune(Item.StewardOfTheDiscordance, 4, Item.TheMindsAscent2)
 
-    commune(Stat.Mithridacy, 10, Item.TheMindsAscent3)
-    commune(Stat.Glasswork, 10, Item.TheMindsAscent3)
-    commune(Stat.APlayerOfChess, 10, Item.TheMindsAscent3)
+    commune(Item.Mithridacy, 10, Item.TheMindsAscent3)
+    commune(Item.Glasswork, 10, Item.TheMindsAscent3)
+    commune(Item.APlayerOfChess, 10, Item.TheMindsAscent3)
 
     add({
         Item.Action: -2,
