@@ -50,6 +50,70 @@ class Bone():
         self.skulls = skulls
         self.addtl_costs = addtl_costs
 
+    @staticmethod
+    def create_skeleton(recipe: dict):
+        bones = bone_table()
+
+        result = Bone(Item.Placeholder, 0, addtl_costs= {})
+
+        for item, quantity in recipe.items():
+            count = abs(quantity)
+            if item in bones:
+                bone: Bone = bones[item]
+                result.echo_value += bone.echo_value * count
+                result.antiquity += bone.antiquity * count
+                result.amalgamy += bone.amalgamy * count
+                result.menace += bone.menace * count
+                result.theology += bone.theology * count
+                result.skulls += bone.skulls * count
+                result.implausibility += bone.implausibility * count
+                for i in range(0, count):
+                    result.addtl_costs = utils.sum_dicts(result.addtl_costs, bone.addtl_costs)
+
+        if (Item.DuplicatedVakeSkull in recipe):
+            count = abs(recipe[Item.DuplicatedVakeSkull])
+
+            for i in range(0, count):
+                # each addtl skull is worth 5 less than previous
+                result.echo_value -= 5 * i
+
+                # each addtl skull worth 1 less menace, min 1
+                result.menace -= min(i, 2)
+
+                # TODO: check formula for OBO. first point at 3rd, or 4th?
+                result.implausibility += math.floor(i/2)
+
+        if (Item.HolyRelicOfTheThighOfStFiacre in recipe):
+            count = abs(recipe[Item.HolyRelicOfTheThighOfStFiacre])
+            theology = 0
+
+            if Item.FivePointedRibcage in recipe:
+                theology = 7
+            elif Item.PrismaticFrame in recipe:
+                theology = 6
+            elif Item.LeviathanFrame in recipe:
+                theology = 6
+            elif Item.RibcageWithABoutiqueOfEightSpines in recipe:
+                theology = 5
+            elif Item.MammothRibcage in recipe:
+                theology = 4
+            elif Item.SegmentedRibcage in recipe:
+                theology = 3
+            elif Item.FlourishingRibcage in recipe:
+                theology = 3
+            elif Item.SkeletonWithSevenNecks in recipe:
+                theology = 2
+            elif Item.ThornedRibcage in recipe:
+                theology = 2
+            elif Item.HumanRibcage in recipe:
+                theology = 1
+            elif Item.HeadlessSkeleton in recipe:
+                theology = 1
+
+            result.theology += count * theology
+
+        return result        
+
 def bone_table():
     dictionary = {}
     for bone in (

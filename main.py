@@ -205,7 +205,7 @@ active_player = player.player_third_city_silverer
 # hack
 # `IndexError: list assignment index out of range` => increase this number
 # most of this is bone market combinatoric shit
-var_buffer = 10_000
+var_buffer = 5_000
 num_items = max(Item, key=lambda x: x.value).value
 print(num_items)
 num_vars = num_items + 1 + var_buffer
