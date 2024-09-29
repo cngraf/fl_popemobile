@@ -10,6 +10,38 @@ from bone_market.models import *
 suspicion_multiplier = 0.85
 exhaustion_hard_cap = 4
 
+exhaustion_items = {
+    Item.GenericBoneMarketExhaustion,
+
+    Item.AmalgamyReptileExhaustion,
+    Item.AmalgamyAmphibianExhaustion,
+    Item.AmalgamyBirdExhaustion ,
+    Item.AmalgamyFishExhaustion,
+    Item.AmalgamyArachnidExhaustion,
+    Item.AmalgamyInsectExhaustion,
+    Item.AmalgamyPrimateExhaustion,
+
+    Item.MenaceReptileExhaustion,
+    Item.MenaceAmphibianExhaustion,    
+    Item.MenaceBirdExhaustion,
+    Item.MenaceFishExhaustion,
+    Item.MenaceArachnidExhaustion,
+    Item.MenaceInsectExhaustion,      
+    Item.MenacePrimateExhaustion,      
+
+    Item.AntiquityGeneralExhaustion,
+    Item.AmalgamyGeneralExhaustion,
+    Item.MenaceGeneralExhaustion,
+
+    Item.GeneralReptileExhaustion,
+    Item.GeneralAmphibianExhaustion,    
+    Item.GeneralBirdExhaustion,
+    Item.GeneralFishExhaustion,
+    Item.GeneralArachnidExhaustion,
+    Item.GeneralInsectExhaustion,    
+    Item.GeneralPrimateExhaustion,       
+}
+
 class Buyer():
     def __init__(self, name, impl_dc: 0):
         self.name = name
@@ -433,9 +465,9 @@ class BohemianSculptress(Buyer):
             Item.RumourOfTheUpperRiver: qty
         }
 
-# TODO
 # - many variants
 # - weekly quality not tied to normal bone market, but does share exhaustion
+# - actually nvm this guy sucks don't bother
 class TriflingDiplomatTripleQuality(Buyer):
     def __init__(self):
         super().__init__("The Trifling Diplomat", 50)
@@ -445,19 +477,13 @@ class TriflingDiplomatTripleQuality(Buyer):
             Item.AssortmentOfKhaganianCoinage: 1 + (skeleton.echo_value * 2)
         }
     
-    # triple sum weeks:
-    # 0 ex @ <= 24
-    # 1 ex @ <= 33
-    # 2 ex @ <= 40
-    # 3 ex @ <= 45
-    # 4 ex @ <= 50
     def secondary_payout(self, flux, zoo_type, skeleton: Bone):
         sum_quals = skeleton.antiquity + skeleton.amalgamy + skeleton.menace
-        payout = (sum_quals ** 2.2)/3
+        payout = (sum_quals/3) ** 2.2
 
         # TODO
         # exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
-        exhaustion = math.foor(((sum_quals / 3) ** 2.2) / 100)
+        exhaustion = math.floor(((sum_quals / 3) ** 2.2) / 100)
         return {
             Item.CompromisingDocument: payout,
             Item.GenericBoneMarketExhaustion: exhaustion

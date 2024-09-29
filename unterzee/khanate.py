@@ -13,7 +13,8 @@ def add_trades(active_player, config: Config):
         Item.StashedTreasure: 3000 * 2,
         Item._LondonKhanateRoundTrip: 1,
         Item._AgentInTransit: 1,
-        Item._UnassumingCratePickup: 3
+        Item._UnassumingCratePickup: 3,
+        Item._TriflingDiplomatSale: 1
     })
 
     # TODO: move this

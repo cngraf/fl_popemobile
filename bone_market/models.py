@@ -7,6 +7,12 @@ from config import Config
 from player import Player
 from bone_market.models import *
 
+'''
+TODO
+- negative modifiers can sometimes be ignored?!
+    negative mods will not reduce a quality below 0,
+    and so can be sidestepped depending on order
+'''
 
 class Flux(Enum):
     NoQuality = 0
@@ -197,6 +203,12 @@ def bone_table():
         Bone(Item.FailedPlasterTailBones, 2.5, implausibility=4),
         Bone(Item.FailedTombLionsTail, 2.5),
         Bone(Item.FailedObsidianChitinTail, 5),
+
+        # Need to add warm amber cost manually
+        Bone(Item._FourMoreJoints, 0, addtl_costs = { Item.NoduleOfTremblingAmber: -1 }),
+        Bone(Item._ReduceAntiquity, 0, anitquity = -2),
+        Bone(Item._ReduceAmalgamy, 0, amalgamy = -2, addtl_costs = { Item.JadeFragment: -25 }),
+        Bone(Item._ReduceMenace, 0, menace = -2),
 
         # TODO: modifications
         # Bone(Item.FourMoreJoints, 0, amalgamy=2),

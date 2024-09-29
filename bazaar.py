@@ -135,9 +135,9 @@ def add_trades(config: Config):
     trade(0, { Item.DubiousTestimony: -1, Item.Echo: 0.5 })
     trade(0, { Item.SwornStatement: -1, Item.Echo: 2.5 })
     trade(0, { Item.CaveAgedCodeOfHonour: -1, Item.LegalDocument: 1 })
-    trade(0, { Item.LegalDocument: -1, Item.LegalDocument: 12.5 })
-    trade(0, { Item.FragmentOfTheTragedyProcedures: -1, Item.LegalDocument: 62.5 })
-    trade(0, { Item.EdictsOfTheFirstCity: -1, Item.LegalDocument: 312.5 })
+    trade(0, { Item.LegalDocument: -1, Item.Echo: 12.5 })
+    trade(0, { Item.FragmentOfTheTragedyProcedures: -1, Item.Echo: 62.5 })
+    trade(0, { Item.EdictsOfTheFirstCity: -1, Item.Echo: 312.5 })
 
     # Luminosity ---------
     buy_sell(config, Item.LumpOfLamplighterBeeswax, -0.02, 0.01)

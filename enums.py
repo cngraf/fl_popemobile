@@ -223,6 +223,12 @@ class Item(Enum):
 
     # Bone Market Hack
     _BoneMarketRotation = auto()
+    _FourMoreJoints = auto()
+    _ReduceAmalgamy = auto()
+    _ReduceAntiquity = auto()
+    _ReduceMenace = auto()
+
+    # Actions
     AntiquityReptileAction = auto()
     AntiquityAmphibianAction = auto()    
     AntiquityBirdAction = auto()
@@ -259,6 +265,7 @@ class Item(Enum):
     GeneralInsectAction = auto()    
     GeneralPrimateAction = auto()    
 
+    # Exhaustion
     AntiquityReptileExhaustion = auto()
     AntiquityAmphibianExhaustion = auto()    
     AntiquityBirdExhaustion = auto()
@@ -1068,6 +1075,7 @@ class Item(Enum):
     Fake_HiddenStash = auto()
     _AgentInTransit = auto()
     _UnassumingCratePickup = auto()
+    _TriflingDiplomatSale = auto()
 
     _PullingThreads1 = auto()
     _PullingThreads2 = auto()

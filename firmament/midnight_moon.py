@@ -49,62 +49,90 @@ def add_trades(config: Config):
         Item.MoonPearl: 253
     })
 
+    # TODO organize echo sales
+    add({
+        Item.TantalisingPossibility: -1,
+        Item.Echo: 0.1
+    })
+
+    add({
+        Item.GlimpseOfAnathema: -1,
+        Item.Echo: 312.5
+    })
+
+    add({
+        Item.RelicOfTheFifthCity: -1,
+        Item.Echo: 2.5
+    })
+
     # Results from simulations/stacks2 using my own stats, mostly ~330/15
     # W/o cartographer unless required
     # ignoring items less than +/- 0.01 EPA i.e. bones and rats
+    # also ignored menaces when they were less than 2 per run
+
+    # TODO double check these. ran again and got somewhat diff results
 
     # Banned Works
-    trade(24.2, {
-        Item.CausticApocryphon: 8.5,
-        Item.TantalisingPossibility: 230,
-        Item.Nightmares: 1,
-        Item.GlimpseOfAnathema: 0.05
+    trade(23.2, {
+        Item.CausticApocryphon: 8.55,
+        Item.TantalisingPossibility: 210,
+        Item.GlimpseOfAnathema: 0.045,
+        Item.Wounds: 1,
+        Item.Nightmares: 1
     })
 
     # Dead Stars 1
-    trade(24.1, {
+    trade(23, {
         Item.GlimEncrustedCarapace: 0.95,
-        Item.TantalisingPossibility: 650,
-        Item.ShardOfGlim: 400,
-        Item.Nightmares: 1,
-        Item.GlimpseOfAnathema: 0.05
+        Item.TantalisingPossibility: 655,
+        Item.ShardOfGlim: 380,
+        Item.GlimpseOfAnathema: 0.045,
+        Item.Wounds: 1,
+        Item.Nightmares: 1,        
     })    
 
     # Dead Stars 2
-    trade(24.1, {
-        Item.RoofChart: 40,
-        Item.TantalisingPossibility: 170,
-        Item.GlimpseOfAnathema: 0.05
+    trade(23, {
+        Item.RoofChart: 38,
+        Item.TantalisingPossibility: 180,
+        Item.GlimpseOfAnathema: 0.045,
+        Item.Wounds: 1,
+        Item.Nightmares: 1,        
     })
 
     # Precipice 1
-    trade(23.2, {
-        Item.Anticandle: 9.4,
-        Item.FragmentOfTheTragedyProcedures: 0.94,
-        Item.RelicOfTheFifthCity: 9.4,
-        Item.TantalisingPossibility: 200,
-        Item.Nightmares: 0.5,
-        Item.GlimpseOfAnathema: 0.06
+    trade(23, {
+        Item.Anticandle: 9.5,
+        Item.FragmentOfTheTragedyProcedures: 0.95,
+        Item.RelicOfTheFifthCity: 9.5,
+        Item.TantalisingPossibility: 215,
+        Item.GlimpseOfAnathema: 0.05,
+        Item.Nightmares: 1,
     })
     
     # Precipice 2
-    trade(23.2, {
-        Item.Anticandle: 9.4,
-        Item.TempestuousTale: 9.4,
-        Item.TantalisingPossibility: 175,
-        Item.RelicOfTheFifthCity: 5.6,
+    trade(23, {
+        Item.Anticandle: 9.5,
+        Item.TempestuousTale: 9.5,
+        Item.TantalisingPossibility: 190,
+        Item.RelicOfTheFifthCity: 5.7,
         Item.MagnificentDiamond: 4.7,
-        Item.Nightmares: 0.5,
-        Item.GlimpseOfAnathema: 0.06
+        Item.GlimpseOfAnathema: 0.05,
+        Item.Nightmares: 1,  
     })
 
     # Cartographer
     trade(23.5, {
-        Item.TantalisingPossibility: 205,
-        Item.PuzzlingMap: 0.94,
-        Item.OneiromanticRevelation: 0.94,
-        Item.StormThrenody: 1.88,
-        Item.VolumeOfCollatedResearch: 5.65,
-        Item.GlimpseOfAnathema: 0.06,
-        Item.Nightmares: 1
+        Item.TantalisingPossibility: 171,
+        Item.PuzzlingMap: 0.95,
+        Item.OneiromanticRevelation: 0.95,
+        Item.StormThrenody: 1.9,
+        Item.VolumeOfCollatedResearch: 5.7,
+        Item.GlimpseOfAnathema: 0.05,
+        Item.Nightmares: 1,
     })
+
+    # add({
+    #     Item.Anticandle: -1,
+    #     Item.Echo: 2.5
+    # })

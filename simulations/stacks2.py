@@ -85,7 +85,8 @@ item_values = {
     Item.PuzzlingMap: {Item.Echo: 12.5, Item.Stuiver: 0},
     Item.FlaskOfAbominableSalts: {Item.Echo: 0.1, Item.Stuiver: 0},
 
-    Item.CausticApocryphon: {Item.Echo: 15.5, Item.Stuiver: 250},
+    # CA value estimated with oneiropomp 17.5 - 1 action
+    Item.CausticApocryphon: {Item.Echo: 11.5, Item.Stuiver: 250},
     Item.GlimEncrustedCarapace: {Item.Echo: 0, Item.Stuiver: 1250},
     Item.ShardOfGlim: {Item.Echo: 0.01, Item.Stuiver: 0},
     Item.RoofChart: {Item.Echo: 2.53, Item.Stuiver: 50},
@@ -2101,7 +2102,7 @@ def simulate_runs(num_runs):
     simple_mode = True
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.SomeFrenchBullshit
+    state.apocrypha_sought = ApocryphaSought.BannedWorks
     state.cartographer_enabled = False
     state.take_alternate_reward = False
 

@@ -328,7 +328,8 @@ item_conversion_rates = {
     Item.ImpossibleTheorem: { Item.Echo: 1562.60 },
 
     # Echo value from Oneiropomp conversion
-    Item.CausticApocryphon: { Item.Echo: 15.5, Item.Stuiver: 250 },
+    # Item.CausticApocryphon: { Item.Echo: 11.0, Item.Stuiver: 250 },
+    Item.CausticApocryphon: { Item.Echo: 0.0, Item.Stuiver: 250 },
     Item.GlimpseOfAnathema: {Item.Echo: 312.5, Item.Stuiver: 6250},
 
     Item.MemoryOfMuchLesserSelf: { Item._ApproximateEchoValue: 2.50 },

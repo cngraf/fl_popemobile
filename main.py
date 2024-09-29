@@ -200,7 +200,7 @@ lab_rpa = 33
 # -------------- Player Config ---------------
 # --------------------------------------------
 
-active_player = player.player_third_city_silverer
+active_player = player.player_bal_monster_hunter
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -263,7 +263,7 @@ upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(config)
 upper_river.decks.add_trades(config)
 
-upper_river.tracklayers_city.add_trades(config)
+# upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
@@ -299,7 +299,7 @@ core_constraint = {
     # Item.VisitFromTimeTheHealer: 1,
     # Item._BoneMarketRotation: 1,
     Item._RatMarketRotation: 1,
-    Item._CardDraws: full_draws_per_day * 7 * 10
+    # Item._CardDraws: full_draws_per_day * 7 * 10
 }
 
 config.add(core_constraint)

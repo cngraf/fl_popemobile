@@ -175,6 +175,22 @@ def add_trades(config: Config):
         Item.IncisiveObservation: 30
     })
 
+    # A Public Lecture (Card)
+    # TODO london deck constraint
+    for ex_item in exhaustion_items:
+        config.add({
+            Item.Action: -1,
+            Item.FistfulOfSurfaceCurrency: -1_000,
+            Item.HinterlandScrip: -25,
+            Item.FavourInHighPlaces: -1,
+            
+            ex_item: -1
+        })
+
+    # -----------------
+    #   Skeleton Modifications
+    # ----------------
+
     # # ----- Test
 
     # # Identify items that can be acquired profitably
@@ -879,6 +895,21 @@ def add_trades(config: Config):
 
             rubbery_collector_buyers.add_trade(config, Flux.Menace, ZooType.Fish, prismatic_fish)
 
+    # ==============================================================
+    #                   Trifling Diplomat
+    # ==============================================================
+
+    diplomat_triple_buyer.add_trade(config, Flux.NoQuality, ZooType.NoType,
+        recipe={
+            Item.Action: -12,
+            Item.SkeletonWithSevenNecks: -1,
+            Item.HornedSkull: -4,
+            Item.DuplicatedVakeSkull: -2,
+            Item.BrightBrassSkull: -1,
+            Item.WingOfAYoungTerrorBird: -2,
+
+            Item._TriflingDiplomatSale: -1
+        })
 
     ##################################################################
     #            The Seven-Necked Combinatoric Shitshow
