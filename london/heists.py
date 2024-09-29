@@ -72,20 +72,20 @@ def add_trades(config: Config):
     escape_cost_actions = 8
     capture_cost_actions = 20
 
-    action_cost = 1 # start heist
+    action_cost = 2 # start heist
     action_cost += 2 # buy casing from Big Rat
     action_cost += avg_success_actions
     action_cost += escape_rate * escape_cost_actions
     action_cost += capture_rate * capture_cost_actions
     cats_per_run = 0.5
 
-    # add({
-    #     Item.Action: -action_cost,
-    #     Item.Echo: -4.8,
-    #     Item.AppallingSecret: -10 * cats_per_run,
-    #     Item.HidingPlaceOfAPeculiarItem: -1,
-    #     Item._WaswoodHeistCashOut: 1 * (1.0 - escape_rate - capture_rate)
-    # })
+    add({
+        Item.Action: -action_cost,
+        Item.Echo: -4.8,
+        Item.AppallingSecret: -10 * cats_per_run,
+        Item.HidingPlaceOfAPeculiarItem: -1,
+        Item._WaswoodHeistCashOut: 1 * (1.0 - escape_rate - capture_rate)
+    })
 
     # parabolan casing with no big rat
     # 4.65 actions => 28 casing (first parabola trip is free)
