@@ -47,6 +47,14 @@ item_conversion_rates = {
     Item.InCorporateDebt: { Item._ApproximateEchoValue: -(12.5 + action_echo_value)/3 },
 
     ################################################################################
+    ###                                 Connected                                ###
+    ################################################################################
+
+    # 1 Society favour + 1 action = 50 CP
+    Item.ConnectedTheDuchess: { Item._ApproximateEchoValue: action_echo_value * 0.04 },
+
+
+    ################################################################################
     ###                                 The Stacks                               ###
     ################################################################################
 
@@ -520,92 +528,3 @@ item_conversion_rates = {
 favour_eev = (2.5 * 2 + 30 * 3)/(5 * 3 + 2)
 for favour in FAVOUR_ITEMS:
     item_conversion_rates[favour] = { Item._ApproximateEchoValue: favour_eev }
-
-#     Item.FavBohemians: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavChurch: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavConstables: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavCriminals: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavDocks: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavGreatGame: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavHell: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavRevolutionaries: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavRubberyMen: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavSociety: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavTombColonies: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-#     Item.FavUrchins: {
-#         Item._ApproximateEchoValue: 5.5
-#     },
-# }
-
-def estimated_conversion_rate(from_item: Item, to_item: Item) -> float:
-    if from_item in estimated_conversions and to_item in estimated_conversions[from_item]:
-        conversion_rate = estimated_conversions[from_item][to_item]
-        return conversion_rate
-
-    return 0
-
-estimated_conversions = {
-    # Favours
-    Item.FavBohemians: {
-        Item.Echo: 5
-    },
-    Item.FavChurch: {
-        Item.Echo: 5
-    },
-    Item.FavConstables: {
-        Item.Echo: 5
-    },
-    Item.FavCriminals: {
-        Item.Echo: 5
-    },
-    Item.FavDocks: {
-        Item.Echo: 5
-    },
-    Item.FavGreatGame: {
-        Item.Echo: 5
-    },
-    Item.FavHell: {
-        Item.Echo: 5
-    },
-    Item.FavRevolutionaries: {
-        Item.Echo: 5
-    },
-    Item.FavRubberyMen: {
-        Item.Echo: 5
-    },
-    Item.FavSociety: {
-        Item.Echo: 5
-    },
-    Item.FavTombColonies: {
-        Item.Echo: 5
-    },
-    Item.FavUrchins: {
-        Item.Echo: 5
-    },
-
-    Item.PerfumedGunpowder: {
-        Item.Echo: 2.5
-    },
-}

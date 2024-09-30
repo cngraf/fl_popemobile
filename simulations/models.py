@@ -81,15 +81,19 @@ class GameState:
     def find_best_action(self):
         best_card, best_action, best_action_ev = None, None, -float('inf')
 
+
         for card in self.storylets:
-            for action in card.actions:
-                if action.can_perform(self):
-                    action_ev = action.ev(self)
-                    if action_ev > best_action_ev:
-                        best_card, best_action, best_action_ev = card, action, action_ev
+            if card.can_draw(self):
+                # TODO 
+                autofire_bonus = 1_000_000 if card.autofire else 0
+                for action in card.actions:
+                    if action.can_perform(self):
+                        action_ev = action.ev(self)
+                        if action_ev > best_action_ev:
+                            best_card, best_action, best_action_ev = card, action, action_ev
 
         for card in self.hand:
-            # HACK until I think of a better way to handle autofire cards
+            # TODO HACK until I think of a better way to handle autofire cards
             autofire_bonus = 1_000_000 if card.autofire else 0
             for action in card.actions:
                 if action.can_perform(self):
@@ -131,6 +135,10 @@ class PlayerOutfit:
         self.kataleptic_toxicology = default_advanced
         self.shapeling_arts = default_advanced
         self.glasswork = default_advanced
+
+        self.bizarre = 20
+        self.dreaded = 20
+        self.respectable = 20
 
         self.reduce_wounds = 0
         self.reduce_nightmares = 0

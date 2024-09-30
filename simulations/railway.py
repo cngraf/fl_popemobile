@@ -5,7 +5,7 @@ from collections import defaultdict
 from enum import Enum, auto
 import utils
 from enums import *
-from simulations.item_conversions import conversion_rate, estimated_conversion_rate
+from simulations.item_conversions import conversion_rate
 from simulations.models import *
 from simulations.models import GameState
 
