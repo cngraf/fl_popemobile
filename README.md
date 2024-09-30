@@ -1,94 +1,101 @@
 
 # PROJECT: POPEMOBILE
 
-31 May 24: Everything is in flux until we figure out exactly how the New Rat Market works.
+## What the heck is this?
 
-Reliable 5+ EPA grinds in the meantime:
+A **toolbox** for **answering questions** about the browser-based interactive narrative game **Fallen London**.
 
-### Commune with TLC
+Questions such as:
 
-5.68 EPA
+- What is the fastest way to accumulate `Item X`?
+- Is `Activity X` more profitable than `Activity Y`?
+- What is the expected value of `Carousel X`?
 
-1. Commune with City or Creditor.
-1. Sell the item you get.
 
-* Requires 15 in three advanced stats and completed railway
+## How to Use
 
-### TLC Deck
+I have vague plans to spin this up into a web app.
 
-~5.2 EPA
+Until then, just ping me (or ask ChatGPT) for a guided set-up.
 
-1. Draw cards in Hinterland City.
-2. Play cards for Prosperity
-3. Exchange Prosperity for items
+- `main.py` main linear optimization model, to optimize eg. Echoes per Action
+    - `player.py` preconfigured player profiles
+    - `config.py` constraints, important for menaces and other negative EV qualities
 
-* Requires completed railway
-
-### 3. Hearts' Game
-
-5.2+ EPA
-
-1. Play Hearts' Game
-2. Trade Exploits for `Leviathan Frame`
-3. Hunt and dissect Pinewood Sharks for `Fin Bones, Collected`
-4. Sell Fish skeletons during Fish weeks
-
-* Default recipe is 1 Bright Brass Skull and 2 Fin Bones Collected.
-    * BaL players can get better payouts using the duplicated Vake skull with any Menace-scaling buyer
-* Swap in 1 or 2 Amber-Crusted Fins to access Amalgamy buyers
-    * obtained by up-converting fin bones at Helicon House
-
-## How to Run
-1. download
-2. navigate to the directory
-3. run `python3 optimize.py`
-4. ask your preferred LLM to explain everything
-
+- `simulations` directory for various monte carlo scripts
 ## TODO
 
-* Rework how London deck is modeled (IN PROGRESS)
-    * Create dummy items for each card
-    * Trade one generic action for like, a collection of card actions
-    * Look I have a model in my head, it's hard to explain
-    * Do the same thing for Hinterland deck
+* Add a license
 
-* Move to a per-week framing (IN PROGRESS)
-    * New Rat Market
-    * Bone Market Exhaustion
-        * sanity check this later. model currently recommends some 6, 12 exhaustion recipes. not obviously wrong, but it doesn't know that you can't use 0-exhaustion recipes while at 4+. will probably end up just hard-coding a limit of 4 or 7
-    * Other stuff on a weekly cycle
+* Non-action-based items conversion
+    * eg. "what's the best way to convert Echoes into Scrip?"
+    * model already supports this in theory
+    * but I need to figure out a workflow for doing it on the fly
 
-* Khanate (DONE)
-    * Intrigues
-    * Smuggling
-    * Widow crates
+* London Opportunity Deck
+    * Figure out WTF to do with this
+    * Option 1: Monte Carlo
+        * this is what I did with the Upper River deck, and I am happy with the results
+            * implement every (economically relevant) card and action in a Monte Carlo sim
+            * pick a few representative player profiles as the input parameters
+                * eg. the bare minimum F2P, the full BiS whale, and one or two intermediates
+            * run the sim for each profile
+            * implement the results as single trades
+        * challenges:
+            * the UR has about 40 cards. London has about 1000.
+            * a bunch of cards lead into their own carousels, eg. Arbor
+            * red cards with unknown rarities
+            * hundreds of bespoke qualities controlling lock/lock, impractical to pick anything that could be called "representative
+    * Option 2: Monte Carlo, but only for ultra-thin deck
+        * same as above, but remove all the clearly undesirable cards that can be removed
+        * much more manageable
+    * Option 3: whatever I'm doing right now, where each card has an `Item` exchange, an each `Item._CardDraw` can be trades for a fractional draw of every other card 
+        * kind of works?
+        * more flexible, in theory
+        * harder to translate to human-readable format
+            * more "accurate" but less useful?
+
+* London miscellaneous
+    * Forgotten Quarter
+    * Chimes carousels
+    * various other early- and mid-game activities
+
+* Laboratory
+    * add more workers and experiments to simulation
 
 * Parabola
-    * Better model of Parabolan War
-    * More/better model of hunts, heists
+    * Refine Parabolan War trades
+    * Hunts
+    * Oneiropomping
 
 * Unterzee
-    * Most of the islands
-    * Zailing deck
+    * Godfall
+    * Polythreme
+    * various other rarely-visited locations
 
 * Hinterlands
-    * Clay Highwayman's Camp
-    * Jericho Library
-    * Clean up Helicon House
-    * Evenlode diving
-    * Evenlode barristering
-    * Cabinet Noir deciphering
-    * Hurlers stuff
-    * Marigold stuff?
-    * all the location decks
+    * Evenlode
+        - diving
+        - barristering
+    * Balmoral
+        * Clay Highwayman's Camp
+        - deciphering
+        - clean up Cover Identity model
+    * Station VIII
+        - revisit the Kitchen
+        - revisit Alchemy
+    * Moulin
+        - add full simulation of Expeditions
+        - Monographs, ok for now?
+    * Hurlers
+        - adulterine castle
+        - goat ball
+        - digging
+        - other discordance stuff
+    * Marigold
+        - anything besides the knights thing?
 
-* General
-    * Railway statues
-    * TLC params
-    * Expand professional activities
-    * Other mutually exclusive items & qualities
-
-* Figure out a way to model the unlimited draw decks with plain matrixes, aka one that doesn't require a monte carlo simulation
+* TLC
 
 * Lots more things
 
