@@ -76,127 +76,6 @@ import fate.upwards
 import numpy as np
 import pprint
 
-'''
-TODO
-- Set up a table/matrix of all the "simple" item conversions and buy/sell options
-    - meeting the following conditions
-        - exactly one input and one output
-        - can be done as much as you like, as often as you like
-        - 0 action cost
-        - no randomness
-    - so buying and selling from the bazaar.
-    - this would be used for easy conversions of outputs of our monte carlo sims
-    - could also be generalized as a module
-    - example:
-        Item.RoofChart: {
-            Item.Stuiver: 50,
-            Item.MoonPearl: 253
-        },
-        Item.MoonPearl: {
-            Item.Echo: 0.01
-        }
-    - maybe do it as a Shop class so we can control access by player prog
-
-- add railway stuff before more london stuff bc it's prob more relevant
-
-London
-- all the chimes & chimes-tier carousels
-    - brawling with dockers
-    - sunken embassy
-    - spider debates
-    - whatever other crap i forgot
-- all the MYN locations
-- forgotten quarter expeditions
-- model Airs somehow
-
-Laboratory
-- add more experiments & workers to monte carlo sim
-
-Parabola
-- most parabolan hunts
-- waswood shores?
-    - figure out the odds
-- basically everything else
-- do a sim of parabolan war?
-    - wiki calc seems pretty good tho
-
-Zailing
-- plug the monte carlo results into the rest of the model
-
-Khanate
-- mostly done?
-
-Railway
-- deck monte carlo sim is done!
-    - gotta plug into the optimizer now
-- let's see what are we still missing
-- Ealing
-    - helicon house: OK, not perfect
-    - butcher: done
-    - spa: TODO low prio
-    - passenger area: TODO?
-- Jericho
-    - canal cruising: DONE
-    - curio stall: done?
-    - library: DONE
-    - favours: done
-- Balmoral
-    - Crathie: idk
-    - Castle: TODO just add to TtH
-    - woods: done? might be missing fox
-    - smuggler: not econ
-    - clay highwayman: TODO bandit carousel
-    - cabinet noir
-        - deciphering: TODO?
-        - cover identities: OK, bit hacky
-- Station VIII
-    - kitchen: partially done? TODO
-    - alchemy: TODO
-- Burrow
-    - nothing repeatable afaik
-- Moulin
-    - expeditions: partial, TODO monte carlo sim
-    - monographs: very simplified, TODO
-- Hurlers
-    - adulterine castle: TODO
-    - digging: TODO
-    - goatball: TODO
-    - any other repeatable discordance stuff: TODO
-- Marigold
-    - wtf do they even have here
-bone market exhaustion
-
-crackpot idea
-- normalize all trades to 1 echo where possible?
-- get a better idea of weights/marginals
-- prob make it much more difficult to read
-- maybe go halfway and do this for the buy/sell actions and that's it
-'''
-
-# # placeholder for upconversions and stuff
-# # if anyone knows the real values please share
-# default_rare_success_rate = 0.05
-
-# # maybe improve slightly with EPA
-# zailing_epa = 3.0
-
-# lab research per action, somewhat optimistic
-lab_rpa = 33
-
-# # for modeling actions that can grant more actions eg. the 30% success on the aunt card
-# replacement_epa = 6.5
-
-# # for modeling time spent outside london
-# replacement_good_card_density = 0.33
-
-# # for long trips outside longon/upper river
-# lost_draw_cost = 0
-
-# # 0.85, 0.74, 0.65
-# wounds_multiplier = 0.85
-# scandal_multiplier = 0.85
-# suspicion_multiplier = 0.85
-# nightmares_multiplier = 0.85
 
 # --------------------------------------------
 # -------------- Player Config ---------------
@@ -238,7 +117,9 @@ InventoryConversions.add_trades(active_player, config)
 
 london.uncategorized.add_trades(active_player, config)
 london.newspaper.add_trades(active_player, config)
-london.laboratory.add_trades(active_player, lab_rpa, config)
+
+# TODO magic number, use simulation results instead
+london.laboratory.add_trades(active_player, 33, config)
 london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
@@ -265,7 +146,7 @@ upper_river.hurlers.add_trades(active_player, config)
 upper_river.marigold.add_trades(config)
 upper_river.decks.add_trades(config)
 
-# upper_river.tracklayers_city.add_trades(config)
+upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
@@ -288,21 +169,27 @@ input_per_cycle = 7 * 120
 
 actions_per_day = 120
 full_draws_per_day = 3
-# +10 for the weekly action refresh card
-# -3 for rat market entry
-actions_per_week = (7 * actions_per_day) + 10 - 3
 
 optimize_input = Item.Action
 optimize_for = Item.Echo
 
-# input_per_cycle
-
 core_constraint = {
     Item.Constraint: 1,
     optimize_input: input_per_cycle,
-    # Item.VisitFromTimeTheHealer: 1,
+
+    # The following features are all +EPA, +Complexity
+
+    # Uncomment to enable Rat Market demand multipliers
+    # Item._RatMarketRotation: 1,
+
+    # Uncomment to enable Bone Market zoo/flux multipliers
     # Item._BoneMarketRotation: 1,
-    Item._RatMarketRotation: 1,
+
+    # Uncomment to enable whatever other random weekly stuff I have implemented
+    # Item.VisitFromTimeTheHealer: 1,
+
+    # Uncomment to enable London and Upper River opportunity decks
+    # Only use if the input is Action-based
     # Item._CardDraws: full_draws_per_day * 7 * 10
 }
 
@@ -312,15 +199,13 @@ c = np.zeros(num_vars)
 c[optimize_for.value] = -1
 
 opt_result = linprog(c, A_ub=config.A.toarray(), b_ub=config.b, bounds=config.bounds, method='highs')
-# print(opt_result)
-
-# Printing
 
 
 trades_used = []
 free_item_conversions = []
-# actions_per_cycle = core_constraint[Item.Action]
 
+# TODO would be cool to get exact numbers on the surplus per cycle
+# this only finds items that are totally unused
 items_gained = []
 items_consumed = []
 
@@ -346,11 +231,6 @@ for i in range(0, len(opt_result.slack)):
                 gain_items += item.name + ":" + str(quantity) + "; "
                 if item not in items_gained:
                     items_gained.append(item)
-        # trade_items = lose_items + " => " + gain_items            
-        # trade_items = trade_items.replace("Item.","")
-
-        # lose_items = lose_items.replace("Item.","")
-        # gain_items = gain_items.replace("Item.","")
         
         action_cost = config.A[i, Item.Action.value]
         trade = [marginal * 1000, lose_items, gain_items]
@@ -370,45 +250,12 @@ for i in items_gained:
 
 pp = pprint.PrettyPrinter(indent=4)
 
-# print("------Assumptions-------")
-# print(f"Core Constraint:")
-# for item, val in core_constraint.items():
-#     print(f"|  {item.name:<30} {val}\n")
 
 
 print(f"Optimize For:                     {optimize_for.name}")
 print(f"-Player Stats-")
 pp.pprint(active_player.qualities)
 
-# print("------Summary-------")
-# # print(f"{str(optimize_for) + ' Per Day:':34}{-1.0/(opt_result.fun):10.3f}")
-# # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.3f}")
-
-
-# print("-----Gained & Unused-------")
-# for i in items_surplus:
-#     print(i)
-
-# print("-----Trades In Grind-------")
-# for i in trades_used:
-#     # print(f"{i[0]:.3}       " + i[1])
-#     print(f"{i[0]:<10.3}{i[1]:<20} => {i[2]}")
-
-# print("-----Cycle-------")
-# print(core_constraint)
-
-# print("-----Optimization Target-------")
-# items_per_input = -1.0/(input_per_cycle * opt_result.fun)
-# # print(f"{str(optimize_for) + ' Per Action':34}{-1.0/(opt_result.fun * actions_per_day):10.5f}")
-# print(f"{optimize_for.name} per {optimize_input.name}: {items_per_input:10.5f}")
-# print(f"{optimize_input.name} per {optimize_for.name}: {1.0/items_per_input:10.5f}")
-# # print(f"{str(optimize_for) + ' Per Action':34}{items_per_cycle:10.5f}")
-# # print(f"{'Actions Per ' + str(optimize_for):34}{-(opt_result.fun * actions_per_cycle):10.5f}")
-
-# print("-------------------------------")
-
-
-# Optional: Colorized output using termcolor (you can replace with colorama)
 
 # Header with color
 print(colored("\n------ Assumptions -------", "green", attrs=['bold']))
