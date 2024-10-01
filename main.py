@@ -68,6 +68,8 @@ import firmament.hallows_throat
 import firmament.midnight_moon
 import firmament.zenith
 
+import uncategorized.menace_locations
+
 import fate.philosofruits
 import fate.upwards
 # import fate.whiskerways
@@ -150,6 +152,8 @@ upper_river.tracklayers_city.add_trades(config)
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
 firmament.zenith.add_trades(config)
+
+uncategorized.menace_locations.add_trades(config)
 
 # fate.philosofruits.add_trades(active_player, config)
 # fate.upwards.add_trades(active_player, config)

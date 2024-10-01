@@ -782,18 +782,20 @@ class Item(Enum):
     FragmentaryOntology = auto()
     DispositionOfTheCardinal = auto()
 
-    # -----
-    # Equipment
-    # -----
+    ################################################################################
+    ###                          Equipment                                       ###
+    ################################################################################
 
     # Weapon
     ConsignmentOfScintillackSnuff = auto()
+    IntricateKifers = auto()
 
     # Companion
     LuckyWeasel = auto()
     SulkyBat = auto()
     WinsomeDispossessedOrphan = auto()
     CheerfulGoldfish = auto()
+    UntrainedLyrebird = auto()
 
     # Unsorted
     BundleOfRaggedClothing = auto()
@@ -1261,11 +1263,20 @@ class Item(Enum):
     # Simulation scratchpad
 
     # Heists
+    PlanningAHeist = auto()
+    TargetSecurity = auto()
     BurglarsProgress = auto()
     IntriguingKey = auto()
     InsideInformation = auto()
     CatlikeTread = auto()
     EscapeRoute = auto()
+
+    _BigRat9Casing = auto()
+    _Parabolan28Casing = auto()
+    _BeginYourHeist = auto()
+    _SuccesfulHeist = auto()
+
+    _ImprisonedInNewNegate = auto()
 
 FAVOUR_ITEMS = [
     Item.FavBohemians,

@@ -36,6 +36,8 @@ class Config:
         self.bounds[Item.Suspicion.value] = (None, 0)
         self.bounds[Item.Nightmares.value] = (None, 0)
 
+        self.bounds[Item._ImprisonedInNewNegate.value] = (None, 1)
+
         self.bounds[Item.TroubledWaters.value] = (None, 0)
 
         self.bounds[Item.GenericBoneMarketExhaustion.value] = (-4, 0)
