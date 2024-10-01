@@ -66,6 +66,7 @@ import upper_river.decks
 
 import firmament.hallows_throat
 import firmament.midnight_moon
+import firmament.zenith
 
 import fate.philosofruits
 import fate.upwards
@@ -79,7 +80,7 @@ import pprint
 # -------------- Player Config ---------------
 # --------------------------------------------
 
-active_player = player.player_bal_monster_hunter
+active_player = player.player_advanced_f2p
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -148,6 +149,7 @@ upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
+firmament.zenith.add_trades(config)
 
 # fate.philosofruits.add_trades(active_player, config)
 # fate.upwards.add_trades(active_player, config)
@@ -167,7 +169,7 @@ actions_per_day = 120
 full_draws_per_day = 3
 
 optimize_input = Item.Action
-optimize_for = Item.Echo
+optimize_for = Item.SurveyOfTheNeathsBones
 
 core_constraint = {
     Item.Constraint: 1,
@@ -179,7 +181,7 @@ core_constraint = {
     # Item._RatMarketRotation: 1,
 
     # Uncomment to enable Bone Market zoo/flux multipliers
-    # Item._BoneMarketRotation: 1,
+    Item._BoneMarketRotation: 1,
 
     # Uncomment to enable whatever other random weekly stuff I have implemented
     # Item.VisitFromTimeTheHealer: 1,

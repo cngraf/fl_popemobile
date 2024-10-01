@@ -147,6 +147,9 @@ class Item(Enum):
     Echo = auto()
 
     Action = auto()
+
+    _NoItem = auto()
+
     _CardDraws = auto()
 
     _ParabolaAction = auto()
@@ -169,7 +172,9 @@ class Item(Enum):
     _PortCecilAction = auto()
     _MangroveAction = auto()
 
-    _NoItem = auto()
+    _HallowsThroatAction = auto()
+    _MidnightMoonAction = auto()
+    _ZenithAction = auto()
 
     # Stats
     Watchful = auto()
@@ -1013,6 +1018,9 @@ class Item(Enum):
     TheMindsAscent2 = auto()
     TheMindsAscent3 = auto()
 
+    # Roof
+    _RandomRoofEvent = auto()
+
     # ----- Psuedo Items
     VisitFromTimeTheHealer = auto()
 
@@ -1040,6 +1048,7 @@ class Item(Enum):
     _LondonKhanateRoundTrip = auto()
     _LondonSeaOfVoicesRoundTrip = auto()
     _UpperRiverRoundTrip = auto()
+    _FirmamentRoundTrip = auto()
 
     DuplicatedVakeSkull = auto()
     DuplicatedCounterfeitHeadOfJohnTheBaptist = auto()
@@ -1071,6 +1080,7 @@ class Item(Enum):
     SouthernWind = auto()
     EasternWind = auto()
     ZeeLegs = auto()
+    TendingTheColossus = auto()
 
     Fake_HiddenStash = auto()
     _AgentInTransit = auto()

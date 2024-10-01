@@ -2590,8 +2590,8 @@ class LabSimulationRunner(SimulationRunner):
 simulation = LabSimulationRunner(
     runs = 500,
     initial_values= {
-        Item.ExperimentalObject: 260,
-        Item.TotalLabReserchRequired: 550,
+        Item.ExperimentalObject: 620,
+        Item.TotalLabReserchRequired: 2700,
         Item.NauticalFocus: 1,
 
         # # Experiment

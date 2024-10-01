@@ -3,12 +3,14 @@ from utils import *
 
 def add_trades(active_player, lab_rpa, config):
     trade = config.trade
+    add = config.add
 
     trade(1, {
         Item.LaboratoryResearch: lab_rpa
     })
 
     # TODO better estimate
+
     trade(1, {
         Item.ParabolanResearch: 12
     })
@@ -52,8 +54,9 @@ def add_trades(active_player, lab_rpa, config):
 
     # Geology Projects --------------
 
-    trade(2, {
-        Item.LaboratoryResearch: -100,
+    add({
+        # Item.LaboratoryResearch: -100,
+        Item.Action: -6,
         Item.SurveyOfTheNeathsBones: 25
     })
 

@@ -2102,9 +2102,9 @@ def simulate_runs(num_runs):
     simple_mode = True
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.BannedWorks
+    state.apocrypha_sought = ApocryphaSought.DeadStars
     state.cartographer_enabled = False
-    state.take_alternate_reward = False
+    state.take_alternate_reward = True
 
     # Progress bar setup
     progress_template = "\rProgress: [{:<50}] {:.2f}% ({}/{})"
@@ -2244,4 +2244,4 @@ def simulate_runs(num_runs):
     total_per_action = all_currency_total / total_steps if total_steps > 0 else 0
     print(f"{'Echoes/Stuivers Per Action':<30} {'':<10} {total_per_action:.4f} E")
 
-simulate_runs(20_000)
+simulate_runs(5_000)
