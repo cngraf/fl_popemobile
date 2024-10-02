@@ -5,10 +5,16 @@ from config import *
 from player import *
 
 def add_trades(_, config: Config):
+    add = config.add
     trade = config.trade
     player = config.player
 
     scandal_multi = player.scandal_reduction
+
+    add({
+        Item._ApproximateEchoValue: -1,
+        Item.Echo: 1
+    })
 
     # -----------------
     # --- Underclay

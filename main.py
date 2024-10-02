@@ -66,6 +66,7 @@ import upper_river.decks
 
 import firmament.hallows_throat
 import firmament.midnight_moon
+import firmament.zenith
 
 import uncategorized.menace_locations
 
@@ -81,7 +82,7 @@ import pprint
 # -------------- Player Config ---------------
 # --------------------------------------------
 
-active_player = player.player_bal_monster_hunter
+active_player = player.player_advanced_f2p
 
 # hack
 # `IndexError: list assignment index out of range` => increase this number
@@ -150,6 +151,7 @@ upper_river.tracklayers_city.add_trades(config)
 
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
+firmament.zenith.add_trades(config)
 
 uncategorized.menace_locations.add_trades(config)
 
@@ -171,7 +173,7 @@ actions_per_day = 120
 full_draws_per_day = 3
 
 optimize_input = Item.Action
-optimize_for = Item.PerfumedGunpowder
+optimize_for = Item.SurveyOfTheNeathsBones
 
 core_constraint = {
     Item.Constraint: 1,

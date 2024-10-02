@@ -22,6 +22,10 @@ rare successes
 - don't know what the odds are for any card
 - big range in value
 
+FATE Colossus cards
+- added basic versions. not a ton of differentiation between them
+- check how cash out works. automatic or another card? think it's 0 actions
+
 randoom zailing gain
 - whether or not an action gives bonus 1-5 zailing seems kinda arbitrary?
     - taking the wiki literally, possible it's just not been updated fully
@@ -47,7 +51,6 @@ player customization
 
 deck manipulation
 - can we add/remove any cards with outfit switching?
-- add new FATE colossus cards
 
 woesel
 - do what we did in stacks2 sim
@@ -81,7 +84,9 @@ item_echo_values = {
     Item.Nightmares: -0.2,
 
     # Nonexistent items to handwave complexity
-    Item.Fake_HiddenStash: 75
+    Item.Fake_HiddenStash: 75,
+
+    Item.TendingTheColossus: 62.5/28
 }
 
 # HACK may god forgive me
@@ -199,7 +204,7 @@ def bonus_zailing2():
 #         return 0.5 + (stat_value - dc) * 0.1
 
 class PlayerOutfit:
-    def __init__(self, default_basic = 0, default_advanced = 0):
+    def __init__(self, default_basic = 330, default_advanced = 18):
         self.zailing_speed = 55
         self.zubmersibility = 0
         self.luxurious = 0
@@ -241,7 +246,7 @@ class ZailingState(GameState):
 
         self.unwelcome_on_the_waters = 0
         self.progress_required = 180
-        self.piracy_enabled = False
+        self.piracy_enabled = True
 
         self.deck = []
         self.hand = []
@@ -4841,6 +4846,77 @@ class FollowHMSRoute(Action):
 
     def pass_rate(self, state: 'ZailingState'):
         return self.broad_pass_rate(240, state.outfits.watchful)
+    
+################################################################################
+###                          (FATE) Colossus Card 1                          ###
+################################################################################
+
+# TODO full options
+# h/t to https://fallenlondon.wiki/wiki/User:Hythonia/Roving_Colossus
+class ColossusCard1(OpportunityCard):
+    def __init__(self):
+        super().__init__("Colossus Card 1")
+        self.actions = [Colossus1Action1()]
+
+    def can_draw(self, state: ZailingState):
+        # return state.colossus_enabled
+        # TODO check the actual levels
+        return state.get_pyramidal_level(Item.TendingTheColossus) <= 2
+
+class Colossus1Action1(Action):
+    def __init__(self):
+        super().__init__("Cannon.png")
+
+    def pass_items(self, state: 'ZailingState'):
+        return {
+            Item.TendingTheColossus: 2,
+            Item.TroubledWaters: 2,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
+        }
+
+    # def pass_rate(self, state: 'ZailingState'):
+    #     return 1.0 
+
+class ColossusCard2(OpportunityCard):
+    def __init__(self):
+        super().__init__("Colossus Card 2")
+        self.actions = [Colossus2Action1()]
+
+    def can_draw(self, state: ZailingState):
+        return state.get_pyramidal_level(Item.TendingTheColossus) in [3, 4]
+        # return state.colossus_enabled
+
+class Colossus2Action1(Action):
+    def __init__(self):
+        super().__init__("Shipbstinate.png")
+
+    def pass_items(self, state: 'ZailingState'):
+        return {
+            Item.TendingTheColossus: 2,
+            Item.TroubledWaters: 2,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
+        }
+
+class ColossusCard3(OpportunityCard):
+    def __init__(self):
+        super().__init__("Colossus Card 3")
+        self.actions = [Colossus3Action1()]
+
+    def can_draw(self, state: ZailingState):
+        return state.get_pyramidal_level(Item.TendingTheColossus) in [5, 6]
+        # return state.colossus_enabled
+
+class Colossus3Action1(Action):
+    def __init__(self):
+        super().__init__("Lyrebird_operatic.png")
+
+    def pass_items(self, state: 'ZailingState'):
+        return {
+            Item.TendingTheColossus: 2,
+            Item.TroubledWaters: 2,
+            Item.ZailingProgress: state.outfits.zailing_speed + bonus_zailing2(),
+        }
+
 
 cards = [
     BountyUponYourHead(),
@@ -4925,7 +5001,12 @@ cards = [
 
     # Snares
     PirateSteamer(),
-    NavigatingTheSnares()
+    NavigatingTheSnares(),
+
+    # FATE Colossus
+    ColossusCard1(),
+    ColossusCard2(),
+    ColossusCard3(),
 ]
 
 # Initial setup
@@ -5184,9 +5265,9 @@ london_snares_khanate = [
 ]
 
 khanate_snares_london = [
-    ZeeRegion.HOME_WATERS,
+    ZeeRegion.SALT_STEPPES,
     ZeeRegion.THE_SNARES,
-    ZeeRegion.SALT_STEPPES
+    ZeeRegion.HOME_WATERS
 ]
 
 london_sheperds_mangrove = [
@@ -5222,5 +5303,5 @@ london_to_khanate_long_route = [
 
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=1_000, route=london_to_khanate_long_route)
+    run_simulation(runs=1_000, route=london_snares_khanate)
 

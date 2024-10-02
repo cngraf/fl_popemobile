@@ -9,6 +9,18 @@ from player import Player
 
 def add_trades(config: Config):
     trade = config.trade
+    add = config.add
+
+    add({
+        Item.Action: -2,
+        Item._RandomRoofEvent: 2,
+        Item._FirmamentRoundTrip: 1,
+    })
+
+    add({
+        Item._RandomRoofEvent: -1,
+        Item._ApproximateEchoValue: 2.5
+    })
 
     # Hallow's Exchange
 
