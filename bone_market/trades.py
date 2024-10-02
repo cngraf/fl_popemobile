@@ -406,6 +406,7 @@ def add_trades(config: Config):
             ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Fish, levi_fish_recipe)
             
             teller_buyers.add_trade(config, Flux.Menace, ZooType.Fish, levi_fish_recipe)
+            teller_buyers.add_trade(config, Flux.Menace, ZooType.NoType, levi_fish_recipe)
             
             gothic_tales_buyers.add_trade(config, Flux.Antiquity, ZooType.Fish, levi_fish_recipe)
             gothic_tales_buyers.add_trade(config, Flux.Menace, ZooType.Fish, levi_fish_recipe)
@@ -420,9 +421,22 @@ def add_trades(config: Config):
 
     # ----------------------
     # ---- Mammoth Ribcage
-            
-    for skull in (Item.HornedSkull, Item.SabreToothedSkull):
 
+    mammoth_menace_fish_recipe = {
+        Item.Action: -9,
+        Item.MammothRibcage: -1,
+
+        Item.HornedSkull: -2,
+        Item.AmberCrustedFin: -3,
+        Item.FinBonesCollected: -1,
+        Item.JetBlackStinger: -1
+    }
+
+    teller_buyers.add_trade(config, Flux.Menace, ZooType.Fish, mammoth_menace_fish_recipe)
+    teller_buyers.add_trade(config, Flux.Menace, ZooType.NoType, mammoth_menace_fish_recipe)
+
+
+    for skull in (Item.HornedSkull, Item.SabreToothedSkull):
         ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Bird,
             recipe={
                 Item.Action: -9,
@@ -827,6 +841,27 @@ def add_trades(config: Config):
             Item.JetBlackStinger: -1,
         })
         entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Reptile, thorned_reptile_recipe)
+
+
+    for filler_leg in (
+        Item.FemurOfASurfaceDeer,
+        Item.UnidentifiedThighBone,
+        Item.FemurOfAJurassicBeast,
+        Item.HelicalThighbone,
+        Item.HolyRelicOfTheThighOfStFiacre,
+        Item.IvoryFemur):
+
+        thorned_menace_bird_recipe = {
+            Item.Action: -9,
+            Item.ThornedRibcage: -1,
+            Item.HornedSkull: -1,
+            filler_leg: -2,
+            Item.WingOfAYoungTerrorBird: -2,
+            Item.JetBlackStinger: -1,
+        }
+
+        teller_buyers.add_trade(config, Flux.Menace, ZooType.Bird, thorned_menace_bird_recipe)
+        teller_buyers.add_trade(config, Flux.Menace, ZooType.NoType, thorned_menace_bird_recipe)
 
     # wtf is this
     # oh right trying to use all the parts of the fox sighting
