@@ -24,20 +24,6 @@ Until then, just ping me (or ask ChatGPT) for a guided set-up.
 
 - `simulations` directory for various monte carlo scripts
 
-## Completeness
-
-https://en.wikipedia.org/wiki/All_models_are_wrong
-
-### "Pretty Good"
-
-* Buying and selling via Bazaar tab
-* Heart's Game prizes
-
-### "It's in there, probably missing a few things"
-* Publishing a Newspaper
-
-Upper River
-
 ### TODO
 
 * Add a license
