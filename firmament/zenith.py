@@ -6,7 +6,6 @@ import utils
 from config import Config
 from player import Player
 
-
 def add_trades(config: Config):
     add = config.add
 
@@ -17,7 +16,6 @@ def add_trades(config: Config):
             Item.Action: -visit_length,
             Item._ZenithAction: visit_length,
         })
-
 
     add({
         Item._ZenithAction: -1,

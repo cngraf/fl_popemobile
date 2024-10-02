@@ -792,6 +792,7 @@ class Item(Enum):
     # Weapon
     ConsignmentOfScintillackSnuff = auto()
     IntricateKifers = auto()
+    InfernalSharpshootersRifle = auto()
 
     # Companion
     LuckyWeasel = auto()
@@ -859,33 +860,54 @@ class Item(Enum):
     Austere = auto()
     Hedonist = auto()
 
-    # Laboratory
+    ################################################################
+    #                        Laboratory
+    ################################################################
+
     ExperimentalObject = auto()
+
     LaboratoryResearch = auto()
     ParabolanResearch = auto()
-    UnlikelyConnection = auto()
-    UnavoidableEpiphany = auto()
-    UnwiseIdea = auto()
-    PrestigeOfYourLaboratory = auto()
-    NumberOfWorkersInYourLaboratory = auto()
-    ResearchPreparations = auto()
-    UnexpectedResult = auto()
-    ExpertiseOfTheFourthCity = auto()
-    ExpertiseOfTheThirdCity = auto()
-    ExpertiseOfTheSecondCity = auto()
-    ExpertiseOfTheFirstCity = auto()
 
-    TotalLabReserchRequired = auto()
-    EquipmentForScientificExperimentation = auto()
+    TotalLabResearchRequired = auto()
+    TotalParabolanResearchRequired = auto()  
+
+    ParabolanMethods = auto()
+    ScienceExperimentalStage = auto()
+
+    RedScienceFocus = auto()
+    CorrespondenceFocus = auto()
+    ToxicologicalFocus = auto()    
+    ShapelingFocus = auto()
+    MonstrousFocus = auto()
+    NauticalFocus = auto()
+    # HerpetologicalFocus = auto()
+    # IcthyologicalFocus = auto()    
+
+    NumismaticResearch = auto()
+    # AmphibianResearch = auto()
+    # PiscineResearch = auto()
 
     NoLongerReviewingLiterature = auto()
     NoLongerFormingHypotheses = auto()
     NoLongerResupplying = auto()
     NoLongerFatigued = auto()
     NoLongerWritingUp = auto()
+    NoLongerConsultingMirrors = auto()
 
-    CorrespondenceFocus = auto()
-    NauticalFocus = auto()
+    ResearchPreparations = auto()
+    UnlikelyConnection = auto()
+    UnavoidableEpiphany = auto()
+    UnwiseIdea = auto()
+    UnexpectedResult = auto()
+
+
+    PrestigeOfYourLaboratory = auto()
+    NumberOfWorkersInYourLaboratory = auto()
+
+    ExpectedLabRewardValue = auto()
+
+    EquipmentForScientificExperimentation = auto()
 
     DisgruntlementAmongStudents = auto()
 
@@ -895,6 +917,13 @@ class Item(Enum):
 
     LaboratoryServicesFromGiftedStudent = auto()
     LaboratoryServicesFromVisionaryStudent = auto()
+
+
+    ExpertiseOfTheFourthCity = auto()
+    ExpertiseOfTheThirdCity = auto()
+    ExpertiseOfTheSecondCity = auto()
+    ExpertiseOfTheFirstCity = auto()
+
 
     _HandClear = auto()
 

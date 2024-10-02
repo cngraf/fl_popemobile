@@ -10,7 +10,7 @@ from simulations.models import *
 from simulations.models import GameState
 
 '''
-TODO
+TODO features
 figure out how to handle non-standard outcomes
 - rare success
     - constant bugbear in these sims
@@ -61,7 +61,516 @@ crappy cards that you can remove/replace
 handling students
 - add graduation and hiring storylets
 
+TODO algorithm
+- better awareness of project length
+- short projects: immediate progess > cash-out items
+
 '''
+
+
+# Not a 1:1 mirror of the in-game values
+# Added a few to handle projects of variable length
+
+class ResearchProject(Enum):
+    CHORISTERS_BOMB = 10
+    DISAMBIGUATION_EOLITH_TUTORIAL = 20
+    SEVEN_SIDED_COIN = 30
+    BUILDING_LOCOMOTIVE = 40
+    JAGUAR_BLADE = 110
+    JAGUAR_BLADE_REMEMBERED = 120
+    REPLICA_ANCIENT_RIFLE_SHORT = 130
+    REPLICA_ANCIENT_RIFLE_LONG = 135
+    PARABOLIC_GENERAL_HORIZONS = 140
+    PARABOLIC_GENERAL_HOLLOWS = 150
+    PARABOLIC_GENERAL_HERALDS = 160
+    ROUTE_PARABOLA_STAGE1 = 210
+    FORGOTTEN_QUARTER_DIG_SITE = 220
+    CARTOGRAPHERS_HOARD = 230
+    GLASS_GAZETTES_5 = 240
+    GLASS_GAZETTES_125 = 245
+    HINTERLAND_SCRIP = 250
+    ROOF_CHARTS = 260
+    INFERNAL_MACHINE = 310
+    DEVILISH_PROBABILITY_DISTRIBUTOR = 320
+    AUGMENTATION_DEVICE = 330
+    BETRAYER_OF_MEASURES = 350
+    DEVICE_DUPLICATION_BONES = 360
+    PARABOLAN_ALBATROSS_THEORY = 410
+    SEVEN_THROATED_WARBLER_THEORY = 420
+    MONSTROUS_ANATOMY_ALBATROSS = 430
+    MONSTROUS_ANATOMY_STORM_BIRD = 440
+    PINEWOOD_SHARK_ANATOMY = 450
+    PRESERVED_FALSE_SNAKE_PHYLOGENY = 460
+    BEASTS_OF_THE_NEATH_SURVEY = 465
+    SPICES_DRUG_ANIMALS = 470
+    SCARLET_EGG_STUDY = 480
+    PELAGIC_EGG_STUDY = 485
+    AGED_EGG_STUDY = 490
+    DIAMOND_HEART_TRANSPLANTATION = 495
+    THORNED_RIBCAGE_TRUTH = 510
+    TREACHERY_OF_MEASURES_RIBCAGE = 520
+    TREACHERY_OF_MEASURES_WARBLER = 530
+    ELASTIC_LIMITS_FLESH_BONE = 540
+    UNIDENTIFIED_THIGH_BONE_TRUTH = 610
+    UNIDENTIFIED_THIGH_BONE_FORGERY = 615
+    EOLITH_DISAMBIGUATION = 810
+    NEATHY_GEOLOGY_SURVEY_25 = 820
+    NEATHY_GEOLOGY_SURVEY_625 = 825
+    ROOF_DRIPPINGS_GEOCHEMICAL_STUDY = 830
+    PERFUMED_GUNPOWDER_FORMULA = 910
+    RAILWAY_STEEL_FORMULA = 920
+    SPICES_NEW_DRUG_TOXICOLOGY = 930
+    SCINTILLACK_SNUFF_FORMULA = 940
+    QUEENLY_ATTAR_TOXICOLOGY = 950
+    STARVED_SECRETIONS_STUDY = 960
+    PERICIPIENT_EGG_STUDY = 970
+    JUSTIFICANDE_METALLURGY = 980
+    SPICES_TEARS_TOXICOLOGY = 990
+    IMPOSSIBLE_THEOREM = 1010
+    STATISTICAL_OBSERVATIONS_NORMAL = 1020
+    STATISTICAL_OBSERVATIONS_CORRUPTED = 1025
+    PARADOXICAL_INVERSION_INSIDE_OUT = 1030
+    FILTRATION_OF_LIGHT_INQUIRY = 1040
+    XANTHOUS_BULB_PROPERTIES = 1045
+    PATTERN_BRICK_TRANSLATION = 1050
+    ORANGE_APPLE_TOXINS_UNDERSTANDING = 1210
+    PRELAPSARIAN_RED_SCIENCE = 1320
+    CAPTURED_USHABTI = 1340
+    SUN_BLAZONED_CUIRASS = 1350
+    MINIATURE_CRAFTS_HELL = 1610
+
+# LLM generated from wiki data then hand-corrected
+# removed one one-time projects
+
+# TODO add additional costs, expected value, hidden qualities
+# pretty sure ParabolanMethods is redundant with Parabolan research req
+
+class LabProjectData():
+    def __init__(self,
+        experimental_object: ResearchProject,
+        qualities: dict,
+        reward: dict,
+        costs: dict = {},
+
+        ):
+        self.experimental_object = experimental_object
+        self.qualities = qualities
+        self.reward = reward
+        self.costs = costs
+
+
+experiment_data = {
+    ResearchProject.REPLICA_ANCIENT_RIFLE_SHORT: LabProjectData(
+        experimental_object=130,
+        qualities={
+            Item.TotalLabResearchRequired: 100,
+            Item.ExpectedLabRewardValue: 1250
+        },
+        reward={
+            # Item.AncientHuntingRifle: 1
+        },
+        costs={}
+    ),
+    ResearchProject.REPLICA_ANCIENT_RIFLE_LONG: LabProjectData(
+        experimental_object=130,
+        qualities={
+            Item.TotalLabResearchRequired: 1650,
+            # Keeps same expected reward value?
+        },
+        reward={
+            # Item.InfernalSharpshootersRifle: 1
+        },
+        costs={}
+    ),
+    ResearchProject.CARTOGRAPHERS_HOARD: LabProjectData(
+        experimental_object=230,
+        qualities={
+            Item.TotalLabResearchRequired: 2700,
+            Item.NauticalFocus: 1,
+            Item.ExpectedLabRewardValue: 31250
+        },
+        reward={
+            Item.CartographersHoard: 1
+        },
+        costs={}
+    ),
+
+    # TODO excess PR reduces regular LR required
+    ResearchProject.GLASS_GAZETTES_5: LabProjectData(
+        experimental_object=240,
+        qualities={
+            Item.TotalLabResearchRequired: 50,
+            Item.TotalParabolanResearchRequired: 10,
+            Item.ExpectedLabRewardValue: 1250
+        },
+        reward={
+            Item.GlassGazette: 5
+        },
+        costs={}
+    ),
+    ResearchProject.GLASS_GAZETTES_125: LabProjectData(
+        experimental_object=240,
+        qualities={
+            Item.TotalLabResearchRequired: 2500,
+            Item.TotalParabolanResearchRequired: 65,
+            Item.ExpectedLabRewardValue: 31250
+        },
+        reward={
+            Item.GlassGazette: 125
+        },
+        costs={}
+    ),
+
+    # TODO requires numismatrix
+    ResearchProject.HINTERLAND_SCRIP: LabProjectData(
+        experimental_object=250,
+        qualities={
+            Item.TotalLabResearchRequired: 125,
+        },
+        reward={
+            Item.BreakthroughInCurrencyDesign: 1
+        },
+        costs={}
+    ),
+
+    ResearchProject.ROOF_CHARTS: LabProjectData(
+        experimental_object=260,
+        qualities={
+            Item.TotalLabResearchRequired: 550,
+            Item.ExpectedLabRewardValue: 6250
+        },
+        # TODO: varies w Firmament story prog
+        reward={
+            Item.RoofChart: 16,
+            Item.ExtraordinaryImplication: 9
+        },
+        costs={
+            Item.TempestuousTale: -1
+        }
+    ),
+
+    
+    ResearchProject.INFERNAL_MACHINE: LabProjectData(
+        experimental_object=310,
+        qualities={
+            Item.TotalLabResearchRequired: 500,
+        },
+        reward={
+            Item.InfernalMachine: 1
+        },
+        costs={
+            Item.NevercoldBrassSliver: -250,
+            Item.BessemerSteelIngot: -5
+        }
+    ),
+    ResearchProject.DEVILISH_PROBABILITY_DISTRIBUTOR: LabProjectData(
+        experimental_object=320,
+        qualities={
+            Item.TotalLabResearchRequired: 450,
+        },
+        reward={
+            Item.DevilishProbabilityDistributor: 1
+        },
+        costs={
+            Item.FavHell: -3,
+            Item.NevercoldBrassSliver: -250
+        }
+    ),
+    ResearchProject.AUGMENTATION_DEVICE: LabProjectData(
+        experimental_object=330,
+        qualities={
+            Item.TotalLabResearchRequired: 100,
+            Item.RedScienceFocus: 1
+        },
+        reward={
+            Item.DirefulReflection: 1
+        },
+        costs={}
+    ),
+
+    ResearchProject.PINEWOOD_SHARK_ANATOMY: LabProjectData(
+        experimental_object=450,
+        qualities={
+            Item.TotalLabResearchRequired: 100,
+            Item.MonstrousFocus: 1,
+        },
+        reward={
+            Item.IncisiveObservation: 2,
+            Item.FinBonesCollected: 38,
+            Item.BoneFragments: 500
+        },
+        costs={
+            Item.RemainsOfAPinewoodShark: -1
+        }
+    ),
+    ResearchProject.PRESERVED_FALSE_SNAKE_PHYLOGENY: LabProjectData(
+        experimental_object=460,
+        qualities={
+            Item.TotalLabResearchRequired: 100,
+            Item.ToxicologicalFocus: 1,
+        },
+        reward={
+            Item.MemoryOfDistantShores: 20,
+            Item.UnearthlyFossil: 1
+        },
+        costs={}
+    ),
+
+
+    ResearchProject.THORNED_RIBCAGE_TRUTH: LabProjectData(
+        experimental_object=510,
+        qualities={
+            Item.TotalLabResearchRequired: 350,
+            Item.TotalParabolanResearchRequired: 15
+        },
+        reward={
+            Item.SearingEnigma: 1
+        },
+        costs={
+            Item.ThornedRibcage: -1
+        }
+    ),
+    ResearchProject.TREACHERY_OF_MEASURES_RIBCAGE: LabProjectData(
+        experimental_object=520,
+        qualities={
+            Item.TotalLabResearchRequired: 425,
+            Item.RedScienceFocus: 1
+        },
+        reward={
+            Item.MammothRibcage: 1
+        },
+        costs={
+            Item.HumanRibcage: -1
+        }
+    ),
+    ResearchProject.TREACHERY_OF_MEASURES_WARBLER: LabProjectData(
+        experimental_object=530,
+        qualities={
+            Item.TotalLabResearchRequired: 425,
+            Item.RedScienceFocus: 1
+        },
+        reward={
+            Item.SkeletonWithSevenNecks: 1
+        },
+        costs={
+            Item.NevercoldBrassSliver: -1000,
+            Item.WarblerSkeleton: -1
+        }
+    ),
+    ResearchProject.ELASTIC_LIMITS_FLESH_BONE: LabProjectData(
+        experimental_object=540,
+        qualities={
+            Item.TotalLabResearchRequired: 550,
+            Item.ShapelingFocus: 1
+        },
+        reward={
+            Item.KnottedHumerus: 1,
+            Item.ThornedRibcage: 1,
+            Item.WitheredTentacle: 2,
+            Item.NoduleOfDeepAmber: 2,
+            Item.BoneFragments: 2150
+        },
+        costs={
+            Item.HumanArm: -1,
+            Item.HumanRibcage: -1,
+            Item.NoduleOfDeepAmber: -100
+        }
+    ),
+    # TODO failure outcome
+    ResearchProject.UNIDENTIFIED_THIGH_BONE_TRUTH: LabProjectData(
+        experimental_object=610,
+        qualities={
+            Item.TotalLabResearchRequired: 25,
+        },
+        reward={
+            Item.FemurOfAJurassicBeast: 1
+        },
+        costs={
+            Item.UnidentifiedThighBone: -1
+        }
+    ),
+    ResearchProject.UNIDENTIFIED_THIGH_BONE_FORGERY: LabProjectData(
+        experimental_object=615,
+        qualities={
+            Item.TotalLabResearchRequired: 75,
+            Item.TotalParabolanResearchRequired: 25
+        },
+        reward={
+            Item.HolyRelicOfTheThighOfStFiacre: 1
+        },
+        costs={}
+    ),
+
+    # TODO other outcomes
+    ResearchProject.EOLITH_DISAMBIGUATION: LabProjectData(
+        experimental_object=810,
+        qualities={
+            Item.TotalLabResearchRequired: 10
+        },
+        reward={
+            Item.PerfumedGunpowder: 1
+        },
+        costs={
+            Item.AmbiguousEolith: -1
+        }
+    ),
+    ResearchProject.NEATHY_GEOLOGY_SURVEY_25: LabProjectData(
+        experimental_object=820,
+        qualities={
+            Item.TotalLabResearchRequired: 100,
+            Item.ExpectedLabRewardValue: 1250
+        },
+        reward={
+            Item.SurveyOfTheNeathsBones: 25
+        },
+        costs={}
+    ),
+    ResearchProject.NEATHY_GEOLOGY_SURVEY_625: LabProjectData(
+        experimental_object=820,
+        qualities={
+            Item.TotalLabResearchRequired: 2700,
+            Item.ExpectedLabRewardValue: 31250
+        },
+        reward={
+            Item.SurveyOfTheNeathsBones: 625
+        },
+        costs={}
+    ),
+    ResearchProject.ROOF_DRIPPINGS_GEOCHEMICAL_STUDY: LabProjectData(
+        experimental_object=830,
+        qualities={
+            Item.TotalLabResearchRequired: 100,
+        },
+        reward={
+            Item.TempestuousTale: 5,
+            Item.ExtraordinaryImplication: 4
+        },
+        costs={
+            Item.SampleOfRoofDrip: -1
+        }
+    ),
+    ResearchProject.QUEENLY_ATTAR_TOXICOLOGY: LabProjectData(
+        experimental_object=950,
+        qualities={
+            Item.TotalLabResearchRequired: 450,
+            Item.TotalParabolanResearchRequired: 15,
+            Item.ToxicologicalFocus: 1
+        },
+        reward={},
+        costs={}
+    ),
+    ResearchProject.STARVED_SECRETIONS_STUDY: LabProjectData(
+        experimental_object=960,
+        qualities={
+            Item.TotalLabResearchRequired: 550,
+            Item.ToxicologicalFocus: 1
+        },
+        reward={
+            Item.NightWhisper: 1
+        },
+        costs={}
+    ),
+    ResearchProject.JUSTIFICANDE_METALLURGY: LabProjectData(
+        experimental_object=980,
+        qualities={
+            Item.TotalLabResearchRequired: 125,
+            Item.ToxicologicalFocus: 1,
+            Item.RedScienceFocus: 1
+        },
+        reward={
+            Item.TempestuousTale: 5,
+            Item.EmeticRevelation: 2,
+            Item.ExtraordinaryImplication: 15
+        },
+        costs={
+            Item.StarvedExpression: -5
+        }
+    ),
+    ResearchProject.IMPOSSIBLE_THEOREM: LabProjectData(
+        experimental_object=1010,
+        qualities={
+            Item.TotalLabResearchRequired: 13000,
+            Item.TotalParabolanResearchRequired: 300
+        },
+        reward={
+            Item.ImpossibleTheorem: 1
+        },
+        costs={}
+    ),
+    # TODO okay this is why ParabolanMethods is a separate quality
+    ResearchProject.STATISTICAL_OBSERVATIONS_NORMAL: LabProjectData(
+        experimental_object=1020,
+        qualities={
+            Item.TotalLabResearchRequired: 100,
+        },
+        reward={
+            Item.MirthlessCompendium: 1
+        },
+        costs={}
+    ),
+    ResearchProject.STATISTICAL_OBSERVATIONS_CORRUPTED: LabProjectData(
+        experimental_object=1020,
+        qualities={
+            Item.TotalLabResearchRequired: 100,
+            Item.TotalParabolanResearchRequired: 1
+        },
+        reward={
+            Item.HinterlandScrip: 20
+        },
+        costs={}
+    ),
+    ResearchProject.PATTERN_BRICK_TRANSLATION: LabProjectData(
+        experimental_object=1050,
+        qualities={
+            Item.TotalLabResearchRequired: 450,
+            Item.TotalParabolanResearchRequired: 15,
+            Item.RedScienceFocus: 1,
+            Item.CorrespondenceFocus: 1
+        },
+        reward={
+            Item.SearingEnigma: 1
+        },
+        costs={}
+    ),
+    ResearchProject.PRELAPSARIAN_RED_SCIENCE: LabProjectData(
+        experimental_object=1320,
+        qualities={
+            Item.TotalLabResearchRequired: 2700,
+            Item.RedScienceFocus: 1,
+            Item.CorrespondenceFocus: 1
+        },
+        # TODO
+        reward={},
+        costs={}
+    ),
+    ResearchProject.CAPTURED_USHABTI: LabProjectData(
+        experimental_object=1340,
+        qualities={
+            Item.TotalLabResearchRequired: 550,
+            Item.ToxicologicalFocus: 1
+        },
+        reward={
+            # TODO
+            # Item.CapturedUshabti: -1,
+            Item.PrimaevalHint: 1,
+            Item.TaleOfTerror: 1
+        },
+        costs={}
+    ),
+    ResearchProject.SUN_BLAZONED_CUIRASS: LabProjectData(
+        experimental_object=1350,
+        qualities={
+            Item.TotalLabResearchRequired: 550,
+            Item.MonstrousFocus: 1
+        },
+        reward={
+            Item.PrimaevalHint: 1
+        },
+        costs={}
+    ),
+}
+
+
 
 research_unit_ev = 0.11 # approx echo value
 
@@ -69,7 +578,7 @@ class LabState(GameState):
     def __init__(self):
         super().__init__(max_hand_size=3)
         self.status = "InProgress"
-
+        self.project_data = {}
         self.outfit = PlayerOutfit(300, 18)
         self.actions = 1
         self.items = {
@@ -80,7 +589,7 @@ class LabState(GameState):
 
             # # Progression qualities
             # Item.EquipmentForScientificExperimentation: 9,
-            # Item.PrestigeOfYourLaboratory: 100,
+            # Item.TotalParabolanResearchRequiredestigeOfYourLaboratory: 100,
             # Item.NumberOfWorkersInYourLaboratory: 4,
             # Item.ScholarOfTheCorrespondence: 21,
 
@@ -103,7 +612,7 @@ class LabState(GameState):
     
     def research_remaining(self):
         have = self.items.get(Item.LaboratoryResearch, 0)
-        need = self.items.get(Item.TotalLabReserchRequired, 0)
+        need = self.items.get(Item.TotalLabResearchRequired, 0)
         return need - have
 
     def highest_worker_level(self):
@@ -383,7 +892,7 @@ class PreparingForBriefExperiment(OpportunityCard):
     
     def can_draw(self, state: LabState):
         return state.items.get(Item.NoLongerReviewingLiterature, 0) == 0 and \
-            state.items.get(Item.TotalLabReserchRequired, 0) < 200
+            state.items.get(Item.TotalLabResearchRequired, 0) < 200
 
 class PrepareCarefully(Action):
     def __init__(self):
@@ -474,7 +983,7 @@ class FormNewHypotheses(OpportunityCard):
     
     def can_draw(self, state: LabState):
         return state.items.get(Item.NoLongerFormingHypotheses, 0) == 0 and \
-            state.items.get(Item.TotalLabReserchRequired, 0) >= 200
+            state.items.get(Item.TotalLabResearchRequired, 0) >= 200
 
 class ReviewPossibilities(Action):
     def __init__(self):
@@ -526,7 +1035,7 @@ class NoMoreOfThis(Action):
         super().__init__("No more of this!")
 
     def can_perform(self, state: GameState):
-        req = state.items[Item.TotalLabReserchRequired]
+        req = state.items[Item.TotalLabResearchRequired]
         return state.items[Item.LaboratoryResearch] >= req/6
     
     def pass_items(self, state: LabState):
@@ -553,7 +1062,7 @@ class ReviewThePriorLiterature(OpportunityCard):
     
     def can_draw(self, state: LabState):
         return state.items.get(Item.NoLongerReviewingLiterature, 0) == 0 and \
-            state.items.get(Item.TotalLabReserchRequired, 0) >= 200
+            state.items.get(Item.TotalLabResearchRequired, 0) >= 200
 
 class ReadCanonicalTexts(Action):
     def __init__(self):
@@ -634,7 +1143,7 @@ class RelateToPastEnigma(Action):
 
     def can_perform(self, state: LabState):
         # return (state.items.get(Item.SearingEnigma, 0) >= 1 and
-        research_remaining = (state.items[Item.TotalLabReserchRequired] -
+        research_remaining = (state.items[Item.TotalLabResearchRequired] -
                               state.items[Item.LaboratoryResearch])
         return (research_remaining >= 500 and 
             1001 <= state.items.get(Item.ExperimentalObject, 0) <= 1200)
@@ -772,7 +1281,7 @@ class UnorthodoxMethods(OpportunityCard):
         self.weight = 0.5  # Very Infrequent Frequency
     
     def can_draw(self, state: LabState):
-        return (state.items.get(Item.TotalLabReserchRequired, 0) >= 200 and
+        return (state.items.get(Item.TotalLabResearchRequired, 0) >= 200 and
             state.items.get(Item.UnlikelyConnection, 0) >= 1 and
             state.items.get(Item.PrestigeOfYourLaboratory, 0) >= 20)
 
@@ -886,7 +1395,7 @@ class RefreshYourConsumables(OpportunityCard):
     
     def can_draw(self, state: LabState):
         return state.items.get(Item.NoLongerResupplying, 0) == 0 and \
-            state.items.get(Item.TotalLabReserchRequired, 0) >= 200
+            state.items.get(Item.TotalLabResearchRequired, 0) >= 200
 
 class DemandDelivery(Action):
     def __init__(self):
@@ -1003,7 +1512,7 @@ class DirectingYourTeam(OpportunityCard):
     def can_draw(self, state: LabState):
         return (state.items.get(Item.NoLongerFormingHypotheses, 0) >= 1 and
                 state.items.get(Item.NumberOfWorkersInYourLaboratory, 0) >= 3 and
-                state.items.get(Item.TotalLabReserchRequired, 0) >= 200 and
+                state.items.get(Item.TotalLabResearchRequired, 0) >= 200 and
                 state.items.get(Item.NoLongerReviewingLiterature, 0) >= 1)
 
 class PutThemToWork(Action):
@@ -1198,7 +1707,7 @@ class CirculateDraft(Action):
     def pass_items(self, state: LabState):
         # Calculate the research gained based on the formula provided
         lab_research = state.items.get(Item.LaboratoryResearch, 0)
-        total_lab_required = state.items.get(Item.TotalLabReserchRequired, 1)
+        total_lab_required = state.items.get(Item.TotalLabResearchRequired, 1)
         unexpected_result = state.items.get(Item.UnexpectedResult, 0)
 
         research_gain = (100 * lab_research / total_lab_required) + \
@@ -2052,7 +2561,8 @@ class SeekInsightOnGeology(Action):
         super().__init__("Seek her insight on charting of geology and bone strata")
     
     def can_perform(self, state: LabState):
-        return state.items.get(Item.ExperimentalObject, 0) == 820
+        # HACK
+        return state.items.get(Item.ExperimentalObject, 0) in [820, 825]
 
     def pass_items(self, state: LabState):
         equipment_level = state.equipment()
@@ -2587,12 +3097,13 @@ class LabSimulationRunner(SimulationRunner):
         return LabState()
     
 
+project_data = experiment_data[ResearchProject.ROOF_CHARTS]
 simulation = LabSimulationRunner(
     runs = 500,
     initial_values= {
-        Item.ExperimentalObject: 620,
-        Item.TotalLabReserchRequired: 2700,
-        Item.NauticalFocus: 1,
+        Item.ExperimentalObject: project_data.experimental_object,
+        Item.TotalLabResearchRequired: project_data.qualities[Item.TotalLabResearchRequired],
+        # Item.NauticalFocus: 1,
 
         # # Experiment
         # Item.LaboratoryResearch: 0,
@@ -2604,8 +3115,8 @@ simulation = LabSimulationRunner(
         Item.ScholarOfTheCorrespondence: 21,
 
         # Experts
-        # Item.LaboratoryServicesOfLetticeTheMercy: 1,
-        Item.LaboratoryServicesFromHephaesta: 1,
+        Item.LaboratoryServicesOfLetticeTheMercy: 1,
+        # Item.LaboratoryServicesFromHephaesta: 1,
         Item.LaboratoryServicesOfSilkCladExpert: 1,
 
         # Students
@@ -2614,8 +3125,8 @@ simulation = LabSimulationRunner(
 
         # Other items
         Item.SecretCollege: 1,
-        Item.PotOfViolantInk: 1,
-        Item.KittenSizedDiamond: 1
+        # Item.PotOfViolantInk: 1,
+        # Item.KittenSizedDiamond: 1
     })
 
 simulation.outfit = PlayerOutfit(330, 18)

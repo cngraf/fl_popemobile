@@ -120,7 +120,7 @@ london.uncategorized.add_trades(active_player, config)
 london.newspaper.add_trades(active_player, config)
 
 # TODO magic number, use simulation results instead
-london.laboratory.add_trades(active_player, 33, config)
+london.laboratory.add_trades(config)
 london.hearts_game.add_trades(active_player, config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
@@ -173,7 +173,7 @@ actions_per_day = 120
 full_draws_per_day = 3
 
 optimize_input = Item.Action
-optimize_for = Item.SurveyOfTheNeathsBones
+optimize_for = Item.Echo
 
 core_constraint = {
     Item.Constraint: 1,
