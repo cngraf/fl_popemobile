@@ -212,6 +212,8 @@ class Item(Enum):
     InscrutableRatMarketSaturation1 = auto()
     TempestuousRatMarketSaturation1 = auto()
     IntricateRatMarketSaturation1 = auto()
+    _TBD_GreatGameRatMarketSaturation1 = auto()
+    _TBD_SpookyRatMarketSaturation1 = auto()
 
     SoftRatMarketSaturation2 = auto()
     SaintlyRatMarketSaturation2 = auto()
@@ -219,7 +221,8 @@ class Item(Enum):
     InscrutableRatMarketSaturation2 = auto()
     TempestuousRatMarketSaturation2 = auto()
     IntricateRatMarketSaturation2 = auto()    
-
+    _TBD_GreatGameRatMarketSaturation2 = auto()
+    _TBD_SpookyRatMarketSaturation2 = auto()
 
     # Bone Market Hack
     _BoneMarketRotation = auto()

@@ -3,6 +3,7 @@ from utils import *
 
 def add_trades(active_player, lab_rpa, config):
     trade = config.trade
+    add = config.add
 
     trade(1, {
         Item.LaboratoryResearch: lab_rpa
@@ -79,10 +80,25 @@ def add_trades(active_player, lab_rpa, config):
         Item.ConsignmentOfScintillackSnuff: 2
     })
 
+    # PerfumedGunpowder per Action:    2.10293
+    add({
+        Item.Action: -1,
+        Item.NightsoilOfTheBazaar: -40,
+        Item.PreservedSurfaceBlooms: -1,
+        Item.PerfumedGunpowder: 10
+    })
+
     # estimated actions
     trade(4, {
         Item.RemainsOfAPinewoodShark: -1,
         Item.FinBonesCollected: 38,
         Item.BoneFragments: 500,
         Item.IncisiveObservation: 2
+    })
+
+    add({
+        Item.Action: -1,
+        Item.PerfumedGunpowder: -4,
+        Item.VitalIntelligence: 1,
+        Item.WellPlacedPawn: 2
     })

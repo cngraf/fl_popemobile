@@ -16,8 +16,8 @@ class RailwayState(GameState):
     def __init__(self, location: Location):
         super().__init__(max_hand_size=5)
         self.location = location
-        self.ev_threshold = 5.68
-        self.scrip_threshold_multiplier = 1.0
+        self.ev_threshold = 5.5
+        self.scrip_threshold_multiplier = 2.0
 
         self.skip_favour_inputs = False
         self.skip_econ_inputs = False
@@ -85,13 +85,16 @@ class RailwayState(GameState):
 
         self.hand = [card for card in self.hand if card.can_draw(self)]
 
-        if self.actions >= 1000:
+        if self.actions >= 500:
             self.status = "Complete"
 
 
 '''
 TODO
-- Hellworm
+- Lines of Communication
+    - turns out this is a semi-permament card if you did the event
+
+- God's Editors at Burrow-Infra-Mump
 
 # Skip cards and actions that are avoidable or non-repeatable
 
@@ -103,7 +106,6 @@ TODO
     Stop That Stove!
     Tending to the Allotment
     That Which was Taken (Upper River)
-    The Clay Highwayman's Gang 2 (implement eventually)
     The Return of the Gondolier
     Who is the Clay Highwayman?
     The Incident of the Honey-Mazed Bear
@@ -111,12 +113,12 @@ TODO
     Something is Landing
         technically not avoidable, -1 action/day
 
-# Bad? cards added by non-essential item
+
+# Bad? cards added by non-essential item/quality
     Tomb Colonist Tour
     Canal Workers on the Upper River
-    God's Editors at Burrow-Infra-Mump
-        might be worthwhile still, check back
     Upper River Artistry
+     The Clay Highwayman's Gang 2
 
 # Replaceable with better cards
     Cells outside the City
@@ -127,7 +129,6 @@ TODO
     An Embarrassment of Snitches
     At the Bottom of a Pit that Used to be a Hill
     Atop the Railway Shed
-    Lines of Communication
     Steel and sabotage
 
 # Any actions that meet the above critera, too many to list
@@ -4346,7 +4347,14 @@ class RailwaySimulationRunner(SimulationRunner):
         return RailwayState(self.location)
     
     def print_item_summary(self):
-        print(f"Location: {self.location.name}")
+        # HACK
+        sample_state = self.create_state()
+        print(f"Location:           {sample_state.location.name}")
+        print(f"EV Threshold:       {sample_state.ev_threshold} echoes")
+        print(f"Scrip EV bonus:     {sample_state.scrip_threshold_multiplier}x")
+        print(f"skip_favour_inputs: {sample_state.skip_favour_inputs}")
+        print(f"skip_econ_inputs:   {sample_state.skip_econ_inputs}")
+
         max_name_length = 35
         print(f"\n{'Item':<35}{'Per Run':>15}{'Echo':>10}{'EPA':>10}{'Scrip':>10}{'SPA':>10}")
         print("-" * 85)
@@ -4402,7 +4410,7 @@ class RailwaySimulationRunner(SimulationRunner):
 
 simulation = RailwaySimulationRunner(
     runs = 100,
-    location = Location.JerichoLocks,
+    location = Location.BurrowInfraMump,
 
     initial_values= {
         Item.ColourAtTheChessboard: 1,
@@ -4412,8 +4420,8 @@ simulation = RailwaySimulationRunner(
         Item.TrainBaggageAccomodations: 6,
         Item.SeeingBanditryInTheUpperRiver: 0, # utils.pyramid(),
 
-        # Item.MoonPearl: 20_000,
-        # Item.InTheCompanyOfAHellworm: 1,
+        Item.MoonPearl: 2_000_000,
+        Item.InTheCompanyOfAHellworm: 1,
         # Item.HellwormSaddle: 1,
     
         Item.EalingGardensCommemorativeDevelopment: 99,
@@ -4421,7 +4429,7 @@ simulation = RailwaySimulationRunner(
         Item.MagistracyOfEvenlodeCommemorativeDevelopment: 99,
         Item.BalmoralCommemorativeDevelopment: 99,
         Item.StationVIIICommemorativeDevelopment: 99,
-        Item.BurrowInfraMumpCommemorativeDevelopment: 99,
+        # Item.BurrowInfraMumpCommemorativeDevelopment: 99,
         Item.MoulinCommemorativeDevelopment: 99,
         Item.HurlersCommemorativeDevelopment: 99,
         Item.MarigoldCommemorativeDevelopment: 99,

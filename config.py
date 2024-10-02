@@ -121,6 +121,8 @@ class Config:
         self.bounds[Item.InscrutableRatMarketSaturation1.value] = (-65_000, 0)
         self.bounds[Item.TempestuousRatMarketSaturation1.value] = (-65_000, 0)
         self.bounds[Item.IntricateRatMarketSaturation1.value] = (-65_000, 0)
+        self.bounds[Item._TBD_GreatGameRatMarketSaturation1.value] = (-65_000, 0)
+        self.bounds[Item._TBD_SpookyRatMarketSaturation1.value] = (-65_000, 0)
 
         self.bounds[Item.SoftRatMarketSaturation2.value] = (-155_000, 0)
         self.bounds[Item.SaintlyRatMarketSaturation2.value] = (-115_000, 0)
@@ -128,6 +130,8 @@ class Config:
         self.bounds[Item.InscrutableRatMarketSaturation2.value] = (-115_000, 0)
         self.bounds[Item.TempestuousRatMarketSaturation2.value] = (-115_000, 0)
         self.bounds[Item.IntricateRatMarketSaturation2.value] = (-115_000, 0)
+        self.bounds[Item._TBD_GreatGameRatMarketSaturation2.value] = (-115_000, 0)
+        self.bounds[Item._TBD_SpookyRatMarketSaturation2.value] = (-115_000, 0)
 
 
 

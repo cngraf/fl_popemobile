@@ -171,7 +171,7 @@ actions_per_day = 120
 full_draws_per_day = 3
 
 optimize_input = Item.Action
-optimize_for = Item.Echo
+optimize_for = Item.PerfumedGunpowder
 
 core_constraint = {
     Item.Constraint: 1,
@@ -180,10 +180,10 @@ core_constraint = {
     # The following features are all +EPA, +Complexity
 
     # Uncomment to enable Rat Market demand multipliers
-    # Item._RatMarketRotation: 1,
+    Item._RatMarketRotation: 1,
 
     # Uncomment to enable Bone Market zoo/flux multipliers
-    # Item._BoneMarketRotation: 1,
+    Item._BoneMarketRotation: 1,
 
     # Uncomment to enable whatever other random weekly stuff I have implemented
     # Item.VisitFromTimeTheHealer: 1,

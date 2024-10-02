@@ -17,84 +17,85 @@ def add_trades(config: Config):
         Item.HinterlandProsperity: 510
     })
 
-    # Cashing in
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.PuzzlingMap: 1
-    })
+    # TODO monte carlo how many actions it actually takes to get right card
+    # # Cashing in
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.PuzzlingMap: 1
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.AmbiguousEolith: 15,
-        Item.UnidentifiedThighBone: 5
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.AmbiguousEolith: 15,
+    #     Item.UnidentifiedThighBone: 5
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.NoduleOfTremblingAmber: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.NoduleOfTremblingAmber: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.LegalDocument: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.LegalDocument: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.VitalIntelligence: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.VitalIntelligence: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.NoduleOfTremblingAmber: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.NoduleOfTremblingAmber: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.CrystallizedEuphoria: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.CrystallizedEuphoria: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.VerseOfCounterCreed: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.VerseOfCounterCreed: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.LostResearchAssistant: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.LostResearchAssistant: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -1050 + efficiency,
-        Item.BlackmailMaterial: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -1050 + efficiency,
+    #     Item.BlackmailMaterial: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -6250,
-        Item.HolyRelicOfTheThighOfStFiacre: 1,
-        Item.VerseOfCounterCreed: 3,
-        Item.ApostatesPsalm: 5
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -6250,
+    #     Item.HolyRelicOfTheThighOfStFiacre: 1,
+    #     Item.VerseOfCounterCreed: 3,
+    #     Item.ApostatesPsalm: 5
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -6250,
-        Item.CaptivatingBallad: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -6250,
+    #     Item.CaptivatingBallad: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -31250,
-        Item.BottleOfFourthCityAirag: 5,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -31250,
+    #     Item.BottleOfFourthCityAirag: 5,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -156000,
-        Item.RumourmongersNetwork: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -156000,
+    #     Item.RumourmongersNetwork: 1,
+    # })
 
-    trade(1, {
-        Item.HinterlandProsperity: -156000,
-        Item.VialOfMastersBlood: 1,
-    })
+    # trade(1, {
+    #     Item.HinterlandProsperity: -156000,
+    #     Item.VialOfMastersBlood: 1,
+    # })
 
     # # amortized betray to crims
     # trade(1, {

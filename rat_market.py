@@ -29,25 +29,35 @@ def add_trades(config: Config):
     trade = config.trade
     add = config.add
 
+    # Rough approximation
+    demands_per_week = 2
+    total_demand_types = 8
+    demand_frequency = demands_per_week / total_demand_types
+
     add({
         Item._RatMarketRotation: -1,
-        # 6 weeks, 2 demands per week => refresh 1/3 capacity per week
+
         # 0 to 65k
-        Item.SoftRatMarketSaturation1: -65_000 / 3,
-        Item.SaintlyRatMarketSaturation1: -65_000 / 3,
-        Item.MaudlinRatMarketSaturation1: -65_000 / 3,
-        Item.InscrutableRatMarketSaturation1: -65_000 / 3,
-        Item.TempestuousRatMarketSaturation1: -65_000 / 3,
-        Item.IntricateRatMarketSaturation1: -65_000 / 3,
+        Item.SoftRatMarketSaturation1: -65_000 * demand_frequency,
+        Item.SaintlyRatMarketSaturation1: -65_000 * demand_frequency,
+        Item.MaudlinRatMarketSaturation1: -65_000 * demand_frequency,
+        Item.InscrutableRatMarketSaturation1: -65_000 * demand_frequency,
+        Item.TempestuousRatMarketSaturation1: -65_000 * demand_frequency,
+        Item.IntricateRatMarketSaturation1: -65_000 * demand_frequency,
+        Item._TBD_GreatGameRatMarketSaturation1: -65_000 * demand_frequency,
+        Item._TBD_SpookyRatMarketSaturation1: -65_000 * demand_frequency,
 
         # 65k to 180k
-        Item.SoftRatMarketSaturation2: -115_000 / 3,
-        Item.SaintlyRatMarketSaturation2: -115_000 / 3,
-        Item.MaudlinRatMarketSaturation2: -115_000 / 3,
-        Item.InscrutableRatMarketSaturation2: -115_000 / 3,
-        Item.TempestuousRatMarketSaturation2: -115_000 / 3,
-        Item.IntricateRatMarketSaturation2: -115_000 / 3,       
+        Item.SoftRatMarketSaturation2: -115_000 * demand_frequency,
+        Item.SaintlyRatMarketSaturation2: -115_000 * demand_frequency,
+        Item.MaudlinRatMarketSaturation2: -115_000 * demand_frequency,
+        Item.InscrutableRatMarketSaturation2: -115_000 * demand_frequency,
+        Item.TempestuousRatMarketSaturation2: -115_000 * demand_frequency,
+        Item.IntricateRatMarketSaturation2: -115_000 * demand_frequency,       
+        Item._TBD_GreatGameRatMarketSaturation2: -115_000 * demand_frequency,       
+        Item._TBD_SpookyRatMarketSaturation2: -115_000 * demand_frequency,       
     })
+    
     add_ratly_demand_trades(config,
         saturation1=Item.SoftRatMarketSaturation1,
         saturation=Item.SoftRatMarketSaturation2,
@@ -60,6 +70,7 @@ def add_trades(config: Config):
         item=Item.ScrapOfIvoryOrganza,
         echo_value=312.50)
     
+
     add_ratly_demand_trades(config,
         saturation1=Item.SaintlyRatMarketSaturation1,
         saturation=Item.SaintlyRatMarketSaturation2,
@@ -72,6 +83,7 @@ def add_trades(config: Config):
         item=Item.FalseHagiotoponym,
         echo_value=62.50)
     
+
     add_ratly_demand_trades(config,
         saturation1=Item.MaudlinRatMarketSaturation1,
         saturation=Item.MaudlinRatMarketSaturation2,
@@ -84,6 +96,7 @@ def add_trades(config: Config):
         item=Item.ParabolanParable,
         echo_value=312.50)
     
+
     add_ratly_demand_trades(config,
         saturation1=Item.InscrutableRatMarketSaturation1,
         saturation=Item.InscrutableRatMarketSaturation2,
@@ -96,6 +109,7 @@ def add_trades(config: Config):
         item=Item.CartographersHoard,
         echo_value=312.50)
     
+
     add_ratly_demand_trades(config,
         saturation1=Item.TempestuousRatMarketSaturation1,
         saturation=Item.TempestuousRatMarketSaturation2,
@@ -108,6 +122,7 @@ def add_trades(config: Config):
         item=Item.NightWhisper,
         echo_value=62.50)
     
+
     add_ratly_demand_trades(config,
         saturation1=Item.IntricateRatMarketSaturation1,
         saturation=Item.IntricateRatMarketSaturation2,
@@ -119,6 +134,76 @@ def add_trades(config: Config):
         saturation=Item.IntricateRatMarketSaturation2,
         item=Item.CorrespondingSounder,
         echo_value=312.50)
+    
+    # TODO exact numbers
+    # New trades coming weekend of 30 Sep 24
+    add_ratly_demand_trades(config,
+        saturation1=Item._TBD_GreatGameRatMarketSaturation1,
+        saturation=Item._TBD_GreatGameRatMarketSaturation2,
+        item=Item.VitalIntelligence,
+        echo_value=12.50)
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item._TBD_GreatGameRatMarketSaturation1,
+        saturation=Item._TBD_GreatGameRatMarketSaturation2,
+        item=Item.CorrespondingSounder,
+        echo_value=312.50)
+    
+    # TODO
+    paired_mate_echo_value = 62.5 # IDK
+
+    config.add({
+        Item.QueenMate: -1,
+        Item.EpauletteMate: -1,
+        Item._TBD_GreatGameRatMarketSaturation1: paired_mate_echo_value * 100,
+        Item.RatShilling: paired_mate_echo_value * 10 * 1.32
+    })
+
+    config.add({
+        Item.QueenMate: -1,
+        Item.EpauletteMate: -1,
+        Item._TBD_GreatGameRatMarketSaturation2: paired_mate_echo_value * 100,
+        Item.RatShilling: paired_mate_echo_value * 10 * 1.12
+    })
+    
+    config.add({
+        Item.QueenMate: -1,
+        Item.EpauletteMate: -1,
+        Item.RatShilling: paired_mate_echo_value * 10
+    })    
+
+    # HACK
+    # add({
+    #       Item.Action: -4,
+    #       Item.LegalDocument: -5,
+    #       Item.ComprehensiveBribe: -6, 
+    #       Item.BazaarPermit: -6, 
+    #       Item.BlackmailMaterial: -6,
+    #       Item.ParabolanOrangeApple: -1,
+    #       Item.DistillationOfRetribution: 1
+    # })
+
+    add_ratly_demand_trades(config,
+        saturation1=Item._TBD_SpookyRatMarketSaturation1,
+        saturation=Item._TBD_SpookyRatMarketSaturation2,
+        item=Item.DistillationOfRetribution,
+        echo_value=312.50)
+
+    add_ratly_demand_trades(config,
+        saturation1=Item._TBD_SpookyRatMarketSaturation1,
+        saturation=Item._TBD_SpookyRatMarketSaturation2,
+        item=Item.MortificationOfAGreatPower,
+        echo_value=62.50)
+
+    add_ratly_demand_trades(config,
+        saturation1=Item._TBD_SpookyRatMarketSaturation1,
+        saturation=Item._TBD_SpookyRatMarketSaturation2,
+        item=Item.DreadfulSurmise,
+        echo_value=312.50)
+
+    
+
+    # Always available
     
     add({
           Item.FourthCityEcho: -1,
