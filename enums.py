@@ -237,41 +237,41 @@ class Item(Enum):
     _ReduceMenace = auto()
 
     # Actions
-    AntiquityReptileAction = auto()
-    AntiquityAmphibianAction = auto()    
-    AntiquityBirdAction = auto()
-    AntiquityFishAction = auto()
-    AntiquityArachnidAction = auto()
-    AntiquityInsectAction = auto()
-    AntiquityPrimateAction = auto()
+    _AntiquityReptileAction = auto()
+    _AntiquityAmphibianAction = auto()    
+    _AntiquityBirdAction = auto()
+    _AntiquityFishAction = auto()
+    _AntiquityArachnidAction = auto()
+    _AntiquityInsectAction = auto()
+    _AntiquityPrimateAction = auto()
 
-    AmalgamyReptileAction = auto()
-    AmalgamyAmphibianAction = auto()    
-    AmalgamyBirdAction = auto()
-    AmalgamyFishAction = auto()
-    AmalgamyArachnidAction = auto()
-    AmalgamyInsectAction = auto()
-    AmalgamyPrimateAction = auto()
+    _AmalgamyReptileAction = auto()
+    _AmalgamyAmphibianAction = auto()    
+    _AmalgamyBirdAction = auto()
+    _AmalgamyFishAction = auto()
+    _AmalgamyArachnidAction = auto()
+    _AmalgamyInsectAction = auto()
+    _AmalgamyPrimateAction = auto()
 
-    MenaceReptileAction = auto()
-    MenaceAmphibianAction = auto()    
-    MenaceBirdAction = auto()
-    MenaceFishAction = auto()
-    MenaceArachnidAction = auto()
-    MenaceInsectAction = auto()      
-    MenacePrimateAction = auto()      
+    _MenaceReptileAction = auto()
+    _MenaceAmphibianAction = auto()    
+    _MenaceBirdAction = auto()
+    _MenaceFishAction = auto()
+    _MenaceArachnidAction = auto()
+    _MenaceInsectAction = auto()      
+    _MenacePrimateAction = auto()      
 
-    AntiquityGeneralAction = auto()
-    AmalgamyGeneralAction = auto()
-    MenaceGeneralAction = auto()
+    _AntiquityGeneralAction = auto()
+    _AmalgamyGeneralAction = auto()
+    _MenaceGeneralAction = auto()
 
-    GeneralReptileAction = auto()
-    GeneralAmphibianAction = auto()    
-    GeneralBirdAction = auto()
-    GeneralFishAction = auto()
-    GeneralArachnidAction = auto()
-    GeneralInsectAction = auto()    
-    GeneralPrimateAction = auto()    
+    _GeneralReptileAction = auto()
+    _GeneralAmphibianAction = auto()    
+    _GeneralBirdAction = auto()
+    _GeneralFishAction = auto()
+    _GeneralArachnidAction = auto()
+    _GeneralInsectAction = auto()    
+    _GeneralPrimateAction = auto()    
 
     # Exhaustion
     AntiquityReptileExhaustion = auto()
@@ -1056,7 +1056,7 @@ class Item(Enum):
     _RandomRoofEvent = auto()
 
     # ----- Psuedo Items
-    VisitFromTimeTheHealer = auto()
+    _VisitFromTimeTheHealer = auto()
 
     AirsOfLondonChange = auto()
 
@@ -1323,4 +1323,42 @@ FAVOUR_ITEMS = [
     Item.FavSociety,
     Item.FavTombColonies,
     Item.FavUrchins
+]
+
+BONE_MARKET_ACTIONS = [
+    Item._AntiquityReptileAction,
+    Item._AntiquityAmphibianAction,    
+    Item._AntiquityBirdAction,
+    Item._AntiquityFishAction,
+    Item._AntiquityArachnidAction,
+    Item._AntiquityInsectAction,
+    Item._AntiquityPrimateAction,
+
+    Item._AmalgamyReptileAction,
+    Item._AmalgamyAmphibianAction,    
+    Item._AmalgamyBirdAction,
+    Item._AmalgamyFishAction,
+    Item._AmalgamyArachnidAction,
+    Item._AmalgamyInsectAction,
+    Item._AmalgamyPrimateAction,
+
+    Item._MenaceReptileAction,
+    Item._MenaceAmphibianAction,    
+    Item._MenaceBirdAction,
+    Item._MenaceFishAction,
+    Item._MenaceArachnidAction,
+    Item._MenaceInsectAction,      
+    Item._MenacePrimateAction,      
+
+    Item._AntiquityGeneralAction,
+    Item._AmalgamyGeneralAction,
+    Item._MenaceGeneralAction,
+
+    Item._GeneralReptileAction,
+    Item._GeneralAmphibianAction,    
+    Item._GeneralBirdAction,
+    Item._GeneralFishAction,
+    Item._GeneralArachnidAction,
+    Item._GeneralInsectAction,    
+    Item._GeneralPrimateAction,    
 ]

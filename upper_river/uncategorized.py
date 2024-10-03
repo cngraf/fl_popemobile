@@ -1,7 +1,7 @@
 from enums import *
-from utils import *
+from helper.utils import *
 
-def add_trades(active_player, config):
+def add_trades(config):
     trade = config.trade
     default_rare_success_rate = 0.05
 

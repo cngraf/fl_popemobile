@@ -1,6 +1,6 @@
 from enums import *
-# from utils import *
-import utils
+# from helper.utils import *
+import helper.utils as utils
 from config import Config
 from player import Player
 from decks.deck import *

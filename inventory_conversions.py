@@ -1,7 +1,7 @@
 from enums import *
-from utils import *
+from helper.utils import *
 
-def add_trades(player, config, default_rare_success_rate = 0.05):
+def add_trades(config, default_rare_success_rate = 0.05):
     trade = config.trade
 
     ## --------------------------------------

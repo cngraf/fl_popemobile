@@ -1,7 +1,7 @@
 import math
 from enum import Enum, auto
 
-import utils
+import helper.utils as utils
 from enums import *
 from config import Config
 from player import Player

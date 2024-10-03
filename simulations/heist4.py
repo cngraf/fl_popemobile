@@ -3,7 +3,7 @@ import sys
 import math
 from collections import defaultdict
 from enum import Enum, auto
-import utils
+import helper.utils as utils
 from enums import *
 from simulations.item_conversions import conversion_rate
 from simulations.models import *

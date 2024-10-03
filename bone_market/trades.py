@@ -1,7 +1,7 @@
 import math
 from enum import Enum, auto
 from enums import *
-import utils
+import helper.utils as utils
 from config import Config
 from player import Player
 from bone_market.models import *
@@ -16,43 +16,43 @@ def add_trades(config: Config):
 
     bone_market_week_actions = {
         Flux.Antiquity: {
-            ZooType.Reptile: Item.AntiquityReptileAction,
-            ZooType.Amphibian: Item.AntiquityAmphibianAction,
-            ZooType.Bird: Item.AntiquityBirdAction,
-            ZooType.Fish: Item.AntiquityFishAction,
-            ZooType.Spider: Item.AntiquityArachnidAction,
-            ZooType.Insect: Item.AntiquityInsectAction,
-            ZooType.Primate: Item.AntiquityPrimateAction,
-            ZooType.NoType: Item.AntiquityGeneralAction
+            ZooType.Reptile: Item._AntiquityReptileAction,
+            ZooType.Amphibian: Item._AntiquityAmphibianAction,
+            ZooType.Bird: Item._AntiquityBirdAction,
+            ZooType.Fish: Item._AntiquityFishAction,
+            ZooType.Spider: Item._AntiquityArachnidAction,
+            ZooType.Insect: Item._AntiquityInsectAction,
+            ZooType.Primate: Item._AntiquityPrimateAction,
+            ZooType.NoType: Item._AntiquityGeneralAction
         },
         Flux.Amalgamy: {
-            ZooType.Reptile: Item.AmalgamyReptileAction,
-            ZooType.Amphibian: Item.AmalgamyAmphibianAction,
-            ZooType.Bird: Item.AmalgamyBirdAction,
-            ZooType.Fish: Item.AmalgamyFishAction,
-            ZooType.Spider: Item.AmalgamyArachnidAction,
-            ZooType.Insect: Item.AmalgamyInsectAction,
-            ZooType.Primate: Item.AmalgamyPrimateAction,
-            ZooType.NoType: Item.AmalgamyGeneralAction
+            ZooType.Reptile: Item._AmalgamyReptileAction,
+            ZooType.Amphibian: Item._AmalgamyAmphibianAction,
+            ZooType.Bird: Item._AmalgamyBirdAction,
+            ZooType.Fish: Item._AmalgamyFishAction,
+            ZooType.Spider: Item._AmalgamyArachnidAction,
+            ZooType.Insect: Item._AmalgamyInsectAction,
+            ZooType.Primate: Item._AmalgamyPrimateAction,
+            ZooType.NoType: Item._AmalgamyGeneralAction
         },
         Flux.Menace: {
-            ZooType.Reptile: Item.MenaceReptileAction,
-            ZooType.Amphibian: Item.MenaceAmphibianAction,
-            ZooType.Bird: Item.MenaceBirdAction,
-            ZooType.Fish: Item.MenaceFishAction,
-            ZooType.Spider: Item.MenaceArachnidAction,
-            ZooType.Insect: Item.MenaceInsectAction,
-            ZooType.Primate: Item.MenacePrimateAction,
-            ZooType.NoType: Item.MenaceGeneralAction
+            ZooType.Reptile: Item._MenaceReptileAction,
+            ZooType.Amphibian: Item._MenaceAmphibianAction,
+            ZooType.Bird: Item._MenaceBirdAction,
+            ZooType.Fish: Item._MenaceFishAction,
+            ZooType.Spider: Item._MenaceArachnidAction,
+            ZooType.Insect: Item._MenaceInsectAction,
+            ZooType.Primate: Item._MenacePrimateAction,
+            ZooType.NoType: Item._MenaceGeneralAction
         },
         Flux.NoQuality: {
-            ZooType.Reptile: Item.GeneralReptileAction,
-            ZooType.Amphibian: Item.GeneralAmphibianAction,
-            ZooType.Bird: Item.GeneralBirdAction,
-            ZooType.Fish: Item.GeneralFishAction,
-            ZooType.Spider: Item.GeneralArachnidAction,
-            ZooType.Insect: Item.GeneralInsectAction,
-            ZooType.Primate: Item.GeneralPrimateAction,
+            ZooType.Reptile: Item._GeneralReptileAction,
+            ZooType.Amphibian: Item._GeneralAmphibianAction,
+            ZooType.Bird: Item._GeneralBirdAction,
+            ZooType.Fish: Item._GeneralFishAction,
+            ZooType.Spider: Item._GeneralArachnidAction,
+            ZooType.Insect: Item._GeneralInsectAction,
+            ZooType.Primate: Item._GeneralPrimateAction,
             # ZooType.NoType: None
         }
     }
@@ -511,7 +511,7 @@ def add_trades(config: Config):
         for tail in (Item.ObsidianChitinTail, Item._NoItem):
             some_mammoth_recipe = {
                 Item.Action: -9,
-                Item.AntiquityReptileAction: -9,
+                Item._AntiquityReptileAction: -9,
                 Item.MammothRibcage: -1,
                 skull_type: -1,
                 Item.FemurOfAJurassicBeast: -4,
@@ -526,7 +526,7 @@ def add_trades(config: Config):
         
         mammoth_recipe2 = {
             Item.Action: -9,
-            Item.AntiquityAmphibianAction: -9,
+            Item._AntiquityAmphibianAction: -9,
             Item.MammothRibcage: -1,
             skull_type: -1,
             Item.FemurOfAJurassicBeast: -1,

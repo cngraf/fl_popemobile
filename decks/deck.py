@@ -1,5 +1,5 @@
 from enums import *
-from utils import *
+from helper.utils import *
 from config import Config
 from player import Player
 

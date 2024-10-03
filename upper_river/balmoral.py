@@ -1,10 +1,10 @@
 from enums import *
-from utils import *
+from helper.utils import *
 from config import Config
 
 # TODO: multiple files?
 
-def add_trades(active_player, config: Config):
+def add_trades(config: Config):
     trade = config.trade
     add = config.add
     player = config.player

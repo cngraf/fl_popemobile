@@ -1,5 +1,5 @@
 from enums import *
-from utils import *
+from helper.utils import *
 
 def add_trades(config):
     add = config.add

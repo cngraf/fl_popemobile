@@ -2,7 +2,7 @@ from enums import *
 from config import Config
 from player import Player
 from decks.deck import *
-import utils
+import helper.utils as utils
 
 import random
 

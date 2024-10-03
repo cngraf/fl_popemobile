@@ -1,10 +1,10 @@
 from enums import *
-from utils import *
+from helper.utils import *
 
 from config import *
 from player import *
 
-def add_trades(_, config: Config):
+def add_trades(config: Config):
     add = config.add
     trade = config.trade
     player = config.player

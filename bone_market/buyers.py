@@ -2,7 +2,7 @@ import math
 from enum import Enum, auto
 from bone_market.models import Bone
 from enums import *
-import utils
+import helper.utils as utils
 from config import Config
 from player import Player
 from bone_market.models import *
@@ -113,81 +113,81 @@ class Buyer():
     def match_action_type(zoo_type, flux_type):
         if zoo_type == ZooType.Reptile:
             if flux_type == Flux.Antiquity:
-                return Item.AntiquityReptileAction
+                return Item._AntiquityReptileAction
             elif flux_type == Flux.Amalgamy:
-                return Item.AmalgamyReptileAction
+                return Item._AmalgamyReptileAction
             elif flux_type == Flux.Menace:
-                return Item.MenaceReptileAction
+                return Item._MenaceReptileAction
             else:
-                return Item.GeneralReptileAction
+                return Item._GeneralReptileAction
         
         elif zoo_type == ZooType.Amphibian:
             if flux_type == Flux.Antiquity:
-                return Item.AntiquityAmphibianAction
+                return Item._AntiquityAmphibianAction
             elif flux_type == Flux.Amalgamy:
-                return Item.AmalgamyAmphibianAction
+                return Item._AmalgamyAmphibianAction
             elif flux_type == Flux.Menace:
-                return Item.MenaceAmphibianAction
+                return Item._MenaceAmphibianAction
             else:
-                return Item.GeneralAmphibianAction        
+                return Item._GeneralAmphibianAction        
 
         elif zoo_type == ZooType.Bird:
             if flux_type == Flux.Antiquity:
-                return Item.AntiquityBirdAction
+                return Item._AntiquityBirdAction
             elif flux_type == Flux.Amalgamy:
-                return Item.AmalgamyBirdAction
+                return Item._AmalgamyBirdAction
             elif flux_type == Flux.Menace:
-                return Item.MenaceBirdAction
+                return Item._MenaceBirdAction
             else:
-                return Item.GeneralBirdAction
+                return Item._GeneralBirdAction
             
         elif zoo_type == ZooType.Fish:
             if flux_type == Flux.Antiquity:
-                return Item.AntiquityFishAction
+                return Item._AntiquityFishAction
             elif flux_type == Flux.Amalgamy:
-                return Item.AmalgamyFishAction
+                return Item._AmalgamyFishAction
             elif flux_type == Flux.Menace:
-                return Item.MenaceFishAction
+                return Item._MenaceFishAction
             else:
-                return Item.GeneralFishAction        
+                return Item._GeneralFishAction        
 
         elif zoo_type == ZooType.Spider:
             if flux_type == Flux.Antiquity:
-                return Item.AntiquityArachnidAction
+                return Item._AntiquityArachnidAction
             elif flux_type == Flux.Amalgamy:
-                return Item.AmalgamyArachnidAction
+                return Item._AmalgamyArachnidAction
             elif flux_type == Flux.Menace:
-                return Item.MenaceArachnidAction
+                return Item._MenaceArachnidAction
             else:
-                return Item.GeneralArachnidAction        
+                return Item._GeneralArachnidAction        
 
         elif zoo_type == ZooType.Insect:
             if flux_type == Flux.Antiquity:
-                return Item.AntiquityInsectAction
+                return Item._AntiquityInsectAction
             elif flux_type == Flux.Amalgamy:
-                return Item.AmalgamyInsectAction
+                return Item._AmalgamyInsectAction
             elif flux_type == Flux.Menace:
-                return Item.MenaceInsectAction
+                return Item._MenaceInsectAction
             else:
-                return Item.GeneralInsectAction
+                return Item._GeneralInsectAction
             
         elif zoo_type == ZooType.Primate:
             if flux_type == Flux.Antiquity:
-                return Item.AntiquityPrimateAction
+                return Item._AntiquityPrimateAction
             elif flux_type == Flux.Amalgamy:
-                return Item.AmalgamyPrimateAction
+                return Item._AmalgamyPrimateAction
             elif flux_type == Flux.Menace:
-                return Item.MenacePrimateAction
+                return Item._MenacePrimateAction
             else:
-                return Item.GeneralPrimateAction
+                return Item._GeneralPrimateAction
 
         else:
             if flux_type == Flux.Antiquity:
-                return Item.AntiquityGeneralAction
+                return Item._AntiquityGeneralAction
             elif flux_type == Flux.Amalgamy:
-                return Item.AmalgamyGeneralAction
+                return Item._AmalgamyGeneralAction
             elif flux_type == Flux.Menace:
-                return Item.MenaceGeneralAction
+                return Item._MenaceGeneralAction
             else:
                 return Item._NoItem # HACK        
 

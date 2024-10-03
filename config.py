@@ -8,19 +8,30 @@ from enum import Enum, auto
 from itertools import count
 
 from enums import *
-import utils as utils
+import helper.utils as utils
 
 class Config:
     player: Player.Player
 
-    def __init__(self, num_vars, player):
+    def __init__(self, player, constraint):
         self.player = player
-        self.A = lil_matrix((num_vars, num_vars))
+        self.constraint = constraint
+
+        self.num_items = max(Item, key=lambda x: x.value).value
+        print(f"max(Item): {self.num_items}")
+
+        # HACK
+        # increase this if you get `IndexError: list assignment index out of range`        
+        var_buffer = 5_000
+        num_vars = self.num_items + 1 + var_buffer
+
+        self.matrix_size = num_vars
+        self.A = lil_matrix((self.matrix_size, self.matrix_size))
         self.b = [1]*num_vars
         
         self.counter = count(start=-1)
 
-        self.bounds = [(0, None) for _ in range(num_vars)]
+        self.bounds = [(0, None) for _ in range(self.matrix_size)]
 
         # in practice it seems this rarely affects the output, but it makes me feel better
         # I don't know if this even works the way I think it does as far as modeling long-term stockpiling
@@ -133,12 +144,12 @@ class Config:
         self.bounds[Item._TBD_GreatGameRatMarketSaturation2.value] = (-115_000, 0)
         self.bounds[Item._TBD_SpookyRatMarketSaturation2.value] = (-115_000, 0)
 
-
-
         self.bounds[Item.WhiskerwaysSecondaryPayout.value] = (None, 0)  
 
         self.enable_all_rat_market_moons = True
 
+        self.add(constraint)
+        
     def add(self, exchanges: dict):
         n = next(self.counter)
         self.b[n] = exchanges.get(Item.Constraint, 0)

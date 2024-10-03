@@ -2,14 +2,14 @@ import math
 from enum import Enum, auto
 
 from enums import *
-import utils
+import helper.utils as utils
 from config import Config
 from player import Player
 
 
 def add_trades(config: Config):
     config.add({
-        Item.VisitFromTimeTheHealer: -1,
+        Item._VisitFromTimeTheHealer: -1,
 
         # Item.FavourableCircumstance: 1, # TODO
         # Item.FreeEvening: 5, # TODO

@@ -4,7 +4,7 @@ from enum import Enum, auto
 from collections import defaultdict
 import simulations.item_conversions
 from enums import Item
-import utils
+import helper.utils as utils
 
 class ActionResult(Enum):
     NotAllowed = auto()

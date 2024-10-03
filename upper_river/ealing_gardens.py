@@ -1,9 +1,10 @@
 from enums import *
-from utils import *
+from helper.utils import *
 from player import *
 from config import *
 
-def add_trades(active_player: Player, config):
+def add_trades(config):
+    active_player = config.player
     trade = config.trade
     # ---- Helicon House
 
