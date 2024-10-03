@@ -601,6 +601,7 @@ class Item(Enum):
     MammothRibcage = auto()
     MoonlightScales = auto()
     ObsidianChitinTail = auto()
+    PanopticalSkull = auto()
     PentagrammicSkull = auto()
     PlasterTailBones = auto()
     PlatedSkull = auto()

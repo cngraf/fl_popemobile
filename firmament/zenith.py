@@ -28,3 +28,24 @@ def add_trades(config: Config):
         Item.RoofChart: -5,
         Item.GlassGazette: 5
     })
+
+    # TODO add to bone market
+    add({
+        Item._ZenithAction: -1,
+        Item.EyelessSkull: -1,
+        Item.PanopticalSkull: 1
+    })
+
+    add({
+        Item._ZenithAction: -1,
+        Item.RelicOfTheFifthCity: -10,
+        Item.NightsoilOfTheBazaar: 25,
+        Item.LondonStreetSign: 6
+    })
+
+    add({
+        Item._ZenithAction: -1,
+        Item.MemoryOfMoonlight: -1,
+        Item.RumourOfTheUpperRiver: 1,
+        Item.Hillmover: 1
+    })

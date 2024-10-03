@@ -12,6 +12,9 @@ from simulations.models import *
 
 '''
 TODO
+update action costs
+- london and khanate free to disembark, others still cost 1?
+
 hidden stash
 - hard to model, but potentially very impactful
     - could be worth > 1 EPA

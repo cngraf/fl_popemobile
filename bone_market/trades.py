@@ -804,8 +804,8 @@ def add_trades(config: Config):
         zailor_particular_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
         zailor_particular_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
 
-        naive_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
-        naive_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
+        # naive_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
+        # naive_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
 
     # ------------------------------------------------
     # ------------ Thorned Ribcage ---------------

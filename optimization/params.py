@@ -16,4 +16,4 @@ core_constraint = {
     Item._VisitFromTimeTheHealer: 1
 }
 
-active_player = player.player_advanced_f2p
+active_player = player.player_bal_licentiate
