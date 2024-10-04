@@ -16,4 +16,4 @@ core_constraint = {
     Item._VisitFromTimeTheHealer: 1
 }
 
-active_player = player.player_bal_licentiate
+active_player = player.player_third_city_silverer

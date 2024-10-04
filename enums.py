@@ -95,31 +95,6 @@ class Ambition(Enum):
     LightFingers = auto()
     Nemesis = auto()
 
-# class Item(Enum):
-#     Watchful = auto()
-#     Shadowy = auto()
-#     Dangerous = auto()
-#     Persuasive = auto()
-
-#     KatalepticToxicology = auto()
-#     MonstrousAnatomy = auto()
-#     APlayerOfChess = auto()
-#     Glasswork = auto()
-#     ShapelingArts = auto()
-#     ArtisanOfTheRedScience = auto()
-#     Mithridacy = auto()
-
-#     StewardOfTheDiscordance = auto()
-#     Zeefaring = auto()
-#     Chthonosophy = auto()
-
-#     Respectable = auto()
-#     Dreaded = auto()
-#     Bizarre = auto()
-
-#     Inerrant = auto()
-#     Insubstantial = auto()
-#     Neathproofed  = auto()
 
 class Treasure(Enum):
     NoTreasure = auto()
@@ -801,6 +776,7 @@ class Item(Enum):
     WinsomeDispossessedOrphan = auto()
     CheerfulGoldfish = auto()
     UntrainedLyrebird = auto()
+    TalkativeRattusFaber = auto()
 
     # Unsorted
     BundleOfRaggedClothing = auto()
@@ -1304,9 +1280,10 @@ class Item(Enum):
     CatlikeTread = auto()
     EscapeRoute = auto()
 
+    _WellPlannedVillainy16Casing = auto()
     _BigRat9Casing = auto()
     _Parabolan28Casing = auto()
-    _BeginYourHeist = auto()
+    _Heist15Casing = auto()
     _SuccesfulHeist = auto()
 
     _ImprisonedInNewNegate = auto()

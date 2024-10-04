@@ -272,6 +272,7 @@ def add_trades(config: Config):
     buy_sell(config, Item.LuckyWeasel, -0.4, 0.2)
     buy_sell(config, Item.BundleOfRaggedClothing, -0.03, 0.01)
     buy_sell(config, Item.CheerfulGoldfish, -0.40, 0.04)
-    
+    buy_sell(config, Item.TalkativeRattusFaber, -0.8, 0.5)
+
     # Unsorted
     trade(0, { Item.CracklingDevice: -1, Item.Echo: 62.5 })
