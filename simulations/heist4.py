@@ -1416,12 +1416,12 @@ class HeistSimRunner(SimulationRunner):
         return state
 
 simulation = HeistSimRunner(
-    runs = 100000,
+    runs = 10000,
     initial_values= {
-        Item.PlanningAHeist: HeistLocation.TREASURE_HIDING_PLACE.value,
+        Item.PlanningAHeist: HeistLocation.UNSYMPATHETIC_LANDLORD_MANSION.value,
         Item.UntrainedLyrebird: 1,
-        Item.InsideInformation: 0,
-        Item.IntriguingKey: 0,
+        Item.InsideInformation: 1,
+        Item.IntriguingKey: 1,
         Item.EscapeRoute: 0
     })
 

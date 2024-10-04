@@ -13,7 +13,9 @@ core_constraint = {
 
     Item._RatMarketRotation: 1,
     Item._BoneMarketRotation: 1,
-    Item._VisitFromTimeTheHealer: 1
+    Item._VisitFromTimeTheHealer: 1,
+
+    Item._CardDraws: 7 * 30
 }
 
-active_player = player.player_third_city_silverer
+active_player = player.player_generic_licentiate

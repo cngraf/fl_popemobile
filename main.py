@@ -25,6 +25,7 @@ import london.newspaper
 import london.hearts_game
 import london.heists
 import london.arbor
+import london.deck_approximation
 
 import bone_market.trades
 
@@ -94,6 +95,7 @@ london.laboratory.add_trades(config)
 london.hearts_game.add_trades(config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
+london.deck_approximation.add_trades(config)
 
 bone_market.trades.add_trades(config)
 
