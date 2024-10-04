@@ -12,21 +12,21 @@ def add_trades(config):
     #     Item.DigsInEvenlode: 1
     # })
 
-    trade(1, {
-        # Item.DigsInEvenlode: -1,
-        Item.SurveyOfTheNeathsBones: -120,
-        Item.PalaeontologicalDiscovery: 5
-    })
+    # trade(1, {
+    #     # Item.DigsInEvenlode: -1,
+    #     Item.SurveyOfTheNeathsBones: -120,
+    #     Item.PalaeontologicalDiscovery: 5
+    # })
 
-    trade(1, {
-        # Item.DigsInEvenlode: -1,
-        Item.SurveyOfTheNeathsBones: -140,
-        Item.PalaeontologicalDiscovery: 6
-    })
+    # trade(1, {
+    #     # Item.DigsInEvenlode: -1,
+    #     Item.SurveyOfTheNeathsBones: -140,
+    #     Item.PalaeontologicalDiscovery: 6
+    # })
 
-    # specific treasure only
-    trade(1, {
-        # Item.DigsInEvenlode: -1,
-        Item.SurveyOfTheNeathsBones: -240,
-        Item.PalaeontologicalDiscovery: 10
-    })
+    # # specific treasure only
+    # trade(1, {
+    #     # Item.DigsInEvenlode: -1,
+    #     Item.SurveyOfTheNeathsBones: -240,
+    #     Item.PalaeontologicalDiscovery: 10
+    # })

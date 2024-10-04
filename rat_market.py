@@ -149,7 +149,7 @@ def add_trades(config: Config):
         item=Item.CorrespondingSounder,
         echo_value=312.50)
     
-    paired_mate_echo_value = 62.5
+    paired_mate_echo_value = 50
     config.add({
         Item.QueenMate: -1,
         Item.EpauletteMate: -1,

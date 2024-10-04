@@ -365,6 +365,7 @@ class Item(Enum):
     DoveMaskShard = auto()
     FragmentOfWhiteGold = auto()
     HorseheadAmulet = auto()
+    RatworkMechanism = auto()
 
     # Curiosity - reagents
     ObliviscereMori = auto()
@@ -1285,7 +1286,7 @@ class Item(Enum):
     _Parabolan28Casing = auto()
     _Heist15Casing = auto()
     _SuccesfulHeist = auto()
-
+    _AllianceWithBigRat = auto()
     _ImprisonedInNewNegate = auto()
 
 FAVOUR_ITEMS = [

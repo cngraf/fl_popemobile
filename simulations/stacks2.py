@@ -187,6 +187,7 @@ class ApocryphaSought(Enum):
     DeadStars = 202
     SomeFrenchBullshit = 203
     UnrealPlaces = 204
+    BookOfProperSpeech = 205
     # ChainedOctavo = 1001
 
 class Action:
@@ -283,6 +284,9 @@ class LibraryState:
             Item.StormThrenody: 0,
             Item.VolumeOfCollatedResearch: 0,
             Item.GlimpseOfAnathema: 0,
+            Item.CracklingDevice: 0,
+            Item.RatworkMechanism: 0,
+            Item.DevilboneDie: 0,
 
             # Menaces
             Item.Wounds: 0,
@@ -388,6 +392,9 @@ class LibraryState:
 
         if apocrypha_sought == ApocryphaSought.UnrealPlaces:
             self.hour_in_the_library = 4
+
+        if apocrypha_sought == ApocryphaSought.BookOfProperSpeech:
+            self.hour_in_the_library = 5
 
     # def add_route(self, val):
     #     pass
@@ -830,6 +837,10 @@ class ReadingRoomAction1(Action):
             state.items[Item.PuzzlingMap] += 1
             state.items[Item.VolumeOfCollatedResearch] += 6
             state.items[Item.TantalisingPossibility] += 10
+        elif state.apocrypha_sought == ApocryphaSought.BookOfProperSpeech:
+            state.items[Item.CracklingDevice] += 1
+            state.items[Item.RatworkMechanism] += 4 
+            state.items[Item.DevilboneDie] += 4
 
         state.actions += 1 # collect loot
 
@@ -2102,7 +2113,7 @@ def simulate_runs(num_runs):
     simple_mode = True
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.DeadStars
+    state.apocrypha_sought = ApocryphaSought.BookOfProperSpeech
     state.cartographer_enabled = False
     state.take_alternate_reward = True
 
