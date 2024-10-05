@@ -18,4 +18,4 @@ core_constraint = {
     Item._CardDraws: 7 * 30
 }
 
-active_player = player.player_generic_licentiate
+active_player = player.player_advanced_f2p
