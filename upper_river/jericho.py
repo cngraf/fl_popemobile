@@ -28,7 +28,7 @@ def add_trades(config: Config):
 
     # --------- Canal Cruising
 
-    if player.profession == Profession.CrookedCross:
+    if player.get(Item.CrookedCross):
         add({
             Item._JerichoAction: -1,
             Item.UnprovenancedArtefact: -4,

@@ -6,9 +6,10 @@ def add_trades(config):
     player = config.player
     add = config.add
 
+    honey_cost = 0 if player.get(Item.SetOfCosmogoneSpectacles) else -100
     add({
         Item.Action: -1,
-        Item.DropOfPrisonersHoney: -0 if player.profession == Profession.Silverer else -100,
+        Item.DropOfPrisonersHoney: honey_cost,
         Item._ParabolaRoundTrip: 1
     })
 
@@ -42,7 +43,7 @@ def add_trades(config):
     # TODO: check actual length of carousel
     # lengths per wiki
 
-    if (config.player.profession == Profession.MonsterHunter):
+    if (config.player.get(Item.NotchedBoneHarpoon)):
         trade(8, {
             Item.FinBonesCollected: 2,
             Item.FavDocks: 1,

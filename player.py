@@ -1,329 +1,31 @@
 from enums import *
 import helper.utils as utils
 
-'''
-Defining the baseline endgame player
-- excludes boons and moods
-- excludes Ambition stuff
-    - Treasure
-    - ambition-exclusive items
-- excludes SMEN & Retired items (irrelevant anyway?)
-- excludes item slots that can't be easily swapped
-    - Destiny
-        - also excludes Mark of Acceptance
-        - but allows Memory of Much Greater Self?
-    - Ship
-    - Spouse
-    - Club
-    - Profession item
-
-TODO:
-- double check these, just count programmatically
-- numbers for "soft F2P"?
-    - allow exceptional story, memory of a tale stuff
-    - allow Ubergoat, other 1 FATE items
-
-with FATE & Seasonal:
-Watchful:   +92 => 322
-Shadowy:    +73 => 303
-Dangerous:  +83 => 313
-Persuasive: +85 => 315
-
-KT:     +10
-MA:     +10
-APoC:   +10
-GW:     +11
-SA:     +10
-AotRS:  +10
-Mith:   +10
-SotD:   +1
-Zee:    +10
-
-without FATE and Seasonal:
-Watchful:   +76
-Shadowy:    +65
-Dangerous:  +72
-Persuasive: +71
-
-KT:     +6
-MA:     +4
-APoC:   +3
-GW:     +5
-SA:     +2
-AotRS:  +2
-Mith:   +3
-SotD:   +1
-Zee:    +5
-
-so to really get into the nitty gritty, are we gonna need some concept of outfits?
-thinking of scandal multiplier
-
-List of Mutually-Exclusive Item & Quality Groups (WIP)
-- Treasures
-- Destinies + Mark of Acceptance
-- Tools of the Trade
-- Ships
-- Spouses
-- Clubs
-- Airships
-- Tattoos
-
-- Ambition-specific items
-- notable branching choices WITHIN Ambitions
-    - LF: Lyon Pursuivant vs. Tatterskin Shawl
-    - Nem: Dream-Shadow vs. Dream-Shard
-    - BAL: trapping 3CV in parabola vs. not
-    - HD: none?
-- rewards of ambition
-
-- Unburdened Imp & Deviless variants
-    - Imp is the only BiS option
-- Salon & Orphanage
-- Sacksmas Quest Rewards
-    - not exclusive but takes several years to complete
-
-- Lab staffing
-
-- Khaganian Network configuration
-    - Ties
-    - Methods
-    - was there a third thing?
-
-- GHR board members
-- GHR statues
-- GHR station darkness 
-- TLC stuff
-    - Location
-    - Founding Body
-    - Currency
-    - Leader
-    - Political Alignment
-- "Closest To" faction
-
-- numerous ES branching choices
-    - trade in souls
-    - aunt
-'''
-
-def baseline_stats():
-    return {
-        Item.Watchful:      230,
-        Item.Shadowy:       230,
-        Item.Dangerous:     230,
-        Item.Persuasive:    230,
-
-        Item.Respectable: 0,
-        Item.Dreaded: 0,
-        Item.Bizarre: 0,
-
-        Item.KatalepticToxicology: 7,
-        Item.MonstrousAnatomy: 7,
-        Item.APlayerOfChess: 7,
-        Item.Glasswork: 7,
-        Item.ShapelingArts: 7,
-        Item.ArtisanOfTheRedScience: 7,
-        Item.Mithridacy: 7,
-
-        Item.StewardOfTheDiscordance: 7, # 6?
-        Item.Zeefaring: 7,
-        Item.Chthonosophy: 2,
-
-        Item.Inerrant: 0,
-        Item.Insubstantial: 0,
-        Item.Neathproofed: 0,
-    }
-
-def min_endgame_f2p_bonuses():
-    # Excludes
-    # - anything FATE-locked
-    # - Mr Chimes' Lost & Found
-    # - hellworm
-    # - ubergoat 
-    # - annual seasonal items
-    # - ambitions
-    # - professions
-    # - any slots with swap costs (ship, spouse, destiny, etc.)
-    # - any items from a mutually exclusive set (eg. salon/orphanage, unburdened imp)
-    # - mark of acceptance
-    # - boons & moods
-    # - SMEN
-    # - retired items
-    # - ubergoat (borderline?)
-    # - anything in-game but not currently obtainable
-
-    # Includes
-    # - faction renown items
-    # - Sacroboscan calendar items
-    # - Evolution
-    # - Railway & TLC
-    # - Firmanent
-    # - non-seasonal HG items
-    return {
-        Item.Watchful: 8 + 11 + 8 + 8 + 10 + 7 + 10 + 5 + 7, # 74
-        Item.Shadowy: 6 + 6 + 7 + 10 + 10 + 10 + 6 + 10 + 5 + 8, # 78
-        Item.Dangerous:  6 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 8 + 4, # 73
-        Item.Persuasive: 10 + 10 + 8 + 5 + 10 + 5 + 10 + 2 + 8 + 8, # 76
-
-        Item.Bizarre: 1 + 2 + 2 + 2 + 1 + 1 + 1 + 2 + 1 + 2 + 2, # 17
-        Item.Dreaded: 2 + 2 + 1 + 1 + 1 + 1 + 1 + 4 + 2 + 2, # 17
-        Item.Respectable: 1 + 1 + 2 + 1 + 1 + 1 + 1 + 4 + 2 + 2, # 16
-
-        # Labcoat or Shell, Work Gloves, Butcher's Tool, Perfumer's Arts
-        Item.KatalepticToxicology: 4,
-
-        # Illuminating Cap, Shell or Ribcage, Naturalist's Map
-        Item.MonstrousAnatomy: 3,
-
-        # Director's Overcoat, Infiltrator's Footsteps, FFG's Address Book
-        Item.APlayerOfChess: 3,
-
-        # Parabola Suit or Viric Frock, VC's Collar, Honey-Mazed Bear, OP Stave (+2)
-        Item.Glasswork: 5,
-
-        # Tunip, Amber Vision
-        Item.ShapelingArts: 2,
-
-        # Misplaced Ring, Flower from Hell, Lowell's Locks and Cages
-        Item.ArtisanOfTheRedScience: 3,
-
-        # Viscount's Collar, Stalking Shadow, Memory of Much Greater Self
-        Item.Mithridacy: 3,
-
-        # imp is from an exclusive set
-        Item.StewardOfTheDiscordance: 0,
-
-        # Captain's or Admiral's Hat, Mostly-Cooperative Chart, Blue Prophet,
-        # HMS Ramilies, Amber Vision
-        Item.Zeefaring: 5,
-
-        # earring not obtainable
-        Item.Chthonosophy: 0,
-
-        # Glim Earring, Carpetbag, Cinnabar Compass
-        Item.Inerrant: 3,
-
-        # Carryall or Suitcase, Nod from Mr Hearts
-        Item.Insubstantial: 2,
-
-        # Illuminating Cap or Hymn, Ratskin Suit, Devil's Dictionary, Ratskin Boots,
-        # Indestructible Trunk
-        Item.Neathproofed: 5,
-    }
-
-def advanced_endgame_f2p_bonuses():
-    # Includes
-    # - everything in min set
-    # - seasonal non-FATE items
-    # - ubergoat
-    # - unburdened imp
-
-    return {
-        Item.Watchful: 8 + 11 + 8 + 8 + 10 + 7 + 20 + 5 + 3 + 8,
-        Item.Shadowy: 8 + 6 + 7 + 10 + 10 + 10 + 6 + 10 + 5 + 4 + 8,
-        Item.Dangerous:  8 + 8 + 5 + 8 + 12 + 8 + 10 + 4 + 4 + 8 + 4,
-        Item.Persuasive: 10 + 10 + 8 + 8 + 10 + 5 + 10 + 5 + 8 + 8,
-        # done
-
-        Item.Bizarre: 4 + 2 + 2 + 2 + 3 + 1 + 1 + 3 + 4 + 3 + 2,
-        Item.Dreaded: 4 + 2 + 1 + 2 + 2 + 1 + 1 + 3 + 4 + 2 + 2,
-        Item.Respectable: 4 + 4 + 2 + 2 + 2 + 1 + 1 + 3 + 4 + 2 + 2,
-
-        # Hat, Clothes, Gloves, Weapon, Boots, Companion, Affil, Transport, HC
-        Item.KatalepticToxicology: 9,
-
-        # Hat, Clothes, Gloves, Wep, Boots, Comp, Transport, HC
-        Item.MonstrousAnatomy: 8,
-
-        # Hat, Clothes, Gloves, Wep, Boots, Luggage, Comp, Affil, Trans
-        Item.APlayerOfChess: 9,
-
-        # Hat, Clothes, Adorn, Gloves, Wep, Boots, Comp+2, HC+2
-        Item.Glasswork: 10,
-
-        # Hat, Wep, Booys, Comp, Affil, HC
-        Item.ShapelingArts: 6,
-
-        # Hat, Clo, Adorn, Gloves, Wep, Boots, Comp+2, Affil, Trans, HC
-        Item.ArtisanOfTheRedScience: 11,
-
-        # Hat, Adorn, Wep, Boots, Comp, Affil, Trans, HC
-        Item.Mithridacy: 8,
-
-        # Companion
-        Item.StewardOfTheDiscordance: 1,
-
-        # Hat, Clo, Gloves, Wep, Boots, Comp, Affil, Trans, HC
-        Item.Zeefaring: 9,
-
-        # Companion
-        Item.Chthonosophy: 1,
-
-        # Weapon, Luggage, HC
-        Item.Inerrant: 3,
-
-        # Luggage, Affil
-        Item.Insubstantial: 2,
-
-        # Hat, Clo+2, Gloves, Wep, Boots, Lugg, Comp
-        Item.Neathproofed: 8,
-    }
-
-
 class Player:
-    '''
-    TODO
-    - get rid of Location prop
-    - add Spouse
-    - add Ship
-    - add Destiny
-    - add Club
-    '''
-
-    location: Location
-    ambition: Ambition
-    treasure: Treasure
-    profession: Profession
-    specialization: Specialization
-
-    baseline_watchful = 230 + 92
-    baseline_shadowy = 230 + 73
-    baseline_dangerous = 230 + 83
-    baseline_persuasive = 230 + 85
-
     def __init__(self,
-                location = Location.NoLocation,
-                ambition = Ambition.NoAmbition,
-                profession = Profession.NoProfession,
-                treasure = Treasure.NoTreasure,
-                qualities = {}):
-        
-        self.location = location
-        self.ambition = ambition
-        self.profession = profession
-        self.specialization = Specialization.NoSpecializaiton
-        self.treasure = treasure
-        self.qualities = {
+        qualities: dict = {},
+        basic_stats_val: int = 310,
+        advanced_stats_val: int = 15,
+        bdr_stats_val: int = 18,
+        defensive_stats_val: int = 3):
 
-        }
+        self.qualities = {}
 
-        advanced_value = 17
+        for stat in BASIC_STATS:
+            self.qualities[stat] = basic_stats_val
 
-        self.qualities = {
-            Item.Watchful:      230 + 92,
-            Item.Shadowy:       230 + 73,
-            Item.Dangerous:     230 + 83,
-            Item.Persuasive:    230 + 85,
+        for stat in ADVANCED_STATS:
+            self.qualities[stat] = advanced_stats_val
 
-            Item.KatalepticToxicology: advanced_value,
-            Item.MonstrousAnatomy: advanced_value,
-            Item.APlayerOfChess: advanced_value,
-            Item.Glasswork: advanced_value,
-            Item.ShapelingArts: advanced_value,
-            Item.ArtisanOfTheRedScience: advanced_value,
-            Item.Mithridacy: advanced_value,
-            Item.StewardOfTheDiscordance: 8,
-            Item.Zeefaring: advanced_value
-        }
+        for stat in BDR_STATS:
+            self.qualities[stat] = bdr_stats_val
+
+        for stat in DEFENSIVE_STATS:
+            self.qualities[stat] = defensive_stats_val
+
+        # Cap to current in-game max from quickchange slots
+        self.qualities[Item.StewardOfTheDiscordance] = min(advanced_stats_val, 8)
+        self.qualities[Item.Chthonosophy] = min(advanced_stats_val, 9)
 
         for key, value in qualities.items():
             self.qualities[key] = value
@@ -337,7 +39,8 @@ class Player:
     def get(self, item: Item):
         return self.qualities.get(item, 0)
 
-    # TOOD: add a threshold to auto-use a second chance item?
+    # TODO this logic is duplicated in a bazillion different places
+    # TODO: add a threshold to auto-use a second chance item?
     def pass_rate(self, stat, difficulty):
         player_level = self.qualities[stat]
         if stat in (Item.Watchful, Item.Shadowy, Item.Dangerous, Item.Persuasive):
@@ -362,104 +65,79 @@ class Player:
     def suspicion_ev(self, int):
         blocked = min(2, int * utils.menace_multiplier(self.suspicion_reduction))
         return max(0, int - blocked)
+    
+    @staticmethod
+    def copy_with_added(player, qualities):
+        """
+        Static method to create a new Player object by summing the qualities of the input Player object
+        with the values from the provided dictionary.
 
-    # suspicion_multiplier = menace_multiplier(player.suspicion_reduction)
-    # scandal_multiplier = menace_multiplier(player.scandal_reduction)    
-    # nightmares_multiplier = menace_multiplier(player.nightmares_reduction)
+        :param player: Player object whose qualities will be summed with the dictionary.
+        :param qualities: Dictionary with Item keys and int values to add to the player's qualities.
+        :return: A new Player object with updated qualities.
+        """
+        # Create a copy of the original player's qualities to avoid modifying the original object
+        new_qualities = player.qualities.copy()
 
-# class Challenge:
-#     def __init__(self, stat: Stat, dc: int, on_pass: dict, on_fail: dict):
-#         self.stat = stat
-#         self.dc = dc
-#         self.on_pass = on_pass
-#         self.on_fail = on_fail
+        # Iterate over the dictionary and sum values to the new_qualities
+        for item, value in qualities.items():
+            if item in new_qualities:
+                new_qualities[item] += value  # Add value if the item already exists
+            else:
+                new_qualities[item] = value  # Add the new item if it doesn't exist
 
-    # def get_trade(self, player: Player):
-    #     pass_rate = player.pass_rate(self.stat, self.dc)
-    #     return utils.weighted_exchange(
-    #         ()
-    #     )
+        # Return a new Player object with the updated qualities
+        return Player(new_qualities)
 
-# utils.sum
-player_baseline_f2p = Player(
-    qualities = utils.sum_dicts(baseline_stats(), min_endgame_f2p_bonuses())
-    )
 
-player_advanced_f2p = Player(
-    qualities = utils.sum_dicts(baseline_stats(), advanced_endgame_f2p_bonuses())
-    )
 
-player_generic_endgame_whale = Player(qualities = {
-    Item.Watchful: 334,
-    Item.Shadowy: 334,
-    Item.Dangerous: 334,
-    Item.Persuasive: 334,
-})
-
-player_generic_monster_hunter = Player(
-    profession=Profession.MonsterHunter,
+player_endgame_f2p = Player(
+    basic_stats_val=310,
+    advanced_stats_val=12,
     qualities={
-        Item.Watchful: 334,
-        Item.Shadowy: 334,
-        Item.Dangerous: 334,
-        Item.Persuasive: 334,
 
-        Item.NotchedBoneHarpoon: 1,
     }
 )
-# aka "cosmogone silvererhand"
-player_third_city_silverer = Player(
-    ambition=Ambition.BagALegend,
-    treasure=Treasure.LongDeadPriestsOfTheRedBird,
-    profession=Profession.Silverer,
-    qualities={
-        Item.Watchful: 334,
-        Item.Shadowy: 334,
-        Item.Dangerous: 334,
-        Item.Persuasive: 334,
 
+player_generic_endgame_whale = Player(
+    basic_stats_val=334,
+    advanced_stats_val=18,
+    bdr_stats_val=20,
+    qualities={
+        Item.Neathproofed: 8,
+        Item.Insubstantial: 4,
+        Item.Inerrant: 6
+    }
+)
+
+
+# aka "cosmogone silvererhand"
+player_third_city_silverer = Player.copy_with_added(
+    player=player_generic_endgame_whale,
+    qualities={
         Item.SetOfCosmogoneSpectacles: 1,
 
         Item.BagALegend: 1,
         Item.LongDeadPriestsOfRedBird: 1,
     })
 
-player_bal_licentiate = Player(
-    ambition=Ambition.BagALegend,
-    treasure=Treasure.NoTreasure,
-    profession=Profession.Licentiate,
+player_generic_bal = Player.copy_with_added(
+    player=player_generic_endgame_whale,
     qualities={
-        Item.Watchful: 334,
-        Item.Shadowy: 334,
-        Item.Dangerous: 334,
-        Item.Persuasive: 334,
+        Item.BagALegend: 1
+    }
+)
 
-        Item.ListOfAliasesWrittenInGant: 1,
-
-        Item.BagALegend: 1, # 4000 is same?
-    })
-
-player_generic_licentiate = Player(
-    ambition=Ambition.NoAmbition,
-    treasure=Treasure.NoTreasure,
-    profession=Profession.Licentiate,
+player_generic_licentiate = Player.copy_with_added(
+    player=player_generic_endgame_whale,
     qualities={
-        Item.Watchful: 334,
-        Item.Shadowy: 334,
-        Item.Dangerous: 334,
-        Item.Persuasive: 334,
-
         Item.ListOfAliasesWrittenInGant: 1,
     })
 
-# aka my PC
-player_bal_monster_hunter = Player(
-    ambition=Ambition.BagALegend,
-    treasure=Treasure.WingedAndTalonedSteed,
-    profession=Profession.MonsterHunter,
+player_bal_licentiate = Player.copy_with_added(
+    player=player_generic_licentiate,
     qualities={
-        Item.Watchful: 334,
-        Item.Shadowy: 334,
-        Item.Dangerous: 334,
-        Item.Persuasive: 334
+        Item.ListOfAliasesWrittenInGant: 1,
+        
+        Item.BagALegend: 1,
     })

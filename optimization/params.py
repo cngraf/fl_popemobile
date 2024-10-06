@@ -4,7 +4,7 @@ import player as player
 # Change these
 optimize_input = Item.Action
 optimization_target = Item.Echo
-active_player = player.player_advanced_f2p
+active_player = player.player_endgame_f2p
 
 
 input_per_cycle = 7 * 120

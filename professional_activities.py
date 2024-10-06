@@ -70,7 +70,7 @@ import config
 def add_trades(config: config.Config):
     trade = config.trade
     active_player = config.player
-    spec = active_player.specialization
+    # spec = active_player.specialization
 
     trade(0, {
         Item.ApproximateValueOfOutstandingInvoicesInPennies: -500,

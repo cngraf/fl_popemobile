@@ -3,6 +3,7 @@ from helper.utils import *
 
 def add_trades(config):
     trade = config.trade
+    add = config.add
     
     # # TODO: upper river deck stuff
     # trade.railway_card("Digs in the Magistracy of the Evenlode",

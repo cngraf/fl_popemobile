@@ -132,14 +132,14 @@ def add_trades(config: Config):
         Item.CoverBackstory: 1
     })
 
-    if (player.treasure == Treasure.PalatialHomeInTheArcticCircle):
+    if (player.get(Item.PalatialHolidayHomeInArcticCircle)):
         trade(1, {
             Item.CoverTiesSurface: 1,
             Item.CoverElaboration: 1,
             Item.CoverNuance: 1
         })
 
-    if (player.treasure == Treasure.SocietyOfTheThreeFingeredHand):
+    if (player.get(Item.SocietyOfTheThreeFingeredHand)):
         trade(1, {
             Item.CoverTiesSurface: 1,
             Item.CoverElaboration: 1,
@@ -169,7 +169,7 @@ def add_trades(config: Config):
         Item.CoverElaboration: 1
     })
 
-    if (player.treasure == Treasure.TheMarvellous):
+    if (player.get(Item.TheMarvellous)):
         trade(1, {
             Item.CoverTiesDispossessed: 1,
             Item.CoverElaboration: 1,

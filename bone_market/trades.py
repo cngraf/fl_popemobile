@@ -253,7 +253,7 @@ def add_trades(config: Config):
     # -------------------------
     # TODO: Verify all outputs
 
-    if (player.ambition == Ambition.BagALegend):
+    if player.get(Item.BagALegend):
         # min 1 action is baked into recipes, this only adds for failure
         # ignores other failure costs bc lazy
         success_rate = utils.narrow_challenge_pass_rate(player.qualities[Item.ArtisanOfTheRedScience], 5)
@@ -263,7 +263,7 @@ def add_trades(config: Config):
             Item.DuplicatedVakeSkull: 1
         })
 
-    if player.profession == Profession.Licentiate:
+    if player.get(Item.ListOfAliasesWrittenInGant):
         trade(0, { Item.ASkeletonOfYourOwn: 1 })
         trade(0, { Item.VictimsSkull: 1 })
 

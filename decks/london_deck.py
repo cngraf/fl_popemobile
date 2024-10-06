@@ -107,14 +107,14 @@ def add_trades(config: Config):
     deck_size = sum(i.freq.value for i in cards)
 
     draw_conversion = {
-        Item.LondonDraw: -1,
+        Item._LondonDraw: -1,
     }
 
     for card in cards:
         draw_rate = card.freq.value / (deck_size - Rarity.Standard.value * 4)
         draw_conversion[card.item] = draw_rate
 
-    config.trade(0, {Item._CardDraws: -1, Item.LondonDraw: 1})
+    config.trade(0, {Item._CardDraws: -1, Item._LondonDraw: 1})
     config.trade(0, draw_conversion)
 
     base_watchful = 230
