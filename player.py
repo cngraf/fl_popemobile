@@ -23,6 +23,9 @@ class Player:
         for stat in DEFENSIVE_STATS:
             self.qualities[stat] = defensive_stats_val
 
+        for stat in RENOWN_ITEMS:
+            self.qualities[stat] = 40
+
         # Cap to current in-game max from quickchange slots
         self.qualities[Item.StewardOfTheDiscordance] = min(advanced_stats_val, 8)
         self.qualities[Item.Chthonosophy] = min(advanced_stats_val, 9)

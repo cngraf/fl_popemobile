@@ -132,6 +132,7 @@ class Item(Enum):
 
     _EalingAction = auto()
     _JerichoAction = auto()
+    _EvenlodeAction = auto()
     _BalmoralAction = auto()
     _StationViiiAction = auto()
     _BurrowAction = auto()
@@ -226,6 +227,8 @@ class Item(Enum):
     #######################################################
 
     _RatMarketRotation = auto()
+    
+    _GeneralRatMarketSaturation1 = auto()
     SoftRatMarketSaturation1 = auto()
     SaintlyRatMarketSaturation1 = auto()
     MaudlinRatMarketSaturation1 = auto()
@@ -235,6 +238,7 @@ class Item(Enum):
     CalculatingRatMarketSaturation1 = auto()
     RuinousRatMarketSaturation1 = auto()
 
+    _GeneralRatMarketSaturation2 = auto()
     SoftRatMarketSaturation2 = auto()
     SaintlyRatMarketSaturation2 = auto()
     MaudlinRatMarketSaturation2 = auto()
@@ -367,11 +371,15 @@ class Item(Enum):
     RenownTombColonies = auto()
     RenownUrchins = auto()
 
+
     # Connected
     ConnectedBenthic = auto()
     ConnectedSummerset = auto()
     ConnectedTheDuchess = auto()
     ConnectedWidow = auto()
+
+    SympatheticAboutRatlyConcerns = auto()
+
     SupportingTheLiberationistTracklayers = auto()
     SupportingThePrehistoricistTracklayers = auto()
     SupportingTheEmancipationistTracklayers = auto()
@@ -1311,6 +1319,21 @@ FAVOUR_ITEMS = [
     Item.FavSociety,
     Item.FavTombColonies,
     Item.FavUrchins
+]
+
+RENOWN_ITEMS = [
+    Item.RenownBohemians,
+    Item.RenownChurch,
+    Item.RenownConstables,
+    Item.RenownCriminals,
+    Item.RenownDocks,
+    Item.RenownGreatGame,
+    Item.RenownHell,
+    Item.RenownRevolutionaries,
+    Item.RenownRubberyMen,
+    Item.RenownSociety,
+    Item.RenownTombColonies,
+    Item.RenownUrchins
 ]
 
 BONE_MARKET_ACTIONS = [
