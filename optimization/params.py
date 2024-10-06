@@ -16,6 +16,7 @@ core_constraint = {
 
     Item._RatMarketRotation: 1,
     Item._BoneMarketRotation: 1,
-    Item._VisitFromTimeTheHealer: 1
-}
+    Item._VisitFromTimeTheHealer: 1,
 
+    Item._CardDraws: 7 * 30
+}

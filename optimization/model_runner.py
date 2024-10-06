@@ -19,6 +19,7 @@ class ModelRunner:
         self.trades_used = []
         self.free_item_conversions = []
         self.items_surplus = []
+        self.items_negative_surplus = [] # eg. market rotations that go unused
         self.bone_market_trades = []  # Store bone market trades
         self.rat_market_trades = []
         self.opt_result = None
@@ -89,6 +90,7 @@ class ModelRunner:
 
         self.trades_used.sort()
         self.items_surplus = [str(i) for i in items_gained if i not in items_consumed]
+        self.items_negative_surplus = [str(i) for i in items_consumed if i not in items_gained]
 
     def wrap_text(self, text: str, width: int = 50) -> str:
         """Wraps text for better formatting in tables."""
@@ -139,6 +141,11 @@ class ModelRunner:
         for item in self.items_surplus:
             print(item)
 
+    def display_negative_surplus_items(self):
+        print(colored("\n----- Lost & Unused Items -------", "cyan", attrs=['bold']))
+        for item in self.items_negative_surplus:
+            print(item)
+
     def display_optimization_results(self):
         print(colored("\n----- Optimization Target -------", "green", attrs=['bold']))
         items_per_input = -1.0 / (self.input_per_cycle * self.opt_result.fun)
@@ -155,4 +162,5 @@ class ModelRunner:
         self.display_bone_market_trades()
         self.display_rat_market_trades()
         self.display_surplus_items()
+        self.display_negative_surplus_items()
         self.display_optimization_results()

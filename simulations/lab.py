@@ -654,6 +654,10 @@ class LabState(GameState):
             return self.ev_hand_clear()
         elif item == Item.ResearchPreparations:
             return 1 * research_unit_ev     
+        elif item == Item.NoLongerFormingHypotheses:
+            return 20 * research_unit_ev
+        elif item == Item.NoLongerReviewingLiterature:
+            return 20 * research_unit_ev
         else:
             return val * conversion_rate(item, Item.Echo)
 
@@ -3097,7 +3101,7 @@ class LabSimulationRunner(SimulationRunner):
         return LabState()
     
 
-project_data = experiment_data[ResearchProject.ROOF_CHARTS]
+project_data = experiment_data[ResearchProject.CARTOGRAPHERS_HOARD]
 simulation = LabSimulationRunner(
     runs = 500,
     initial_values= {

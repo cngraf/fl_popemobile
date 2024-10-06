@@ -36,7 +36,7 @@ def add_trades(config):
     # Cartographic
 
     add({
-        Item.Action: -89,
+        Item.Action: -86,
         Item.CartographersHoard: 1,
         Item.VolumeOfCollatedResearch: 4
     })
@@ -107,7 +107,7 @@ def add_trades(config):
     })
 
     add({
-        Item.Action: -90,
+        Item.Action: -86,
         Item.SurveyOfTheNeathsBones: 625,
         Item.VolumeOfCollatedResearch: 4
     })

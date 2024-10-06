@@ -295,7 +295,7 @@ class Player:
                 ambition = Ambition.NoAmbition,
                 profession = Profession.NoProfession,
                 treasure = Treasure.NoTreasure,
-                stats = {}):
+                qualities = {}):
         
         self.location = location
         self.ambition = ambition
@@ -325,7 +325,7 @@ class Player:
             Item.Zeefaring: advanced_value
         }
 
-        for key, value in stats.items():
+        for key, value in qualities.items():
             self.qualities[key] = value
 
         self.wounds_reduction = 2
@@ -382,56 +382,74 @@ class Player:
 
 # utils.sum
 player_baseline_f2p = Player(
-    stats = utils.sum_dicts(baseline_stats(), min_endgame_f2p_bonuses())
+    qualities = utils.sum_dicts(baseline_stats(), min_endgame_f2p_bonuses())
     )
 
 player_advanced_f2p = Player(
-    stats = utils.sum_dicts(baseline_stats(), advanced_endgame_f2p_bonuses())
+    qualities = utils.sum_dicts(baseline_stats(), advanced_endgame_f2p_bonuses())
     )
 
-player_generic = Player(stats = {
-    Item.Watchful: 330,
-    Item.Shadowy: 330,
-    Item.Dangerous: 330,
-    Item.Persuasive: 330
+player_generic_endgame_whale = Player(qualities = {
+    Item.Watchful: 334,
+    Item.Shadowy: 334,
+    Item.Dangerous: 334,
+    Item.Persuasive: 334,
 })
 
 player_generic_monster_hunter = Player(
-    profession=Profession.MonsterHunter
-)
+    profession=Profession.MonsterHunter,
+    qualities={
+        Item.Watchful: 334,
+        Item.Shadowy: 334,
+        Item.Dangerous: 334,
+        Item.Persuasive: 334,
 
+        Item.NotchedBoneHarpoon: 1,
+    }
+)
 # aka "cosmogone silvererhand"
 player_third_city_silverer = Player(
     ambition=Ambition.BagALegend,
     treasure=Treasure.LongDeadPriestsOfTheRedBird,
     profession=Profession.Silverer,
-    stats={
-        Item.Watchful: Player.baseline_watchful + 13,
-        Item.Shadowy: Player.baseline_shadowy + 6,
-        Item.Dangerous: Player.baseline_dangerous,
-        Item.Persuasive: Player.baseline_persuasive
+    qualities={
+        Item.Watchful: 334,
+        Item.Shadowy: 334,
+        Item.Dangerous: 334,
+        Item.Persuasive: 334,
+
+        Item.SetOfCosmogoneSpectacles: 1,
+
+        Item.BagALegend: 1,
+        Item.LongDeadPriestsOfRedBird: 1,
     })
 
 player_bal_licentiate = Player(
     ambition=Ambition.BagALegend,
-    treasure=Treasure.WingedAndTalonedSteed,
+    treasure=Treasure.NoTreasure,
     profession=Profession.Licentiate,
-    stats={
-        Item.Watchful: Player.baseline_watchful,
-        Item.Shadowy: 230 + 97,
-        Item.Dangerous: Player.baseline_dangerous + 6 + 13,
-        Item.Persuasive: Player.baseline_persuasive
+    qualities={
+        Item.Watchful: 334,
+        Item.Shadowy: 334,
+        Item.Dangerous: 334,
+        Item.Persuasive: 334,
+
+        Item.ListOfAliasesWrittenInGant: 1,
+
+        Item.BagALegend: 1, # 4000 is same?
     })
 
 player_generic_licentiate = Player(
     ambition=Ambition.NoAmbition,
     treasure=Treasure.NoTreasure,
     profession=Profession.Licentiate,
-    stats={
-        Item.Watchful: Player.baseline_watchful,
-        Item.Shadowy: Player.baseline_shadowy + 6,
-        Item.Dangerous: Player.baseline_dangerous,
-        Item.Persuasive: Player.baseline_persuasive
+    qualities={
+        Item.Watchful: 334,
+        Item.Shadowy: 334,
+        Item.Dangerous: 334,
+        Item.Persuasive: 334,
+
+        Item.ListOfAliasesWrittenInGant: 1,
     })
 
 # aka my PC
@@ -439,9 +457,9 @@ player_bal_monster_hunter = Player(
     ambition=Ambition.BagALegend,
     treasure=Treasure.WingedAndTalonedSteed,
     profession=Profession.MonsterHunter,
-    stats={
-        Item.Watchful: 230 + 102,
-        Item.Shadowy: 230 + 100,
-        Item.Dangerous: 230 + 101,
-        Item.Persuasive: 230 + 91
+    qualities={
+        Item.Watchful: 334,
+        Item.Shadowy: 334,
+        Item.Dangerous: 334,
+        Item.Persuasive: 334
     })

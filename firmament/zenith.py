@@ -49,3 +49,14 @@ def add_trades(config: Config):
         Item.RumourOfTheUpperRiver: 1,
         Item.Hillmover: 1
     })
+
+    # Stacks new route
+    add({
+        Item.Action: -23.2,
+        Item.TantalisingPossibility: 171,
+        Item.CracklingDevice: 0.95,
+        Item.RatworkMechanism: 4 * 0.95,
+        Item.DevilboneDie: 4 * 0.95,
+        Item.GlimpseOfAnathema: 0.05,
+        Item.Nightmares: 1,
+    })

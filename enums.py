@@ -95,31 +95,6 @@ class Ambition(Enum):
     LightFingers = auto()
     Nemesis = auto()
 
-# class Item(Enum):
-#     Watchful = auto()
-#     Shadowy = auto()
-#     Dangerous = auto()
-#     Persuasive = auto()
-
-#     KatalepticToxicology = auto()
-#     MonstrousAnatomy = auto()
-#     APlayerOfChess = auto()
-#     Glasswork = auto()
-#     ShapelingArts = auto()
-#     ArtisanOfTheRedScience = auto()
-#     Mithridacy = auto()
-
-#     StewardOfTheDiscordance = auto()
-#     Zeefaring = auto()
-#     Chthonosophy = auto()
-
-#     Respectable = auto()
-#     Dreaded = auto()
-#     Bizarre = auto()
-
-#     Inerrant = auto()
-#     Insubstantial = auto()
-#     Neathproofed  = auto()
 
 class Treasure(Enum):
     NoTreasure = auto()
@@ -217,8 +192,8 @@ class Item(Enum):
     InscrutableRatMarketSaturation1 = auto()
     TempestuousRatMarketSaturation1 = auto()
     IntricateRatMarketSaturation1 = auto()
-    _TBD_GreatGameRatMarketSaturation1 = auto()
-    _TBD_SpookyRatMarketSaturation1 = auto()
+    CalculatingRatMarketSaturation1 = auto()
+    RuinousRatMarketSaturation1 = auto()
 
     SoftRatMarketSaturation2 = auto()
     SaintlyRatMarketSaturation2 = auto()
@@ -226,8 +201,8 @@ class Item(Enum):
     InscrutableRatMarketSaturation2 = auto()
     TempestuousRatMarketSaturation2 = auto()
     IntricateRatMarketSaturation2 = auto()    
-    _TBD_GreatGameRatMarketSaturation2 = auto()
-    _TBD_SpookyRatMarketSaturation2 = auto()
+    CalculatingRatMarketSaturation2 = auto()
+    RuinousRatMarketSaturation2 = auto()
 
     # Bone Market Hack
     _BoneMarketRotation = auto()
@@ -390,6 +365,7 @@ class Item(Enum):
     DoveMaskShard = auto()
     FragmentOfWhiteGold = auto()
     HorseheadAmulet = auto()
+    RatworkMechanism = auto()
 
     # Curiosity - reagents
     ObliviscereMori = auto()
@@ -801,6 +777,7 @@ class Item(Enum):
     WinsomeDispossessedOrphan = auto()
     CheerfulGoldfish = auto()
     UntrainedLyrebird = auto()
+    TalkativeRattusFaber = auto()
 
     # Unsorted
     BundleOfRaggedClothing = auto()
@@ -1304,11 +1281,12 @@ class Item(Enum):
     CatlikeTread = auto()
     EscapeRoute = auto()
 
+    _WellPlannedVillainy16Casing = auto()
     _BigRat9Casing = auto()
     _Parabolan28Casing = auto()
-    _BeginYourHeist = auto()
+    _Heist15Casing = auto()
     _SuccesfulHeist = auto()
-
+    _AllianceWithBigRat = auto()
     _ImprisonedInNewNegate = auto()
 
 FAVOUR_ITEMS = [

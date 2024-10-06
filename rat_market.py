@@ -7,7 +7,7 @@ from config import Config
 ## Rat Market
 ## ------------
 
-def add_ratly_demand_trades(config : Config, saturation1, saturation, item, echo_value):
+def add_ratly_demand_trades(config : Config, saturation1, saturation2, item, echo_value):
         config.add({
             item: -1,
             saturation1: echo_value * 100,
@@ -16,7 +16,7 @@ def add_ratly_demand_trades(config : Config, saturation1, saturation, item, echo
 
         config.add({
             item: -1,
-            saturation: echo_value * 100,
+            saturation2: echo_value * 100,
             Item.RatShilling: echo_value * 10 * 1.12
         })
 
@@ -44,8 +44,8 @@ def add_trades(config: Config):
         Item.InscrutableRatMarketSaturation1: -65_000 * demand_frequency,
         Item.TempestuousRatMarketSaturation1: -65_000 * demand_frequency,
         Item.IntricateRatMarketSaturation1: -65_000 * demand_frequency,
-        Item._TBD_GreatGameRatMarketSaturation1: -65_000 * demand_frequency,
-        Item._TBD_SpookyRatMarketSaturation1: -65_000 * demand_frequency,
+        Item.CalculatingRatMarketSaturation1: -65_000 * demand_frequency,
+        Item.RuinousRatMarketSaturation1: -65_000 * demand_frequency,
 
         # 65k to 180k
         Item.SoftRatMarketSaturation2: -115_000 * demand_frequency,
@@ -54,115 +54,113 @@ def add_trades(config: Config):
         Item.InscrutableRatMarketSaturation2: -115_000 * demand_frequency,
         Item.TempestuousRatMarketSaturation2: -115_000 * demand_frequency,
         Item.IntricateRatMarketSaturation2: -115_000 * demand_frequency,       
-        Item._TBD_GreatGameRatMarketSaturation2: -115_000 * demand_frequency,       
-        Item._TBD_SpookyRatMarketSaturation2: -115_000 * demand_frequency,       
+        Item.CalculatingRatMarketSaturation2: -115_000 * demand_frequency,       
+        Item.RuinousRatMarketSaturation2: -115_000 * demand_frequency,       
     })
     
     add_ratly_demand_trades(config,
         saturation1=Item.SoftRatMarketSaturation1,
-        saturation=Item.SoftRatMarketSaturation2,
+        saturation2=Item.SoftRatMarketSaturation2,
         item=Item.ParabolaLinenScrap,
         echo_value=62.50)
     
     add_ratly_demand_trades(config,
         saturation1=Item.SoftRatMarketSaturation1,
-        saturation=Item.SoftRatMarketSaturation2,
+        saturation2=Item.SoftRatMarketSaturation2,
         item=Item.ScrapOfIvoryOrganza,
         echo_value=312.50)
     
 
     add_ratly_demand_trades(config,
         saturation1=Item.SaintlyRatMarketSaturation1,
-        saturation=Item.SaintlyRatMarketSaturation2,
+        saturation2=Item.SaintlyRatMarketSaturation2,
         item=Item.RattyReliquary,
         echo_value=12.50)
     
     add_ratly_demand_trades(config,
         saturation1=Item.SaintlyRatMarketSaturation1,
-        saturation=Item.SaintlyRatMarketSaturation2,
+        saturation2=Item.SaintlyRatMarketSaturation2,
         item=Item.FalseHagiotoponym,
         echo_value=62.50)
     
 
     add_ratly_demand_trades(config,
         saturation1=Item.MaudlinRatMarketSaturation1,
-        saturation=Item.MaudlinRatMarketSaturation2,
+        saturation2=Item.MaudlinRatMarketSaturation2,
         item=Item.CaptivatingBallad,
         echo_value=62.50)
     
     add_ratly_demand_trades(config,
         saturation1=Item.MaudlinRatMarketSaturation1,
-        saturation=Item.MaudlinRatMarketSaturation2,
+        saturation2=Item.MaudlinRatMarketSaturation2,
         item=Item.ParabolanParable,
         echo_value=312.50)
     
 
     add_ratly_demand_trades(config,
         saturation1=Item.InscrutableRatMarketSaturation1,
-        saturation=Item.InscrutableRatMarketSaturation2,
+        saturation2=Item.InscrutableRatMarketSaturation2,
         item=Item.UncannyIncunabulum,
         echo_value=12.50)
     
     add_ratly_demand_trades(config,
         saturation1=Item.InscrutableRatMarketSaturation1,
-        saturation=Item.InscrutableRatMarketSaturation2,
+        saturation2=Item.InscrutableRatMarketSaturation2,
         item=Item.CartographersHoard,
         echo_value=312.50)
     
 
     add_ratly_demand_trades(config,
         saturation1=Item.TempestuousRatMarketSaturation1,
-        saturation=Item.TempestuousRatMarketSaturation2,
+        saturation2=Item.TempestuousRatMarketSaturation2,
         item=Item.StormThrenody,
         echo_value=12.50)
     
     add_ratly_demand_trades(config,
         saturation1=Item.TempestuousRatMarketSaturation1,
-        saturation=Item.TempestuousRatMarketSaturation2,
+        saturation2=Item.TempestuousRatMarketSaturation2,
         item=Item.NightWhisper,
         echo_value=62.50)
     
 
     add_ratly_demand_trades(config,
         saturation1=Item.IntricateRatMarketSaturation1,
-        saturation=Item.IntricateRatMarketSaturation2,
+        saturation2=Item.IntricateRatMarketSaturation2,
         item=Item.UnlawfulDevice,
         echo_value=12.50)
     
     add_ratly_demand_trades(config,
         saturation1=Item.IntricateRatMarketSaturation1,
-        saturation=Item.IntricateRatMarketSaturation2,
+        saturation2=Item.IntricateRatMarketSaturation2,
         item=Item.CorrespondingSounder,
         echo_value=312.50)
     
     # TODO exact numbers
     # New trades coming weekend of 30 Sep 24
     add_ratly_demand_trades(config,
-        saturation1=Item._TBD_GreatGameRatMarketSaturation1,
-        saturation=Item._TBD_GreatGameRatMarketSaturation2,
+        saturation1=Item.CalculatingRatMarketSaturation1,
+        saturation2=Item.CalculatingRatMarketSaturation2,
         item=Item.VitalIntelligence,
         echo_value=12.50)
     
     add_ratly_demand_trades(config,
-        saturation1=Item._TBD_GreatGameRatMarketSaturation1,
-        saturation=Item._TBD_GreatGameRatMarketSaturation2,
+        saturation1=Item.CalculatingRatMarketSaturation1,
+        saturation2=Item.CalculatingRatMarketSaturation2,
         item=Item.CorrespondingSounder,
         echo_value=312.50)
     
-    # TODO
-    paired_mate_echo_value = 62.5 # IDK
-
+    paired_mate_echo_value = 50
     config.add({
         Item.QueenMate: -1,
         Item.EpauletteMate: -1,
-        Item._TBD_GreatGameRatMarketSaturation1: paired_mate_echo_value * 100,
+        Item.CalculatingRatMarketSaturation1: paired_mate_echo_value * 100,
         Item.RatShilling: paired_mate_echo_value * 10 * 1.32
     })
 
     config.add({
         Item.QueenMate: -1,
         Item.EpauletteMate: -1,
-        Item._TBD_GreatGameRatMarketSaturation2: paired_mate_echo_value * 100,
+        Item.CalculatingRatMarketSaturation2: paired_mate_echo_value * 100,
         Item.RatShilling: paired_mate_echo_value * 10 * 1.12
     })
     
@@ -184,20 +182,20 @@ def add_trades(config: Config):
     # })
 
     add_ratly_demand_trades(config,
-        saturation1=Item._TBD_SpookyRatMarketSaturation1,
-        saturation=Item._TBD_SpookyRatMarketSaturation2,
+        saturation1=Item.RuinousRatMarketSaturation1,
+        saturation2=Item.RuinousRatMarketSaturation2,
         item=Item.DistillationOfRetribution,
         echo_value=312.50)
 
     add_ratly_demand_trades(config,
-        saturation1=Item._TBD_SpookyRatMarketSaturation1,
-        saturation=Item._TBD_SpookyRatMarketSaturation2,
+        saturation1=Item.RuinousRatMarketSaturation1,
+        saturation2=Item.RuinousRatMarketSaturation2,
         item=Item.MortificationOfAGreatPower,
         echo_value=62.50)
 
     add_ratly_demand_trades(config,
-        saturation1=Item._TBD_SpookyRatMarketSaturation1,
-        saturation=Item._TBD_SpookyRatMarketSaturation2,
+        saturation1=Item.RuinousRatMarketSaturation1,
+        saturation2=Item.RuinousRatMarketSaturation2,
         item=Item.DreadfulSurmise,
         echo_value=312.50)
 
