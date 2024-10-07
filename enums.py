@@ -1341,3 +1341,24 @@ BONE_MARKET_ACTIONS = [
     Item._GeneralInsectAction,    
     Item._GeneralPrimateAction,    
 ]
+
+SPECIAL_ACTION_TYPES = [
+    Item._EalingAction,
+    Item._JerichoAction,
+    Item._BalmoralAction,
+    Item._StationViiiAction,
+    Item._BurrowAction,
+    Item._MoulinAction,
+    Item._HurlersAction,
+    Item._MarigoldAction,
+
+    Item._WakefulEyeAction,
+    Item._KhanateAction,
+    Item._SeaOfVoicesAction,
+    Item._PortCecilAction,
+    Item._MangroveAction,
+
+    Item._HallowsThroatAction,
+    Item._MidnightMoonAction,
+    Item._ZenithAction,
+]

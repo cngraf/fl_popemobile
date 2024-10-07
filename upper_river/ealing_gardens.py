@@ -335,7 +335,7 @@ def add_trades(config):
     # --- Sponsor a Dig
     # NB: Wiki is uncertain about some ranges
 
-    trade(1, {
+    trade(2, {
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: -50,
         Item.HelicalThighbone: 3,
@@ -344,7 +344,7 @@ def add_trades(config):
         Item.BoneFragments: 385.5
     })
 
-    trade(1, {
+    trade(2, {
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: -75,
         Item.ThornedRibcage: 1,
@@ -355,13 +355,13 @@ def add_trades(config):
     })
 
 
-    trade(1, {
+    trade(2, {
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: -163,
         Item.PalaeontologicalDiscovery: 7
     })
 
-    trade(1, {
+    trade(2, {
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: -175,
         Item.MagisterialLager: -10,

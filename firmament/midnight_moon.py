@@ -6,10 +6,15 @@ import helper.utils as utils
 from config import Config
 from player import Player
 
-
 def add_trades(config: Config):
     add = config.add
     trade = config.trade
+
+    add({
+        Item._FirmamentRoundTrip: -1,
+        Item.Action: -50,
+        Item._MidnightMoonAction: 50
+    })
 
     # trade(0, {
     #     Item.NoduleOfWarmAmber: -1,
@@ -73,7 +78,8 @@ def add_trades(config: Config):
     # TODO double check these. ran again and got somewhat diff results
 
     # Banned Works
-    trade(23.2, {
+    add({
+        Item._MidnightMoonAction: -23.2,
         Item.CausticApocryphon: 8.55,
         Item.TantalisingPossibility: 210,
         Item.GlimpseOfAnathema: 0.045,
@@ -82,7 +88,8 @@ def add_trades(config: Config):
     })
 
     # Dead Stars 1
-    trade(23, {
+    add({
+        Item._MidnightMoonAction: -23,        
         Item.GlimEncrustedCarapace: 0.95,
         Item.TantalisingPossibility: 655,
         Item.ShardOfGlim: 380,
@@ -92,7 +99,8 @@ def add_trades(config: Config):
     })    
 
     # Dead Stars 2
-    trade(23, {
+    add({        
+        Item._MidnightMoonAction: -23,        
         Item.RoofChart: 38,
         Item.TantalisingPossibility: 180,
         Item.GlimpseOfAnathema: 0.045,
@@ -101,7 +109,8 @@ def add_trades(config: Config):
     })
 
     # Precipice 1
-    trade(23, {
+    add({        
+        Item._MidnightMoonAction: -23,        
         Item.Anticandle: 9.5,
         Item.FragmentOfTheTragedyProcedures: 0.95,
         Item.RelicOfTheFifthCity: 9.5,
@@ -111,7 +120,8 @@ def add_trades(config: Config):
     })
     
     # Precipice 2
-    trade(23, {
+    add({        
+        Item._MidnightMoonAction: -23,        
         Item.Anticandle: 9.5,
         Item.TempestuousTale: 9.5,
         Item.TantalisingPossibility: 190,
@@ -122,7 +132,8 @@ def add_trades(config: Config):
     })
 
     # Cartographer
-    trade(23.5, {
+    add({        
+        Item._MidnightMoonAction: -23.5,        
         Item.TantalisingPossibility: 171,
         Item.PuzzlingMap: 0.95,
         Item.OneiromanticRevelation: 0.95,

@@ -12,8 +12,8 @@ def add_trades(config):
         Item._ParabolaRoundTrip: 1
     })
 
-    for i in range(0, 11):
-        visit_length = 2 ** i
+    for i in range(1, 5):
+        visit_length = i * 10
         add({
             Item._ParabolaRoundTrip: -1,
             Item.Action: -visit_length,

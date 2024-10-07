@@ -2110,11 +2110,11 @@ def simulate_runs(num_runs):
     print(f"{'SIMULATION RESULTS':^80}")
     print("=" * 80)
 
-    simple_mode = True
+    simple_mode = False
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.BookOfProperSpeech
-    state.cartographer_enabled = False
+    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
+    state.cartographer_enabled = True
     state.take_alternate_reward = True
 
     # Progress bar setup
