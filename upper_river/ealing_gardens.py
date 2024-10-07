@@ -90,7 +90,7 @@ def add_trades(config):
     trade(0, {
         Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
         Item.FittingInAtHeliconHouse:
-            2 if active_player.profession == Profession.Silverer else 1,
+            2 if active_player.get(Item.SetOfCosmogoneSpectacles) else 1,
         Item.Inspired: 6
     })
 
@@ -180,7 +180,7 @@ def add_trades(config):
     # 5x Romantic Notion
     # 5x Warm Amber
 
-    if (active_player.treasure == Treasure.LongDeadPriestsOfTheRedBird):
+    if (active_player.get(Item.LongDeadPriestsOfRedBird)):
         trade(3, {
             Item.IntriguingSnippet: 3,
 

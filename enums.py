@@ -132,6 +132,7 @@ class Item(Enum):
 
     _EalingAction = auto()
     _JerichoAction = auto()
+    _EvenlodeAction = auto()
     _BalmoralAction = auto()
     _StationViiiAction = auto()
     _BurrowAction = auto()
@@ -151,7 +152,11 @@ class Item(Enum):
     _MidnightMoonAction = auto()
     _ZenithAction = auto()
 
-    # Stats
+
+    #######################################################
+    #                       Stats
+    #######################################################  
+
     Watchful = auto()
     Shadowy = auto()
     Dangerous = auto()
@@ -176,6 +181,22 @@ class Item(Enum):
     Inerrant = auto()
     Insubstantial = auto()
     Neathproofed  = auto()
+    
+    _WoundsReduction = auto()
+    _ScandalReduction = auto()
+    _SuspicionReduction = auto()
+    _NightmaresReduction = auto()
+
+    # Second Chances
+    SuddenInsight = auto()
+    HastilyScrawledWarningNote = auto()
+    HardEarnedLesson = auto()
+    ConfidentSmile = auto()
+
+
+    #######################################################
+    #                       Story
+    #######################################################
 
     # Ambition
     BagALegend = auto()
@@ -184,8 +205,30 @@ class Item(Enum):
     Nemesis = auto()
 
 
-    # Rat Market
+    #######################################################
+    #                       Menaces
+    #######################################################
+
+    # Menaces
+    Wounds = auto()
+    Scandal = auto()
+    Suspicion = auto()
+    Nightmares = auto()
+
+    Irrigo = auto()
+    TroubledWaters = auto()
+
+    SeeingBanditryInTheUpperRiver = auto()
+    InCorporateDebt = auto()
+    AdvancingTheLiberationOfNight = auto()
+
+    #######################################################
+    #                       Rat Market
+    #######################################################
+
     _RatMarketRotation = auto()
+    
+    _GeneralRatMarketSaturation1 = auto()
     SoftRatMarketSaturation1 = auto()
     SaintlyRatMarketSaturation1 = auto()
     MaudlinRatMarketSaturation1 = auto()
@@ -195,6 +238,7 @@ class Item(Enum):
     CalculatingRatMarketSaturation1 = auto()
     RuinousRatMarketSaturation1 = auto()
 
+    _GeneralRatMarketSaturation2 = auto()
     SoftRatMarketSaturation2 = auto()
     SaintlyRatMarketSaturation2 = auto()
     MaudlinRatMarketSaturation2 = auto()
@@ -203,6 +247,12 @@ class Item(Enum):
     IntricateRatMarketSaturation2 = auto()    
     CalculatingRatMarketSaturation2 = auto()
     RuinousRatMarketSaturation2 = auto()
+
+
+    #######################################################
+    #                       Bone Market
+    #######################################################
+
 
     # Bone Market Hack
     _BoneMarketRotation = auto()
@@ -249,6 +299,8 @@ class Item(Enum):
     _GeneralPrimateAction = auto()    
 
     # Exhaustion
+    GenericBoneMarketExhaustion = auto()
+
     AntiquityReptileExhaustion = auto()
     AntiquityAmphibianExhaustion = auto()    
     AntiquityBirdExhaustion = auto()
@@ -285,27 +337,9 @@ class Item(Enum):
     GeneralInsectExhaustion = auto()    
     GeneralPrimateExhaustion = auto()   
 
-
-    # Menaces
-    Wounds = auto()
-    Scandal = auto()
-    Suspicion = auto()
-    Nightmares = auto()
-
-    Irrigo = auto()
-    TroubledWaters = auto()
-
-    GenericBoneMarketExhaustion = auto()
-    RatMarketExhaustion = auto()
-    SeeingBanditryInTheUpperRiver = auto()
-    InCorporateDebt = auto()
-    AdvancingTheLiberationOfNight = auto()
-
-    # Second Chances
-    SuddenInsight = auto()
-    HastilyScrawledWarningNote = auto()
-    HardEarnedLesson = auto()
-    ConfidentSmile = auto()
+    #######################################################
+    #                       Factions
+    #######################################################
 
     # Favours
     FavBohemians = auto()
@@ -323,14 +357,37 @@ class Item(Enum):
 
     FavourFingerkings = auto()
 
+    # Renown
+    RenownBohemians = auto()
+    RenownChurch = auto()
+    RenownConstables = auto()
+    RenownCriminals = auto()
+    RenownDocks = auto()
+    RenownGreatGame = auto()
+    RenownHell = auto()
+    RenownRevolutionaries = auto()
+    RenownRubberyMen = auto()
+    RenownSociety = auto()
+    RenownTombColonies = auto()
+    RenownUrchins = auto()
+
+
     # Connected
     ConnectedBenthic = auto()
     ConnectedSummerset = auto()
     ConnectedTheDuchess = auto()
     ConnectedWidow = auto()
+
+    SympatheticAboutRatlyConcerns = auto()
+
     SupportingTheLiberationistTracklayers = auto()
     SupportingThePrehistoricistTracklayers = auto()
     SupportingTheEmancipationistTracklayers = auto()
+
+
+    #######################################################
+    #                       Economy
+    #######################################################
 
     # Academic
     FoxfireCandleStub = auto()
@@ -1130,31 +1187,8 @@ class Item(Enum):
     # ---------------------------------
     # ---------- Cards ----------------
     # ---------------------------------
-
-    '''
-    CXY_CardName
-    X is a character for the broader location
-    - L for London
-    - H for Hinterlands / Railway
-    - F for Firmament / Roof
-    - Z for Unterzee
-    avoiding R bc ambiguous between railway and roof
-
-    Y is optional character(s) for sub-location that has transit costs
-    - Ea for Ealing
-    - Je for Jericho
-    - ME for Magistracy of Evenlode
-    - Ba for Balmoral
-    - St for Station VIII
-    - Bu for Burrow
-    - Mo for Moulin
-    - Hu for Hurlers
-    - MS for Marigold
-
-    idk man this is a lot maybe just use the full names
-
-    '''
-    LondonDraw = auto()
+ 
+    _LondonDraw = auto()
     
     # Lodgings
     CL_LairInTheMarshes = auto()
@@ -1253,23 +1287,6 @@ class Item(Enum):
     # Zailing
     Card_NavigationError = auto()
 
-    # Philsofruits
-    # named after the png icons
-
-    CZP_TreeBlue = auto()
-    CZP_Blemmigan = auto()
-    CZP_Passerby = auto()
-    CZP_Argument = auto()
-    CZP_Crowd2 = auto()     
-    CZP_Jungle = auto()     
-    CZP_Stick = auto()     
-    CZP_Cherries = auto()     
-    CZP_MangroveCollegeInterior = auto()     
-    CZP_ElegaicCockatoo = auto()     
-    CZP_Drowned = auto()     
-    CZP_SpiderTree = auto()     
-    CZP_Parrot = auto()
-
     # Simulation scratchpad
 
     # Heists
@@ -1302,6 +1319,21 @@ FAVOUR_ITEMS = [
     Item.FavSociety,
     Item.FavTombColonies,
     Item.FavUrchins
+]
+
+RENOWN_ITEMS = [
+    Item.RenownBohemians,
+    Item.RenownChurch,
+    Item.RenownConstables,
+    Item.RenownCriminals,
+    Item.RenownDocks,
+    Item.RenownGreatGame,
+    Item.RenownHell,
+    Item.RenownRevolutionaries,
+    Item.RenownRubberyMen,
+    Item.RenownSociety,
+    Item.RenownTombColonies,
+    Item.RenownUrchins
 ]
 
 BONE_MARKET_ACTIONS = [
@@ -1361,4 +1393,47 @@ SPECIAL_ACTION_TYPES = [
     Item._HallowsThroatAction,
     Item._MidnightMoonAction,
     Item._ZenithAction,
+]
+
+BASIC_STATS = [
+    Item.Watchful,
+    Item.Shadowy,
+    Item.Dangerous,
+    Item.Persuasive,
+]
+
+ADVANCED_STATS = [
+    Item.KatalepticToxicology,
+    Item.MonstrousAnatomy,
+    Item.APlayerOfChess,
+    Item.Glasswork,
+    Item.ArtisanOfTheRedScience,
+    Item.Mithridacy,
+
+    Item.ShapelingArts,
+    Item.Zeefaring,
+
+    Item.StewardOfTheDiscordance,
+    Item.Chthonosophy,    
+]
+
+BDR_STATS = [
+    Item.Respectable,
+    Item.Dreaded,
+    Item.Bizarre,
+]
+
+DEFENSIVE_STATS = [
+    Item.Inerrant,
+    Item.Insubstantial,
+    Item.Neathproofed ,
+]
+
+ALL_STATS = BASIC_STATS + ADVANCED_STATS + BDR_STATS + DEFENSIVE_STATS
+
+MENACE_REDUCTION_QUALITIES = [
+    Item._WoundsReduction,
+    Item._NightmaresReduction,
+    Item._ScandalReduction,
+    Item._SuspicionReduction,
 ]

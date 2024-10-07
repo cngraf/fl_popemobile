@@ -11,12 +11,14 @@ def add_ratly_demand_trades(config : Config, saturation1, saturation2, item, ech
         config.add({
             item: -1,
             saturation1: echo_value * 100,
+            Item._GeneralRatMarketSaturation1: echo_value * 100,
             Item.RatShilling: echo_value * 10 * 1.32
         })
 
         config.add({
             item: -1,
             saturation2: echo_value * 100,
+            Item._GeneralRatMarketSaturation2: echo_value * 100,
             Item.RatShilling: echo_value * 10 * 1.12
         })
 
@@ -37,6 +39,8 @@ def add_trades(config: Config):
     add({
         Item._RatMarketRotation: -1,
 
+        Item._GeneralRatMarketSaturation1: -65_000,
+
         # 0 to 65k
         Item.SoftRatMarketSaturation1: -65_000 * demand_frequency,
         Item.SaintlyRatMarketSaturation1: -65_000 * demand_frequency,
@@ -46,6 +50,8 @@ def add_trades(config: Config):
         Item.IntricateRatMarketSaturation1: -65_000 * demand_frequency,
         Item.CalculatingRatMarketSaturation1: -65_000 * demand_frequency,
         Item.RuinousRatMarketSaturation1: -65_000 * demand_frequency,
+
+        Item._GeneralRatMarketSaturation2: -115_000,
 
         # 65k to 180k
         Item.SoftRatMarketSaturation2: -115_000 * demand_frequency,
@@ -153,6 +159,7 @@ def add_trades(config: Config):
     config.add({
         Item.QueenMate: -1,
         Item.EpauletteMate: -1,
+        Item._GeneralRatMarketSaturation1: paired_mate_echo_value * 100,
         Item.CalculatingRatMarketSaturation1: paired_mate_echo_value * 100,
         Item.RatShilling: paired_mate_echo_value * 10 * 1.32
     })
@@ -160,6 +167,7 @@ def add_trades(config: Config):
     config.add({
         Item.QueenMate: -1,
         Item.EpauletteMate: -1,
+        Item._GeneralRatMarketSaturation2: paired_mate_echo_value * 100,
         Item.CalculatingRatMarketSaturation2: paired_mate_echo_value * 100,
         Item.RatShilling: paired_mate_echo_value * 10 * 1.12
     })

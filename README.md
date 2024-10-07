@@ -21,6 +21,7 @@ Until then, just ping me (or ask ChatGPT) for a guided set-up.
 - `main.py` main linear optimization model, to optimize eg. Echoes per Action
     - `player.py` preconfigured player profiles
     - `config.py` constraints, important for menaces and other negative EV qualities
+    - `optimization/params.py` optimizer settings, inputs and targets
 
 - `simulations` directory for various monte carlo scripts
 
@@ -111,7 +112,7 @@ A: almost certainly not
 
 ### Q: How do I change the optimization target?
 
-A: set `optimize_for` in `optimize.py`
+A: change the value in `optimization/params.py`
 
 ### Q: How do I tweak this other parameter?
 

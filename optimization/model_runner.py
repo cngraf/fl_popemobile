@@ -104,8 +104,9 @@ class ModelRunner:
         return '\n'.join(wrapped_items)
 
     def display_player_stats(self):
-        print(f"-Player Stats-")
-        pprint.pprint(self.active_player.qualities)
+        print(f"----- Player Items & Qualities ------")
+        for key, val in self.active_player.qualities.items():
+            print(f"{key.name:<24} {val:>4}")
 
     def display_assumptions(self):
         print(colored("\n------ Assumptions -------", "green", attrs=['bold']))

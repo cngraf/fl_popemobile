@@ -1,10 +1,13 @@
 from enums import *
 import player as player
 
-input_per_cycle = 7 * 120
-
+# Change these
 optimize_input = Item.Action
 optimization_target = Item.Echo
+active_player = player.player_endgame_f2p
+
+
+input_per_cycle = 7 * 120
 
 # Core constraint setup
 core_constraint = {
@@ -17,5 +20,3 @@ core_constraint = {
 
     Item._CardDraws: 7 * 30
 }
-
-active_player = player.player_advanced_f2p
