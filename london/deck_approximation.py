@@ -16,19 +16,19 @@ def add_trades(config: Config):
     specific_favour_per_card = favour_card_frequency/unique_favours
 
     add({
-        Item._CardDraws: -1,
-        Item.CL_Bohemians:  specific_favour_per_card,
-        Item.CL_Church:     specific_favour_per_card,
-        Item.CL_Constables: specific_favour_per_card,
-        Item.CL_Criminals:  specific_favour_per_card,
-        Item.CL_Docks:      specific_favour_per_card,
-        Item.CL_GreatGame:  specific_favour_per_card,
-        Item.CL_Hell:       specific_favour_per_card,
-        Item.CL_Revolutionaries: specific_favour_per_card,
-        Item.CL_RubberyMen: specific_favour_per_card,
-        Item.CL_Society:    specific_favour_per_card,                           
-        Item.CL_TombColonies: specific_favour_per_card,                           
-        Item.CL_Urchins:    specific_favour_per_card,       
+        Item._CardDraws: -1/specific_favour_per_card,
+        Item.CL_Bohemians:  1,
+        Item.CL_Church:     1,
+        Item.CL_Constables: 1,
+        Item.CL_Criminals:  1,
+        Item.CL_Docks:      1,
+        Item.CL_GreatGame:  1,
+        Item.CL_Hell:       1,
+        Item.CL_Revolutionaries: 1,
+        Item.CL_RubberyMen: 1,
+        Item.CL_Society:    1,                           
+        Item.CL_TombColonies: 1,                           
+        Item.CL_Urchins:    1,       
     })
 
     add({

@@ -4,10 +4,10 @@ import player as player
 # Change these
 optimize_input = Item.Action
 optimization_target = Item.Echo
-active_player = player.player_endgame_f2p
+active_player = player.player_generic_endgame_whale
 
 
-input_per_cycle = 7 * 120
+input_per_cycle = 7 * 80
 
 # Core constraint setup
 core_constraint = {
@@ -18,5 +18,5 @@ core_constraint = {
     Item._BoneMarketRotation: 1,
     Item._VisitFromTimeTheHealer: 1,
 
-    Item._CardDraws: 7 * 30
+    Item._CardDraws: 20 * 7
 }

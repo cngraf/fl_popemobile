@@ -21,7 +21,7 @@ def add_trades(config: Config):
             Item._BalmoralAction: visit_length,
 
             # TODO unsure this ties out
-            Item.PresentYourPaintingInLondon: 1
+            Item._UnveilYourPaintingLondon: 1
         })
 
     # --- Seven Necked Skeleton
@@ -485,93 +485,73 @@ def add_trades(config: Config):
 
     # TODO: other cash outs
 
-    # -------------------------
-    # ------- Painting --------
-    # -------------------------
+    ########################################################
+    #                       Painting
+    ########################################################
 
     # Start + finish costs
     # Does not include travel, present
-    add({
-        Item._BalmoralAction: -2,
-        Item.PaintersProgress: -6,
-        Item.CompletedPainting: 1
-    })
+    # add({
+    #     Item._BalmoralAction: -2,
+    #     Item.PaintersProgress: -6,
+    #     Item.CompletedPainting: 1
+    # })
 
-    add({
-        Item.PaintingIncendiary: -1,
-        Item.PaintingAnyQuality: 1
-    })
+    add({Item.PaintingIncendiary: -1, Item._PaintingAnyQuality: 1})
+    add({Item.PaintingLuminosity: -1, Item._PaintingAnyQuality: 1})
+    add({Item.PaintingNostalgic: -1, Item._PaintingAnyQuality: 1})
 
-    add({
-        Item.PaintingLuminosity: -1,
-        Item.PaintingAnyQuality: 1
-    })
+    # TODO: Nontrivial challenges (Persuasive 200)
 
-    add({
-        Item.PaintingNostalgic: -1,
-        Item.PaintingAnyQuality: 1
-    })
-
-    # Paint with Moonlight => Success
-    # TODO: Nontrivial challenge (Persuasive 200)
+    ###### Moonlight #####
     add({
         Item._BalmoralAction: -1,
         Item.Moonlit: -2,
         Item.MemoryOfMuchLesserSelf: -2,
         Item.MemoryOfLight: -10,
 
-        Item.PaintersProgress: 1,
         Item.PaintingLuminosity: 1,
         Item.Inspired: 1
     })
 
-    # Paint with Moonlight => Failure
     add({
         Item._BalmoralAction: -1,
         Item.Moonlit: -2,
         Item.MemoryOfMuchLesserSelf: -2,
         Item.MemoryOfLight: -10,
 
-        Item.PaintersProgress: 1,
         Item.PaintingNostalgic: 1
     })
 
-    # Subversive => Success
+    ###### Subversive #####
     add({
         Item._BalmoralAction: -1,
         Item.VitalIntelligence: -1,
 
-        Item.PaintersProgress: 1,
         Item.PaintingIncendiary: 1,
         Item.RomanticNotion: 15
     })
 
-    # Subversive => Failure
     add({
         Item._BalmoralAction: -1,
         Item.VitalIntelligence: -1,
 
-        Item.PaintersProgress: 1,
         Item.PaintingNostalgic: 1
     })
 
-    # Paint! => success
-    # TODO: Nontrivial challenge (Persuasive 200)
+    ###### Paint! #####
     add({
         Item._BalmoralAction: -1,
         Item.TouchingLoveStory: -5,
 
-        Item.PaintersProgress: 1,
         Item.PaintingNostalgic: 1,
         Item.RomanticNotion: 15
     })
 
-    # Paint! => failure
     add({
         Item._BalmoralAction: -1,
         Item.TouchingLoveStory: -3,
 
-        Item.PaintersProgress: 1,
         Item.PaintingIncendiary: 1
     })
 
@@ -585,58 +565,27 @@ def add_trades(config: Config):
     # 1 to present
     # 1 to return back to Balmoral (or to get there, if start/end in London)
 
-    # add({
-    #     Item._BalmoralAction: -9,
-    #     Item.PaintersProgress: 1
-    # })
-
-    # Full recipe
-    # "Paint!" fail x3, succeed x3
-    add({
-        Item._BalmoralAction: -9,
-        Item.TouchingLoveStory: -24,
-        Item.RomanticNotion: 45,
-        
-        Item.PaintingIncendiary: 3,
-        Item.PaintingNostalgic: 3,
-        Item.PaintersProgress: 6
-    })
-
     add({
         Item._BalmoralAction: -2,
-        Item.PaintersProgress: -6,
-        Item.PresentYourPaintingInLondon: 1,
-        Item.RumourOfTheUpperRiver: 2
-    })
-
-    # # TODO move to ealing?
-    # add({
-    #     Item._BalmoralAction: -2,
-    #     Item.CompletedPainting: -1,
-    #     Item.PresentYourPaintingInHeliconHouse: 1,
-    #     Item.RumourOfTheUpperRiver: 2
-    # })    
-
-    add({
         Item.Action: -1,
-        Item.CompletedPainting: -1,
-        Item.PresentYourPaintingInLondon: -1,
-        
-        Item.PaintingNostalgic: -4,
-        Item.PaintingAnyQuality: -2,
+        Item._UnveilYourPaintingLondon: -1,
 
+        Item.PaintingNostalgic: -4,
+        Item._PaintingAnyQuality: -2,
+    
         Item.BottleOfFourthCityAirag: 1,
         Item.CellarOfWine: 1,
         Item.SwornStatement: 2
     })
 
     add({
+        Item._BalmoralAction: -2,
         Item.Action: -1,
-        Item.CompletedPainting: -1,
-        Item.PresentYourPaintingInLondon: -1,
+        Item._UnveilYourPaintingLondon: -1,
+        
         Item.PaintingLuminosity: -4,
-        Item.PaintingAnyQuality: -2,
-
+        Item._PaintingAnyQuality: -2,
+    
         Item.ViennaOpening: 5,
         Item.SwornStatement: 5,
         Item.ParabolaLinenScrap: 1,
@@ -644,36 +593,39 @@ def add_trades(config: Config):
     })
 
     add({
+        Item._BalmoralAction: -2,
         Item.Action: -1,
-        Item.CompletedPainting: -1,
-        Item.PresentYourPaintingInLondon: -1,
+        Item._UnveilYourPaintingLondon: -1,        
+        
         Item.PaintingIncendiary: -4,
-        Item.PaintingAnyQuality: -2,
-
+        Item._PaintingAnyQuality: -2,
+    
         Item.SkeletonWithSevenNecks: 1,
         Item.SilentSoul: 1,
         Item.ThirstyBombazineScrap: 2
     })
-    
+
     add({
+        Item._BalmoralAction: -2,
         Item.Action: -1,
-        Item.CompletedPainting: -1,
-        Item.PresentYourPaintingInLondon: -1,        
+        Item._UnveilYourPaintingLondon: -1,        
+        
         Item.PaintingIncendiary: -3,
         Item.PaintingNostalgic: -3,
-
+    
         Item.DiscordantSoul: 1,
         Item.DirefulReflection: 1,
         Item.MourningCandle: 2
     })
 
     add({
+        Item._BalmoralAction: -2,
         Item.Action: -1,
-        Item.CompletedPainting: -1,
-        Item.PresentYourPaintingInLondon: -1,
+        Item._UnveilYourPaintingLondon: -1,        
+        
         Item.PaintingIncendiary: -3,
         Item.PaintingLuminosity: -3,
-
+    
         Item.NightWhisper: 1,
         Item.ViennaOpening: 5,
         Item.ThirstyBombazineScrap: 5,
@@ -681,23 +633,26 @@ def add_trades(config: Config):
     })
 
     add({
+        Item._BalmoralAction: -2,
         Item.Action: -1,
-        Item.CompletedPainting: -1,
-        Item.PresentYourPaintingInLondon: -1,
-        Item.PaintingIncendiary: -3,
+        Item._UnveilYourPaintingLondon: -1,        
+        
         Item.PaintingNostalgic: -3,
-
+        Item.PaintingLuminosity: -3,
+    
         Item.BottleOfFourthCityAirag: 1,
         Item.MourningCandle: 10,
         Item.FavourInHighPlaces: 1
     })
 
+
+
     # TODO: Move to helicon house
     add({
         Item.Action: -1,
         Item.CompletedPainting: -1,
-        Item.PresentYourPaintingInLondon: -1,
-        Item.PaintingAnyQuality: -6,
+        Item._UnveilYourPaintingLondon: -1,
+        Item._PaintingAnyQuality: -6,
 
         Item.HinterlandScrip: 125
     })

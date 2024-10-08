@@ -4,8 +4,8 @@ from helper.utils import *
 def add_trades(config):
     add = config.add
     
-    for i in range(0, 11):
-        visit_length = 2 ** i
+    for i in range(1, 2):
+        visit_length = 10 * i
         add({
             Item._UpperRiverRoundTrip: -1,
             Item.Action: -1 * visit_length,

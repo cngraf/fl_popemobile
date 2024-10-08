@@ -63,7 +63,26 @@ def add_trades(config: Config):
         Item.CalculatingRatMarketSaturation2: -115_000 * demand_frequency,       
         Item.RuinousRatMarketSaturation2: -115_000 * demand_frequency,       
     })
-    
+
+    # Release valves for bounded qualities
+    add({
+        Item._GeneralRatMarketSaturation1: 1000
+    })
+
+    add({
+        Item._GeneralRatMarketSaturation2: 1000
+    })
+
+    for type in RAT_MARKET_SATURATION_1_TYPES:
+        add({
+            type: 1_000,
+        })
+
+    for type in RAT_MARKET_SATURATION_2_TYPES:
+        add({
+            type: 1_000,
+        })
+
     add_ratly_demand_trades(config,
         saturation1=Item.SoftRatMarketSaturation1,
         saturation2=Item.SoftRatMarketSaturation2,

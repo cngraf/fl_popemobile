@@ -140,6 +140,8 @@ class Item(Enum):
     _HurlersAction = auto()
     _MarigoldAction = auto()
     
+    _HeliconAction = auto()
+
     _JerichoFavourExchange = auto()
 
     _WakefulEyeAction = auto()
@@ -1069,13 +1071,13 @@ class Item(Enum):
 
     PaintersProgress = auto()
     CompletedPainting = auto()
-    PresentYourPaintingInLondon = auto()
+    _UnveilYourPaintingLondon = auto()
     PresentYourPaintingInHeliconHouse = auto()
 
     PaintingIncendiary = auto()
     PaintingLuminosity = auto()
     PaintingNostalgic = auto()
-    PaintingAnyQuality = auto()
+    _PaintingAnyQuality = auto()
 
     MonographCautionary = auto()
     MonographTragic = auto()
@@ -1375,6 +1377,28 @@ BONE_MARKET_ACTIONS = [
     Item._GeneralPrimateAction,    
 ]
 
+RAT_MARKET_SATURATION_1_TYPES = [
+    Item.SoftRatMarketSaturation1,
+    Item.SaintlyRatMarketSaturation1,
+    Item.MaudlinRatMarketSaturation1,
+    Item.InscrutableRatMarketSaturation1,
+    Item.TempestuousRatMarketSaturation1,
+    Item.IntricateRatMarketSaturation1,
+    Item.CalculatingRatMarketSaturation1,
+    Item.RuinousRatMarketSaturation1,
+]
+
+RAT_MARKET_SATURATION_2_TYPES = [
+    Item.SoftRatMarketSaturation2,
+    Item.SaintlyRatMarketSaturation2,
+    Item.MaudlinRatMarketSaturation2,
+    Item.InscrutableRatMarketSaturation2,
+    Item.TempestuousRatMarketSaturation2,
+    Item.IntricateRatMarketSaturation2,    
+    Item.CalculatingRatMarketSaturation2,
+    Item.RuinousRatMarketSaturation2,
+]
+
 SPECIAL_ACTION_TYPES = [
     Item._EalingAction,
     Item._JerichoAction,
@@ -1385,6 +1409,7 @@ SPECIAL_ACTION_TYPES = [
     Item._HurlersAction,
     Item._MarigoldAction,
 
+    Item._HeliconAction,
     Item._WakefulEyeAction,
     Item._KhanateAction,
     Item._SeaOfVoicesAction,

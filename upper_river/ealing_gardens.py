@@ -3,8 +3,9 @@ from helper.utils import *
 from player import *
 from config import *
 
-def add_trades(config):
+def add_trades(config: Config):
     active_player = config.player
+    add = config.add
     trade = config.trade
     # ---- Helicon House
 
@@ -23,36 +24,66 @@ def add_trades(config):
     - certain options only being available at specific "times"
     - other things I don't know how to cleanly model
     '''
+    
+    for i in range(1, 11):
+        visit_length = 10 * i
+        add({
+            Item._UpperRiverRoundTrip: -1,
+            Item.Action: -1 * visit_length,
+            Item._EalingAction: visit_length,
+        })
+
 
     initial_fitting_in = 3
 
     # action costs paid upfront to prevent dipping in and out
-    trade(6, {
+    # trade(6, {
+    add({
+        Item._EalingAction: -6,
+        Item._HeliconAction: 5,
         Item.TimeRemainingAtHeliconHouseTwoThruFive: 4,
         Item.TimeRemainingAtHeliconHouseExactlyOne: 1,
 
-        # with spouse & FATE pendant
+        # with spouse & oneiric key
         Item.FittingInAtHeliconHouse: initial_fitting_in,
-        Item.IntriguingSnippet: 3
+        Item.RomanticNotion: 5
     })
 
-    trade(5, {
-        Item.TimeRemainingAtHeliconHouseTwoThruFive: 3,
-        Item.TimeRemainingAtHeliconHouseExactlyOne: 1,
+    # # trade(5, {
+    # add({
+    #     Item._EalingAction: -5,
+    #     Item._HeliconAction: 4,
+    #     Item.TimeRemainingAtHeliconHouseTwoThruFive: 3,
+    #     Item.TimeRemainingAtHeliconHouseExactlyOne: 1,
 
-        # with spouse & FATE pendant
-        Item.FittingInAtHeliconHouse: initial_fitting_in,
+    #     # with spouse & FATE pendant
+    #     Item.FittingInAtHeliconHouse: initial_fitting_in,
+    # })
+
+    # This is the F2P version of main route
+    # With Oneiric Key
+    add({
+        Item._EalingAction: -6,
+        Item.FinBonesCollected: -40,
+
+        Item.RomanticNotion: 5,
+        Item.ThirstyBombazineScrap: 1,
+        Item.HandPickedPeppercaps: 18,
+        Item.AmberCrustedFin: 4
     })
 
     # Entrance Hall
-    trade(0, {
+    # trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
         Item.HandPickedPeppercaps: -1,
         Item.FittingInAtHeliconHouse: 2,
         Item.Investigating: 20
     })
 
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
         # stop FittingIn from carrying over 
         Item.FittingInAtHeliconHouse: -1 * initial_fitting_in,
@@ -62,14 +93,16 @@ def add_trades(config):
 
     for i in range(0, 5):
         fitting_in = initial_fitting_in + i * 2
-        trade(0, {
+        add({
+            Item._HeliconAction: -1,
             Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
             Item.FittingInAtHeliconHouse: -1 * fitting_in,
             Item.HandPickedPeppercaps: fitting_in,
             Item.SolaceFruit: 20
         })
 
-        trade(0, {
+        add({
+            Item._HeliconAction: -1,
             Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
             Item.FittingInAtHeliconHouse: -1 * fitting_in,
             Item.HandPickedPeppercaps: 15 + fitting_in,
@@ -78,7 +111,8 @@ def add_trades(config):
 
     # The Upstairs Honey Den
     # more variable but not gonna bother rn
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
         Item.Casing: -15,
         Item.FittingInAtHeliconHouse: -3,
@@ -87,7 +121,8 @@ def add_trades(config):
         Item.MoonPearl: 25.5,
     })
 
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
         Item.FittingInAtHeliconHouse:
             2 if active_player.get(Item.SetOfCosmogoneSpectacles) else 1,
@@ -97,40 +132,46 @@ def add_trades(config):
     # Bellow Stairs
 
     # actually requires 4+ fitting in
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
         Item.NoduleOfWarmAmber: -5,
         Item.WitheredTentacle: 3,
         Item.FittingInAtHeliconHouse: 2
     })
 
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
         Item.FinBonesCollected: -10,
         Item.AmberCrustedFin: 1
     })
 
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
         Item.FinBonesCollected: -10,
         Item.AmberCrustedFin: 1
     })
 
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
         Item.HumanRibcage: -1,
         Item.ThornedRibcage: -1,
         Item.FlourishingRibcage: 1
     })
 
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
         Item.HumanRibcage: -1,
         Item.ThornedRibcage: -1,
         Item.FlourishingRibcage: 1
     })
 
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
         Item.ThornedRibcage: -1,
         Item.SkeletonWithSevenNecks: -1,
@@ -139,7 +180,8 @@ def add_trades(config):
         Item.RibcageWithABoutiqueOfEightSpines: 1
     })
 
-    trade(0, {
+    add({
+        Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
         Item.ThornedRibcage: -1,
         Item.SkeletonWithSevenNecks: -1,
@@ -266,40 +308,47 @@ def add_trades(config):
 
     # ----- Butcher
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.FemurOfASurfaceDeer: -5,
         Item.PotOfVenisonMarrow: 5
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.RatOnAString: -1000,
         Item.SausageAboutWhichNoOneComplains: 1
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.DeepZeeCatch: -1,
         Item.CrustaceanPincer: 2
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BoneFragments: -130,
         Item.NoduleOfWarmAmber: -2,
         Item.WarblerSkeleton: 2
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BoneFragments: -100,
         Item.NoduleOfWarmAmber: -2,
         Item.BatWing: 2
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BoneFragments: -2000,
         Item.NoduleOfWarmAmber: -25,
         Item.AlbatrossWing: 2
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BoneFragments: -4900,
         Item.NoduleOfWarmAmber: -125,
         Item.SabreToothedSkull: 1,
@@ -307,25 +356,29 @@ def add_trades(config):
         Item.UnidentifiedThighBone: 0.5
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BoneFragments: -1000,
         Item.NoduleOfWarmAmber: -5,
         Item.HornedSkull: 1
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BoneFragments: -200,
         Item.NoduleOfWarmAmber: -2,
         Item.TombLionsTail: 2
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BoneFragments: -100,
         Item.NoduleOfWarmAmber: -25,
         Item.WingOfAYoungTerrorBird: 2
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BoneFragments: -1750,
         Item.NoduleOfWarmAmber: -25,
         Item.CrateOfIncorruptibleBiscuits: -1,
@@ -335,7 +388,9 @@ def add_trades(config):
     # --- Sponsor a Dig
     # NB: Wiki is uncertain about some ranges
 
-    trade(2, {
+
+    add({
+        Item._EalingAction: -1,
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: -50,
         Item.HelicalThighbone: 3,
@@ -344,7 +399,8 @@ def add_trades(config):
         Item.BoneFragments: 385.5
     })
 
-    trade(2, {
+    add({
+        Item._EalingAction: -1,
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: -75,
         Item.ThornedRibcage: 1,
@@ -355,13 +411,15 @@ def add_trades(config):
     })
 
 
-    trade(2, {
+    add({
+        Item._EalingAction: -2,
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: -163,
         Item.PalaeontologicalDiscovery: 7
     })
 
-    trade(2, {
+    add({
+        Item._EalingAction: -2,
         Item.StrongBackedLabour: -1,
         Item.SurveyOfTheNeathsBones: -175,
         Item.MagisterialLager: -10,
@@ -375,13 +433,15 @@ def add_trades(config):
     spa_rare_success_rate = 0.1
     spa_normal_success_rate = 1 - spa_rare_success_rate
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BrilliantSoul: 1.5 * spa_normal_success_rate,
         Item.Soul: 100 * spa_normal_success_rate,
         Item.CompromisingDocument: 6 * spa_rare_success_rate
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BrilliantSoul: 5 * spa_normal_success_rate,
         Item.SilentSoul: 1 * spa_rare_success_rate,
         Item.FavHell: 1 * spa_rare_success_rate
@@ -389,12 +449,14 @@ def add_trades(config):
 
     # --- Rubbery Pie Stand
     
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BasketOfRubberyPies: -5,
         Item.InCorporateDebt: -3
     })
 
-    trade(1, {
+    add({
+        Item._EalingAction: -1,
         Item.BasketOfRubberyPies: -5,
         Item.HinterlandScrip: 32
     })

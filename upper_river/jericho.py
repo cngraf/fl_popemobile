@@ -9,7 +9,7 @@ def add_trades(config: Config):
     player = config.player
     add = config.add
 
-    for i in range(0, 11):
+    for i in range(2, 7):
         visit_length = 2 ** i
         add({
             Item._UpperRiverRoundTrip: -1,
