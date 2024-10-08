@@ -4,7 +4,7 @@ from termcolor import colored
 import numpy as np
 from scipy.optimize import linprog
 from config import Config
-from enums import Item, BONE_MARKET_ACTIONS
+from enums import Item, BONE_MARKET_ACTIONS, SPECIAL_ACTION_TYPES
 
 # Example placeholder for BONE_MARKET_ACTIONS
 # BONE_MARKET_ACTIONS = [Item.AntiquityReptileExhaustion, Item.AmalgamyReptileExhaustion]  # Add actual members
@@ -22,6 +22,9 @@ class ModelRunner:
         self.items_negative_surplus = [] # eg. market rotations that go unused
         self.bone_market_trades = []  # Store bone market trades
         self.rat_market_trades = []
+
+        self.special_action_trades = {}
+
         self.opt_result = None
 
     def run_optimization(self):
@@ -52,8 +55,10 @@ class ModelRunner:
                 lose_items = ""
                 gain_items = ""
                 count_terms = 0
-                bone_market_trade = False  # Flag to track if trade involves bone market items
-                rat_market_trade = False
+                is_bone_market_trade = False  # Flag to track if trade involves bone market items
+                is_rat_market_trade = False
+                is_special_action_trade = False
+                special_action_type = None 
                 for ii in range(self.config.num_items):
                     quantity = round(self.config.A[i, ii], 2)
                     item = Item(ii)
@@ -61,9 +66,12 @@ class ModelRunner:
 
                     if quantity != 0:
                         if item in BONE_MARKET_ACTIONS:
-                            bone_market_trade = True
+                            is_bone_market_trade = True
                         elif item == Item.RatShilling:
-                            rat_market_trade = True
+                            is_rat_market_trade = True
+                        elif item in SPECIAL_ACTION_TYPES:
+                            special_action_type = item
+                            is_special_action_trade = True
 
                         if quantity < 0:
                             count_terms += 1
@@ -79,13 +87,20 @@ class ModelRunner:
                 action_cost = self.config.A[i, Item.Action.value]
                 trade = [marginal * 1000, lose_items, gain_items]
 
-                if bone_market_trade:
+
+
+                if is_bone_market_trade:
                     self.bone_market_trades.append(trade)
-                elif rat_market_trade:
+                elif is_rat_market_trade:
                     self.rat_market_trades.append(trade)
+                elif is_special_action_trade:
+                    if special_action_type not in self.special_action_trades.keys():
+                        self.special_action_trades[special_action_type] = []
+                    self.special_action_trades[special_action_type].append(trade)
                 elif count_terms == 2 and action_cost == 0:
                     self.free_item_conversions.append(trade)
                 else:
+
                     self.trades_used.append([marginal, lose_items, gain_items])
 
         self.trades_used.sort()
@@ -119,12 +134,15 @@ class ModelRunner:
     def display_trades(self):
         self._display_trade_data(self.trades_used, "Actions")
 
+    def display_special_action_trades(self):
+        for key, value in self.special_action_trades.items():
+            self._display_trade_data(value, key.name)
+
     def display_bone_market_trades(self):
         """Displays trades that involve Bone Market items in a separate table."""
         self._display_trade_data(self.bone_market_trades, "Bone Market Trades")
 
     def display_rat_market_trades(self):
-        """Displays trades that involve Bone Market items in a separate table."""
         self._display_trade_data(self.rat_market_trades, "Rat Market Trades")
 
     def _display_trade_data(self, trade_data_list, header_title):
@@ -160,6 +178,7 @@ class ModelRunner:
         self.display_player_stats()
         self.display_conversions()
         self.display_trades()
+        self.display_special_action_trades()
         self.display_bone_market_trades()
         self.display_rat_market_trades()
         self.display_surplus_items()

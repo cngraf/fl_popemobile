@@ -1067,6 +1067,7 @@ class Item(Enum):
     CoverCredentials = auto()
     CoverBackstory = auto()
 
+    PaintersProgress = auto()
     CompletedPainting = auto()
     PresentYourPaintingInLondon = auto()
     PresentYourPaintingInHeliconHouse = auto()
