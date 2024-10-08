@@ -57,6 +57,13 @@ class Buyer():
         }
 
         skeleton = Bone.create_skeleton(recipe)
+
+        # # HACK for finding skeletons for CGD leviathan frame trade
+        # if 300 <= skeleton.echo_value * self.zoo_multiplier(zoo_type) < 330:
+        #     print("    >>>>> Candidate Recipe:")
+        #     print(zoo_type)
+        #     print(recipe)
+
         primary = self.primary_payout(flux, zoo_type, skeleton)
         secondary = self.secondary_payout(flux, zoo_type, skeleton)
 
@@ -488,3 +495,15 @@ class TriflingDiplomatTripleQuality(Buyer):
             Item.CompromisingDocument: payout,
             Item.GenericBoneMarketExhaustion: exhaustion
         }
+
+class CarpentersGranddaughter(Buyer):
+    def __init__(self):
+        super().__init__("The Carpenter's Granddaughter", 100)
+
+    def primary_payout(self, flux, zoo_type, skeleton: Bone):
+        multi = self.zoo_multiplier(zoo_type)
+        skelly_value = skeleton.echo_value * multi
+        if skelly_value >= 300:
+            return { Item.LeviathanFrame: 1 }
+        else:
+            return {}

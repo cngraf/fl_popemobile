@@ -4,7 +4,7 @@ import player as player
 # Change these
 optimize_input = Item.Action
 optimization_target = Item.Echo
-active_player = player.player_generic_endgame_whale
+active_player = player.player_bal_licentiate
 
 
 input_per_cycle = 7 * 80

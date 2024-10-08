@@ -264,6 +264,8 @@ class Item(Enum):
     _ReduceMenace = auto()
 
     # Actions
+    _BoneMarketAction = auto()
+
     _AntiquityReptileAction = auto()
     _AntiquityAmphibianAction = auto()    
     _AntiquityBirdAction = auto()
@@ -1340,6 +1342,8 @@ RENOWN_ITEMS = [
 ]
 
 BONE_MARKET_ACTIONS = [
+    Item._BoneMarketAction,
+    
     Item._AntiquityReptileAction,
     Item._AntiquityAmphibianAction,    
     Item._AntiquityBirdAction,

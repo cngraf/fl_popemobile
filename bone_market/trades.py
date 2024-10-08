@@ -10,9 +10,14 @@ from bone_market.buyers import *
 def add_trades(config: Config):
     player = config.player
     trade = config.trade
-
+    add = config.add
     # HACK
     config.trade(0, { Item._NoItem: 1})
+
+    # add({
+    #     Item.Action: -1,
+    #     Item._BoneMarketAction: 1
+    # })
 
     bone_market_week_actions = {
         Flux.Antiquity: {
@@ -87,6 +92,7 @@ def add_trades(config: Config):
 
             config.add({ weekly_action: -1, generic_flux_action: 1 })
             config.add({ weekly_action: -1, generic_zoo_action: 1 })
+            config.add({ weekly_action: -1, Item._BoneMarketAction: 1 })
 
             config.add({
                 exhaustion_type: -exhaustion_per_week,
@@ -170,7 +176,9 @@ def add_trades(config: Config):
     # Sell To Patrons
     # ----------------
 
-    trade(1, {
+    add({
+        Item.Action: -1,
+        Item._BoneMarketAction: -1,
         Item.HumanRibcage: -1,
         Item.IncisiveObservation: 30
     })
@@ -186,12 +194,6 @@ def add_trades(config: Config):
             
             ex_item: -1
         })
-
-    # -----------------
-    #   Skeleton Modifications
-    # ----------------
-
-    # # ----- Test
 
     # # Identify items that can be acquired profitably
     # for (item, data) in bone_table().items():
@@ -264,21 +266,38 @@ def add_trades(config: Config):
         })
 
     if player.get(Item.ListOfAliasesWrittenInGant):
-        trade(0, { Item.ASkeletonOfYourOwn: 1 })
-        trade(0, { Item.VictimsSkull: 1 })
+        add({ Item.ASkeletonOfYourOwn: 1 })
+        add({ Item.VictimsSkull: 1 })
 
-    trade(0, {
+    add({
         Item.BoneFragments: -500,
         Item.HandPickedPeppercaps: -10,
         Item.DuplicatedCounterfeitHeadOfJohnTheBaptist: 1
     })
 
-    # Break down 8 spine ribcage for parts + woesel
-    trade(10, {
+    
+    #####################################################
+    #               Breaking Down
+    #####################################################
+
+    # 1x Build on Bouquet of 8 Spines
+    # 8x add BBS
+    # 1x break down for parts (force fail with Woesel)
+    
+    add({
+        Item.Action: -10,
+        Item._BoneMarketAction: -10,
         Item.BrightBrassSkull: -8,
         Item.NevercoldBrassSliver: -1600,
         Item.BoneFragments: 52000
     })
+
+    # # Also fail all checks to affix skull
+    # add({
+    #     Item._BoneMarketAction: -10,
+    #     Item.BrightBrassSkull: -8,
+    #     Item.BoneFragments: 48000
+    # })
 
     # Buyers
     gothic_tales_buyers = AuthorOfGothicTales()
@@ -526,7 +545,6 @@ def add_trades(config: Config):
         
         mammoth_recipe2 = {
             Item.Action: -9,
-            Item._AntiquityAmphibianAction: -9,
             Item.MammothRibcage: -1,
             skull_type: -1,
             Item.FemurOfAJurassicBeast: -1,
@@ -537,6 +555,20 @@ def add_trades(config: Config):
         zailor_particular_buyers.add_trade(config, Flux.Antiquity, ZooType.Amphibian, mammoth_recipe2)
         zailor_particular_buyers.add_trade(config, Flux.Amalgamy, ZooType.Amphibian, mammoth_recipe2)
 
+        for limb in (
+            Item.FemurOfAJurassicBeast,
+            Item.HolyRelicOfTheThighOfStFiacre):
+
+            mammoth_amphibian_recipe = {
+                Item.Action: -9,
+                Item.MammothRibcage: -1,
+                skull_type: -1,
+                Item.HelicalThighbone: -3,
+                limb: -1            
+            }
+
+            zailor_particular_buyers.add_trade(config, Flux.Antiquity, ZooType.Amphibian, mammoth_amphibian_recipe)
+            zailor_particular_buyers.add_trade(config, Flux.Amalgamy, ZooType.Amphibian, mammoth_amphibian_recipe)
     # -------------------------------
     # ----- Human Ribcage -----------
     # -------------------------------
@@ -798,14 +830,14 @@ def add_trades(config: Config):
         entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.NoType, recipe)
         entrepreneur_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
 
-        paleo_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
-        paleo_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
+        # paleo_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
+        # paleo_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
         
         zailor_particular_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
         zailor_particular_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
 
-        # naive_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
-        # naive_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
+        naive_buyers.add_trade(config, Flux.NoQuality, ZooType.Bird, recipe)
+        naive_buyers.add_trade(config, Flux.NoQuality, ZooType.NoType, recipe)
 
     # ------------------------------------------------
     # ------------ Thorned Ribcage ---------------
@@ -945,6 +977,37 @@ def add_trades(config: Config):
 
             Item._TriflingDiplomatSale: -1
         })
+
+
+    # ==============================================================
+    #                   Malacologist
+    # ==============================================================
+
+    config.add({
+        Item.Action: -12,
+        Item.GlimEncrustedCarapace: -1,
+        Item.VictimsSkull: -1,
+        Item.WitheredTentacle: -8,
+
+        Item.PreservedSurfaceBlooms: 34,
+        Item.VolumeOfCollatedResearch: 19
+    })
+
+    # ==============================================================
+    #                   Enthusiast in Skulls
+    # ==============================================================    
+
+    config.add({
+        Item.Action: -12,
+        Item.SkeletonWithSevenNecks: -1,
+        Item.VictimsSkull: -4,
+        Item.CarvedBallOfStygianIvory: -3,
+        Item.WingOfAYoungTerrorBird: -2,
+
+        Item.PieceOfRostygold: 8500,
+        Item.VitalIntelligence: 7,
+        Item.GenericBoneMarketExhaustion: 1
+    })
 
     ##################################################################
     #            The Seven-Necked Combinatoric Shitshow

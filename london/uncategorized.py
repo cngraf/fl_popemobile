@@ -174,24 +174,43 @@ def add_trades(config: Config):
     
     # Add Entrepreneur and vote him off
     # TODO: confirm action cost
+    # config.add({
+    #     Item.Action: -7,
+    #     Item.InCorporateDebt: -15,
+    #     Item.HinterlandScrip: 10
+    # })
+
+    # TODO: does TLC spur count as a station?
+
+    '''
+    Action tally
+        1 add Tentacled Entrepreneur
+        0 begin meeting
+        
+        1 start vote to kick
+        4 convince other members
+        1 declare victory
+
+        do this twice:
+            1 start vote dividend
+            4 convince others
+            1 declare victory
+
+        0 bring meeting to a close
+
+    Total: 1 + 6 + (6 * 2) = 19 actions 
+    '''
+    
+    stations_built = 9
+    train_luxuries = 6
+
     config.add({
-        Item.Action: -7,
-        Item.InCorporateDebt: -15,
-        Item.HinterlandScrip: 10
-    })
+        Item.Action: -19,
 
-    # TODO: check that this works
-    # does TLC spur count as a station?
-
-    # start at 0 debt & 4 members
-    # vote dividend twice
-    config.add({
-        Item.Action: -1 * (6 + 6 + 1),
-
-        Item.MoonPearl: 2 * (2000 + 9 * 250 + 6 * 50),
+        Item.HinterlandScrip: 10,
+        Item.MoonPearl: 2 * (2000 + 250 * stations_built + train_luxuries * 50),
         Item.MagnificentDiamond: 4,
         Item.BottleOfBrokenGiant1844: 4,
-        Item.InCorporateDebt: 5 + 7,
         Item.DelayUntilTheNextBoardMeeting: 1
     })
 
