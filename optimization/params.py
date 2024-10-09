@@ -4,10 +4,10 @@ import player as player
 # Change these
 optimize_input = Item.Action
 optimization_target = Item.Echo
-active_player = player.player_bal_licentiate
+active_player = player.player_generic_licentiate
 
 
-input_per_cycle = 7 * 80
+input_per_cycle = 7 * 100
 
 # Core constraint setup
 core_constraint = {

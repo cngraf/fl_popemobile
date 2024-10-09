@@ -19,6 +19,61 @@ def add_trades(config: Config):
     #     Item._BoneMarketAction: 1
     # })
 
+    add({
+        Item._BoneMarketMegaShoppingList1: 1,
+        Item.NevercoldBrassSliver: -200 * 55,
+        # Item.HeadlessSkeleton: 0,
+        # Item.SkeletonOfYourOwn: 0,
+        Item.HumanRibcage: -16,
+        Item.ThornedRibcage: -36,
+        # Item.SegmentedRibcage: 0,
+        Item.SkeletonWithSevenNecks: -1,
+        # Item.FlourishingRibcage: 0,
+        Item.MammothRibcage: -28,
+        # Item.GlimEncrustedCarapace: 0,
+        # Item.RibcageWithABouquetOfEightSpines: 0,
+        # Item.LeviathanFrame: 0,
+        # Item.PrismaticFrame: 0,
+        # Item.FivePointedRibcage: 0,
+        # Item.VictimsSkull: 0,
+        # Item.CarvedBallOfStygianIvory: 0,
+        # Item.RubberySkull: 0,
+        Item.HornedSkull: -28,
+        # Item.PentagrammicSkull: 0,
+        # Item.CounterfeitHeadOfJohnTheBaptist: 0,
+        Item.SkullInCoral: -4,
+        # Item.PlatedSkull: 0,
+        # Item.EyelessSkull: 0,
+        # Item.DoubledSkull: 0,
+        # Item.SabretoothedSkull: 0,
+        Item.BrightBrassSkull: -55,
+        # Item.SeveredChimaericalHeadOfTheVake: 0,
+        # Item.CustomEngravedSkull: 0,
+        # Item.CrustaceanPincer: 0,
+        Item.KnottedHumerus: -16,
+        # Item.HumanArm: 0,
+        # Item.IvoryHumerus: 0,
+        # Item.FossilisedForelimb: 0,
+        # Item.FemurOfASurfaceDeer: 0,
+        Item.UnidentifiedThighBone: -32,
+        Item.FemurOfAJurassicBeast: -104,
+        Item.HelicalThighbone: -64,
+        Item.HolyRelicOfTheThighOfStFiacre: -24,
+        # Item.IvoryFemur: 0,
+        # Item.BatWing: 0,
+        Item.WingOfAYoungTerrorBird: -65,
+        Item.AlbatrossWing: -17,
+        # Item.FinBonesCollected: 0,
+        # Item.AmberCrustedFin: 0,
+        # Item.WitheredTentacle: 0,
+        Item.JetBlackStinger: -32,
+        # Item.PlasterTailBones: 0,
+        Item.TombLionsTail: -44,
+        # Item.ObsidianChitinTail: 0
+    })
+
+
+
     bone_market_week_actions = {
         Flux.Antiquity: {
             ZooType.Reptile: Item._AntiquityReptileAction,

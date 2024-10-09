@@ -263,6 +263,8 @@ class Item(Enum):
     _ReduceAntiquity = auto()
     _ReduceMenace = auto()
 
+    _BoneMarketMegaShoppingList1 = auto()
+
     # Actions
     _BoneMarketAction = auto()
 

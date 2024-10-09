@@ -98,7 +98,7 @@ class Buyer():
         if zoo_type == ZooType.Chimera:
             impl += 3
         
-        dc = self.implausibility_dc * (skeleton.implausibility)
+        dc = self.implausibility_dc * impl
     
         pass_rate = max(0.01, utils.broad_challenge_pass_rate(shadowy, dc))
         return (1.0 / pass_rate) - 1

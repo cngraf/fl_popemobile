@@ -192,7 +192,7 @@ def bone_table():
         Bone(Item.FailedAmberCrustedFin, 15, amalgamy=1, implausibility=2),
 
         Bone(Item.WitheredTentacle, 2.5, anitquity=-1),
-        Bone(Item.JetBlackStinger, 2.5, menace=2),
+        Bone(Item.JetBlackStinger, 0.5, menace=2),
         Bone(Item.PlasterTailBones, 2.5, implausibility=1),
         Bone(Item.TombLionsTail, 2.5, anitquity=1),
         Bone(Item.ObsidianChitinTail, 5, amalgamy=1),
