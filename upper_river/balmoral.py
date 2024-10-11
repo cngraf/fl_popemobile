@@ -9,12 +9,17 @@ def add_trades(config: Config):
     add = config.add
     player = config.player
 
-    # each starts with same 3 actions:
-    # - compel x2
-    # - enter woods x1
+    # Player Unlocks
+    has_spur_line = player.get(Item.InvolvedInARailwayVenture) >= 140
+    has_seal = player.get(Item.SealOfStJoshua) > 0
 
-    for i in range(1, 11):
-        visit_length = 10 * i
+    # TODO confirm these numbers from Oct 11 update
+    deer_prosperity = 1260 if has_spur_line else 0
+    grouse_prosperity = 1110 if has_spur_line else 0
+    fox_prosperity = 1220 if has_spur_line else 0
+
+    for i in range(0, 7):
+        visit_length = 2 ** i
         add({
             Item._UpperRiverRoundTrip: -1,
             Item.Action: -1 * visit_length,
@@ -24,97 +29,189 @@ def add_trades(config: Config):
             Item._UnveilYourPaintingLondon: 1
         })
 
-    # --- Seven Necked Skeleton
-
-    # fringes x1, lay trail x1, wander fringes x2, track x1, report x1
+    #####################
+    # Weekly Stuff
+    #####################
     add({
-        Item._BalmoralAction: -9,
-        Item.VolumeOfCollatedResearch: -8,
+        Item._BalmoralAction: -2,
+        Item.GiftFromBalmoral: -1,
+
+        Item.HinterlandScrip: 125
+    })
+
+    #####################
+    # Entering the Woods
+    #####################
+
+    add({
+        Item._BalmoralAction: -3,
+        Item.VitalIntelligence: -2,
+        Item._MoonlitWoodsEntry: 1
+    })
+
+    if has_seal:
+        add({
+            Item._BalmoralAction: -3,
+            Item.VolumeOfCollatedResearch: -8,
+            Item._MoonlitWoodsEntry: 1
+        })
+
+    #####################
+    # Seven-Necked Skelly
+    #####################        
+
+    # Fringes, Trail, Wander x2, Track
+    add({
+        Item._BalmoralAction: -5,
         Item.UnprovenancedArtefact: -4,
+        Item._MoonlitWoodsEntry: -1,
 
         Item.Moonlit: 1,
-        Item.SkeletonWithSevenNecks: 1,
-        Item.WingOfAYoungTerrorBird: 3,
-        Item.BoneFragments: 200
+        Item.ObservationGrouse: 1
     })
 
-    # fringes x1, lay trail x2, track x1, report x1
-    trade(8, {
-        Item.VolumeOfCollatedResearch: -8,
+    # Fringes, Trail x2, Track
+    add({
+        Item._BalmoralAction: -4,
         Item.UnprovenancedArtefact: -8,
+        Item._MoonlitWoodsEntry: -1,
 
         Item.Moonlit: 2,
-        Item.SkeletonWithSevenNecks: 1,
-        Item.WingOfAYoungTerrorBird: 3,
-        Item.BoneFragments: 200
+        Item.ObservationGrouse: 1
     })
 
-    # glades x1, darken x2, return (free), fringes x1, track x1, report x1
+    # Glades, Darken x2, Fringes, Track
     add({
-        Item._BalmoralAction: -9,
-        Item.VolumeOfCollatedResearch: -8,
+        Item._BalmoralAction: -5,
         Item.ThirstyBombazineScrap: -6,
+        Item._MoonlitWoodsEntry: -1,
 
         Item.Moonlit: 2,
+        Item.ObservationGrouse: 1
+    })
+
+    add({
+        Item._BalmoralAction: -1,
+        Item.ObservationGrouse: -1,
+
         Item.SkeletonWithSevenNecks: 1,
         Item.WingOfAYoungTerrorBird: 3,
-        Item.BoneFragments: 200
-    })    
+        Item.BoneFragments: 200,
+        Item.HinterlandProsperity: grouse_prosperity
+    })
 
-    # --- Mammoth Ribcage
+    #####################
+    # Mammoth Ribcage
+    #####################
 
-    # glades x1, darken x3, wander glades x1, track x1, report x1
+    # Glades, Darken x3, Wander, Track
     add({
-        Item._BalmoralAction: -10,
-        Item.VolumeOfCollatedResearch: -8,
+        Item._BalmoralAction: -6,
         Item.ThirstyBombazineScrap: -9,
+        Item._MoonlitWoodsEntry: -1,
 
         Item.Moonlit: 4,
-        Item.MammothRibcage: 1,
-        Item.HolyRelicOfTheThighOfStFiacre: 1,
-        Item.FemurOfAJurassicBeast: 2,
-        Item.BoneFragments: 400
+        Item.ObservationRedDeer: 1
     })
 
-    # fringes x1, lay trail x3, return (0), gladex x1, darken x2, track x1, report x1
+    # Fringes, Trail x3, Glades, Track
     add({
-        Item._BalmoralAction: -10,
-        Item.VolumeOfCollatedResearch: -8,
-        Item.ThirstyBombazineScrap: -6,
-        Item.UnprovenancedArtefact: -4,
+        Item._BalmoralAction: -6,
+        Item.UnprovenancedArtefact: -12,
+        Item._MoonlitWoodsEntry: -1,
 
         Item.Moonlit: 3,
+        Item.ObservationRedDeer: 1
+    })
+
+    # Fringes, Trail x2, Glades, Darken, Track
+    add({
+        Item._BalmoralAction: -6,
+        Item.UnprovenancedArtefact: -12,
+        Item._MoonlitWoodsEntry: -1,
+
+        Item.Moonlit: 3,
+        Item.ObservationRedDeer: 1
+    })
+
+    # Fringes, Trail x2, Glades, Wander x2, Track
+    add({
+        Item._BalmoralAction: -7,
+        Item.UnprovenancedArtefact: -8,
+        Item._MoonlitWoodsEntry: -1,
+
+        Item.Moonlit: 4,
+        Item.ObservationRedDeer: 1
+    })    
+
+    # Fringes, Trail, Glades, Darken x2, Track
+    add({
+        Item._BalmoralAction: -6,
+        Item.UnprovenancedArtefact: -4,
+        Item.ThirstyBombazineScrap: -6,
+        Item._MoonlitWoodsEntry: -1,
+
+        Item.Moonlit: 3,
+        Item.ObservationRedDeer: 1
+    })
+
+    # Moonlit grind?
+    # Glades, Wander x10, Track
+    add({
+        Item._BalmoralAction: -12,
+        Item._MoonlitWoodsEntry: -1,
+
+        Item.Moonlit: 10,
+        Item.ObservationRedDeer: 1
+    })
+
+    add({
+        Item._BalmoralAction: -1,
+        Item.ObservationRedDeer: -1,
+
         Item.MammothRibcage: 1,
         Item.HolyRelicOfTheThighOfStFiacre: 1,
         Item.FemurOfAJurassicBeast: 2,
-        Item.BoneFragments: 400
+        Item.BoneFragments: 400,
+
+        Item.HinterlandProsperity: deer_prosperity
     })    
 
 
-    # --- Doubled Skull & Thorned Ribcage
+    #####################
+    # Doubled Skull
+    #####################
 
-    # fringes x1, lay trail x1, wander glades x2, return, moonlight x1, track x1, report x1
+    # Glades, Darken x2, Moonlight, Track
     add({
-        Item._BalmoralAction: -10,
-        Item.VolumeOfCollatedResearch: -8,
-        Item.UnprovenancedArtefact: -4,
+        Item._BalmoralAction: -5,
+        Item.ThirstyBombazineScrap: -6,
+        Item._MoonlitWoodsEntry: -1,
 
-        Item.Moonlit: -5 + 1,
-        Item.DoubledSkull: 1,
-        Item.ThornedRibcage: 1,
-        Item.KnottedHumerus: 2
+        Item.Moonlit: 3,
+        Item.ObservationFox: 1
     })
 
-    # glades x1, darken x2, return (free), moonlight x1, track x1, report x1
+    # Glades, Darken, Wander x3, Moonlight, Track
     add({
-        Item._BalmoralAction: -9,
-        Item.VolumeOfCollatedResearch: -8,
-        Item.ThirstyBombazineScrap: -6,
+        Item._BalmoralAction: -7,
+        Item.ThirstyBombazineScrap: -3,
+        Item._MoonlitWoodsEntry: -1,
 
-        Item.Moonlit: -5 + 3,
+        Item.Moonlit: 4,
+        Item.ObservationFox: 1
+    })    
+
+    add({
+        Item._BalmoralAction: -1,
+        Item.ObservationFox: -1,
+        Item.Moonlit: -5,
+
         Item.DoubledSkull: 1,
         Item.ThornedRibcage: 1,
-        Item.KnottedHumerus: 2
+        Item.KnottedHumerus: 2,
+
+        Item.HinterlandProsperity: fox_prosperity
     })    
 
     # ---------------------------------

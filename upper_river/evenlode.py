@@ -7,7 +7,6 @@ def renown_scaling(renown: int):
     return 200/(1 + math.pow(math.e, pow))
 
 def add_trades(config: Config):
-    trade = config.trade
     add = config.add
     player = config.player
 
@@ -16,33 +15,6 @@ def add_trades(config: Config):
         Item.Action: -40,
         Item._EvenlodeAction: 40
     })
-    
-    # # TODO: upper river deck stuff
-    # trade.railway_card("Digs in the Magistracy of the Evenlode",
-    #     Rarity.Standard,
-    #     Location.TheMagistracyOfTheEvenlode,
-    #     True, {
-    #     Item.DigsInEvenlode: 1
-    # })
-
-    # trade(1, {
-    #     # Item.DigsInEvenlode: -1,
-    #     Item.SurveyOfTheNeathsBones: -120,
-    #     Item.PalaeontologicalDiscovery: 5
-    # })
-
-    # trade(1, {
-    #     # Item.DigsInEvenlode: -1,
-    #     Item.SurveyOfTheNeathsBones: -140,
-    #     Item.PalaeontologicalDiscovery: 6
-    # })
-
-    # # specific treasure only
-    # trade(1, {
-    #     # Item.DigsInEvenlode: -1,
-    #     Item.SurveyOfTheNeathsBones: -240,
-    #     Item.PalaeontologicalDiscovery: 10
-    # })
 
     ###############################################
     #               Barristering
@@ -52,7 +24,9 @@ def add_trades(config: Config):
     # check what's achievable for each case
     prestige = 9
 
-    # TODO various unique resolution bonuses
+    # TODO various unique resolution bonuses from items
+    # TODO confirm prosperity values from Oct 11 patch
+    prosperity_per_prestige = 25 if player.get(Item.InvolvedInARailwayVenture) >= 140 else 0
 
     # Magistracy v Accused
     add({
@@ -63,7 +37,8 @@ def add_trades(config: Config):
 
         Item.JournalOfInfamy: prestige,
         Item.DubiousTestimony: prestige - 25,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 1,
+        Item.HinterlandProsperity: prestige * prosperity_per_prestige
     })
 
     add({
@@ -74,7 +49,8 @@ def add_trades(config: Config):
 
         Item.JournalOfInfamy: prestige - 25,
         Item.DubiousTestimony: prestige,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 1,
+        Item.HinterlandProsperity: prestige * prosperity_per_prestige
     })
 
     # Rats v Urchins
@@ -86,7 +62,8 @@ def add_trades(config: Config):
 
         Item.JournalOfInfamy: prestige,
         Item.DubiousTestimony: prestige,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 1,
+        Item.HinterlandProsperity: prestige * prosperity_per_prestige
     })
 
     add({
@@ -97,7 +74,8 @@ def add_trades(config: Config):
 
         Item.JournalOfInfamy: prestige,
         Item.DubiousTestimony: prestige,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 1,
+        Item.HinterlandProsperity: prestige * prosperity_per_prestige
     })
 
     # Tomb-Colonists vs Devils
@@ -109,7 +87,8 @@ def add_trades(config: Config):
 
         Item.JournalOfInfamy: prestige,
         Item.DubiousTestimony: prestige,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 1,
+        Item.HinterlandProsperity: prestige * prosperity_per_prestige
     })
 
     add({
@@ -120,7 +99,8 @@ def add_trades(config: Config):
 
         Item.JournalOfInfamy: prestige,
         Item.DubiousTestimony: prestige,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 1,
+        Item.HinterlandProsperity: prestige * prosperity_per_prestige
     })
 
 
@@ -134,7 +114,8 @@ def add_trades(config: Config):
 
         Item.JournalOfInfamy: prestige,
         Item.DubiousTestimony: prestige,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 1,
+        Item.HinterlandProsperity: prestige * prosperity_per_prestige
     })
 
     add({
@@ -146,5 +127,6 @@ def add_trades(config: Config):
 
         Item.JournalOfInfamy: prestige,
         Item.DubiousTestimony: prestige,
-        Item.SwornStatement: 1
+        Item.SwornStatement: 1,
+        Item.HinterlandProsperity: prestige * prosperity_per_prestige
     })               

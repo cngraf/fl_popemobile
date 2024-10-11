@@ -8,14 +8,15 @@ from player import Player
 from bone_market.models import *
 
 suspicion_multiplier = 0.85
-exhaustion_hard_cap = 12
+exhaustion_hard_cap = 8
+exhaustion_val_blacklist = []
 
 exhaustion_items = {
     Item.GenericBoneMarketExhaustion,
 
     Item.AmalgamyReptileExhaustion,
     Item.AmalgamyAmphibianExhaustion,
-    Item.AmalgamyBirdExhaustion ,
+    Item.AmalgamyBirdExhaustion,
     Item.AmalgamyFishExhaustion,
     Item.AmalgamyArachnidExhaustion,
     Item.AmalgamyInsectExhaustion,
@@ -89,7 +90,6 @@ class Buyer():
             failure_penalty)
         
         exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
-        exhaustion_val_blacklist = []
         exhaustion_total = total.get(exhaustion_type, 0)
         if exhaustion_total <= exhaustion_hard_cap and exhaustion_total not in exhaustion_val_blacklist:
             config.add(total)

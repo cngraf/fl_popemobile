@@ -127,6 +127,7 @@ class Item(Enum):
 
     _CardDraws = auto()
 
+
     _ParabolaAction = auto()
     _ParabolaRoundTrip = auto()
 
@@ -154,6 +155,8 @@ class Item(Enum):
     _HallowsThroatAction = auto()
     _MidnightMoonAction = auto()
     _ZenithAction = auto()
+
+    _SocialAction = auto()
 
     _TestItem = auto()
 
@@ -208,6 +211,7 @@ class Item(Enum):
     LightFingers = auto()
     Nemesis = auto()
 
+    InvolvedInARailwayVenture = auto()
 
     #######################################################
     #                       Menaces
@@ -838,6 +842,7 @@ class Item(Enum):
     ConsignmentOfScintillackSnuff = auto()
     IntricateKifers = auto()
     InfernalSharpshootersRifle = auto()
+    SealOfStJoshua = auto()
 
     # Companion
     LuckyWeasel = auto()
@@ -896,7 +901,7 @@ class Item(Enum):
     RecentParticipantInAStarvedCulturalExchange = auto()
     RavagesOfParabolanWarfare = auto()
     FleetingRecollections = auto()
-    AGiftFromBalmoral = auto()
+    GiftFromBalmoral = auto()
     GlowingViric = auto()
     MiredInMail = auto()
     ReportFromTheKhagansPalace = auto()
@@ -1095,6 +1100,10 @@ class Item(Enum):
     EsteemOfTheGuild = auto()
     WagesOfADig = auto()
 
+    _MoonlitWoodsEntry = auto()
+    ObservationFox = auto()
+    ObservationGrouse = auto()
+    ObservationRedDeer = auto()
     Moonlit = auto()
 
     _CoverTiesGeneric = auto()
@@ -1441,6 +1450,7 @@ RAT_MARKET_SATURATION_2_TYPES = [
 ]
 
 SPECIAL_ACTION_TYPES = [
+    Item._SocialAction,
     Item._ForgottenQuarterAction,
 
     # Upper River

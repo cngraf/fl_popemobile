@@ -254,7 +254,7 @@ def add_trades(config):
         Item._StationViiiAction: -1,
         Item.SparklingSolacefruitRoyale: -1,
         Item.MemoryOfDiscordance: -1,
-        # Item.SuddenInsight: -1, # TODO source these
+        Item.SuddenInsight: -1,
         Item.Moonlit: -3,
 
         Item.SolacefruitChampagneSorbet: 1,

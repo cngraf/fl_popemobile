@@ -4,7 +4,7 @@ from player import *
 from config import *
 
 def add_trades(config: Config):
-    active_player = config.player
+    player = config.player
     add = config.add
     trade = config.trade
     # ---- Helicon House
@@ -24,6 +24,8 @@ def add_trades(config: Config):
     - certain options only being available at specific "times"
     - other things I don't know how to cleanly model
     '''
+
+    has_spur_line = player.get(Item.InvolvedInARailwayVenture) >= 140
     
     for i in range(1, 11):
         visit_length = 10 * i
@@ -134,7 +136,7 @@ def add_trades(config: Config):
         Item._HeliconAction: -1,
         Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
         Item.FittingInAtHeliconHouse:
-            2 if active_player.get(Item.SetOfCosmogoneSpectacles) else 1,
+            2 if player.get(Item.SetOfCosmogoneSpectacles) else 1,
         Item.Inspired: 6
     })
 
@@ -199,6 +201,18 @@ def add_trades(config: Config):
         Item.RibcageWithABoutiqueOfEightSpines: 1
     })
 
+    # Modeling
+    # assume 3 fitting in
+    add({
+        Item._HeliconAction: -1,
+        Item.TimeRemainingAtHeliconHouseExactlyOne: -1,
+        Item.FittingInAtHeliconHouse: -initial_fitting_in,
+
+        Item.BottleOfStranglingWillowAbsinthe: math.floor(initial_fitting_in * 0.5),
+        Item.HinterlandScrip: 20,
+        Item.HinterlandProsperity: (80 * initial_fitting_in * 2) if has_spur_line else 0
+    })
+
     '''
     spouse options of interest
     - +5 fascinating
@@ -231,7 +245,7 @@ def add_trades(config: Config):
     # 5x Romantic Notion
     # 5x Warm Amber
 
-    if (active_player.get(Item.LongDeadPriestsOfRedBird)):
+    if (player.get(Item.LongDeadPriestsOfRedBird)):
         trade(3, {
             Item.IntriguingSnippet: 3,
 
@@ -282,7 +296,7 @@ def add_trades(config: Config):
             Item.MemoryOfDiscordance: 1
         })
 
-        if (active_player.profession == Profession.Silverer):
+        if (player.profession == Profession.Silverer):
             # 1) Enter with pendant & firebrand or missionary
             #   +3 snippets, +3 Fitting In, +5 Inspired
             # 2) Offer yourself as escort and guide

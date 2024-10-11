@@ -102,3 +102,10 @@ def add_trades(config: Config):
         Item.CL_Urchins: -1,
         Item.FavUrchins: 1
     })
+
+    for favour in FAVOUR_ITEMS:
+        add({
+            Item.Action: -1,
+            Item.FavourableCircumstance: -1,
+            favour: 1
+        })

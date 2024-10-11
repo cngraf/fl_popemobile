@@ -4,6 +4,12 @@ from helper.utils import *
 def add_trades(config):
     add = config.add
 
+    '''
+    TODO
+    add other card options
+    eg digs in evelode
+    '''
+
     ################################################################################
     ###                          Batch 1                                         ###
     ################################################################################
@@ -73,53 +79,53 @@ def add_trades(config):
 
 
     add({
-        Item._MarigoldAction: -1000,
-        Item._CardDraws: -6000,
+        Item._MarigoldAction: -10.00,
+        Item._CardDraws: -60.00,
         
-        Item.ProscribedMaterial: 75000,
-        Item.FavChurch: 1000
+        Item.ProscribedMaterial: 750.00,
+        Item.FavChurch: 10.00
     })
 
     add({
-        Item._HurlersAction: -1000,
-        Item._CardDraws: -5650,
+        Item._HurlersAction: -10.00,
+        Item._CardDraws: -56.50,
         
-        Item.ProscribedMaterial: 60000,
-        Item.VolumeOfCollatedResearch: -2400,
+        Item.ProscribedMaterial: 600.00,
+        Item.VolumeOfCollatedResearch: -24.00,
     })
 
     add({
-        Item._MoulinAction: -1000,
-        Item._CardDraws: -7000,
+        Item._MoulinAction: -10.00,
+        Item._CardDraws: -70.00,
         
-        Item.ProscribedMaterial: 75000,
-        Item.FavChurch: 1000
+        Item.ProscribedMaterial: 750.00,
+        Item.FavChurch: 10.00
     })
 
     add({
-        Item._BurrowAction: -1000,
-        Item._CardDraws: -3500,
-        Item.MoonPearl: -325_000,
+        Item._BurrowAction: -10.00,
+        Item._CardDraws: -35.00,
+        Item.MoonPearl: -3250.00,
         
-        Item.ProscribedMaterial: 37500,
-        Item.FavChurch: 500,
-        Item.VerseOfCounterCreed: 500
+        Item.ProscribedMaterial: 375.00,
+        Item.FavChurch: 5.00,
+        Item.VerseOfCounterCreed: 5.00
     })
 
     add({
-        Item._StationViiiAction: -1000,
-        Item._CardDraws: -7000,
+        Item._StationViiiAction: -10.00,
+        Item._CardDraws: -70.00,
         
-        Item.ProscribedMaterial: 75000,
-        Item.FavChurch: 1000
+        Item.ProscribedMaterial: 750.00,
+        Item.FavChurch: 10.00
     })
 
     add({
-        Item._BalmoralAction: -1000,
-        Item._CardDraws: -6000,
+        Item._BalmoralAction: -10.00,
+        Item._CardDraws: -60.00,
         
-        Item.ProscribedMaterial: 75000,
-        Item.FavChurch: 1000
+        Item.ProscribedMaterial: 750.00,
+        Item.FavChurch: 10.00
     })
 
     add({
@@ -132,11 +138,11 @@ def add_trades(config):
     })
 
     add({
-        Item._EalingAction: -1000,
-        Item._CardDraws: -9600,
+        Item._EalingAction: -10.00,
+        Item._CardDraws: -96.00,
         
-        Item.ProscribedMaterial: 75000,
-        Item.FavChurch: 1000
+        Item.ProscribedMaterial: 750.00,
+        Item.FavChurch: 10.00
     })
 
     ################################################################################

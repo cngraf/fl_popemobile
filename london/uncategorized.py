@@ -16,6 +16,19 @@ def add_trades(config: Config):
         Item.Echo: 1
     })
 
+
+    #######################################################
+    #                   Nadir # TODO
+    #######################################################
+
+    # hole in your head, no other cards
+    add({
+        Item.Action: -5,
+        Item.FleetingRecollections: -1,
+        Item.DiscordantLaw: -1,
+        Item.DiscordantSoul: 1
+    })
+
     # -----------------
     # --- Underclay
     # ----------------

@@ -98,7 +98,8 @@ player_endgame_f2p = Player(
     basic_stats_val=310,
     advanced_stats_val=12,
     qualities={
-
+        Item.SealOfStJoshua: 1,
+        Item.InvolvedInARailwayVenture: 140,
     }
 )
 
@@ -109,7 +110,10 @@ player_generic_endgame_whale = Player(
     qualities={
         Item.Neathproofed: 8,
         Item.Insubstantial: 4,
-        Item.Inerrant: 6
+        Item.Inerrant: 6,
+
+        Item.SealOfStJoshua: 1,
+        Item.InvolvedInARailwayVenture: 140,
     }
 )
 
