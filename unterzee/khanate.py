@@ -7,9 +7,9 @@ def add_trades(config: Config):
     trade = config.trade
 
     # rough estimate from zailing sim
-    # about 10 actions and 3000 plunder per leg
+    # about 9 actions and 3000 plunder per leg
     add({
-        Item.Action: -10 * 2,
+        Item.Action: -9 * 2,
         Item.StashedTreasure: 3000 * 2,
         Item._LondonKhanateRoundTrip: 1,
         Item._AgentInTransit: 1,
@@ -18,11 +18,33 @@ def add_trades(config: Config):
     })
 
     # TODO: move this
-    for visit_length in (10, 20, 40, 80, 160):
+    for visit_length in (1, 5, 10, 20, 40, 80, 160):
         add({
             Item._LondonKhanateRoundTrip: -1,
-            Item.Action: -1 * visit_length,
+            Item.Action: -1 * visit_length - 1,
             Item._KhanateAction: visit_length
+        })
+
+    add({
+        Item._KhanateAction: -1,
+        Item.ReportFromTheKhagansPalace: 1,
+        Item.EmeticRevelation: 5
+    })
+
+    for item, qty in (
+        (Item.GlassGazette, -4),
+        (Item.CorrespondencePlaque, -20),
+        (Item.UnprovenancedArtefact, -4),
+        (Item.PalimpsestScrap, -20),
+        (Item.MourningCandle, -4),
+        (Item.ThirstyBombazineScrap, -4),
+        (Item.KnobOfScintillack, -4),
+        (Item.TraceOfViric, -20),
+    ):
+        add({
+            Item._KhanateAction: -1,
+            item: qty,
+            Item.EmeticRevelation: 1
         })
 
     add({

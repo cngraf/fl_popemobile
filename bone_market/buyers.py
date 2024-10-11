@@ -8,7 +8,7 @@ from player import Player
 from bone_market.models import *
 
 suspicion_multiplier = 0.85
-exhaustion_hard_cap = 4
+exhaustion_hard_cap = 12
 
 exhaustion_items = {
     Item.GenericBoneMarketExhaustion,
@@ -58,6 +58,12 @@ class Buyer():
 
         skeleton = Bone.create_skeleton(recipe)
 
+        # if Item.MammothRibcage in recipe.keys():
+        #     return
+        
+        # if Item.ThornedRibcage in recipe.keys():
+        #     return
+
         # # HACK for finding skeletons for CGD leviathan frame trade
         # if 300 <= skeleton.echo_value * self.zoo_multiplier(zoo_type) < 330:
         #     print("    >>>>> Candidate Recipe:")
@@ -83,7 +89,9 @@ class Buyer():
             failure_penalty)
         
         exhaustion_type = self.match_exhaustion_type(zoo_type, flux)
-        if total.get(exhaustion_type, 0) <= exhaustion_hard_cap:
+        exhaustion_val_blacklist = []
+        exhaustion_total = total.get(exhaustion_type, 0)
+        if exhaustion_total <= exhaustion_hard_cap and exhaustion_total not in exhaustion_val_blacklist:
             config.add(total)
 
     def primary_payout(self, flux, zoo_type, skeleton: Bone):

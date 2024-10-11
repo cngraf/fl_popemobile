@@ -7,6 +7,8 @@ from scipy.optimize import linprog
 from enum import Enum, auto
 from itertools import count
 
+from sklearn.linear_model import Lasso
+
 from enums import *
 import helper.utils as utils
 
@@ -51,43 +53,45 @@ class Config:
 
         self.bounds[Item.TroubledWaters.value] = (None, 0)
 
-        self.bounds[Item.GenericBoneMarketExhaustion.value] = (-4, 0)
+        exhaustion_lower_bounds = -100
+        exhaustion_upper_bounds = 12
+        self.bounds[Item.GenericBoneMarketExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
 
-        self.bounds[Item.AntiquityReptileExhaustion.value] = (-4, 0)
-        self.bounds[Item.AntiquityAmphibianExhaustion.value] = (-4, 0)
-        self.bounds[Item.AntiquityBirdExhaustion.value] = (-4, 0)
-        self.bounds[Item.AntiquityFishExhaustion.value] = (-4, 0)
-        self.bounds[Item.AntiquityArachnidExhaustion.value] = (-4, 0)
-        self.bounds[Item.AntiquityInsectExhaustion.value] = (-4, 0)
-        self.bounds[Item.AntiquityPrimateExhaustion.value] = (-4, 0)
+        self.bounds[Item.AntiquityReptileExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AntiquityAmphibianExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AntiquityBirdExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AntiquityFishExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AntiquityArachnidExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AntiquityInsectExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AntiquityPrimateExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
 
-        self.bounds[Item.AmalgamyReptileExhaustion.value] = (-4, 0)
-        self.bounds[Item.AmalgamyAmphibianExhaustion.value] = (-4, 0)
-        self.bounds[Item.AmalgamyBirdExhaustion.value] = (-4, 0)
-        self.bounds[Item.AmalgamyFishExhaustion.value] = (-4, 0)
-        self.bounds[Item.AmalgamyArachnidExhaustion.value] = (-4, 0)
-        self.bounds[Item.AmalgamyInsectExhaustion.value] = (-4, 0)
-        self.bounds[Item.AmalgamyPrimateExhaustion.value] = (-4, 0)
+        self.bounds[Item.AmalgamyReptileExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AmalgamyAmphibianExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AmalgamyBirdExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AmalgamyFishExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AmalgamyArachnidExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AmalgamyInsectExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AmalgamyPrimateExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
 
-        self.bounds[Item.MenaceReptileExhaustion.value] = (-4, 0)
-        self.bounds[Item.MenaceAmphibianExhaustion.value] = (-4, 0)
-        self.bounds[Item.MenaceBirdExhaustion.value] = (-4, 0)
-        self.bounds[Item.MenaceFishExhaustion.value] = (-4, 0)
-        self.bounds[Item.MenaceArachnidExhaustion.value] = (-4, 0)
-        self.bounds[Item.MenaceInsectExhaustion.value] = (-4, 0)
-        self.bounds[Item.MenacePrimateExhaustion.value] = (-4, 0)
+        self.bounds[Item.MenaceReptileExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.MenaceAmphibianExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.MenaceBirdExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.MenaceFishExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.MenaceArachnidExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.MenaceInsectExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.MenacePrimateExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
 
-        self.bounds[Item.AntiquityGeneralExhaustion.value] = (-4, 0)
-        self.bounds[Item.AmalgamyGeneralExhaustion.value] = (-4, 0)
-        self.bounds[Item.MenaceGeneralExhaustion.value] = (-4, 0)
+        self.bounds[Item.AntiquityGeneralExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.AmalgamyGeneralExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.MenaceGeneralExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
 
-        self.bounds[Item.GeneralReptileExhaustion.value] = (-4, 0)
-        self.bounds[Item.GeneralAmphibianExhaustion.value] = (-4, 0)
-        self.bounds[Item.GeneralBirdExhaustion.value] = (-4, 0)
-        self.bounds[Item.GeneralFishExhaustion.value] = (-4, 0)
-        self.bounds[Item.GeneralArachnidExhaustion.value] = (-4, 0)
-        self.bounds[Item.GeneralInsectExhaustion.value] = (-4, 0)
-        self.bounds[Item.GeneralPrimateExhaustion.value] = (-4, 0)
+        self.bounds[Item.GeneralReptileExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.GeneralAmphibianExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.GeneralBirdExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.GeneralFishExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.GeneralArachnidExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.GeneralInsectExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
+        self.bounds[Item.GeneralPrimateExhaustion.value] = (exhaustion_lower_bounds, exhaustion_upper_bounds)
 
 
         self.bounds[Item.Hedonist.value] = (0, 55)
@@ -119,6 +123,8 @@ class Config:
         self.bounds[Item.RecentParticipantInAStarvedCulturalExchange.value] = (-1, 0)
 
         self.bounds[Item.DelayUntilTheNextBoardMeeting.value] = (-1, 0)
+
+        self.bounds[Item.ReportFromTheKhagansPalace.value] = (-1, 0)
 
         self.bounds[Item._CoverTiesGeneric.value] = (0, 1)
         self.bounds[Item.CoverTiesSurface.value] = (0, 1)

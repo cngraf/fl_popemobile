@@ -35,6 +35,21 @@ def add_trades(config: Config):
     #     Item.ShardOfGlim: 80
     # })
 
+
+    #######################################################
+    #                   Clay Quarters
+    #######################################################
+
+    # TODO entry cost
+    add({
+        Item.Action: -1,
+        Item.AnIdentityUncovered: -1,
+        Item.CompromisingDocument: -4,
+        Item.PieceOfRostygold: -50,
+        Item.MoonPearl: -50,
+        Item.StrongBackedLabour: 2
+    })
+
     ## ------------
     ## Various London Carousels?
     ## ------------

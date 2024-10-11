@@ -27,8 +27,34 @@ class ModelRunner:
 
         self.opt_result = None
 
+    def run_l1_optimization(self):
+        # Define the problem size
+        n = self.config.matrix_size
+
+        # Original objective: Maximize a particular variable
+        c = np.zeros(n)
+        c[self.optimize_for.value] = -1  # Minimize negative for maximization
+
+        # Regularization parameter
+        lambda_ = 10000.0  # Strength of L1 regularization
+
+        # New objective: Minimize c^T * x + λ * sum(|x_i|)
+        # Introduce new variables u and v for L1 regularization
+        c_extended = np.concatenate([c, lambda_ * np.ones(n)])  # Include regularization term
+
+        # Modify the A_ub matrix to account for x_i = u_i - v_i (so the dimensions double)
+        A_ub_extended = np.hstack([self.config.A.toarray(), np.zeros((self.config.A.shape[0], n))])  # Add zeros for new variables
+
+        # Update the bounds: Ensure u_i and v_i are non-negative
+        bounds_extended = self.config.bounds + [(0, None)] * n  # Add non-negative bounds for u_i and v_i
+
+        # Perform linear programming optimization with extended variables
+        self.opt_result = linprog(c_extended, A_ub=A_ub_extended, b_ub=self.config.b, bounds=bounds_extended, method='highs')
+        print(self.opt_result)
+
     def run_optimization(self):
         """Set up and solve the linear programming problem."""
+
         try:
             c = np.zeros(self.config.matrix_size)
             c[self.optimize_for.value] = -1  # Minimize negative for maximization
@@ -42,6 +68,16 @@ class ModelRunner:
                 print(colored(f"Optimization failed: {self.opt_result.message}", "red", attrs=['bold']))
         except Exception as e:
             print(colored(f"An error occurred during optimization: {e}", "red", attrs=['bold']))
+
+    # # TODO not sure what this does right now
+    # def run_lasso_optimization(self):
+    #     lasso = Lasso(0.1)
+    #     lasso.fit(self.config.A.toarray(), self.config.b)
+    #     x_lasso = lasso.coef_
+
+    #     for i, coef in enumerate(x_lasso):
+    #         if coef != 0.0:
+    #             print(f"{self.config.A[i]}): {coef:.4f}")        
 
     def process_results(self):
         """Process the optimization results to determine trades and surplus items."""

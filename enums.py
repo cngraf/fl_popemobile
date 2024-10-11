@@ -140,6 +140,7 @@ class Item(Enum):
     _HurlersAction = auto()
     _MarigoldAction = auto()
     
+    _TracklayerCityAction = auto()
     _HeliconAction = auto()
 
     _JerichoFavourExchange = auto()
@@ -154,6 +155,7 @@ class Item(Enum):
     _MidnightMoonAction = auto()
     _ZenithAction = auto()
 
+    _TestItem = auto()
 
     #######################################################
     #                       Stats
@@ -223,6 +225,7 @@ class Item(Enum):
     SeeingBanditryInTheUpperRiver = auto()
     InCorporateDebt = auto()
     AdvancingTheLiberationOfNight = auto()
+    TheCityWaning = auto()
 
     #######################################################
     #                       Rat Market
@@ -894,12 +897,39 @@ class Item(Enum):
     AGiftFromBalmoral = auto()
     GlowingViric = auto()
     MiredInMail = auto()
-    AReportFromTheKhagansPalace = auto()
+    ReportFromTheKhagansPalace = auto()
     SomeoneIsComing = auto()
 
     # Quriks
     Austere = auto()
     Hedonist = auto()
+
+
+    ################################################################
+    #                        Forgotten Quarter
+    ################################################################    
+
+    _ForgottenQuarterAction = auto()
+
+    CrateOfExpeditionSupplies = auto()
+
+    _ThievesCacheReward = auto()
+    _ShrineOfDeepBlueHeavenReward = auto()
+    _ChacolitePagodaReward = auto()
+    _TombOfSilkenThreadReward = auto()
+    _SanctuaryOfCrimsonPetalsReward = auto()
+    _StonefallCopseReward = auto()
+
+    # FATE
+    _TempleOfUttermostWindReward = auto()
+    _GalleryOfSerpentsReward = auto()
+
+    _UnpredictateTreasure_ThievesCache= auto()
+    _UnpredictateTreasure_DeepBlueHeaven = auto()
+
+    # FATE
+    _UnpredictateTreasure_UttermostWind = auto()
+    _UnpredictateTreasure_GalleryOfSerpents = auto()
 
     ################################################################
     #                        Laboratory
@@ -1011,6 +1041,9 @@ class Item(Enum):
     _WaswoodHeistCashOut = auto()
     _ApproximateEchoValue = auto()
     _SkeletonPennyValue = auto()
+
+    CollectionNotePackageInLondon = auto()
+    _CollectPackageFromPinnockRoundTrip = auto()
 
     TracklayersDispleasure = auto()
 
@@ -1406,6 +1439,9 @@ RAT_MARKET_SATURATION_2_TYPES = [
 ]
 
 SPECIAL_ACTION_TYPES = [
+    Item._ForgottenQuarterAction,
+
+    # Upper River
     Item._EalingAction,
     Item._JerichoAction,
     Item._BalmoralAction,
@@ -1416,12 +1452,16 @@ SPECIAL_ACTION_TYPES = [
     Item._MarigoldAction,
 
     Item._HeliconAction,
+    Item._TracklayerCityAction,
+
+    # Zailing
     Item._WakefulEyeAction,
     Item._KhanateAction,
     Item._SeaOfVoicesAction,
     Item._PortCecilAction,
     Item._MangroveAction,
 
+    # Roof
     Item._HallowsThroatAction,
     Item._MidnightMoonAction,
     Item._ZenithAction,

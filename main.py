@@ -26,6 +26,7 @@ import london.hearts_game
 import london.heists
 import london.arbor
 import london.deck_approximation
+import london.forgotten_quarter
 
 import bone_market.trades
 
@@ -96,6 +97,7 @@ london.hearts_game.add_trades(config)
 london.arbor.add_trades(config)
 london.heists.add_trades(config)
 london.deck_approximation.add_trades(config)
+london.forgotten_quarter.add_trades(config)
 
 bone_market.trades.add_trades(config)
 

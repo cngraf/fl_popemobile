@@ -17,7 +17,7 @@ class RailwayState(GameState):
         super().__init__(max_hand_size=5)
         self.location = location
         self.ev_threshold = 5.5
-        self.scrip_threshold_multiplier = 2.0
+        self.scrip_threshold_multiplier = 1.0
 
         self.skip_favour_inputs = False
         self.skip_econ_inputs = False
@@ -4410,7 +4410,7 @@ class RailwaySimulationRunner(SimulationRunner):
 
 simulation = RailwaySimulationRunner(
     runs = 100,
-    location = Location.BurrowInfraMump,
+    location = Location.JerichoLocks,
 
     initial_values= {
         Item.ColourAtTheChessboard: 1,
@@ -4421,7 +4421,7 @@ simulation = RailwaySimulationRunner(
         Item.SeeingBanditryInTheUpperRiver: 0, # utils.pyramid(),
 
         Item.MoonPearl: 2_000_000,
-        Item.InTheCompanyOfAHellworm: 1,
+        # Item.InTheCompanyOfAHellworm: 1,
         # Item.HellwormSaddle: 1,
     
         Item.EalingGardensCommemorativeDevelopment: 99,

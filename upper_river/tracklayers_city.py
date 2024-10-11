@@ -12,8 +12,17 @@ def add_trades(config: Config):
 
     efficiency = 300
 
+    for i in range(1, 11):
+        visit_length = 10 * i
+        add({
+            Item._UpperRiverRoundTrip: -1,
+            Item.Action: -1 * visit_length,
+            Item._TracklayerCityAction: visit_length,
+        })
+
     # ballpark
-    trade(1, {
+    add({
+        Item._TracklayerCityAction: -1,
         Item.HinterlandProsperity: 510
     })
 
@@ -87,26 +96,43 @@ def add_trades(config: Config):
     #     Item.BottleOfFourthCityAirag: 5,
     # })
 
-    # trade(1, {
-    #     Item.HinterlandProsperity: -156000,
-    #     Item.RumourmongersNetwork: 1,
-    # })
+    add({
+        Item._TracklayerCityAction: -1,
+        Item.HinterlandProsperity: -156000,
+        Item.RumourmongersNetwork: 1,
+    })
 
-    # trade(1, {
-    #     Item.HinterlandProsperity: -156000,
-    #     Item.VialOfMastersBlood: 1,
-    # })
+    add({
+        Item._TracklayerCityAction: -1,
+        Item.HinterlandProsperity: -156000,
+        Item.VialOfMastersBlood: 1,
+    })
 
-    # # amortized betray to crims
-    # trade(1, {
-    #     Item.HinterlandProsperity: -500_000,
-    #     Item.JournalOfInfamy: 10_000
-    # })
+    # amortized betrayal options
+    add({
+        Item._TracklayerCityAction: -1,
+        Item.HinterlandProsperity: -500_000,
+        Item.JournalOfInfamy: 10_000,
 
-    # trade(1, {
-    #     Item.HinterlandProsperity: -500_000,
-    #     Item.DubiousTestimony: 10_000
-    # })
+        # Item.TheCityWaning: 36,
+        # Item.FavCriminals: 3
+    })
+
+    add({
+        Item._TracklayerCityAction: -1,
+        Item.HinterlandProsperity: -500_000,
+        Item.DubiousTestimony: 10_000,
+
+        # Item.TheCityWaning: 36,
+        # Item.FavConstables: 3
+    })
+
+    add({
+        # Moves city from Marigold to Moulin/Hurlers
+        Item._TracklayerCityAction: -1,
+        Item.HinterlandProsperity: -500_000,
+        Item.InfernalContract: 25_000,
+    })    
 
     # Communing
 
@@ -139,6 +165,7 @@ def add_trades(config: Config):
 
     add({
         Item.Action: -2,
+        Item.MemoryOfMuchLesserSelf: -2,
         Item.TheMindsAscent1: -2,
         Item.TheMindsAscent2: -3,     
         Item.TheMindsAscent3: -4,     
@@ -147,9 +174,21 @@ def add_trades(config: Config):
     
     add({
         Item.Action: -2,
+        Item.MemoryOfMuchLesserSelf: -2,
         Item.TheMindsAscent1: -2,
         Item.TheMindsAscent2: -3,     
         Item.TheMindsAscent3: -4,     
         Item.PrimaevalHint: 1
     })
     
+    add({
+        Item._TracklayerCityAction: -1,
+        Item.CrystallizedEuphoria: -5,
+        Item.TheCityWaning: -45 # TODO confirm
+    })
+
+    add({
+        Item._TracklayerCityAction: -1,
+        Item.OneiromanticRevelation: -1,
+        Item.HinterlandProsperity: 6250
+    })

@@ -51,7 +51,9 @@ def add_trades(config: Config):
         # Item.InscrutableRatMarketSaturation2: -115_000 / 3,
         # Item.TempestuousRatMarketSaturation2: -115_000 / 3,
         # Item.IntricateRatMarketSaturation2: -115_000 / 3,        
-   
+
+        # Living story
+        Item.ReportFromTheKhagansPalace: -1,
     })
 
     # free source of constraining qualities
@@ -62,7 +64,7 @@ def add_trades(config: Config):
         Item.RecentParticipantInAStarvedCulturalExchange,
         Item.GlowingViric,
         Item.MiredInMail,
-        Item.AReportFromTheKhagansPalace
+        Item.ReportFromTheKhagansPalace
     ):
         config.add({
             lockout_quality: 1

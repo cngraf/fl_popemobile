@@ -2,30 +2,136 @@ from enums import *
 from helper.utils import *
 
 def add_trades(config):
+    add = config.add
     trade = config.trade
-    trade(2, {
-        Item.ExtraordinaryImplication: -2,
-        Item.HalcyonicTonic: 1,
-        Item.FillipOfEffervescence: 1
+
+    for i in range(0, 7):
+        visit_length = 2 ** i
+        add({
+            Item._UpperRiverRoundTrip: -1,
+            Item.Action: -1 * visit_length,
+            Item._StationViiiAction: visit_length,
+
+            # Item._UnveilYourPaintingLondon: 1
+        })
+
+
+    ################################################
+    #               Collecting Reagents
+    ################################################
+    add({
+        Item._StationViiiAction: -1,
+        Item.CollectionNotePackageInLondon: 1
     })
 
+    add({
+        Item._StationViiiAction: -1,
+        Item.CollectionNotePackageInLondon: -1,
+        Item.SwornStatement: -3,
+
+        Item.ObliviscereMori: 1
+    })
+
+    # Collect from Pinnock & return
+    add({
+        Item._StationViiiAction: -1,
+        Item.Action: -2,
+ 
+        Item.RumourOfTheUpperRiver: 2,
+        Item.ObliviscereMori: 1
+    })
+
+    add({
+        Item._StationViiiAction: -1,
+        Item.Action: -2,
+        Item.AntiqueMystery: -2,
+        Item.ConsignmentOfScintillackSnuff: -2,
+    
+        Item.RumourOfTheUpperRiver: 2,
+        Item.ElationAtFelineOration: 1
+    })
+
+    add({
+        Item._StationViiiAction: -1,
+        Item.Action: -2,
+        Item.DirefulReflection: -2,
+        Item.ComprehensiveBribe: -2,
+    
+        Item.RumourOfTheUpperRiver: 2,
+        Item.VindicationOfFaith: 1
+    })
+
+    add({
+        Item._StationViiiAction: -1,
+        Item.Action: -2,
+        Item.BazaarPermit: -6,
+        Item.BlackmailMaterial: -6,
+        Item.ComprehensiveBribe: -6,
+        Item.LegalDocument: -6,
+        Item.ParabolanOrangeApple: -1,
+    
+        Item.RumourOfTheUpperRiver: 2,
+        Item.ExhilarationFromAchievingJustice: 1
+    })
+
+    add({
+        Item._StationViiiAction: -1,
+        Item.Action: -2,
+        Item.TouchingLoveStory: -10,
+        Item.FavourInHighPlaces: -2,
+        Item.SearingEnigma: -2,
+        Item.NoduleOfPulsatingAmber: -2,
+    
+        Item.RumourOfTheUpperRiver: 2,
+        Item.HorrifyingConfirmationThatYouWereRightAllAlong: 1
+    })
+
+    add({
+        Item._StationViiiAction: -1,
+        Item.Action: -2,
+        Item.BlackmailMaterial: -22,
+        Item.DiaryOfTheDead: -5,
+        Item.DreadfulSurmise: -1,
+        Item.TinOfZzoup: -10,
+        Item.TinnedHam: -10,
+    
+        Item.RumourOfTheUpperRiver: 2,
+        Item.UnthinkableHope: 1
+    })
+
+    ################################################
+    #               Extracting Sentiment
+    ################################################
+
+    for reagent, sentiment in (
+        (Item.ObliviscereMori, Item.CrystallizedEuphoria),
+        (Item.ElationAtFelineOration, Item.OilOfCompanionship),
+        (Item.VindicationOfFaith, Item.SalveOfRighteousness),
+        (Item.HorrifyingConfirmationThatYouWereRightAllAlong, Item.ConcentrateOfSelf),
+        (Item.UnthinkableHope, Item.PowderOfRenewal),
+    ):
+        add({
+            Item._StationViiiAction: -1,
+            reagent: -1,
+            sentiment: 1
+        })
+
+
+    # Mark a Crate
+    add({
+        Item._StationViiiAction: -3,
+        Item.ExtraordinaryImplication: -1,
+        Item.HalcyonicTonic: 0.5,
+        Item.FillipOfEffervescence: 0.5
+    })
+
+    # Card
+    # TODO move this
     trade(1, {
         Item.OilOfCompanionship: -1,
         Item.RumourOfTheUpperRiver: -98,
 
         Item.PrismaticFrame: 1
-    })
-
-    # Handwaving the UR/London transition
-    trade(3, {
-        Item.CrystallizedEuphoria: 1
-    })
-
-    trade(3, {
-        Item.AntiqueMystery: -2,
-        Item.ConsignmentOfScintillackSnuff: -2,
-
-        Item.OilOfCompanionship: 1
     })
 
     # Mr Wines
