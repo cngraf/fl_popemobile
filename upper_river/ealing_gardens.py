@@ -49,6 +49,15 @@ def add_trades(config: Config):
         Item.RomanticNotion: 5
     })
 
+    add({
+        Item.TimeRemainingAtHeliconHouseTwoThruFive: -1,
+        Item.CulinaryTributeToTheSeaOfSpines: -1,
+
+        Item.FittingInAtHeliconHouse: 3,
+        Item.Inspired: 4,
+        Item.HinterlandScrip: 55
+    })
+
     # # trade(5, {
     # add({
     #     Item._EalingAction: -5,
@@ -426,6 +435,7 @@ def add_trades(config: Config):
         Item.PalaeontologicalDiscovery: 7,
         Item.RustedStirrup: 63
     })
+    
 
     # --- Spa
     

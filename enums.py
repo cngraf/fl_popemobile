@@ -790,6 +790,8 @@ class Item(Enum):
     OneiricPearl = auto()
 
     # Culinary Concoction
+    _CulinaryConcoction = auto()
+    CulinaryIngredientValue = auto()
     SharplyFlavoredPickleAsYetUnpoisoned = auto()
     JetBlackPickleRelishDosedWithHillchangerScorpionVenom = auto()
     EnvenomedPicklesSuspendedInVenisonAspic = auto()    
