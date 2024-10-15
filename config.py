@@ -152,6 +152,9 @@ class Config:
 
         self.bounds[Item.WhiskerwaysSecondaryPayout.value] = (None, 0)  
 
+        self.bounds[Item.ReportFromTheKhagansPalace.value] = (-1, 0)
+        self.bounds[Item.ViolantSights.value] = (-1, 0)
+
         self.enable_all_rat_market_moons = True
 
         self.add(constraint)

@@ -1,22 +1,34 @@
 from enums import *
 import player as player
 
-# Change these
-optimize_input = Item.Action
-optimization_target = Item.Echo
-active_player = player.player_bal_licentiate
+actions_per_day = 120
+cards_per_day = 40
 
+# Optimize `solution_output` per `solution_input`
+solution_input = Item.Action
+solution_output = Item.Echo
 
-input_per_cycle = 7 * 105
+active_player = player.player_endgame_f2p
+
+add_qualities = {
+    # Item.BagALegend: 4000,
+
+    # Item.ListOfAliasesWrittenInGant: 1,
+
+    # Item._AllianceWithBigRat: 1,
+}
+
+active_player.qualities.update(add_qualities)
+
 
 # Core constraint setup
 core_constraint = {
     Item.Constraint: 1,
-    optimize_input: input_per_cycle,
+    solution_input: actions_per_day * 7,
 
     Item._RatMarketRotation: 1,
     Item._BoneMarketRotation: 1,
     Item._VisitFromTimeTheHealer: 1,
 
-    Item._CardDraws: 30 * 7
+    Item._CardDraws: cards_per_day * 7,
 }

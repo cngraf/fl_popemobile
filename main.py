@@ -62,7 +62,7 @@ import fate.upwards
 import fate.whiskerways
 
 # --------------------------------------------
-# -------------- Player Config ---------------
+# -------------- Parameters    ---------------
 # --------------------------------------------
 
 config = Config(
@@ -135,8 +135,8 @@ fate.whiskerways.add_trades(config)
 
 
 runner = ModelRunner(
-    optimize_input=optimization.params.optimize_input,
-    optimize_output=optimization.params.optimization_target,
+    optimize_input=optimization.params.solution_input,
+    optimize_output=optimization.params.solution_output,
     config=config)
 
 # Run the optimization and display the results

@@ -100,6 +100,8 @@ player_endgame_f2p = Player(
     qualities={
         Item.SealOfStJoshua: 1,
         Item.InvolvedInARailwayVenture: 140,
+
+        # Item._AllianceWithBigRat: 1
     }
 )
 
@@ -114,37 +116,39 @@ player_generic_endgame_whale = Player(
 
         Item.SealOfStJoshua: 1,
         Item.InvolvedInARailwayVenture: 140,
+
+        # Item._AllianceWithBigRat: 1
     }
 )
 
 
-# aka "cosmogone silvererhand"
-player_third_city_silverer = Player.copy_with_added(
-    player=player_generic_endgame_whale,
-    qualities={
-        Item.SetOfCosmogoneSpectacles: 1,
+# # aka "cosmogone silvererhand"
+# player_third_city_silverer = Player.copy_with_added(
+#     player=player_generic_endgame_whale,
+#     qualities={
+#         Item.SetOfCosmogoneSpectacles: 1,
 
-        Item.BagALegend: 1,
-        Item.LongDeadPriestsOfRedBird: 1,
-    })
+#         Item.BagALegend: 1,
+#         Item.LongDeadPriestsOfRedBird: 1,
+#     })
 
-player_generic_bal = Player.copy_with_added(
-    player=player_generic_endgame_whale,
-    qualities={
-        Item.BagALegend: 1
-    }
-)
+# player_generic_bal = Player.copy_with_added(
+#     player=player_generic_endgame_whale,
+#     qualities={
+#         Item.BagALegend: 1
+#     }
+# )
 
-player_generic_licentiate = Player.copy_with_added(
-    player=player_generic_endgame_whale,
-    qualities={
-        Item.ListOfAliasesWrittenInGant: 1,
-    })
+# player_generic_licentiate = Player.copy_with_added(
+#     player=player_generic_endgame_whale,
+#     qualities={
+#         Item.ListOfAliasesWrittenInGant: 1,
+#     })
 
-player_bal_licentiate = Player.copy_with_added(
-    player=player_generic_licentiate,
-    qualities={
-        Item.ListOfAliasesWrittenInGant: 1,
+# player_bal_licentiate = Player.copy_with_added(
+#     player=player_generic_licentiate,
+#     qualities={
+#         Item.ListOfAliasesWrittenInGant: 1,
         
-        Item.BagALegend: 1,
-    })
+#         Item.BagALegend: 1,
+#     })

@@ -649,12 +649,15 @@ class LibraryState:
 
         # 15 progress
         if progress < 30:
+            if keys > 2:
+                high_prio.extend([
+                    LockedGateAction1,
+                    LibrariansOfficeAction3,
+                ])
             high_prio.extend([
-                LockedGateAction1,
-                LibrariansOfficeAction3,
                 GodsEyeViewAction2
             ])
-        
+
         # Routes + more TPs, harder check
         if routes < route_stockpile:
             high_prio.append(DeadEndAction2)
@@ -2113,9 +2116,9 @@ def simulate_runs(num_runs):
     simple_mode = True
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.DeadStars
-    state.cartographer_enabled = False
-    state.take_alternate_reward = True
+    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
+    state.cartographer_enabled = True
+    state.take_alternate_reward = False
 
     # Progress bar setup
     progress_template = "\rProgress: [{:<50}] {:.2f}% ({}/{})"
@@ -2255,4 +2258,4 @@ def simulate_runs(num_runs):
     total_per_action = all_currency_total / total_steps if total_steps > 0 else 0
     print(f"{'Echoes/Stuivers Per Action':<30} {'':<10} {total_per_action:.4f} E")
 
-simulate_runs(5_000)
+simulate_runs(50_000)

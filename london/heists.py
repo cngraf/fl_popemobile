@@ -50,7 +50,7 @@ def add_trades(config: Config):
     if (config.player.qualities.get(Item._AllianceWithBigRat, 0) > 0):
         add({
             Item.Action: -2,
-            Item.TalkativeRattusFaber: 6,
+            Item.TalkativeRattusFaber: -6,
             Item._Heist15Casing: 1
         })
 

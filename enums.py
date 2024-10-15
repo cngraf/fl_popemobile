@@ -123,6 +123,7 @@ class Item(Enum):
 
     Action = auto()
 
+    _Week = auto()
     _NoItem = auto()
 
     _CardDraws = auto()
@@ -834,6 +835,48 @@ class Item(Enum):
     FragmentaryOntology = auto()
     DispositionOfTheCardinal = auto()
 
+    # Zenith - High Sancta
+    ViolantSights = auto()
+
+    _HighSanctaDraw_Stage1 = auto()
+    _HighSanctaPlay_Stage1 = auto()
+
+    CF_BleedingIn = auto()
+    CF_BorrowedScripts = auto()
+    CF_DrowsyExile = auto()
+    CF_FamilyAndLaw = auto()
+    CF_LawsUnwritten = auto()
+    CF_MoltenForests = auto()
+    CF_PungentSorrows = auto()
+    CF_Statuary = auto()
+    CF_StolenMarble = auto()
+
+    _HighSanctaDraw_Stage2 = auto()
+    _HighSanctaPlay_Stage2 = auto()
+
+    CF_Chained = auto()
+    CF_Consortion = auto()
+    CF_Coronation = auto()
+    CF_ScarredMemories = auto()
+    CF_UndyingWish = auto()
+    CF_UnsignedInTriplicate = auto()
+    CF_VelvetDark = auto()
+    CF_VoidsBreath = auto()
+    CF_Waning = auto()    
+
+    _HighSanctaDraw_Stage3 = auto()
+    _HighSanctaPlay_Stage3 = auto()    
+
+    CF_BlackIce = auto()
+    CF_DiscardedHearts = auto()
+    CF_DrownedWars = auto()
+    CF_HandsAndBlades = auto()
+    CF_LoveAndTombstones = auto()
+    CF_MonthsPassing = auto()
+    CF_Reliquaries = auto()
+    CF_RescuedHungers = auto()
+    CF_Sloughing = auto()    
+
     ################################################################################
     ###                          Equipment                                       ###
     ################################################################################
@@ -895,6 +938,8 @@ class Item(Enum):
     FreeEvening = auto()
     FavourableCircumstance = auto()
     AnEarnestOfPayment = auto()
+    ProfessionalPerk = auto()
+    TradeSecret = auto()
     AConsequenceOfYourAmbition = auto()
     BraggingRightsAtTheMedusasHead = auto()
     DelayUntilTheNextBoardMeeting = auto()
@@ -1033,6 +1078,7 @@ class Item(Enum):
     ServicesClay = auto()    
 
     # Hellworm
+    YourVeryOwnMiniatureHellworm = auto()
     InTheCompanyOfAHellworm = auto()
     HellwormSaddle = auto()
     DispositionOfYourHellworm = auto()

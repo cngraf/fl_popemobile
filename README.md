@@ -58,7 +58,7 @@ Until then, just ping me (or ask ChatGPT) for a guided set-up.
             * more "accurate" but less useful?
 
 * London miscellaneous
-    * Forgotten Quarter
+    * ~~Forgotten Quarter~~
     * Chimes carousels
     * various other early- and mid-game activities
 
@@ -78,14 +78,14 @@ Until then, just ping me (or ask ChatGPT) for a guided set-up.
 * Hinterlands
     * Evenlode
         - diving
-        - barristering
+        - ~~barristering~~
     * Balmoral
         * Clay Highwayman's Camp
         - deciphering
-        - clean up Cover Identity model
+        - ~~clean up Cover Identity model~~
     * Station VIII
-        - revisit the Kitchen
-        - revisit Alchemy
+        - ~~revisit the Kitchen~~
+        - ~~revisit Alchemy~~
     * Moulin
         - add full simulation of Expeditions
         - Monographs, ok for now?

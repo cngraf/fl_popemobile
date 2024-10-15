@@ -1,9 +1,11 @@
 from enums import *
+import optimization.params as params
 from helper.utils import *
 
 def add_trades(config, default_rare_success_rate = 0.05):
+    add = config.trade
     trade = config.trade
-
+    
     ## --------------------------------------
     ## ----------- Connected
     ## --------------------------------------

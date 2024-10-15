@@ -1,0 +1,1126 @@
+Item tier   0 to 65k    65k to 180k (115k)
+5           52          92
+6           10.4        18.4
+7           2.08        3.68
+
+All sources are used, but not all are equally important, use common sense.
+Many inputs are byproducts of other activities.
+
+Demand Type
+    ItemName 
+        Source1 (Approx. actions per unit => EPA at 1.32)
+            Inputs
+                Input sources
+        Source2
+            etc.
+    
+Soft 1
+    ParabolaLinenScrap (29 => 2.15)
+        Khaganian Intrigued (Threads 1, 3, 9, 10, repeat)
+        Painting in Balmoral
+            MemoryOfLight
+                Bone Market (Antiquity exhaustion)
+            MemoryOfMuchLesserSelf
+                Cabinet Noir
+                Wellsping Expeditions
+            Moonlit
+                Balmoral Woods
+            TouchingLoveStory
+                Waswood Heists
+    ScrapOfIvoryOrganza (65 => 6.35)
+        Cabinet Noir 
+            FinalBreath
+                Bone Market (Amalgamy exhaustion)
+                Jericho Canal Cruising
+
+Saintly 1, 2
+    RattyReliquary
+        Church Favours @ Jericho
+            Jurisdictional Dispute card (FATE: Stake your position)
+    FalseHagiotoponym
+        Burrow upconversion
+            PalimpsestScrap
+                Rat Market
+            ApostatesPsalm
+                Church Favours @ Jericho
+                Sunken Embassy
+            VerseOfCounterCreed
+                Burrow Darkness card
+                    MoonPearls
+                        Board meeting dividends
+
+Maudlin 1 (2?)
+    CaptivatingBallad
+        Waswood Heists
+
+Inscrutable 1
+    UncannyIncunabulum
+        Jericho Canal Cruising
+        Docks Favours in Jericho
+        Widow Crates from Khanate
+
+Tempestuous 1
+    StormThrenody
+        The Stacks (FATE Cartographer route)
+        Urchins Favours in Jericho
+    NightWhisper
+        Jericho Canal Cruising
+            MemoryOfDistantShores
+                Bone Market
+            SwornStatement
+                Barristering
+                Waswood Heists
+            ScrapOfIncendiaryGossip
+                Inkling upconversion
+                    Rat Market
+            NightOnTheTown
+                Society Favours in Jericho
+                    Cards
+                    Khanate threads 9
+        Painting in Balmoral
+            TouchingLoveStory
+                Waswood Heists
+            MemoryOfLight
+                Bone Market
+            MemoryOfMuchLesserSelf
+                Wellspring Expeditions
+            Moonlit
+                Woods in Balmoral
+
+Intricate 1
+    UnlawfulDevice
+        Revolutionaries Favours in Jericho
+
+    NOT Corresponding Sounder
+        ~73 actions to obtain
+            Sells for 4125 RS
+                5.65 EPA without any byproducts is below par
+
+Calculating 1
+    VitalIntelligence
+        Khanate (Pulling Threads 1, 3, 9, 10, repeat)
+            EmeticRevelation
+                ReportFromTheKhagansPalace
+
+Ruinous 1
+    MortificationOfAGreatPower
+        Evenlode Barristering
+            PreservedSurfaceBlooms
+                Rat Market
+
+Example report
+
+max(Item): 936
+
+------ Summary -------
+
+------ Assumptions -------
+Core Constraint:
+dict_items([(<Item.Constraint: 0>, 1), (<Item.Action: 2>, 735), (<Item._RatMarketRotation: 72>, 1), (<Item._BoneMarketRotation: 91>, 1), (<Item._VisitFromTimeTheHealer: 765>, 1), (<Item._CardDraws: 4>, 210)])
+----- Player Items & Qualities ------
+Watchful                  334
+Shadowy                   334
+Dangerous                 334
+Persuasive                334
+KatalepticToxicology       18
+MonstrousAnatomy           18
+APlayerOfChess             18
+Glasswork                  18
+ArtisanOfTheRedScience     18
+Mithridacy                 18
+ShapelingArts              18
+Zeefaring                  18
+StewardOfTheDiscordance     8
+Chthonosophy                9
+Respectable                20
+Dreaded                    20
+Bizarre                    20
+Inerrant                    6
+Insubstantial               4
+Neathproofed                8
+RenownBohemians            40
+RenownChurch               40
+RenownConstables           40
+RenownCriminals            40
+RenownDocks                40
+RenownGreatGame            40
+RenownHell                 40
+RenownRevolutionaries      40
+RenownRubberyMen           40
+RenownSociety              40
+RenownTombColonies         40
+RenownUrchins              40
+SealOfStJoshua              1
+InvolvedInARailwayVenture  140
+ListOfAliasesWrittenInGant    2
+BagALegend                  1
+
+----- Conversions -------
+╒════════════╤═════════════════════════════════════╤══════════════════════════════════╕
+│   Marginal │ Loss                                │ Gain                             │
+╞════════════╪═════════════════════════════════════╪══════════════════════════════════╡
+│     -0.155 │ UnprovenancedArtefact:-1            │ Echo:2.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│    -98.762 │ ShardOfGlim:-1                      │ Echo:0.01                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -1.324 │ PuzzlingMap:-1                      │ Echo:12.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -1.324 │ OneiromanticRevelation:-1           │ Echo:62.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -1.479 │ OstentatiousDiamond:-1              │ Echo:0.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.909 │ MagnificentDiamond:-1               │ Echo:12.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.056 │ AntiqueMystery:-1                   │ Echo:12.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.587 │ PrimaevalHint:-1                    │ Echo:62.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│  -2455.05  │ AmanitaSherry:-1                    │ Echo:0.1                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.126 │ QueerSoul:-1                        │ Echo:2.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.01  │ SilentSoul:-1                       │ Echo:12.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -4.473 │ Echo:-62.5                          │ BrightBrassSkull:1               │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.025 │ StolenKiss:-1                       │ Echo:2.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.679 │ FavourInHighPlaces:-1               │ Echo:12.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -4.566 │ DubiousTestimony:-1                 │ Echo:0.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.126 │ CaveAgedCodeOfHonour:-1             │ LegalDocument:1                  │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.126 │ LegalDocument:-1                    │ Echo:12.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.074 │ FragmentOfTheTragedyProcedures:-1   │ Echo:62.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│    -66.044 │ MemoryOfLight:-1                    │ CrypticClue:25                   │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│  -1649.34  │ CrypticClue:-1                      │ Echo:0.02                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -4.566 │ JournalOfInfamy:-1                  │ Echo:0.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -1.785 │ Echo:-0.04                          │ DropOfPrisonersHoney:1           │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.432 │ RomanticNotion:-1                   │ Echo:0.1                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.294 │ BazaarPermit:-1                     │ Echo:12.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.008 │ EmeticRevelation:-1                 │ CrypticClue:625                  │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.24  │ UnearthlyFossil:-1                  │ Echo:2.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│   -379.001 │ ProscribedMaterial:-1               │ Echo:0.04                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -5.208 │ TinnedHam:-1                        │ Echo:63.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.126 │ AeolianScream:-1                    │ Echo:2.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│  -3803.32  │ BottelofMorelways1872:-1            │ Echo:0.1                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.086 │ BottleOfStranglingWillowAbsinthe:-1 │ Echo:0.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.78  │ BottleOfBrokenGiant1844:-1          │ Echo:2.5                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.01  │ BottleOfFourthCityAirag:-1          │ Echo:62.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ VialOfMastersBlood:-1               │ Echo:1562.6                      │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│  -1052.24  │ MoonPearl:-1                        │ Echo:0.01                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.391 │ CracklingDevice:-1                  │ Echo:62.5                        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -3.275 │ _ApproximateEchoValue:-1            │ Echo:1                           │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AntiquityGeneralExhaustion:-4       │ AntiquityAmphibianExhaustion:4   │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AntiquityGeneralExhaustion:-4       │ AntiquityFishExhaustion:4        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AntiquityGeneralExhaustion:-4       │ AntiquityArachnidExhaustion:4    │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AntiquityGeneralExhaustion:-4       │ AntiquityInsectExhaustion:4      │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AntiquityGeneralExhaustion:-4       │ AntiquityPrimateExhaustion:4     │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AmalgamyGeneralExhaustion:-4        │ AmalgamyAmphibianExhaustion:4    │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AmalgamyGeneralExhaustion:-4        │ AmalgamyFishExhaustion:4         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AmalgamyGeneralExhaustion:-4        │ AmalgamyArachnidExhaustion:4     │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ AmalgamyGeneralExhaustion:-4        │ AmalgamyInsectExhaustion:4       │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ MenaceGeneralExhaustion:-4          │ MenaceReptileExhaustion:4        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ MenaceGeneralExhaustion:-4          │ MenaceAmphibianExhaustion:4      │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ MenaceGeneralExhaustion:-4          │ MenaceFishExhaustion:4           │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ MenaceGeneralExhaustion:-4          │ MenaceArachnidExhaustion:4       │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ MenaceGeneralExhaustion:-4          │ MenaceInsectExhaustion:4         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.009 │ MenaceGeneralExhaustion:-4          │ MenacePrimateExhaustion:4        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.245 │ HinterlandScrip:-2                  │ UnidentifiedThighBone:1          │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.007 │ JetBlackStinger:-1                  │ FailedJetBlackStinger:1          │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -4.83  │ BoneFragments:-6000                 │ DuplicatedVakeSkull:1            │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.141 │ OneiricPearl:-1                     │ AssortmentOfKhaganianCoinage:125 │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.391 │ AssortmentOfKhaganianCoinage:-130   │ CracklingDevice:1                │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.013 │ StashedTreasure:-31250              │ FabulousDiamond:1                │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -5.208 │ HinterlandScrip:-125                │ TinnedHam:1                      │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│    -46.571 │ FinalBreath:-1                      │ HinterlandScrip:1                │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│    -13.681 │ MovesInTheGreatGame:-1              │ HinterlandScrip:1                │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│   -241.336 │ RoyalBlueFeather:-1                 │ HinterlandScrip:1                │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│    -14.864 │ CarvedBallOfStygianIvory:-1         │ HinterlandScrip:5                │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│    -12.389 │ TailfeatherBrilliantAsFlame:-1      │ HinterlandScrip:5                │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -1.523 │ ViennaOpening:-1                    │ HinterlandScrip:5                │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.063 │ QueenMate:-1                        │ HinterlandScrip:50               │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.01  │ PalaeontologicalDiscovery:-1        │ FemurOfAJurassicBeast:5          │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.027 │ CoverTiesSurface:-1                 │ _CoverTiesGeneric:1              │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.559 │ PaintingIncendiary:-1               │ _PaintingAnyQuality:1            │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -1.31  │ _RandomRoofEvent:-1                 │ _ApproximateEchoValue:2.5        │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│   -238.305 │ TantalisingPossibility:-1           │ Echo:0.1                         │
+├────────────┼─────────────────────────────────────┼──────────────────────────────────┤
+│     -0.07  │ GlimpseOfAnathema:-1                │ Echo:312.5                       │
+╘════════════╧═════════════════════════════════════╧══════════════════════════════════╛
+
+----- Actions -------
+╒════════════╤════════════════════════════════════════╤═══════════════════════════════════╕
+│   Marginal │ Loss                                   │ Gain                              │
+╞════════════╪════════════════════════════════════════╪═══════════════════════════════════╡
+│     -0.02  │                                        │ _GeneralRatMarketSaturation2:1000 │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0.008 │ Action:-1                              │ HeartsGameExploits:1              │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0.005 │                                        │ ASkeletonOfYourOwn:1              │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0.002 │ Action:-2                              │ RumourOfTheUpperRiver:2           │
+│            │                                        │ _UpperRiverRoundTrip:1            │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0.001 │ Action:-1                              │ SabreToothedSkull:1               │
+│            │ HinterlandScrip:-120                   │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0.001 │ Action:-2                              │ _RandomRoofEvent:2                │
+│            │                                        │ _FirmamentRoundTrip:1             │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0.001 │ _EvenlodeAction:-6                     │ ShardOfGlim:194.68                │
+│            │ PreservedSurfaceBlooms:-20             │ DubiousTestimony:9                │
+│            │                                        │ SwornStatement:1                  │
+│            │                                        │ JournalOfInfamy:9                 │
+│            │                                        │ MortificationOfAGreatPower:1      │
+│            │                                        │ HinterlandProsperity:225          │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ WingOfAYoungTerrorBird:2          │
+│            │ BoneFragments:-100                     │                                   │
+│            │ NoduleOfWarmAmber:-25                  │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavConstables:1                   │
+│            │ CL_Constables:-1                       │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavCriminals:1                    │
+│            │ CL_Criminals:-1                        │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavDocks:1                        │
+│            │ CL_Docks:-1                            │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavGreatGame:1                    │
+│            │ CL_GreatGame:-1                        │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavHell:1                         │
+│            │ CL_Hell:-1                             │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavRevolutionaries:1              │
+│            │ CL_Revolutionaries:-1                  │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavSociety:1                      │
+│            │ CL_Society:-1                          │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavTombColonies:1                 │
+│            │ CL_TombColonies:-1                     │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavUrchins:1                      │
+│            │ CL_Urchins:-1                          │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ _CardDraws:-35.93                      │ CL_Bohemians:1                    │
+│            │                                        │ CL_Church:1                       │
+│            │                                        │ CL_Constables:1                   │
+│            │                                        │ CL_Criminals:1                    │
+│            │                                        │ CL_Docks:1                        │
+│            │                                        │ CL_GreatGame:1                    │
+│            │                                        │ CL_Hell:1                         │
+│            │                                        │ CL_Revolutionaries:1              │
+│            │                                        │ CL_RubberyMen:1                   │
+│            │                                        │ CL_Society:1                      │
+│            │                                        │ CL_TombColonies:1                 │
+│            │                                        │ CL_Urchins:1                      │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │                                        │ Action:735                        │
+│            │                                        │ _CardDraws:210                    │
+│            │                                        │ _RatMarketRotation:1              │
+│            │                                        │ _BoneMarketRotation:1             │
+│            │                                        │ _VisitFromTimeTheHealer:1         │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-19                             │ MagnificentDiamond:4              │
+│            │                                        │ HinterlandScrip:10                │
+│            │                                        │ BottleOfBrokenGiant1844:4         │
+│            │                                        │ MoonPearl:9100                    │
+│            │                                        │ DelayUntilTheNextBoardMeeting:1   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ DelayUntilTheNextBoardMeeting:-1       │ FreeEvening:5                     │
+│            │ ReportFromTheKhagansPalace:-0.88       │ FavourableCircumstance:1          │
+│            │ _VisitFromTimeTheHealer:-1             │ FleetingRecollections:1           │
+│            │                                        │ GiftFromBalmoral:0.88             │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ _RatMarketRotation:-1                  │                                   │
+│            │ _GeneralRatMarketSaturation1:-65000    │                                   │
+│            │ SoftRatMarketSaturation1:-16250        │                                   │
+│            │ SaintlyRatMarketSaturation1:-16250     │                                   │
+│            │ MaudlinRatMarketSaturation1:-16250     │                                   │
+│            │ InscrutableRatMarketSaturation1:-16250 │                                   │
+│            │ TempestuousRatMarketSaturation1:-16250 │                                   │
+│            │ IntricateRatMarketSaturation1:-16250   │                                   │
+│            │ CalculatingRatMarketSaturation1:-16250 │                                   │
+│            │ RuinousRatMarketSaturation1:-16250     │                                   │
+│            │ _GeneralRatMarketSaturation2:-115000   │                                   │
+│            │ SoftRatMarketSaturation2:-28750        │                                   │
+│            │ SaintlyRatMarketSaturation2:-28750     │                                   │
+│            │ MaudlinRatMarketSaturation2:-28750     │                                   │
+│            │ InscrutableRatMarketSaturation2:-28750 │                                   │
+│            │ TempestuousRatMarketSaturation2:-28750 │                                   │
+│            │ IntricateRatMarketSaturation2:-28750   │                                   │
+│            │ CalculatingRatMarketSaturation2:-28750 │                                   │
+│            │ RuinousRatMarketSaturation2:-28750     │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-5                              │ _Heist15Casing:1                  │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-7.5                            │ Suspicion:1                       │
+│            │ ConnectedTheDuchess:-1.7               │ _WaswoodHeistCashOut:1            │
+│            │ HidingPlaceOfAPeculiarItem:-1          │                                   │
+│            │ _Heist15Casing:-1                      │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ _ParabolaAction:-4                     │ HidingPlaceOfAPeculiarItem:1      │
+│            │ FlaskOfWaswoodSpringWater:-1           │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ PalaeontologicalDiscovery:-2           │ HelicalThighbone:6                │
+│            │                                        │ KnottedHumerus:4                  │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ LeviathanFrame:1                  │
+│            │ HeartsGameExploits:-65                 │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ _WaswoodHeistCashOut:-1                │ TouchingLoveStory:16              │
+│            │                                        │ CaptivatingBallad:1               │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ Wounds:0.2                        │
+│            │ ConnectedWidow:-2                      │ MagnificentDiamond:0.3            │
+│            │ UnassumingCrate:-1                     │ FourthCityEcho:0.1                │
+│            │                                        │ SilentSoul:0.1                    │
+│            │                                        │ UncannyIncunabulum:0.3            │
+│            │                                        │ BazaarPermit:0.15                 │
+│            │                                        │ HumanArm:0.1                      │
+│            │                                        │ UnidentifiedThighBone:0.1         │
+│            │                                        │ BottleOfFourthCityAirag:0.1       │
+│            │                                        │ ConsignmentOfScintillackSnuff:0.1 │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ ConnectedWidow:2                  │
+│            │ UnassumingCrate:-1                     │ OstentatiousDiamond:15            │
+│            │                                        │ MagnificentDiamond:1              │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavRevolutionaries:1              │
+│            │ FavourableCircumstance:-1              │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-40                             │ _EvenlodeAction:40                │
+│            │ _UpperRiverRoundTrip:-1                │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ ScrapOfIncendiaryGossip:105       │
+│            │ InklingOfIdentity:-500                 │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ _WaswoodHeistCashOut:-1                │ SwornStatement:16                 │
+│            │                                        │ FragmentOfTheTragedyProcedures:1  │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-18                             │ StashedTreasure:6000              │
+│            │                                        │ _LondonKhanateRoundTrip:1         │
+│            │                                        │ _AgentInTransit:1                 │
+│            │                                        │ _UnassumingCratePickup:3          │
+│            │                                        │ _TriflingDiplomatSale:1           │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavDocks:1                        │
+│            │ FavourableCircumstance:-1              │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │                                   │
+│            │ AmalgamyReptileExhaustion:-1           │                                   │
+│            │ FistfulOfSurfaceCurrency:-1000         │                                   │
+│            │ HinterlandScrip:-25                    │                                   │
+│            │ FavourInHighPlaces:-1                  │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ FavCriminals:1                    │
+│            │ FavourableCircumstance:-1              │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-15                             │ Wounds:8                          │
+│            │                                        │ Suspicion:1.81                    │
+│            │                                        │ FlaskOfWaswoodSpringWater:4       │
+│            │                                        │ MemoryOfMuchLesserSelf:1          │
+│            │                                        │ RumourOfTheUpperRiver:1           │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-86                             │ VolumeOfCollatedResearch:4        │
+│            │                                        │ SurveyOfTheNeathsBones:625        │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ PrismaticFrame:1                  │
+│            │ OilOfCompanionship:-1                  │                                   │
+│            │ RumourOfTheUpperRiver:-98              │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ ConsignmentOfScintillackSnuff:2   │
+│            │ PreservedSurfaceBlooms:-1              │                                   │
+│            │ KnobOfScintillack:-8                   │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-100                            │ NevercoldBrassSliver:37500        │
+│            │                                        │ ApostatesPsalm:3                  │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ _ParabolaRoundTrip:1              │
+│            │ DropOfPrisonersHoney:-100              │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-40                             │ _ParabolaAction:40                │
+│            │ _ParabolaRoundTrip:-1                  │                                   │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-1                              │ HinterlandScrip:625               │
+│            │ FabulousDiamond:-1                     │ StolenKiss:2                      │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-2                              │ ConnectedTheDuchess:50            │
+├────────────┼────────────────────────────────────────┼───────────────────────────────────┤
+│     -0     │ Action:-20                             │                                   │
+╘════════════╧════════════════════════════════════════╧═══════════════════════════════════╛
+
+----- _SocialAction -------
+╒════════════╤══════════════════╤═════════════════╕
+│   Marginal │ Loss             │ Gain            │
+╞════════════╪══════════════════╪═════════════════╡
+│     -0.441 │ Action:-1        │ _SocialAction:1 │
+├────────────┼──────────────────┼─────────────────┤
+│     -0.063 │ _SocialAction:-1 │                 │
+│            │ Wounds:-6        │                 │
+├────────────┼──────────────────┼─────────────────┤
+│     -0.146 │ _SocialAction:-1 │                 │
+│            │ Suspicion:-4     │                 │
+├────────────┼──────────────────┼─────────────────┤
+│     -0.232 │ _SocialAction:-1 │                 │
+│            │ Nightmares:-6    │                 │
+╘════════════╧══════════════════╧═════════════════╛
+
+----- _KhanateAction -------
+╒════════════╤══════════════════════════════════╤══════════════════════════════════╕
+│   Marginal │ Loss                             │ Gain                             │
+╞════════════╪══════════════════════════════════╪══════════════════════════════════╡
+│     -0.066 │ Action:-161                      │ _KhanateAction:160               │
+│            │ _LondonKhanateRoundTrip:-1       │                                  │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -0.171 │ _KhanateAction:-1                │ EmeticRevelation:5               │
+│            │                                  │ ReportFromTheKhagansPalace:1     │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -0.197 │ _KhanateAction:-1                │ UnassumingCrate:1                │
+│            │ AssortmentOfKhaganianCoinage:-10 │                                  │
+│            │ _UnassumingCratePickup:-1        │                                  │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -8.455 │ _KhanateAction:-1                │ Infiltrating:10                  │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -0.141 │ _KhanateAction:-2                │ VitalIntelligence:6              │
+│            │ EmeticRevelation:-1              │ _PullingThreads3:1               │
+│            │ Infiltrating:-100                │                                  │
+│            │ _PullingThreads1:-1              │                                  │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -0.141 │ _KhanateAction:-2                │ FistfulOfSurfaceCurrency:415     │
+│            │ EmeticRevelation:-1              │ VitalIntelligence:1              │
+│            │ Infiltrating:-100                │ FavourInHighPlaces:4             │
+│            │ _PullingThreads3:-1              │ _PullingThreads5:1               │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -0.141 │ _KhanateAction:-2                │ VitalIntelligence:4              │
+│            │ EmeticRevelation:-1              │ OneiricPearl:1                   │
+│            │ Infiltrating:-100                │ _PullingThreads7:1               │
+│            │ _PullingThreads5:-1              │                                  │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -0.141 │ _KhanateAction:-2                │ AssortmentOfKhaganianCoinage:125 │
+│            │ EmeticRevelation:-1              │ VitalIntelligence:1              │
+│            │ Infiltrating:-100                │ _PullingThreads9:1               │
+│            │ _PullingThreads7:-1              │                                  │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -0.141 │ _KhanateAction:-2                │ FavSociety:1                     │
+│            │ EmeticRevelation:-1              │ MovesInTheGreatGame:20           │
+│            │ Infiltrating:-100                │ VitalIntelligence:5              │
+│            │ _PullingThreads9:-1              │ _PullingThreads10:1              │
+├────────────┼──────────────────────────────────┼──────────────────────────────────┤
+│     -0.141 │ _KhanateAction:-2                │ AssortmentOfKhaganianCoinage:125 │
+│            │ EmeticRevelation:-1              │ VitalIntelligence:1              │
+│            │ Infiltrating:-100                │ _PullingThreads1:1               │
+│            │ _PullingThreads10:-1             │                                  │
+╘════════════╧══════════════════════════════════╧══════════════════════════════════╛
+
+----- _EalingAction -------
+╒════════════╤═════════════════════════════╤═════════════════════════════╕
+│   Marginal │ Loss                        │ Gain                        │
+╞════════════╪═════════════════════════════╪═════════════════════════════╡
+│     -0.011 │ Action:-100                 │ _EalingAction:100           │
+│            │ _UpperRiverRoundTrip:-1     │                             │
+├────────────┼─────────────────────────────┼─────────────────────────────┤
+│     -0.079 │ _EalingAction:-1            │ AlbatrossWing:2             │
+│            │ BoneFragments:-2000         │                             │
+│            │ NoduleOfWarmAmber:-25       │                             │
+├────────────┼─────────────────────────────┼─────────────────────────────┤
+│     -0.13  │ _EalingAction:-1            │ TombLionsTail:2             │
+│            │ BoneFragments:-200          │                             │
+│            │ NoduleOfWarmAmber:-2        │                             │
+├────────────┼─────────────────────────────┼─────────────────────────────┤
+│     -0.267 │ _EalingAction:-1            │ FemurOfAJurassicBeast:4     │
+│            │ StrongBackedLabour:-1       │ FinBonesCollected:12.5      │
+│            │ SurveyOfTheNeathsBones:-75  │ HornedSkull:1               │
+│            │                             │ JetBlackStinger:4           │
+│            │                             │ ThornedRibcage:1            │
+├────────────┼─────────────────────────────┼─────────────────────────────┤
+│     -0.036 │ _EalingAction:-2            │ PalaeontologicalDiscovery:7 │
+│            │ StrongBackedLabour:-1       │                             │
+│            │ SurveyOfTheNeathsBones:-163 │                             │
+╘════════════╧═════════════════════════════╧═════════════════════════════╛
+
+----- _HeliconAction -------
+╒════════════╤══════════════════════════════════════════╤══════════════════════════════════════════╕
+│   Marginal │ Loss                                     │ Gain                                     │
+╞════════════╪══════════════════════════════════════════╪══════════════════════════════════════════╡
+│     -0.086 │ _EalingAction:-6                         │ _HeliconAction:5                         │
+│            │                                          │ RomanticNotion:5                         │
+│            │                                          │ FittingInAtHeliconHouse:3                │
+│            │                                          │ TimeRemainingAtHeliconHouseTwoThruFive:4 │
+│            │                                          │ TimeRemainingAtHeliconHouseExactlyOne:1  │
+├────────────┼──────────────────────────────────────────┼──────────────────────────────────────────┤
+│     -0.346 │ _HeliconAction:-1                        │ AmberCrustedFin:1                        │
+│            │ FinBonesCollected:-10                    │                                          │
+│            │ TimeRemainingAtHeliconHouseTwoThruFive:- │                                          │
+│            │ 1                                        │                                          │
+├────────────┼──────────────────────────────────────────┼──────────────────────────────────────────┤
+│     -0.086 │ _HeliconAction:-1                        │ HinterlandScrip:20                       │
+│            │ FittingInAtHeliconHouse:-3               │ BottleOfStranglingWillowAbsinthe:1       │
+│            │ TimeRemainingAtHeliconHouseExactlyOne:-1 │ HinterlandProsperity:480                 │
+╘════════════╧══════════════════════════════════════════╧══════════════════════════════════════════╛
+
+----- _JerichoAction -------
+╒════════════╤══════════════════════════════╤═══════════════════════════╕
+│   Marginal │ Loss                         │ Gain                      │
+╞════════════╪══════════════════════════════╪═══════════════════════════╡
+│     -1.262 │ Action:-4                    │ _JerichoAction:4          │
+│            │ _UpperRiverRoundTrip:-1      │ _JerichoFavourExchange:1  │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.021 │ _JerichoAction:-1            │ EsteemOfTheGuild:2        │
+│            │ VolumeOfCollatedResearch:-10 │                           │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -1.604 │ _JerichoAction:-1            │ EsteemOfTheGuild:2        │
+│            │ MemoryOfDistantShores:-40    │                           │
+│            │ SwornStatement:-2            │                           │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.174 │ _JerichoAction:-1            │ EsteemOfTheGuild:2        │
+│            │ ScrapOfIncendiaryGossip:-45  │                           │
+│            │ NightOnTheTown:-1            │                           │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.025 │ _JerichoAction:-2            │ UnprovenancedArtefact:8.5 │
+│            │ EsteemOfTheGuild:-3          │ FinBonesCollected:5       │
+│            │                              │ MoonlightScales:50        │
+│            │                              │ SkullInCoral:1.5          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.587 │ _JerichoAction:-2            │ PrimaevalHint:1           │
+│            │ EsteemOfTheGuild:-6          │ MovesInTheGreatGame:18.5  │
+│            │                              │ UncannyIncunabulum:2.5    │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.622 │ _JerichoAction:-1            │ RattyReliquary:2          │
+│            │ _JerichoFavourExchange:-1    │ ApostatesPsalm:2          │
+│            │ FavChurch:-4                 │                           │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.063 │ _JerichoAction:-2            │ SwornStatement:2          │
+│            │ _JerichoFavourExchange:-1    │ CaveAgedCodeOfHonour:2    │
+│            │ FavChurch:-4                 │ RattyReliquary:2          │
+│            │ FavConstables:-4             │ ApostatesPsalm:2          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.074 │ _JerichoAction:-2            │ BoneFragments:500         │
+│            │ _JerichoFavourExchange:-1    │ HumanRibcage:2            │
+│            │ FavChurch:-4                 │ RattyReliquary:2          │
+│            │ FavCriminals:-4              │ ApostatesPsalm:2          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.079 │ _JerichoAction:-2            │ KnobOfScintillack:2       │
+│            │ _JerichoFavourExchange:-1    │ UncannyIncunabulum:2      │
+│            │ FavChurch:-4                 │ RattyReliquary:2          │
+│            │ FavDocks:-4                  │ ApostatesPsalm:2          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.063 │ _JerichoAction:-2            │ ViennaOpening:2           │
+│            │ _JerichoFavourExchange:-1    │ QueenMate:1               │
+│            │ FavChurch:-4                 │ RattyReliquary:2          │
+│            │ FavGreatGame:-4              │ ApostatesPsalm:2          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.063 │ _JerichoAction:-2            │ QueerSoul:2               │
+│            │ _JerichoFavourExchange:-1    │ ThornedRibcage:2          │
+│            │ FavChurch:-4                 │ RattyReliquary:2          │
+│            │ FavHell:-4                   │ ApostatesPsalm:2          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.084 │ _JerichoAction:-2            │ UnlawfulDevice:2          │
+│            │ _JerichoFavourExchange:-1    │ ThirstyBombazineScrap:2   │
+│            │ FavChurch:-4                 │ RattyReliquary:2          │
+│            │ FavRevolutionaries:-4        │ ApostatesPsalm:2          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.087 │ _JerichoAction:-2            │ FavourInHighPlaces:2      │
+│            │ _JerichoFavourExchange:-1    │ RattyReliquary:2          │
+│            │ FavChurch:-4                 │ NightOnTheTown:2          │
+│            │ FavSociety:-4                │ ApostatesPsalm:2          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.063 │ _JerichoAction:-2            │ UnprovenancedArtefact:2   │
+│            │ _JerichoFavourExchange:-1    │ AntiqueMystery:2          │
+│            │ FavChurch:-4                 │ RattyReliquary:2          │
+│            │ FavTombColonies:-4           │ ApostatesPsalm:2          │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.063 │ _JerichoAction:-2            │ RattyReliquary:2          │
+│            │ _JerichoFavourExchange:-1    │ ApostatesPsalm:2          │
+│            │ FavChurch:-4                 │ AeolianScream:2           │
+│            │ FavUrchins:-4                │ StormThrenody:2           │
+├────────────┼──────────────────────────────┼───────────────────────────┤
+│     -0.012 │ _CardDraws:-41               │ FavChurch:0.24            │
+│            │ _JerichoAction:-10           │ StrongBackedLabour:24.35  │
+│            │                              │ ProscribedMaterial:38.4   │
+╘════════════╧══════════════════════════════╧═══════════════════════════╛
+
+----- _BalmoralAction -------
+╒════════════╤══════════════════════════════╤═════════════════════════════════╕
+│   Marginal │ Loss                         │ Gain                            │
+╞════════════╪══════════════════════════════╪═════════════════════════════════╡
+│     -0.279 │ Action:-64                   │ _BalmoralAction:64              │
+│            │ _UpperRiverRoundTrip:-1      │ _UnveilYourPaintingLondon:1     │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.171 │ _BalmoralAction:-2           │ HinterlandScrip:125             │
+│            │ GiftFromBalmoral:-1          │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.987 │ _BalmoralAction:-3           │ _MoonlitWoodsEntry:1            │
+│            │ VolumeOfCollatedResearch:-8  │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.045 │ _BalmoralAction:-5           │ ObservationGrouse:1             │
+│            │ UnprovenancedArtefact:-4     │ Moonlit:1                       │
+│            │ _MoonlitWoodsEntry:-1        │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.045 │ _BalmoralAction:-1           │ BoneFragments:200               │
+│            │ ObservationGrouse:-1         │ SkeletonWithSevenNecks:1        │
+│            │                              │ WingOfAYoungTerrorBird:3        │
+│            │                              │ HinterlandProsperity:1110       │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.942 │ _BalmoralAction:-6           │ ObservationRedDeer:1            │
+│            │ ThirstyBombazineScrap:-9     │ Moonlit:4                       │
+│            │ _MoonlitWoodsEntry:-1        │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.942 │ _BalmoralAction:-1           │ BoneFragments:400               │
+│            │ ObservationRedDeer:-1        │ FemurOfAJurassicBeast:2         │
+│            │                              │ HolyRelicOfTheThighOfStFiacre:1 │
+│            │                              │ MammothRibcage:1                │
+│            │                              │ HinterlandProsperity:1260       │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.027 │ _BalmoralAction:-1           │ CoverTiesSurface:1              │
+│            │ CrypticClue:-250             │ CoverElaboration:1              │
+│            │                              │ CoverBackstory:1                │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.046 │ _BalmoralAction:-1           │ CoverTiesBazaar:1               │
+│            │ FavSociety:-1                │ CoverElaboration:1              │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.41  │ _BalmoralAction:-1           │ CoverElaboration:1              │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.228 │ _BalmoralAction:-1           │ CoverNuance:1                   │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.228 │ _BalmoralAction:-1           │ CoverCredentials:1              │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.523 │ _BalmoralAction:-1           │ CoverBackstory:11               │
+│            │ FinalBreath:-50              │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.027 │ _BalmoralAction:-1           │ MemoryOfMuchLesserSelf:80       │
+│            │ _CoverTiesGeneric:-1         │                                 │
+│            │ CoverElaboration:-1          │                                 │
+│            │ CoverBackstory:-78           │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.046 │ _BalmoralAction:-1           │ ScrapOfIvoryOrganza:1           │
+│            │ CoverTiesBazaar:-1           │                                 │
+│            │ CoverElaboration:-10         │                                 │
+│            │ CoverNuance:-5               │                                 │
+│            │ CoverCredentials:-5          │                                 │
+│            │ CoverBackstory:-80           │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -1.117 │ _BalmoralAction:-1           │ Inspired:1                      │
+│            │ MemoryOfLight:-10            │ PaintingLuminosity:1            │
+│            │ MemoryOfMuchLesserSelf:-2    │                                 │
+│            │ Moonlit:-2                   │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.559 │ _BalmoralAction:-1           │ PaintingIncendiary:1            │
+│            │ TouchingLoveStory:-3         │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.279 │ Action:-1                    │ ViennaOpening:5                 │
+│            │ _BalmoralAction:-2           │ SwornStatement:5                │
+│            │ _UnveilYourPaintingLondon:-1 │ BazaarPermit:1                  │
+│            │ PaintingLuminosity:-4        │ ParabolaLinenScrap:1            │
+│            │ _PaintingAnyQuality:-2       │                                 │
+├────────────┼──────────────────────────────┼─────────────────────────────────┤
+│     -0.393 │ _CardDraws:-60               │ FavChurch:10                    │
+│            │ _BalmoralAction:-10          │ ProscribedMaterial:750          │
+╘════════════╧══════════════════════════════╧═════════════════════════════════╛
+
+----- _BurrowAction -------
+╒════════════╤═════════════════════════╤════════════════════════╕
+│   Marginal │ Loss                    │ Gain                   │
+╞════════════╪═════════════════════════╪════════════════════════╡
+│     -0.041 │ Action:-64              │ _BurrowAction:64       │
+│            │ _UpperRiverRoundTrip:-1 │                        │
+├────────────┼─────────────────────────┼────────────────────────┤
+│     -0.371 │ _BurrowAction:-1        │ FalseHagiotoponym:1    │
+│            │ PalimpsestScrap:-10     │                        │
+│            │ ApostatesPsalm:-7       │                        │
+│            │ VerseOfCounterCreed:-3  │                        │
+├────────────┼─────────────────────────┼────────────────────────┤
+│     -0.223 │ _CardDraws:-35          │ FavChurch:5            │
+│            │ _BurrowAction:-10       │ ProscribedMaterial:375 │
+│            │ MoonPearl:-3250         │ VerseOfCounterCreed:5  │
+╘════════════╧═════════════════════════╧════════════════════════╛
+
+----- _StationViiiAction -------
+╒════════════╤══════════════════════════════════╤══════════════════════════╕
+│   Marginal │ Loss                             │ Gain                     │
+╞════════════╪══════════════════════════════════╪══════════════════════════╡
+│     -0.001 │ Action:-64                       │ _StationViiiAction:64    │
+│            │ _UpperRiverRoundTrip:-1          │                          │
+├────────────┼──────────────────────────────────┼──────────────────────────┤
+│     -0.035 │ Action:-2                        │ ElationAtFelineOration:1 │
+│            │ _StationViiiAction:-1            │ RumourOfTheUpperRiver:2  │
+│            │ AntiqueMystery:-2                │                          │
+│            │ ConsignmentOfScintillackSnuff:-2 │                          │
+├────────────┼──────────────────────────────────┼──────────────────────────┤
+│     -0.035 │ _StationViiiAction:-1            │ OilOfCompanionship:1     │
+│            │ ElationAtFelineOration:-1        │                          │
+╘════════════╧══════════════════════════════════╧══════════════════════════╛
+
+----- _TracklayerCityAction -------
+╒════════════╤══════════════════════════════╤══════════════════════════╕
+│   Marginal │ Loss                         │ Gain                     │
+╞════════════╪══════════════════════════════╪══════════════════════════╡
+│     -0     │ Action:-64                   │ _TracklayerCityAction:64 │
+│            │ _UpperRiverRoundTrip:-1      │                          │
+├────────────┼──────────────────────────────┼──────────────────────────┤
+│     -0.009 │ _TracklayerCityAction:-1     │ VialOfMastersBlood:1     │
+│            │ HinterlandProsperity:-156000 │                          │
+╘════════════╧══════════════════════════════╧══════════════════════════╛
+
+----- _MidnightMoonAction -------
+╒════════════╤═══════════════════════════╤══════════════════════════════╕
+│   Marginal │ Loss                      │ Gain                         │
+╞════════════╪═══════════════════════════╪══════════════════════════════╡
+│     -0.655 │ Action:-50                │ _MidnightMoonAction:50       │
+│            │ _FirmamentRoundTrip:-1    │                              │
+├────────────┼───────────────────────────┼──────────────────────────────┤
+│     -1.394 │ _MidnightMoonAction:-23.5 │ Nightmares:1                 │
+│            │                           │ VolumeOfCollatedResearch:5.7 │
+│            │                           │ PuzzlingMap:0.95             │
+│            │                           │ OneiromanticRevelation:0.95  │
+│            │                           │ StormThrenody:1.9            │
+│            │                           │ TantalisingPossibility:171   │
+│            │                           │ GlimpseOfAnathema:0.05       │
+╘════════════╧═══════════════════════════╧══════════════════════════════╛
+
+----- Bone Market Trades -------
+╒════════════╤════════════════════════════════════╤═══════════════════════════════════╕
+│   Marginal │ Loss                               │ Gain                              │
+╞════════════╪════════════════════════════════════╪═══════════════════════════════════╡
+│     -0.086 │ _AntiquityReptileAction:-1         │ _AntiquityGeneralAction:1         │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -1.586 │ _AntiquityAmphibianAction:-1       │ _AntiquityGeneralAction:1         │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.484 │ _AntiquityBirdAction:-1            │ _GeneralBirdAction:1              │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -4.451 │ _AntiquityBirdAction:-1            │ _BoneMarketAction:1               │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -6.504 │ _AntiquityPrimateAction:-1         │ _GeneralPrimateAction:1           │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -1.319 │ _AmalgamyReptileAction:-1          │ _AmalgamyGeneralAction:1          │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -6.169 │ _AmalgamyPrimateAction:-1          │ _GeneralPrimateAction:1           │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -2.007 │ _MenaceReptileAction:-1            │ _MenaceGeneralAction:1            │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.72  │ _MenaceFishAction:-1               │ _GeneralFishAction:1              │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.195 │ _BoneMarketRotation:-1             │ _AntiquityReptileAction:33.33     │
+│            │ AntiquityReptileExhaustion:-0.19   │ _AntiquityAmphibianAction:33.33   │
+│            │ AntiquityAmphibianExhaustion:-0.19 │ _AntiquityBirdAction:33.33        │
+│            │ AntiquityBirdExhaustion:-0.19      │ _AntiquityFishAction:33.33        │
+│            │ AntiquityFishExhaustion:-0.19      │ _AntiquityArachnidAction:33.33    │
+│            │ AntiquityArachnidExhaustion:-0.19  │ _AntiquityInsectAction:33.33      │
+│            │ AntiquityInsectExhaustion:-0.19    │ _AntiquityPrimateAction:33.33     │
+│            │ AntiquityPrimateExhaustion:-0.19   │ _AmalgamyReptileAction:33.33      │
+│            │ AmalgamyReptileExhaustion:-0.19    │ _AmalgamyAmphibianAction:33.33    │
+│            │ AmalgamyAmphibianExhaustion:-0.19  │ _AmalgamyBirdAction:33.33         │
+│            │ AmalgamyBirdExhaustion:-0.19       │ _AmalgamyFishAction:33.33         │
+│            │ AmalgamyFishExhaustion:-0.19       │ _AmalgamyArachnidAction:33.33     │
+│            │ AmalgamyArachnidExhaustion:-0.19   │ _AmalgamyInsectAction:33.33       │
+│            │ AmalgamyInsectExhaustion:-0.19     │ _AmalgamyPrimateAction:33.33      │
+│            │ AmalgamyPrimateExhaustion:-0.19    │ _MenaceReptileAction:33.33        │
+│            │ MenaceReptileExhaustion:-0.19      │ _MenaceAmphibianAction:33.33      │
+│            │ MenaceAmphibianExhaustion:-0.19    │ _MenaceBirdAction:33.33           │
+│            │ MenaceBirdExhaustion:-0.19         │ _MenaceFishAction:33.33           │
+│            │ MenaceFishExhaustion:-0.19         │ _MenaceArachnidAction:33.33       │
+│            │ MenaceArachnidExhaustion:-0.19     │ _MenaceInsectAction:33.33         │
+│            │ MenaceInsectExhaustion:-0.19       │ _MenacePrimateAction:33.33        │
+│            │ MenacePrimateExhaustion:-0.19      │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.445 │ Action:-10                         │ BoneFragments:52000               │
+│            │ _BoneMarketAction:-10              │                                   │
+│            │ NevercoldBrassSliver:-1600         │                                   │
+│            │ BrightBrassSkull:-8                │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.12  │ Action:-6                          │ BoneFragments:46867.5             │
+│            │ _GeneralFishAction:-6              │ UnearthlyFossil:2                 │
+│            │ NevercoldBrassSliver:-200          │                                   │
+│            │ BrightBrassSkull:-1                │                                   │
+│            │ AmberCrustedFin:-2                 │                                   │
+│            │ LeviathanFrame:-1                  │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.037 │ Action:-9                          │ AntiquityReptileExhaustion:1      │
+│            │ _AntiquityReptileAction:-9         │ MemoryOfLight:317.4               │
+│            │ NevercoldBrassSliver:-200          │ TailfeatherBrilliantAsFlame:47.62 │
+│            │ BrightBrassSkull:-1                │                                   │
+│            │ FemurOfAJurassicBeast:-4           │                                   │
+│            │ MammothRibcage:-1                  │                                   │
+│            │ TombLionsTail:-1                   │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.186 │ Action:-9                          │ AntiquityGeneralExhaustion:1      │
+│            │ _AntiquityGeneralAction:-9         │ MemoryOfLight:289                 │
+│            │ NevercoldBrassSliver:-200          │ TailfeatherBrilliantAsFlame:47.62 │
+│            │ BrightBrassSkull:-1                │                                   │
+│            │ FemurOfAJurassicBeast:-4           │                                   │
+│            │ MammothRibcage:-1                  │                                   │
+│            │ TombLionsTail:-1                   │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.037 │ Action:-9                          │ AntiquityBirdExhaustion:1         │
+│            │ _AntiquityBirdAction:-9            │ MemoryOfLight:315.2               │
+│            │ NevercoldBrassSliver:-200          │ TailfeatherBrilliantAsFlame:47.62 │
+│            │ BrightBrassSkull:-1                │                                   │
+│            │ FemurOfAJurassicBeast:-2           │                                   │
+│            │ MammothRibcage:-1                  │                                   │
+│            │ TombLionsTail:-1                   │                                   │
+│            │ WingOfAYoungTerrorBird:-2          │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.007 │ Action:-9                          │ HinterlandScrip:222.8             │
+│            │ _AntiquityReptileAction:-9         │ CarvedBallOfStygianIvory:21       │
+│            │ FemurOfAJurassicBeast:-3           │                                   │
+│            │ HolyRelicOfTheThighOfStFiacre:-1   │                                   │
+│            │ HornedSkull:-1                     │                                   │
+│            │ MammothRibcage:-1                  │                                   │
+│            │ FailedJetBlackStinger:-1           │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.669 │ Action:-9                          │ HinterlandScrip:328.4             │
+│            │ _AntiquityReptileAction:-9         │ CarvedBallOfStygianIvory:21       │
+│            │ FemurOfAJurassicBeast:-3           │                                   │
+│            │ HolyRelicOfTheThighOfStFiacre:-1   │                                   │
+│            │ JetBlackStinger:-1                 │                                   │
+│            │ MammothRibcage:-1                  │                                   │
+│            │ SabreToothedSkull:-1               │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.006 │ Action:-9                          │ KnobOfScintillack:21              │
+│            │ _AmalgamyAmphibianAction:-9        │ NoduleOfWarmAmber:1559.5          │
+│            │ NevercoldBrassSliver:-200          │                                   │
+│            │ BrightBrassSkull:-1                │                                   │
+│            │ FemurOfAJurassicBeast:-1           │                                   │
+│            │ HelicalThighbone:-3                │                                   │
+│            │ MammothRibcage:-1                  │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.149 │ Action:-8.87                       │ Suspicion:1.48                    │
+│            │ _AmalgamyGeneralAction:-8.87       │ AmalgamyGeneralExhaustion:1       │
+│            │ NevercoldBrassSliver:-200          │ MemoryOfDistantShores:203         │
+│            │ BrightBrassSkull:-1                │ FinalBreath:238.1                 │
+│            │ AlbatrossWing:-1                   │                                   │
+│            │ HelicalThighbone:-3                │                                   │
+│            │ HumanRibcage:-1                    │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -1.626 │ Action:-4                          │ BottelofMorelways1872:767.5       │
+│            │ _MenacePrimateAction:-4            │ RoyalBlueFeather:40.18            │
+│            │ DuplicatedVakeSkull:-1             │                                   │
+│            │ ASkeletonOfYourOwn:-1              │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -3.168 │ Action:-4                          │ BottelofMorelways1872:767.5       │
+│            │ _GeneralPrimateAction:-4           │ RoyalBlueFeather:36               │
+│            │ DuplicatedVakeSkull:-1             │                                   │
+│            │ ASkeletonOfYourOwn:-1              │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.036 │ Action:-13.4                       │ Suspicion:2.37                    │
+│            │ _GeneralBirdAction:-13.4           │ ThirstyBombazineScrap:229.9       │
+│            │ NevercoldBrassSliver:-1200         │                                   │
+│            │ BrightBrassSkull:-6                │                                   │
+│            │ SkeletonWithSevenNecks:-1          │                                   │
+│            │ WingOfAYoungTerrorBird:-2          │                                   │
+│            │ DuplicatedVakeSkull:-1             │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.009 │ Action:-13.25                      │ Suspicion:2.12                    │
+│            │ _AmalgamyBirdAction:-13.25         │ AmalgamyBirdExhaustion:4          │
+│            │ NevercoldBrassSliver:-600          │ MemoryOfDistantShores:758.5       │
+│            │ KnobOfScintillack:-4               │ FinalBreath:615.16                │
+│            │ BrightBrassSkull:-3                │                                   │
+│            │ AlbatrossWing:-1                   │                                   │
+│            │ SkeletonWithSevenNecks:-1          │                                   │
+│            │ SkullInCoral:-4                    │                                   │
+│            │ WingOfAYoungTerrorBird:-1          │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.037 │ Action:-9                          │ AmalgamyPrimateExhaustion:1       │
+│            │ _AmalgamyPrimateAction:-9          │ MemoryOfDistantShores:201.9       │
+│            │ NevercoldBrassSliver:-200          │ FinalBreath:238.1                 │
+│            │ BrightBrassSkull:-1                │                                   │
+│            │ HelicalThighbone:-2                │                                   │
+│            │ KnottedHumerus:-2                  │                                   │
+│            │ ThornedRibcage:-1                  │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.096 │ Action:-9                          │ AmalgamyReptileExhaustion:1       │
+│            │ _AmalgamyReptileAction:-9          │ MemoryOfDistantShores:203         │
+│            │ NevercoldBrassSliver:-200          │ FinalBreath:238.1                 │
+│            │ BrightBrassSkull:-1                │                                   │
+│            │ HelicalThighbone:-2                │                                   │
+│            │ JetBlackStinger:-1                 │                                   │
+│            │ KnottedHumerus:-2                  │                                   │
+│            │ ThornedRibcage:-1                  │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.127 │ Action:-9                          │ MenaceGeneralExhaustion:1         │
+│            │ _MenaceGeneralAction:-9            │ BottelofMorelways1872:350         │
+│            │ HornedSkull:-1                     │ RoyalBlueFeather:238.1            │
+│            │ JetBlackStinger:-1                 │                                   │
+│            │ ThornedRibcage:-1                  │                                   │
+│            │ UnidentifiedThighBone:-2           │                                   │
+│            │ WingOfAYoungTerrorBird:-2          │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.037 │ Action:-9                          │ MenaceBirdExhaustion:1            │
+│            │ _MenaceBirdAction:-9               │ BottelofMorelways1872:635.5       │
+│            │ HolyRelicOfTheThighOfStFiacre:-2   │ RoyalBlueFeather:238.1            │
+│            │ HornedSkull:-1                     │                                   │
+│            │ JetBlackStinger:-1                 │                                   │
+│            │ ThornedRibcage:-1                  │                                   │
+│            │ WingOfAYoungTerrorBird:-2          │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.096 │ Action:-9                          │ MenaceGeneralExhaustion:1         │
+│            │ _MenaceGeneralAction:-9            │ BottelofMorelways1872:580         │
+│            │ HolyRelicOfTheThighOfStFiacre:-2   │ RoyalBlueFeather:238.1            │
+│            │ HornedSkull:-1                     │                                   │
+│            │ JetBlackStinger:-1                 │                                   │
+│            │ ThornedRibcage:-1                  │                                   │
+│            │ WingOfAYoungTerrorBird:-2          │                                   │
+├────────────┼────────────────────────────────────┼───────────────────────────────────┤
+│     -0.035 │ Action:-11                         │ HinterlandScrip:983.65            │
+│            │ _MenaceFishAction:-11              │ CarvedBallOfStygianIvory:19       │
+│            │ AmberCrustedFin:-3                 │                                   │
+│            │ JetBlackStinger:-1                 │                                   │
+│            │ PrismaticFrame:-1                  │                                   │
+│            │ SabreToothedSkull:-1               │                                   │
+╘════════════╧════════════════════════════════════╧═══════════════════════════════════╛
+
+----- Rat Market Trades -------
+╒════════════╤═══════════════════════════════╤══════════════════════════════════════╕
+│   Marginal │ Loss                          │ Gain                                 │
+╞════════════╪═══════════════════════════════╪══════════════════════════════════════╡
+│     -0.279 │ ParabolaLinenScrap:-1         │ _GeneralRatMarketSaturation1:6250    │
+│            │                               │ SoftRatMarketSaturation1:6250        │
+│            │                               │ RatShilling:825                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -0.046 │ ScrapOfIvoryOrganza:-1        │ _GeneralRatMarketSaturation1:31250   │
+│            │                               │ SoftRatMarketSaturation1:31250       │
+│            │                               │ RatShilling:4125                     │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -2.525 │ RattyReliquary:-1             │ _GeneralRatMarketSaturation1:1250    │
+│            │                               │ SaintlyRatMarketSaturation1:1250     │
+│            │                               │ RatShilling:165                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -0.002 │ FalseHagiotoponym:-1          │ _GeneralRatMarketSaturation1:6250    │
+│            │                               │ SaintlyRatMarketSaturation1:6250     │
+│            │                               │ RatShilling:825                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -0.369 │ FalseHagiotoponym:-1          │ _GeneralRatMarketSaturation2:6250    │
+│            │                               │ SaintlyRatMarketSaturation2:6250     │
+│            │                               │ RatShilling:700                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -0.105 │ CaptivatingBallad:-1          │ _GeneralRatMarketSaturation1:6250    │
+│            │                               │ MaudlinRatMarketSaturation1:6250     │
+│            │                               │ RatShilling:825                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -1.656 │ UncannyIncunabulum:-1         │ _GeneralRatMarketSaturation1:1250    │
+│            │                               │ InscrutableRatMarketSaturation1:1250 │
+│            │                               │ RatShilling:165                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -2.537 │ StormThrenody:-1              │ _GeneralRatMarketSaturation1:1250    │
+│            │                               │ TempestuousRatMarketSaturation1:1250 │
+│            │                               │ RatShilling:165                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -0.238 │ StormThrenody:-1              │ _GeneralRatMarketSaturation2:1250    │
+│            │                               │ TempestuousRatMarketSaturation2:1250 │
+│            │                               │ RatShilling:140                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -0.169 │ UnlawfulDevice:-1             │ _GeneralRatMarketSaturation1:1250    │
+│            │                               │ IntricateRatMarketSaturation1:1250   │
+│            │                               │ RatShilling:165                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -2.537 │ VitalIntelligence:-1          │ _GeneralRatMarketSaturation1:1250    │
+│            │                               │ CalculatingRatMarketSaturation1:1250 │
+│            │                               │ RatShilling:165                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -0.507 │ MortificationOfAGreatPower:-1 │ _GeneralRatMarketSaturation1:6250    │
+│            │                               │ RuinousRatMarketSaturation1:6250     │
+│            │                               │ RatShilling:825                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -0.01  │ FourthCityEcho:-1             │ RatShilling:125                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│    -37.259 │ RatShilling:-1                │ InklingOfIdentity:1                  │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│    -10.176 │ RatShilling:-25               │ PreservedSurfaceBlooms:1             │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│  -2455.05  │ RatShilling:-1                │ AmanitaSherry:1                      │
+├────────────┼───────────────────────────────┼──────────────────────────────────────┤
+│     -3.709 │ RatShilling:-7                │ PalimpsestScrap:1                    │
+╘════════════╧═══════════════════════════════╧══════════════════════════════════════╛
+
+----- Gained & Unused Items -------
+Item.FreeEvening
+Item.FleetingRecollections
+Item.CL_Bohemians
+Item.CL_Church
+Item.CL_RubberyMen
+Item._AntiquityFishAction
+Item._AntiquityArachnidAction
+Item._AntiquityInsectAction
+Item._AmalgamyFishAction
+Item._AmalgamyArachnidAction
+Item._AmalgamyInsectAction
+Item._MenaceAmphibianAction
+Item._MenaceArachnidAction
+Item._MenaceInsectAction
+Item._AgentInTransit
+Item._TriflingDiplomatSale
+Item.HumanArm
+Item.MoonlightScales
+Item.Inspired
+
+----- Lost & Unused Items -------
+Item.SoftRatMarketSaturation2
+Item.MaudlinRatMarketSaturation2
+Item.InscrutableRatMarketSaturation2
+Item.IntricateRatMarketSaturation2
+Item.CalculatingRatMarketSaturation2
+Item.RuinousRatMarketSaturation2
+
+----- Optimization Target -------
+Echo per Cycle:    5125.133
+Echo per Action:      6.973
+Action per Echo:      0.143

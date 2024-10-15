@@ -2,6 +2,7 @@ from enums import *
 from config import *
 
 def add_trades(config: Config):
+    add = config.add
     trade = config.trade
 
     for item, buy_price, sale_value in (
@@ -53,3 +54,9 @@ def add_trades(config: Config):
         (Item.CartographersHoard, 625),
     ):
         trade(0, { item: -1, Item.HinterlandScrip: sale_value })
+
+
+    add({
+        Item.HinterlandScrip: -200_000,
+        Item.YourVeryOwnMiniatureHellworm: 1
+    })

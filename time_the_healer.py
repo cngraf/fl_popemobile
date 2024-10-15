@@ -8,8 +8,13 @@ from player import Player
 
 
 def add_trades(config: Config):
+    add = config.add
+
     config.add({
         Item._VisitFromTimeTheHealer: -1,
+
+        Item.AnEarnestOfPayment: 1,
+        Item.ProfessionalPerk: 1,
 
         Item.FavourableCircumstance: 1, # TODO
         Item.FreeEvening: 5, # TODO
@@ -18,20 +23,22 @@ def add_trades(config: Config):
         # Item.AConsequenceOfYourAmbition: 1, # TODO
         Item.FleetingRecollections: 1, # TODO
 
-        # Item.Wounds: -2,
-        # Item.Nightmares: -1,
-        # # Item.Suspicion: -1,
-        # Item.Scandal: -1,
+        Item.Wounds: -2,
+        Item.Nightmares: -1,
+        Item.Suspicion: -1,
+        Item.Scandal: -1,
 
         # # Item.BoneMarketExhaustion: -4, # done
 
         # Item.RavagesOfParabolanWarfare: -10, # TODO
+
+        # Not worth the bloat
         # Item.RecentParticipantInAStarvedCulturalExchange: -1, # TODO
         # Item.GlowingViric: -1, # TODO
         # Item.MiredInMail: -99,
 
         Item.DelayUntilTheNextBoardMeeting: -1,
-
+        Item.ViolantSights: -1,
         # Living story
         Item.ReportFromTheKhagansPalace: -7/8,
         Item.GiftFromBalmoral: 7/8,
@@ -50,6 +57,70 @@ def add_trades(config: Config):
         config.add({
             lockout_quality: 1
         })
+
+
+    add({
+        Item.AnEarnestOfPayment: -1,
+        Item.Echo: 70
+    })
+
+    ############################
+    # Professional Perks
+
+
+    # Ballpark "reduce menace by half"
+    add({
+        Item.Action: -1,
+        Item.ProfessionalPerk: -2,
+        Item.Nightmares: -15
+    })
+
+    add({
+        Item.Action: -1,
+        Item.ProfessionalPerk: -2,
+        Item.Wounds: -12
+    })
+
+    add({
+        Item.Action: -1,
+        Item.ProfessionalPerk: -2,
+        Item.Scandal: -12
+    })
+
+    add({
+        Item.Action: -1,
+        Item.ProfessionalPerk: -2,
+        Item.Suspicion: -12
+    })
+
+    add({
+        Item.Action: -1,
+        Item.ProfessionalPerk: -4,
+        Item.TradeSecret: -12
+    })
+
+
+    add({
+        Item.Action: -1,
+        Item.ProfessionalPerk: -1,
+        Item.HardEarnedLesson: 1,
+        Item.HastilyScrawledWarningNote: 1,
+        Item.ConfidentSmile: 1,
+        Item.SuddenInsight: 1,
+    })
+
+    add({
+        Item.Action: -10,
+        Item.TradeSecret: -1,
+        Item.SearingEnigma: 1,
+        Item.AntiqueMystery: 5
+    })
+
+    add({
+        Item.TradeSecret: -1,
+        Item.Echo: 60
+    })
+
 
 # Time-gated stuff
 # Lots missing

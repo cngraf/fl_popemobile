@@ -1,21 +1,26 @@
 from enums import *
 from helper.utils import *
-
 from config import *
 from player import *
+
+import optimization.params as params
 
 def add_trades(config: Config):
     add = config.add
     trade = config.trade
     player = config.player
 
-    scandal_multi = player.scandal_reduction
+    # # HACK not sure where to put this
+    # add({
+    #     params.solution_input: -1,
+    #     Item.Action: params.actions_per_input,
+    #     Item._CardDraws: params.actions_per_input * params.card_draws_per_action,
+    # })
 
     add({
         Item._ApproximateEchoValue: -1,
         Item.Echo: 1
     })
-
 
     #######################################################
     #                   Nadir # TODO

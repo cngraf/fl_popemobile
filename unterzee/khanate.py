@@ -472,7 +472,7 @@ def add_trades(config: Config):
         Item.EmeticRevelation: -1,
         Item.Infiltrating: -100,
 
-        Item.VitalIntelligence: 4,
+        Item.VitalIntelligence: 1,
         Item.OneiricPearl: 1,
 
         Item._PullingThreads5: -1,
