@@ -147,11 +147,11 @@ def add_trades(config: Config):
         Item.ApostatesPsalm: 16
     })
 
-    add({
-        Item._WaswoodHeistCashOut: -1,
-        Item.CaptivatingBallad: 1,
-        Item.TouchingLoveStory: 16
-    })
+    # add({
+    #     Item._WaswoodHeistCashOut: -1,
+    #     Item.CaptivatingBallad: 1,
+    #     Item.TouchingLoveStory: 16
+    # })
 
     add({
         Item._WaswoodHeistCashOut: -1,

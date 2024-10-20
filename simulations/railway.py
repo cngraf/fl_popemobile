@@ -16,7 +16,7 @@ class RailwayState(GameState):
     def __init__(self, location: Location):
         super().__init__(max_hand_size=5)
         self.location = location
-        self.ev_threshold = 5.5
+        self.ev_threshold = 6.0
         self.scrip_threshold_multiplier = 1.0
 
         self.skip_favour_inputs = False
@@ -85,7 +85,7 @@ class RailwayState(GameState):
 
         self.hand = [card for card in self.hand if card.can_draw(self)]
 
-        if self.actions >= 500:
+        if self.actions >= 200:
             self.status = "Complete"
 
 
@@ -4429,7 +4429,7 @@ simulation = RailwaySimulationRunner(
         Item.MagistracyOfEvenlodeCommemorativeDevelopment: 99,
         Item.BalmoralCommemorativeDevelopment: 99,
         Item.StationVIIICommemorativeDevelopment: 99,
-        # Item.BurrowInfraMumpCommemorativeDevelopment: 99,
+        Item.BurrowInfraMumpCommemorativeDevelopment: 99,
         Item.MoulinCommemorativeDevelopment: 99,
         Item.HurlersCommemorativeDevelopment: 99,
         Item.MarigoldCommemorativeDevelopment: 99,

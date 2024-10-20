@@ -54,6 +54,7 @@ import upper_river.decks
 import firmament.hallows_throat
 import firmament.midnight_moon
 import firmament.zenith
+import firmament.stacks
 
 import uncategorized.menace_locations
 
@@ -126,6 +127,7 @@ upper_river.tracklayers_city.add_trades(config)
 firmament.hallows_throat.add_trades(config)
 firmament.midnight_moon.add_trades(config)
 firmament.zenith.add_trades(config)
+firmament.stacks.add_trades(config)
 
 uncategorized.menace_locations.add_trades(config)
 

@@ -156,6 +156,7 @@ class Item(Enum):
     _HallowsThroatAction = auto()
     _MidnightMoonAction = auto()
     _ZenithAction = auto()
+    _StacksAction = auto()
 
     _SocialAction = auto()
 
@@ -237,6 +238,7 @@ class Item(Enum):
     #######################################################
 
     _RatMarketRotation = auto()
+    _RatNoLonger = auto()
     
     _GeneralRatMarketSaturation1 = auto()
     SoftRatMarketSaturation1 = auto()
@@ -952,6 +954,8 @@ class Item(Enum):
     ReportFromTheKhagansPalace = auto()
     SomeoneIsComing = auto()
 
+    _DeployTrainInParabolanWar = auto()
+
     # Quriks
     Austere = auto()
     Hedonist = auto()
@@ -1268,7 +1272,11 @@ class Item(Enum):
     # Upper River
     DigsInEvenlode = auto()
 
-    # FATE
+    # ---------------------------------
+    #               FATE 
+    # ---------------------------------
+
+
     MythicPotential = auto()
     MoralisingDevelopment = auto()
     HeroicRally = auto()
@@ -1280,6 +1288,9 @@ class Item(Enum):
     FruitfulFrivolity = auto()
     FruitfulRot = auto()
     PhilsofruitYield = auto()
+
+    AcquaintanceTheClamorousCartographer = auto()
+
 
     # ---------------------------------
     # ---------- Cards ----------------
@@ -1523,6 +1534,8 @@ SPECIAL_ACTION_TYPES = [
     Item._HallowsThroatAction,
     Item._MidnightMoonAction,
     Item._ZenithAction,
+
+    Item._StacksAction
 ]
 
 BASIC_STATS = [

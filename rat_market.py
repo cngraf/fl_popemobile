@@ -28,7 +28,6 @@ def add_ratly_demand_trades(config : Config, saturation1, saturation2, item, ech
         })
 
 def add_trades(config: Config):
-    trade = config.trade
     add = config.add
 
     # Rough approximation
@@ -231,8 +230,8 @@ def add_trades(config: Config):
     # Always available
     
     add({
-          Item.FourthCityEcho: -1,
-          Item.RatShilling: 125
+        Item.FourthCityEcho: -1,
+        Item.RatShilling: 125
     })
 
     # if config.enable_all_rat_market_moons:
@@ -253,7 +252,21 @@ def add_trades(config: Config):
     #         trade(0, { item: 1, Item.RatShilling: price})
 
     # TODO: new auto-exchange is more complicated & random
-    trade(0, { Item.RatShilling: -1, Item.PieceOfRostygold: 10 })
+    add({ Item.RatShilling: -1, Item.PieceOfRostygold: 10 })
+
+    add({
+        # Ranges per wiki
+        Item._RatNoLonger: -1,
+        Item.RatShilling: -371.4,
+
+        Item.FourthCityEcho: 1.5,
+        Item.FirstCityCoin: 2,
+        Item.JustificandeCoin: 1,
+        Item.HinterlandScrip: 10,
+        Item.FistfulOfSurfaceCurrency: 163,
+        Item.AssortmentOfKhaganianCoinage: 11
+    })
+
 
     ratty_bazaar_prices = {
         Item.InklingOfIdentity: 1,
@@ -299,129 +312,3 @@ def add_trades(config: Config):
                 item: 1,
                 Item.RatShilling: -1 * price
           })
-
-
-    # # Crow-Crease Cryptics
-
-    # trade(0, {
-    #     Item.RatShilling: -1,
-    #     Item.InklingOfIdentity: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -1,
-    #     Item.ManiacsPrayer: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -2,
-    #     Item.AppallingSecret: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -7,
-    #     Item.CompromisingDocument: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -7,
-    #     Item.CorrespondencePlaque: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -7,
-    #     Item.JournalOfInfamy: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -7,
-    #     Item.TaleOfTerror: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -50,
-    #     Item.TouchingLoveStory: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -250,
-    #     Item.BlackmailMaterial: 1
-    # })
-
-    # # Extramurine Trading Company
-
-    # trade(0, {
-    #     Item.RatShilling: -8,
-    #     Item.RoyalBlueFeather: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -8,
-    #     Item.SolaceFruit: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -10,
-    #     Item.HandPickedPeppercaps: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -10,
-    #     Item.NightsoilOfTheBazaar: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -25,
-    #     Item.PreservedSurfaceBlooms: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -45,
-    #     Item.CarvedBallOfStygianIvory: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -60,
-    #     Item.CrateOfIncorruptibleBiscuits: 1
-    # })
-
-    # # Merru's Gun Exchange
-
-    # trade(0, {
-    #     Item.RatShilling: -1,
-    #     Item.AmanitaSherry: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -1,
-    #     Item.MapScrap: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -1,
-    #     Item.PhosphorescentScarab: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -2,
-    #     Item.FlawedDiamond: 1
-    # })
-
-    # trade(0, {
-    #     Item.RatShilling: -7,
-    #     Item.PalimpsestScrap: 1
-    # })
-
-    # # Nightclaw's Paw-Brokers
-
-    # trade(0, {
-    #     Item.RatShilling: -2,
-    #     Item.WellPlacedPawn: 1
-    # })
-
-    # # Tier 4
-
-    # trade(0, {
-    #     Item.FourthCityEcho: -1,
-    #     Item.RatShilling: 125
-    # })

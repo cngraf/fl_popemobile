@@ -99,26 +99,27 @@ def add_trades(config):
     # ------------------
 
     # Ballparked via wiki calculator @ 320 base stats and default values
+    # minus a couple actions for free parabolan war clear
+    default_war_actions = 70
 
-    trade(72, {
-        Item.ParabolanParable: 1
-    })
+    for item in (
+        Item.ParabolanParable,
+        Item.RayDrenchedCinder,
+        Item.EdictsOfTheFirstCity,
+        Item.WaswoodAlmanac,
+        Item.ConcentrateOfSelf
+    ):
+        add({
+            Item._ParabolaAction: -default_war_actions,
+            item: 1
+        })
 
-    trade(72, {
-        Item.RayDrenchedCinder: 1
-    })
-
-    trade(72, {
-        Item.EdictsOfTheFirstCity: 1
-    })
-
-    trade(72, {
-        Item.WaswoodAlmanac: 1
-    })
-
-    trade(72, {
-        Item.ConcentrateOfSelf: 1
-    })
+        add({
+            # ballpark length of single stage
+            Item._ParabolaAction: - (default_war_actions - 12),
+            Item._DeployTrainInParabolanWar: -1,
+            item: 1
+        })
 
     # --- The Waswood
 

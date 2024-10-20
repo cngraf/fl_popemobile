@@ -26,7 +26,6 @@ action_echo_value = 6
 
 # TODO clean this up or sth
 item_conversion_rates = {
-
     Item.Echo: { Item.Echo: 1},
 
     # Tinned Ham laundering

@@ -248,6 +248,19 @@ def add_trades(config: Config):
     })
 
 
+    config.add({
+        Item.Action: -25,
+
+        Item.HinterlandScrip: 10,
+        Item.MoonPearl: 2 * (2000 + 250 * stations_built + train_luxuries * 50),
+        Item.MagnificentDiamond: 4,
+        Item.BottleOfBrokenGiant1844: 4,
+        Item.DelayUntilTheNextBoardMeeting: 1,
+        Item._DeployTrainInParabolanWar:  1,
+    })
+
+
+
     # --- Starved cultural exchange ---
     config.uniform_random_trade(
         input={

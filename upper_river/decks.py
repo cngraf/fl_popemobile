@@ -86,6 +86,16 @@ def add_trades(config):
         Item.FavChurch: 10.00
     })
 
+    # # With no statue
+    # add({
+    #     Item._MarigoldAction: -10.00,
+    #     Item._CardDraws: -50.00,
+        
+    #     Item.ProscribedMaterial: 750.00,
+    #     Item.FavChurch: 10.00
+    # })
+
+
     add({
         Item._HurlersAction: -10.00,
         Item._CardDraws: -56.50,

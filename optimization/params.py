@@ -10,15 +10,20 @@ solution_output = Item.Echo
 
 active_player = player.player_endgame_f2p
 
-add_qualities = {
+story_qualities = {
     # Item.BagALegend: 4000,
 
     # Item.ListOfAliasesWrittenInGant: 1,
 
-    # Item._AllianceWithBigRat: 1,
+    Item._AllianceWithBigRat: 1,
 }
 
-active_player.qualities.update(add_qualities)
+fate_qualities = {
+    Item.AcquaintanceTheClamorousCartographer: 6
+}
+
+active_player.qualities.update(story_qualities)
+active_player.qualities.update(fate_qualities)
 
 
 # Core constraint setup

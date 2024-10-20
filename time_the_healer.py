@@ -17,31 +17,35 @@ def add_trades(config: Config):
         Item.ProfessionalPerk: 1,
 
         Item.FavourableCircumstance: 1, # TODO
-        Item.FreeEvening: 5, # TODO
-        # # Item.ABeneficence: 1,
-
-        # Item.AConsequenceOfYourAmbition: 1, # TODO
-        Item.FleetingRecollections: 1, # TODO
+        Item.FreeEvening: 5,
 
         Item.Wounds: -2,
         Item.Nightmares: -1,
         Item.Suspicion: -1,
         Item.Scandal: -1,
 
-        # # Item.BoneMarketExhaustion: -4, # done
+        Item._RatNoLonger: 1,
 
-        # Item.RavagesOfParabolanWarfare: -10, # TODO
-
-        # Not worth the bloat
-        # Item.RecentParticipantInAStarvedCulturalExchange: -1, # TODO
-        # Item.GlowingViric: -1, # TODO
-        # Item.MiredInMail: -99,
-
+        #####################
+        # Weekly Carousels
+        #####################
+        Item.FleetingRecollections: 1, # TODO
         Item.DelayUntilTheNextBoardMeeting: -1,
         Item.ViolantSights: -1,
-        # Living story
+
+        # Living story, drift of 1 day
         Item.ReportFromTheKhagansPalace: -7/8,
-        Item.GiftFromBalmoral: 7/8,
+        Item.GiftFromBalmoral: 7/8,        
+
+
+        # Item.RavagesOfParabolanWarfare: -10, # TODO
+        # Item.MiredInMail: -99,
+
+        ##### Stuff that is not worth the bloat
+        # Item.AConsequenceOfYourAmbition: 1,
+        # Item.ABeneficence: 1,
+        # Item.RecentParticipantInAStarvedCulturalExchange: -1,
+        # Item.GlowingViric: -1,
     })
 
     # free source of constraining qualities
