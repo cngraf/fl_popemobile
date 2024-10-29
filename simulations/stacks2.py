@@ -128,7 +128,7 @@ class OutfitList:
         self.watchful_plus_dangerous = 332 + 261
 
         # deadend2
-        self.watchful_plus_cthonosophy15 = 323 + 8 * 15
+        self.watchful_plus_cthonosophy15 = 323 + 9 * 15
 
         # gaoler1, shushing1, shushing2
         self.shadowy = 323
@@ -143,7 +143,7 @@ class OutfitList:
         self.shadowy_plus_insubstantial15 = 306 + 4 * 15
 
         # stonegallery2, shape2, octavo2
-        self.cthonosophy = 9
+        self.cthonosophy = 10
 
         # greycaridnal3
         self.persuasive_plus_bizarre10 = 260 + 28 * 10
@@ -639,7 +639,10 @@ class LibraryState:
                 high_prio.append(GaolerLibrarianAction2)
 
         # Routes + TPs
-        high_prio.append(MapRoomAction1)
+        high_prio.extend([
+            MapRoomAction4,
+            MapRoomAction1
+            ])
 
         # Progression
         high_prio.extend([
@@ -1097,7 +1100,11 @@ class LockedGateAction1(Action):
 class MapRoom(LibraryCard):
     def __init__(self):
         super().__init__("A Map Room")
-        self.actions = [MapRoomAction1(), MapRoomAction2(), MapRoomAction3()]
+        self.actions = [
+            MapRoomAction1(),
+            MapRoomAction2(),
+            MapRoomAction3(),
+            MapRoomAction4()]
 
 class MapRoomAction1(Action):
     def __init__(self):
@@ -1168,6 +1175,21 @@ class MapRoomAction3(Action):
 
     def success_ev(self, state: LibraryState):
         return state.ev_noises(2) + state.ev_progress(5)
+    
+class MapRoomAction4(Action):
+    def __init__(self):
+        super().__init__("Paint new routes upon maps of the library")
+
+    def can_perform(self, state: LibraryState):
+        # TODO require Palette Hallowmas item
+        return True
+
+    def perform_success(self, state: LibraryState):
+        state.items[Item.RouteTracedThroughTheLibrary] += random.randint(1, 2)
+        state.items[Item.TantalisingPossibility] += 50
+
+    def success_ev(self, state: LibraryState):
+        return (state.ev_route(1) + state.ev_route(2))/2 + ev_tant * 50
 
 class PoisonGallery(LibraryCard):
     def __init__(self):
@@ -2113,12 +2135,12 @@ def simulate_runs(num_runs):
     print(f"{'SIMULATION RESULTS':^80}")
     print("=" * 80)
 
-    simple_mode = True
+    simple_mode = False
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
-    state.cartographer_enabled = True
-    state.take_alternate_reward = False
+    state.apocrypha_sought = ApocryphaSought.SomeFrenchBullshit
+    state.cartographer_enabled = False
+    state.take_alternate_reward = True
 
     # Progress bar setup
     progress_template = "\rProgress: [{:<50}] {:.2f}% ({}/{})"
@@ -2258,4 +2280,4 @@ def simulate_runs(num_runs):
     total_per_action = all_currency_total / total_steps if total_steps > 0 else 0
     print(f"{'Echoes/Stuivers Per Action':<30} {'':<10} {total_per_action:.4f} E")
 
-simulate_runs(50_000)
+simulate_runs(10_000)
