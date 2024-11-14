@@ -3101,7 +3101,7 @@ class LabSimulationRunner(SimulationRunner):
         return LabState()
     
 
-project_data = experiment_data[ResearchProject.CARTOGRAPHERS_HOARD]
+project_data = experiment_data[ResearchProject.NEATHY_GEOLOGY_SURVEY_625]
 simulation = LabSimulationRunner(
     runs = 500,
     initial_values= {
@@ -3119,8 +3119,8 @@ simulation = LabSimulationRunner(
         Item.ScholarOfTheCorrespondence: 21,
 
         # Experts
-        Item.LaboratoryServicesOfLetticeTheMercy: 1,
-        # Item.LaboratoryServicesFromHephaesta: 1,
+        # Item.LaboratoryServicesOfLetticeTheMercy: 1,
+        Item.LaboratoryServicesFromHephaesta: 1,
         Item.LaboratoryServicesOfSilkCladExpert: 1,
 
         # Students
@@ -3129,10 +3129,10 @@ simulation = LabSimulationRunner(
 
         # Other items
         Item.SecretCollege: 1,
-        # Item.PotOfViolantInk: 1,
-        # Item.KittenSizedDiamond: 1
+        Item.PotOfViolantInk: 1,
+        Item.KittenSizedDiamond: 1
     })
 
-simulation.outfit = PlayerOutfit(330, 18)
+simulation.outfit = PlayerOutfit(334, 18)
 
 simulation.run_simulation()    

@@ -130,6 +130,12 @@ def add_trades(config: Config):
     add_ratly_demand_trades(config,
         saturation1=Item.InscrutableRatMarketSaturation1,
         saturation2=Item.InscrutableRatMarketSaturation2,
+        item=Item.ChimericalArchive,
+        echo_value=62.50)    
+    
+    add_ratly_demand_trades(config,
+        saturation1=Item.InscrutableRatMarketSaturation1,
+        saturation2=Item.InscrutableRatMarketSaturation2,
         item=Item.CartographersHoard,
         echo_value=312.50)
     
@@ -153,6 +159,12 @@ def add_trades(config: Config):
         item=Item.UnlawfulDevice,
         echo_value=12.50)
     
+    add_ratly_demand_trades(config,
+        saturation1=Item.IntricateRatMarketSaturation1,
+        saturation2=Item.IntricateRatMarketSaturation2,
+        item=Item.CracklingDevice,
+        echo_value=62.50)
+
     add_ratly_demand_trades(config,
         saturation1=Item.IntricateRatMarketSaturation1,
         saturation2=Item.IntricateRatMarketSaturation2,
