@@ -1778,11 +1778,12 @@ class StacksSimRunner(SimulationRunner):
             self.initial_values[Item.LibraryKey] = state.get(Item.LibraryKey)
             self.initial_values[Item.RouteTracedThroughTheLibrary] = state.get(Item.RouteTracedThroughTheLibrary)
             self.initial_values[Item.FragmentaryOntology] = state.get(Item.FragmentaryOntology)
+            self.initial_values[Item.AnathemaUnchained] = state.get(Item.AnathemaUnchained)
 
         self.display_results()    
 
 simulation = StacksSimRunner(
-    runs = 500,
+    runs = 5000,
     initial_values={
         Item.ApocryphaSought: ApocryphaSoughtBook.CodexOfUnrealPlaces.value,
 
