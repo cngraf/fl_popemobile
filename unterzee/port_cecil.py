@@ -3,16 +3,17 @@ from helper.utils import *
 
 def add_trades(config):
     trade = config.trade
+    add = config.add
+
     # --------------
     # Port Cecil
     # -------------
 
-    # # 7? actions to zail from london? 4 + 2 + 1
-    # # TODO: check round trip length
-    # trade(14, {
-    #     Item.PortCecilCycles: 4, # arbitrary, how many times thru before home
-    #     Item.ZailingDraws: 12
-    # })
+    add({
+        Item.Action: -11.5 - 40,
+        Item.StashedTreasure: 2700,
+        Item._PortCecilAction: 40,
+    })
 
     # ideal cycle w/ maxed stats
     # - 13 AotRS (reliable but less profitable w less)
@@ -24,7 +25,7 @@ def add_trades(config):
     # 2x (deploy cat wrangling => 30x silvered cats claw)
     #   OR (distact w wildlife => 4x withered tentacle)
 
-    trade(1, { Item._PortCecilAction: 1 })
+    # trade(1, { Item._PortCecilAction: 1 })
 
     trade(0, {
         Item._PortCecilAction: -14,

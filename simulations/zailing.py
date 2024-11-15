@@ -3295,7 +3295,7 @@ class RecogniseShape(Action):
 class WindFromTheNorth(OpportunityCard):
     def __init__(self):
         super().__init__("A Wind from the North")
-        self.actions = [KeepCrewOnCourse(), HelpThem(), ListenToTheWind()]
+        self.actions = [KeepCrewOnCourse(), HelpThem(), ListenToTheWindNorth()]
 
     def can_draw(self, state: ZailingState):
         return state.current_region == ZeeRegion.STORMBONES        
@@ -3348,7 +3348,7 @@ class HelpThem(Action):
         # NP reduces challenge but should already be 100%
         return self.broad_pass_rate(110, state.outfits.dangerous)
 
-class ListenToTheWind(Action):
+class ListenToTheWindNorth(Action):
     def __init__(self):
         super().__init__("Listen to the wind")
 
@@ -5304,7 +5304,17 @@ london_to_khanate_long_route = [
     ZeeRegion.SALT_STEPPES
 ]
 
+london_to_cecil = [
+    ZeeRegion.HOME_WATERS,
+    ZeeRegion.STORMBONES
+]
+
+cecil_to_london = [
+    ZeeRegion.STORMBONES,
+    ZeeRegion.HOME_WATERS,
+]
+
 # Now execute multiple runs:
 if __name__ == "__main__":
-    run_simulation(runs=1_000, route=london_snares_khanate)
+    run_simulation(runs=1_000, route=london_to_cecil)
 

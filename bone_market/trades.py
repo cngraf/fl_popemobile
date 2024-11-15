@@ -996,6 +996,40 @@ def add_trades(config: Config):
 
 
     # ==============================================================
+    #                   Segmented Ribcage
+    # ==============================================================    
+
+    single_segment_vake = {
+        Item.Action: -6,
+        Item.DuplicatedVakeSkull: -1,
+        Item.SegmentedRibcage: -1,
+        Item.WingOfAYoungTerrorBird: -2,
+        Item.JetBlackStinger: -1
+    }
+
+    # NB: trivial gain, not worth complexity
+    # teller_buyers.add_trade(config, Flux.Menace, ZooType.Chimera, single_segment_vake)
+
+    entrepreneur_buyers.add_trade(config, Flux.Amalgamy, ZooType.Chimera,
+        recipe={
+            Item.Action: -6,
+            Item.SkullInCoral: -1,
+            Item.SegmentedRibcage: -1,
+            Item.HelicalThighbone: -2,
+            Item.ObsidianChitinTail: -1
+    })
+
+    ambassador_buyers.add_trade(config, Flux.Antiquity, ZooType.Chimera,
+        recipe={
+            Item.Action: -6,
+            Item.DoubledSkull: -1,
+            Item.SegmentedRibcage: -1,
+            Item.FossilisedForelimb: -2,
+            Item.TombLionsTail: -1
+    })
+
+
+    # ==============================================================
     #                   Prismatic Frame
     # ==============================================================
     for skull in (

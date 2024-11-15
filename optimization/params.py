@@ -11,7 +11,7 @@ solution_output = Item.Echo
 active_player = player.player_endgame_f2p
 
 story_qualities = {
-    # Item.BagALegend: 4000,
+    Item.BagALegend: 4000,
 
     # Item.ListOfAliasesWrittenInGant: 1,
 

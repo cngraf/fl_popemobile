@@ -795,7 +795,7 @@ class ApocryphaFoundAction1(Action):
 
     def success_ev(self, state: LibraryState):
         return 20
-    
+
 class ReadingRoom(LibraryCard):
     def __init__(self):
         super().__init__("The Reading Room", 10_000.0)

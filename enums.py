@@ -832,10 +832,24 @@ class Item(Enum):
     GlimpseOfAnathema = auto()
 
     # Firmament - The Stacks
+    _StacksProgress = auto()
+    InSearchOfLostTime = auto()
+    HourInTheLibrary = auto()
     RouteTracedThroughTheLibrary = auto()
     LibraryKey = auto()
     FragmentaryOntology = auto()
     DispositionOfTheCardinal = auto()
+    ApocryphaSought = auto()
+    UnwoundThread = auto()
+    AnathemaUnchained = auto()
+    NoisesInTheLibrary = auto()
+    _OverdueStorylet = auto()
+
+    _BannedWorksPrize = auto()
+    _DeadStarsPrize = auto()
+    _PrecipicePrize = auto()
+    _UnrealPlacesPrize = auto()
+    _ProperSpeechPrize = auto()
 
     # Zenith - High Sancta
     ViolantSights = auto()

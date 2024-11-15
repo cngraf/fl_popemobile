@@ -136,8 +136,9 @@ class PlayerOutfit:
         self.shapeling_arts = default_advanced
         self.glasswork = default_advanced
 
+
         self.bizarre = 20
-        self.dreaded = 20
+        self.dreaded = 2
         self.respectable = 20
 
         self.reduce_wounds = 0
@@ -148,7 +149,11 @@ class PlayerOutfit:
         self.zailing_speed = 55
         self.zubmersibility = 1
         self.luxurious = 0
-        self.reduce_tw = 0 # TODO re-implement        
+        self.reduce_tw = 0 # TODO re-implement
+
+        self.cthonosophy = 5
+        self.shadowy_inerrant15 = 292 + 15 * 7
+        self.watchful_inerrant15 = 313 + 15 * 6
 
 class OpportunityCard:
     def __init__(self, name, weight=1.0):
@@ -289,7 +294,7 @@ class SimulationRunner:
         self.total_card_draw_counts = defaultdict(int)
         self.total_card_play_counts = defaultdict(int)
 
-        self.outfit = None
+        self.outfit = PlayerOutfit()
 
         self.outcome_counts = defaultdict(int)
 
@@ -443,6 +448,9 @@ class SimulationRunner:
         item_summaries = []
 
         for item, total_change in self.total_item_changes.items():
+            if item == None:
+                continue
+
             initial_qty = self.initial_values.get(item, 0) * self.runs
             net_change = total_change - initial_qty
 
