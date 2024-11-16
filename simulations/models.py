@@ -311,10 +311,14 @@ class SimulationRunner:
     def create_state(self) -> GameState:
         raise NotImplementedError
 
+    def after_run(self, state: GameState):
+        pass
+
     def run_simulation(self):
         for i in range(self.runs):
             state = self.create_state()
 
+            # TODO remove all this setup, make part of create_state()
             for key, val in self.initial_values.items():
                 state.items[key] = val
 
@@ -322,8 +326,11 @@ class SimulationRunner:
             state.storylets.extend(self.storylets)
             state.deck.extend(self.cards)
 
-            state.run()  # Run the individual simulation
+            intial_item_counts = state.items.copy()
 
+            state.run()  # Run the individual simulation
+            self.after_run(state)
+            
             # Track success and failure of each run
             self.outcome_counts[state.status] += 1
 
@@ -333,7 +340,8 @@ class SimulationRunner:
 
             # Accumulate item changes for each run
             for item, count in state.items.items():
-                self.total_item_changes[item] += count
+                change = count - intial_item_counts.get(item, 0)
+                self.total_item_changes[item] += change
 
             # Accumulate action play/success/failure counts
             for action, result_counts in state.action_result_counts.items():
@@ -383,7 +391,7 @@ class SimulationRunner:
         for stat, value in vars(outfit).items():
             print(f"{stat:<30}{value:<10}")    
 
-    def print_condensed_action_table(self):
+    def print_condensed_action_table(self, played_only = False):
         color_codes = {
             'red': '\033[31m',
             'green': '\033[32m',
@@ -399,8 +407,8 @@ class SimulationRunner:
         print("-" * 105)
 
         # Sort cards by total play count (descending)
-        sorted_cards = sorted(self.total_card_draw_counts.keys(), key=lambda card: self.total_card_play_counts.get(card, 0), reverse=True)
-
+        sorted_cards = sorted(self.total_card_play_counts.keys(), key=lambda card: self.total_card_draw_counts.get(card, 0), reverse=True)
+        
         for card in sorted_cards:
             card_name = self.truncate_string(card.name)
 
@@ -433,7 +441,10 @@ class SimulationRunner:
                 elif success_rate >= 0.40:
                     success_color = color_codes['magenta']
 
-                if action_played > 0:
+                if action_played == 0:
+                    if played_only: continue
+                    print(f"{'':<8}{action_name:<40}{'':<15}{action_played:<15.2f}")
+                else:
                     print(f"{'':<8}{action_name:<40}{'':<15}{action_played:<15.2f}{success_color}{success_rate * 100:.2f}{color_codes['reset']}%")
 
             print("-" * 105)

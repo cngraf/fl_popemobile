@@ -45,7 +45,7 @@ class LibraryState(GameState):
             Item.LibraryKey: 0,
         }
 
-        self.cartographer_enabled = True
+        self.cartographer_enabled = False
         self.allow_cartographer_toggle = False
 
         self.storylets = []
@@ -56,21 +56,10 @@ class LibraryState(GameState):
 
         best_card, best_action = self.best_action_by_simple_ranking()
 
-        # best_card, best_action, best_action_ev = None, None, -float('inf')
-
-        # for card in self.storylets:
-        #     for action in card.actions:
-        #         if action.can_perform(self):
-        #             action_ev = action.ev(self)
-        #             if action_ev > best_action_ev:
-        #                 best_card, best_action, best_action_ev = card, action, action_ev
-
-        # for card in self.hand:
-        #     for action in card.actions:
-        #         if action.can_perform(self):
-        #             action_ev = action.ev(self)
-        #             if action_ev > best_action_ev:
-        #                 best_card, best_action, best_action_ev = card, action, action_ev
+        # holding_octavo = any(card.__class__ == ChainedOctavo for card in self.hand)
+        # if holding_octavo and best_card.__class__ != ChainedOctavo:
+        #     print("Octavo fail!")
+        #     print(self.items)
 
         if best_action is None:
             # TODO log or default to other strat?
@@ -94,6 +83,10 @@ class LibraryState(GameState):
 
         self.hand = [card for card in self.hand if card.can_draw(self)]
 
+        if self.get(Item.NoisesInTheLibrary) >= 36:
+            print("Noises Failure!")
+            self.status = "Failure"
+
     def run(self):
         while self.status == "InProgress":
             self.step()
@@ -109,10 +102,25 @@ class LibraryState(GameState):
         noises = self.get(Item.NoisesInTheLibrary)
         octavo_available = self.get(Item.AnathemaUnchained) == 0 and self.get(Item.InSearchOfLostTime) == 1
 
-        key_cap = 1000
+
+        high_value_cards = [
+            TeaRoom,
+            ChainedOctavo,
+            GaolerLibrarian,
+            MapRoom,
+            LibrariansOffice,
+        ]
+
+        if keys > 1:
+            high_value_cards.append(LockedGate)
+
+        high_value_card_in_hand = any(card.__class__ in high_value_cards for card in self.hand)
+
+        key_cap = 20
         route_floor = 10
 
         list = [
+            Storylet_EnterStacks,
             Storylet_ReturnToRoof,
             Storylet_FindYourWayBack,
             ChainedOctavo1_Unchain,
@@ -122,7 +130,7 @@ class LibraryState(GameState):
         if keys < key_cap:
             list.extend([LibrariansOffice1_PickDrawers])
 
-            if noises < 30:
+            if noises < 22:
                 list.append(GaolerLibrarian2_LiftKey)
 
         list.extend([
@@ -134,25 +142,31 @@ class LibraryState(GameState):
             ReadingRoom_OpenTheBook,
             ApocryphaFound_Claim,
         ])
+    
 
         if progress >= 40:
             list.extend([
                 Deck_RefillHand
             ])
 
-        # TODO check w/ use broad_pass_rate()
-        # min for 100%
-        if frags >= 9:
+        # if octavo_available:
+        #     list.extend([
+        #         DeadEnd1_RopeDescend,
+        #         GrandStaircase1_InformedDecision
+        #     ])
+
+        # Minor improvement even below 100%?
+        if frags >= 5:
             list.extend([
                 Atrium2_CourseCorrect
             ])
 
-        # Routes + more TPs, harder check
+        # # Routes + more TPs, harder check
         if routes < 5:
             list.append(DeadEnd2_VantagePoint)
 
         # 5 is min for 100%
-        if progress < 35 and routes >= 5:
+        if progress < 35: #and routes >= 5:
             list.append(TeaRoom2_ConsultMaps)
 
         # 15 progress
@@ -171,22 +185,28 @@ class LibraryState(GameState):
         if routes < route_floor:
             list.append(DeadEnd2_VantagePoint)
 
-        list.append(Deck_RefillHand)
-
         # TODO experiment with this placement
         if progress < 35 and routes >= route_floor:
             list.append(StoneGallery3_FollowBorehole)
 
+        list.append(Deck_RefillHand)
+
         if keys < key_cap and noises == 0:
-            list.extend([
-                BlackGallery1_Woesel,
-                DeadEnd1_Woesel
-            ])
+            list.append(BlackGallery1_Woesel)
 
-        list.append(DeadEnd1_RopeDescend)
-        list.append(Labyrinth1_RethinkMovements)
+        if not high_value_card_in_hand:
+            if keys < key_cap and noises == 0:
+                list.append(DeadEnd1_Woesel)
 
-        list.append(GrandStaircase1_InformedDecision)
+            list.append(DeadEnd1_RopeDescend)
+
+            if progress < 35:
+                list.append(Labyrinth1_RethinkMovements)  
+
+            list.append(GrandStaircase1_InformedDecision)
+
+        if progress < 25:
+            list.append(Compass2_Chart)
 
         list.extend([        
             # 5 progress free*
@@ -199,16 +219,17 @@ class LibraryState(GameState):
             BlackGallery1_LightLantern,
             StoneGallery1_SilentGallery,
             
+            PoisonGallery1_FurnitureSteppingStones,
+
             GaolerLibrarian3_Intervention,
             LibrariansOffice2_OppositeDoor,
             TerribleShushing2_HurryAlong,
-            
-            
-            PoisonGallery1_FurnitureSteppingStones,
-            # PoisonGalleryAction1,
 
-            # fallback if few routes but bad hand
-            # GrandStaircase1_InformedDecision,
+            DeadEnd1_RopeDescend,
+            GrandStaircase1_InformedDecision,
+            
+            # 1-3 routes
+            Compass1_Camera,
 
             # 5 progress for 1 fragment
             Labyrinth2_RejectShape,
@@ -216,7 +237,6 @@ class LibraryState(GameState):
 
             # Gain routes only
             DiscardedLadder1_Climb,
-            Compass1_Camera,
             Index1_SearchReferenceCard,
 
             # 5 progress for 1 route
@@ -227,7 +247,12 @@ class LibraryState(GameState):
             Snuffbox1_ComputeFigure,
             ChainedOctavo2_ExamineSection,
             GrandStaircase2_UpDown,
-            TeaRoom3_MakeSense
+            TeaRoom3_MakeSense,
+
+            # Redundant Safety
+            TeaRoom1_Regroup,
+            MapRoom4_PaintRoutes,
+            Compass1_Camera,
         ])
 
         # Find the best action from the ranked list that is in the hand
@@ -253,18 +278,51 @@ class LibraryState(GameState):
 
 
         # If no action can be performed, return None
-        return (None, None)                        
+        return (None, None)
 
+    def book_prize(self):
+        book = self.get(Item.ApocryphaSought)
+        if book == ApocryphaSoughtBook.IndexOfBannedWorks.value:
+            return Item._BannedWorksPrize
+        elif book == ApocryphaSoughtBook.AnnalOfDeadStars.value:
+            return Item._DeadStarsPrize
+        elif book == ApocryphaSoughtBook.LePrecipiceDeLaTombee.value:
+            return Item._PrecipicePrize
+        elif book == ApocryphaSoughtBook.CodexOfUnrealPlaces.value:
+            return Item._UnrealPlacesPrize
+        elif book == ApocryphaSoughtBook.BookOfProperSpeech.value:
+            return Item._ProperSpeechPrize
+        elif book == ApocryphaSoughtBook.ChainedOctavo.value:
+            return Item.GlimpseOfAnathema
+    
+    def book_starting_hour(self):
+        book = self.get(Item.ApocryphaSought)
+        if book == ApocryphaSoughtBook.IndexOfBannedWorks.value:
+            return 1
+        elif book == ApocryphaSoughtBook.AnnalOfDeadStars.value:
+            return 2
+        elif book == ApocryphaSoughtBook.LePrecipiceDeLaTombee.value:
+            return 3
+        elif book == ApocryphaSoughtBook.CodexOfUnrealPlaces.value:
+            return 4
+        elif book == ApocryphaSoughtBook.BookOfProperSpeech.value:
+            return 5
+        else:
+            print(f"{book} unknown or invalid")
+            return 1
+        
 class StacksStorylets(OpportunityCard):
     def __init__(self):
         super().__init__("Stacks Storylets")
         self.actions = [
             Deck_RefillHand(),
+            Storylet_EnterStacks(),
+            Storylet_FindYourWayBack(),
+            Storylet_ReturnToRoof(),
+
             Storylet_ToggleCartographer(),
             # EnableCartographer(),
-            # DisableCartographer(),
-            Storylet_FindYourWayBack(),
-            Storylet_ReturnToRoof()
+            # DisableCartographer(),            
         ]
 
 class Deck_RefillHand(Action):
@@ -336,6 +394,25 @@ class Storylet_ToggleCartographer(Action):
 #         state.cartographer_enabled = False
 #         return result
 
+class Storylet_EnterStacks(Action):
+    def __init__(self):
+        super().__init__("(BEGIN RUN)")
+
+    def can_perform(self, state):
+        return state.get(Item.InSearchOfLostTime) == 0
+    
+    def pass_items(self, state: LibraryState):
+        return {
+            Item.HourInTheLibrary: state.book_starting_hour(),
+            Item.InSearchOfLostTime: 1
+        }
+    
+    def perform_pass(self, state: LibraryState):
+        if state.get(Item.ApocryphaSought) == ApocryphaSoughtBook.CodexOfUnrealPlaces.value:
+            state.cartographer_enabled = True
+    
+        return super().perform_pass(state)
+
 # TODO rare failure/success with keys "Overdue"
 # not set up to have alt rates calculated at runtime
 class Storylet_FindYourWayBack(Action):
@@ -345,7 +422,8 @@ class Storylet_FindYourWayBack(Action):
         self.alt_fail_rate = 0.0
 
     def can_perform(self, state: LibraryState):
-        return state.get(Item.UnwoundThread) > 0 #and not state.get(Item._OverdueStorylet)
+        return state.get(Item.UnwoundThread) > 0 and state.get(Item.InSearchOfLostTime) == 3
+        #and not state.get(Item._OverdueStorylet)
     
     def pass_rate(self, state: LibraryState):
         # TODO
@@ -471,7 +549,7 @@ class ChainedOctavo1_Unchain(Action):
         super().__init__("Unchain it")
 
     def can_perform(self, state: LibraryState):
-        return state.get(Item.LibraryKey) > 1 and state.get(Item.NoisesInTheLibrary) < 28
+        return state.get(Item.LibraryKey) >= 1 and state.get(Item.NoisesInTheLibrary) < 28
 
     def pass_items(self, state: LibraryState):
         return {
@@ -1155,7 +1233,6 @@ class BlackGallery(OpportunityCard):
     def can_draw(self, state: LibraryState):
         return state.get(Item.HourInTheLibrary) in [3, 4, 5]
 
-
 class BlackGallery1_LightLantern(Action):
     def __init__(self):
         super().__init__("Light a lantern")
@@ -1176,7 +1253,7 @@ class BlackGallery1_LightLantern(Action):
 
 class BlackGallery1_Woesel(Action):
     def __init__(self):
-        super().__init__("Light a lantern")
+        super().__init__("(WOESEL) Light a lantern")
 
     def pass_rate(self, state: LibraryState):
         return 0
@@ -1668,7 +1745,7 @@ class Compass1_Camera(Action):
 
     def pass_items(self, state: LibraryState):
         return {
-            Item.RouteTracedThroughTheLibrary: 2,  # TODO: Random [1, 3]
+            Item.RouteTracedThroughTheLibrary: random.randint(1,3),
         }
 
     def fail_items(self, state: LibraryState):
@@ -1687,12 +1764,14 @@ class Compass2_Chart(Action):
     def pass_items(self, state: LibraryState):
         return {
             Item.RouteTracedThroughTheLibrary: -3,
-            Item._StacksProgress: random.choose(5, 10, 15)
+            Item._StacksProgress: random.choice([5, 10, 15])
         }
 
 class StacksSimRunner(SimulationRunner):
     def __init__(self, runs: int, initial_values: dict):
         super().__init__(runs, initial_values)
+
+        # self.key_distro = {}
 
         self.storylets = [
             StacksStorylets()
@@ -1729,67 +1808,31 @@ class StacksSimRunner(SimulationRunner):
 
     def create_state(self):
         state = LibraryState()
-        state.items[Item.InSearchOfLostTime] = 1
-        state.actions = 1
-        # state.outfit
+        
+        for item in (
+            Item.LibraryKey,
+            Item.RouteTracedThroughTheLibrary,
+            Item.FragmentaryOntology,
+            Item.AnathemaUnchained):
+
+            state.items[item] = self.total_item_changes.get(item, 0)
+
         return state
     
-    # TODO rewrite this so it's not a total override
-    def run_simulation(self):
-        for i in range(self.runs):
-            state = self.create_state()
+    # def after_run(self, state):
+    #     key_count = state.get(Item.LibraryKey)
 
-            for key, val in self.initial_values.items():
-                state.items[key] = val
-
-            state.outfit = self.outfit
-            state.storylets.extend(self.storylets)
-            state.deck.extend(self.cards)
-
-            state.run()  # Run the individual simulation
-
-            # Track success and failure of each run
-            self.outcome_counts[state.status] += 1
-
-            # Accumulate total actions across all runs
-            self.total_draws += state.cards_drawn
-            self.total_actions += state.actions
-
-            # Accumulate item changes for each run
-            for item, count in state.items.items():
-                self.total_item_changes[item] += count
-
-            # Accumulate action play/success/failure counts
-            for action, result_counts in state.action_result_counts.items():
-                for result, count in result_counts.items():
-                    self.total_action_result_counts[action][result] += count
-                    self.total_action_play_counts[action] += count
-
-            # Accumulate card draw/play counts
-            for card, count in state.card_draw_counts.items():
-                self.total_card_draw_counts[card] += count
-
-            for card, count in state.card_play_counts.items():
-                self.total_card_play_counts[card] += count
-            
-            self.update_progress((i + 1) / self.runs)  # Update the progress bar
-
-            # HACK this is the only change from base method
-            self.initial_values[Item.LibraryKey] = state.get(Item.LibraryKey)
-            self.initial_values[Item.RouteTracedThroughTheLibrary] = state.get(Item.RouteTracedThroughTheLibrary)
-            self.initial_values[Item.FragmentaryOntology] = state.get(Item.FragmentaryOntology)
-            self.initial_values[Item.AnathemaUnchained] = state.get(Item.AnathemaUnchained)
-
-        self.display_results()    
-
+    #     self.key_distro[key_count] = self.key_distro.get(key_count, 0)
+    #     self.key_distro[key_count] += 1 
+    
 simulation = StacksSimRunner(
-    runs = 5000,
+    runs = 10000,
     initial_values={
-        Item.ApocryphaSought: ApocryphaSoughtBook.CodexOfUnrealPlaces.value,
+        Item.ApocryphaSought: ApocryphaSoughtBook.AnnalOfDeadStars.value,
 
-        Item.RouteTracedThroughTheLibrary: 20,
-        Item.FragmentaryOntology: 5,
-        Item.LibraryKey: 5
+        # Item.RouteTracedThroughTheLibrary: 0,
+        # Item.FragmentaryOntology: 0,
+        # Item.LibraryKey: 0
     })
 
 # HACK IDK why I did it this way but whatever, works for now
@@ -1808,7 +1851,7 @@ my_outfit.watchful_inerrant15 = 313 + 6 * 15
 my_outfit.shadowy_watchful = 241 + 343
 
 # stonegallery3 (500)
-my_outfit.watchful_plus_dangerous = 332 + 261
+my_outfit.dangerous_watchful = 332 + 261
 
 # deadend2 (584)
 my_outfit.watchful_cthonosophy15 = 323 + 9 * 15
@@ -1843,3 +1886,6 @@ my_outfit.neathproofed_inerrant = 8 + 3
 simulation.outfit = my_outfit
 
 simulation.run_simulation()
+
+# for i in simulation.key_distro.items():
+#     print(i)
