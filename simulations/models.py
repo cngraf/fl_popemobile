@@ -340,7 +340,10 @@ class SimulationRunner:
 
             # Accumulate item changes for each run
             for item, count in state.items.items():
-                change = count - intial_item_counts.get(item, 0)
+                # if item == Item.Nightmares:
+                #     print(f"Nightmares: {count}")
+                #     print(f"Initial: {intial_item_counts.get(item, 0)}")
+                change = count - intial_item_counts.get(item, 0)             
                 self.total_item_changes[item] += change
 
             # Accumulate action play/success/failure counts
@@ -462,11 +465,22 @@ class SimulationRunner:
             if item == None:
                 continue
 
-            initial_qty = self.initial_values.get(item, 0) * self.runs
-            net_change = total_change - initial_qty
+            net_change = total_change
 
             avg_change = net_change / self.runs
-            echo_value = simulations.item_conversions.conversion_rate(item, Item.Echo)
+            echo_value = 0 # simulations.item_conversions.conversion_rate(item, Item.Echo)
+
+            for currency in (
+                Item.Echo,
+                Item.HinterlandScrip,
+                Item.Stuiver,
+                Item.AssortmentOfKhaganianCoinage
+            ):
+                item_value_in_currency = simulations.item_conversions.conversion_rate(item, currency)
+                echo_per_currency = simulations.item_conversions.conversion_rate(currency, Item.Echo)
+                laundered_value = item_value_in_currency * echo_per_currency
+                if laundered_value > echo_value:
+                    echo_value = laundered_value
 
             estimated = False
             if echo_value == 0:

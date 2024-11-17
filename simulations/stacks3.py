@@ -46,7 +46,6 @@ class LibraryState(GameState):
         }
 
         self.cartographer_enabled = False
-        self.allow_cartographer_toggle = False
 
         self.storylets = []
         self.hand = []
@@ -181,13 +180,16 @@ class LibraryState(GameState):
                 GodsEyeView2_FocusPath
             ])
 
-        # Routes + more TPs, harder check
+        # # Routes + more TPs, harder check
         if routes < route_floor:
             list.append(DeadEnd2_VantagePoint)
 
         # TODO experiment with this placement
         if progress < 35 and routes >= route_floor:
             list.append(StoneGallery3_FollowBorehole)
+
+        # if len(self.hand) < 4:
+        #     list.append(Storylet_ToggleCartographer)
 
         list.append(Deck_RefillHand)
 
@@ -348,8 +350,7 @@ class Storylet_ToggleCartographer(Action):
         super().__init__("(TOGGLE CARTOGRAPHER)")
 
     def can_perform(self, state: LibraryState):
-        return state.allow_cartographer_toggle \
-            and state.get(Item.InSearchOfLostTime) == 1 \
+        return state.get(Item.InSearchOfLostTime) == 1 \
             and state.get(Item.ApocryphaSought) != 204
     
     def pass_items(self, state):

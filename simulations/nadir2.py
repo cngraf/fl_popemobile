@@ -7,13 +7,13 @@ from simulations.item_conversions import conversion_rate
 from simulations.models import *
 from simulations.models import GameState
 
+# TODO add sound of wings
 
 class NadirState(GameState):
     def __init__(self):
         super().__init__(max_hand_size=5)
         self.status = "InProgress"
         self.skip_econ_inputs = False
-
 
     def ev_from_item(self, item, val: int):
         if item == Item.Irrigo:
@@ -29,17 +29,121 @@ class NadirState(GameState):
             self.step()
 
     def step(self):
-        best_card, best_action, best_action_ev = self.find_best_action()
+
+        best_card, best_action = self.best_action_by_simple_ranking()
+
+
+        if best_action is None:
+            # TODO log or default to other strat?
+            print("Cards in hand: " + str(len(self.hand)))
+            print(f"Irrigo {self.get(Item.Irrigo)}")
+            for card in self.hand:
+                print(card.name)
+            # print("Best action: " + best_action.name)
 
         if best_action:
             result = best_action.perform(self)
             self.actions += best_action.action_cost
             self.action_result_counts[best_action][result] += 1
+            # print(best_action.name)
+            # print(self.hand)
+            # print(self.items)
 
-            if best_card is not None:
-                self.card_play_counts[best_card] += 1
-                if best_card in self.hand:
-                    self.hand.remove(best_card)
+        if best_card is not None:
+            self.card_play_counts[best_card] += 1
+            if best_card in self.hand:
+                self.hand.remove(best_card)            
+
+        self.hand = [card for card in self.hand if card.can_draw(self)]
+
+    def run(self):
+        while self.status == "InProgress":
+            self.step()
+
+
+    # Econ strat, TODO do another one for speed
+    def best_action_by_simple_ranking(self):
+
+        irrigo = self.get(Item.Irrigo)
+
+        irrigo_cap = 9
+
+        list = [
+            Storylet_EnterNadir
+        ]
+
+        if irrigo >= irrigo_cap:
+            list.append(Storylet_LeaveNadir)
+    
+        if irrigo + 2 <= irrigo_cap:
+            list.extend([
+                Battles1_Wisdom, # 62.5e/2, same as other 3
+                Woods_DanceGoesOnWithClathermont, # 36.5e/2
+                Hole_RipOutWordsWithDiscordantStudiesTwoCap
+            ])
+
+        # TODO fine-tune at lower Irrigo values?
+        list.append(Losing3_Goldfish) # 25e/1
+
+        if irrigo + 2 <= irrigo_cap:
+            list.extend([
+                Garden2_RosersReroll,
+                # Garden2_RosersBail
+            ])
+
+        list.append(OldBones2_ExamineSiteWithDaughter) # ~12.5e/1
+        list.append(Losing3_Goldfish)
+        list.append(SoundOfWings1_Confront) # 25e/2
+
+        list.append(Deck_RefillHand)
+
+        # TODO where to put Catafalquerie
+
+        # Low value 1 Irrigo
+        if irrigo + 1 <= irrigo_cap:
+            list.extend([
+                Sins_AllowImmaculateEel, # 6.25e/1
+                Cata3_RebelsWhoWillNotRise, # 5e/1
+
+                Altarful3_Urchins, # 2.5e/1
+                Web_Ascend, # 2.5e/1
+
+                Pause1_Bread, # 1e/1
+                CardGame1_SpeakManLeft, # 0.6e/1
+                Recall1_Blank, # 0.1e/1
+
+                Sea1_Trophies,
+                Air1_Dream, # 0e/1
+                Face1_GetOut, # 0e/1
+                SomethingMoves1_WhatDoYouSee, # 0e/1
+                Storylet_LeaveNadir
+                ])
+
+
+        # if irrigo >= 5:
+        list.append(Storylet_LeaveNadir)
+
+        # Low value 2 Irrigo
+        list.extend([
+            Motion1_Run,
+            Reflections1_Run,
+            Water1_Run
+        ])
+
+
+        # Find the best action from the ranked list that is in the hand
+        for ranked_action in list:
+            for storylet in self.storylets:
+                for action in storylet.actions:
+                    if isinstance(action, ranked_action) and action.can_perform(self):
+                        return (storylet, action)
+            for card in self.hand:
+                for card_action in card.actions:
+                    if isinstance(card_action, ranked_action) and card_action.can_perform(self):
+                        return (card, card_action)
+
+        # If no action can be performed, return None
+        return (None, None)
 
 ################################################################
 #                     Base Storylet
@@ -47,12 +151,14 @@ class NadirState(GameState):
 
 class StoryletNadir(OpportunityCard):
     def __init__(self):
-        super().__init__("Storylet: On A Heist")
+        super().__init__("Storylet: Nadir")
         self.actions = [
-            RefillHand(),
+            Deck_RefillHand(),
+            Storylet_EnterNadir(),
+            Storylet_LeaveNadir()
         ]
 
-class RefillHand(Action):
+class Deck_RefillHand(Action):
     def __init__(self):
         super().__init__("(REFILL HAND)")
         self.action_cost = 0
@@ -68,6 +174,27 @@ class RefillHand(Action):
     def ev(self, state: GameState):
         return 5
 
+class Storylet_EnterNadir(Action):
+    def __init__(self):
+        super().__init__("(ENTER)")
+        self.action_cost = 3
+
+    def can_perform(self, state):
+        return state.get(Item.Irrigo) == 0
+    
+    def pass_items(self, state):
+        return {
+            Item.Irrigo: 1
+        }
+
+class Storylet_LeaveNadir(Action):
+    def __init__(self):
+        super().__init__("(LEAVE)")
+    
+    def perform_pass(self, state: GameState):
+        result = super().perform_pass(state)
+        state.status = "Complete"
+        return result
 
 ################################################################
 #                          A Card Game
@@ -77,13 +204,13 @@ class CardGame(OpportunityCard):
     def __init__(self):
         super().__init__("A Card Game")
         self.actions = [
-            SpeakManLeft(),
-            SpeakWomanRight(),
-            DealYourselfIn(),
+            CardGame1_SpeakManLeft(),
+            CardGame2_SpeakWomanRight(),
+            CardGame3_DealYourselfIn(),
             # Dice()
         ]
 
-class SpeakManLeft(Action):
+class CardGame1_SpeakManLeft(Action):
     def __init__(self):
         super().__init__("Speak to the man on the left")
 
@@ -94,7 +221,7 @@ class SpeakManLeft(Action):
             Item.RomanticNotion: 1,
         }
 
-class SpeakWomanRight(Action):
+class CardGame2_SpeakWomanRight(Action):
     def __init__(self):
         super().__init__("Speak to the woman on the right")
 
@@ -105,7 +232,7 @@ class SpeakWomanRight(Action):
             Item.ManiacsPrayer: 1,
         }
 
-class DealYourselfIn(Action):
+class CardGame3_DealYourselfIn(Action):
     def __init__(self):
         super().__init__("Deal yourself in")
 
@@ -139,19 +266,19 @@ class FamiliarFace(OpportunityCard):
     def __init__(self):
         super().__init__("A Familiar Face?")
         self.actions = [
-            GetOut(),
+            Face1_GetOut(),
             # SleepsFortressSuit(),
             # SleepsFortressFrock()
         ]
 
-class GetOut(Action):
+class Face1_GetOut(Action):
     def __init__(self):
         super().__init__("Get out. Get out!")
 
     def pass_items(self, state: NadirState):
         return {
             Item.Irrigo: 1,
-            Item.Watchful: 4,
+            # Item.Watchful: 4,
         }
 
 # class SleepsFortressSuit(Action):
@@ -190,12 +317,12 @@ class PauseForRefreshment(OpportunityCard):
     def __init__(self):
         super().__init__("A Pause for Refreshment")
         self.actions = [
-            Bread(),
-            Zzoup(),
+            Pause1_Bread(),
+            Pause2_Zzoup(),
             # Lunchbox()
         ]
 
-class Bread(Action):
+class Pause1_Bread(Action):
     def __init__(self):
         super().__init__("Bread")
 
@@ -205,7 +332,7 @@ class Bread(Action):
             Item.CrypticClue: 50,
         }
 
-class Zzoup(Action):
+class Pause2_Zzoup(Action):
     def __init__(self):
         super().__init__("'Zzoup.'")
 
@@ -245,14 +372,14 @@ class WakingDreamOfMotion(OpportunityCard):
     def __init__(self):
         super().__init__("A Waking Dream of Motion")
         self.actions = [
-            RunMotion(),
+            Motion1_Run(),
             # PastConfidences()
         ]
 
     def can_draw(self, state):
         return state.get_pyramidal_level(Item.Nightmares) >= 4
 
-class RunMotion(Action):
+class Motion1_Run(Action):
     def __init__(self):
         super().__init__("Run")
 
@@ -286,14 +413,14 @@ class WakingDreamOfReflections(OpportunityCard):
     def __init__(self):
         super().__init__("A Waking Dream of Reflections")
         self.actions = [
-            RunReflections(),
+            Reflections1_Run(),
             # KindOfMonster()
         ]
 
     def can_draw(self, state):
         return state.get_pyramidal_level(Item.Nightmares) >= 2
 
-class RunReflections(Action):
+class Reflections1_Run(Action):
     def __init__(self):
         super().__init__("Run")
 
@@ -327,14 +454,14 @@ class WakingDreamOfWater(OpportunityCard):
     def __init__(self):
         super().__init__("A Waking Dream of Water")
         self.actions = [
-            RunWater(),
+            Water1_Run(),
             # ShipOfLights()
         ]
 
     def can_draw(self, state):
         return state.get_pyramidal_level(Item.Nightmares) >= 6
 
-class RunWater(Action):
+class Water1_Run(Action):
     def __init__(self):
         super().__init__("Run")
 
@@ -368,11 +495,11 @@ class WeaknessInTheAir(OpportunityCard):
     def __init__(self):
         super().__init__("A Weakness in the Air")
         self.actions = [
-            Dream(),
+            Air1_Dream(),
             # DreamsCanWait()
         ]
 
-class Dream(Action):
+class Air1_Dream(Action):
     def __init__(self):
         super().__init__("Dream")
 
@@ -415,8 +542,8 @@ class AltarfulOfStrangers(OpportunityCard):
         self.actions = [
             # SpeakMaskedMan(),
             # SpeakRubberyMan(),
-            SpeakUrchins(),
-            ExamineAltar()
+            Altarful3_Urchins(),
+            Altarful4_Examine()
         ]
 
 # class SpeakMaskedMan(Action):
@@ -447,12 +574,12 @@ class AltarfulOfStrangers(OpportunityCard):
 #             Item.NoduleOfVioletAmber: 1,
 #         }
 
-class SpeakUrchins(Action):
+class Altarful3_Urchins(Action):
     def __init__(self):
         super().__init__("Speak to the Urchins")
 
     def pass_rate(self, state: NadirState):
-        return self.broad_pass_rate(200, state.get(Item.Persuasive))
+        return self.broad_pass_rate(200, state.outfit.persuasive)
 
     def pass_items(self, state: NadirState):
         return {
@@ -465,7 +592,7 @@ class SpeakUrchins(Action):
             Item.Irrigo: 1,
         }
 
-class ExamineAltar(Action):
+class Altarful4_Examine(Action):
     def __init__(self):
         super().__init__("Speak to the Urchins")
 
@@ -484,12 +611,12 @@ class UnlikelyGarden(OpportunityCard):
     def __init__(self):
         super().__init__("An Unlikely Garden")
         self.actions = [
-            EnemiesWereYouNot(),
-            WhereDidTheRosersGoReroll(),
-            WhereDidTheRosersGoBail()
+            Garden1_Enemies(),
+            Garden2_RosersReroll(),
+            Garden2_RosersBail()
         ]
 
-class EnemiesWereYouNot(Action):
+class Garden1_Enemies(Action):
     def __init__(self):
         super().__init__("But you were their enemies, were you not?")
 
@@ -499,13 +626,13 @@ class EnemiesWereYouNot(Action):
             Item.WalkingTheFallingCities: 10,
         }
 
-class WhereDidTheRosersGoReroll(Action):
+class Garden2_RosersReroll(Action):
     def __init__(self):
-        super().__init__("(REROLL) Where did the Rosers go?")
+        super().__init__("(SC + RETRY) Where did the Rosers go?")
 
     # Assume 2nd chance used
     def pass_rate(self, state):
-        single_rate = self.broad_pass_rate(1000, state.get(Item.Persuasive))
+        single_rate = self.broad_pass_rate(1000, state.outfit.persuasive)
         return 1 - (1 - single_rate) ** 2
 
     def pass_items(self, state: NadirState):
@@ -523,13 +650,13 @@ class WhereDidTheRosersGoReroll(Action):
             Item.Nightmares: 1,
         }
     
-class WhereDidTheRosersGoBail(Action):
+class Garden2_RosersBail(Action):
     def __init__(self):
-        super().__init__("(BAIL) Where did the Rosers go?")
+        super().__init__("(SC + NO RETRY) Where did the Rosers go?")
 
     # No reroll, no fail
     def pass_rate(self, state):
-        self.broad_pass_rate(1000, state.get(Item.Persuasive))
+        return self.broad_pass_rate(1000, state.outfit.persuasive)
 
     def pass_items(self, state: NadirState):
         return {
@@ -548,13 +675,13 @@ class RecallHowTheyCame(OpportunityCard):
     def __init__(self):
         super().__init__("Do you recall how they came to that place?")
         self.actions = [
-            BlankRecall(),
-            WhoRecall(),
-            WhatRecall(),
-            WhyRecall()
+            Recall1_Blank(),
+            Recall2_Who(),
+            Recall3_What(),
+            Recall4_Why()
         ]
 
-class BlankRecall(Action):
+class Recall1_Blank(Action):
     def __init__(self):
         super().__init__("—")
 
@@ -564,7 +691,7 @@ class BlankRecall(Action):
             Item.NoduleOfWarmAmber: 1,
         }
 
-class WhoRecall(Action):
+class Recall2_Who(Action):
     def __init__(self):
         super().__init__("Who-")
 
@@ -575,7 +702,7 @@ class WhoRecall(Action):
             Item.NoduleOfTremblingAmber: 1,
         }
 
-class WhatRecall(Action):
+class Recall3_What(Action):
     def __init__(self):
         super().__init__("What -")
 
@@ -586,7 +713,7 @@ class WhatRecall(Action):
             Item.NoduleOfFecundAmber: 1,
         }
 
-class WhyRecall(Action):
+class Recall4_Why(Action):
     def __init__(self):
         super().__init__("Why -")
 
@@ -605,11 +732,12 @@ class Losing(OpportunityCard):
     def __init__(self):
         super().__init__("Losing")
         self.actions = [
-            JustOne(),
-            DubiousAttribution()
+            Losing1_JustOne(),
+            Losing2_DubiousAttribution(),
+            Losing3_Goldfish(),
         ]
 
-class JustOne(Action):
+class Losing1_JustOne(Action):
     def __init__(self):
         super().__init__("Just one")
 
@@ -621,7 +749,7 @@ class JustOne(Action):
             # Item.Watchful: -10
         }
 
-class DubiousAttribution(Action):
+class Losing2_DubiousAttribution(Action):
     def __init__(self):
         super().__init__("Dubious attribution")
 
@@ -631,6 +759,21 @@ class DubiousAttribution(Action):
             Item.Irrigo: 2,
             Item.UncannyIncunabulum: 1,
         }
+    
+class Losing3_Goldfish(Action):
+    def __init__(self):
+        super().__init__("Dubious attribution")
+
+    def pass_rate(self, state):
+        bonus = state.get(Item.Irrigo) * 20
+        return self.broad_pass_rate(250, state.outfit.watchful + bonus)
+
+    def pass_items(self, state: NadirState):
+        return {
+            Item.Irrigo: 1,
+            Item.AntiqueMystery: 1,
+            Item.CaveAgedCodeOfHonour: 1,
+        }    
 
 ################################################################
 #                        Lost at Sea
@@ -640,12 +783,12 @@ class LostAtSea(OpportunityCard):
     def __init__(self):
         super().__init__("Lost at Sea")
         self.actions = [
-            Trophies(),
-            MissYou(),
-            ItWasTheMilk()
+            Sea1_Trophies(),
+            Sea2_MissYou(),
+            Sea3_ItWasTheMilk()
         ]
 
-class Trophies(Action):
+class Sea1_Trophies(Action):
     def __init__(self):
         super().__init__('"They\'ll take your limbs for trophies. Please."')
 
@@ -654,7 +797,7 @@ class Trophies(Action):
             Item.Irrigo: 1,
         }
 
-class MissYou(Action):
+class Sea2_MissYou(Action):
     def __init__(self):
         super().__init__('"I\'ll miss you."')
 
@@ -666,7 +809,7 @@ class MissYou(Action):
             Item.TouchingLoveStory: 1,
         }
 
-class ItWasTheMilk(Action):
+class Sea3_ItWasTheMilk(Action):
     def __init__(self):
         super().__init__('"It was the milk... it was the milk, wasn\'t it?"')
 
@@ -687,11 +830,11 @@ class OldBones(OpportunityCard):
     def __init__(self):
         super().__init__("Old Bones")
         self.actions = [
-            ExamineSite(),
-            ExamineSiteWithDaughter()
+            OldBones1_ExamineSite(),
+            OldBones2_ExamineSiteWithDaughter()
         ]
 
-class ExamineSite(Action):
+class OldBones1_ExamineSite(Action):
     def __init__(self):
         super().__init__("Examine the site")
 
@@ -701,7 +844,7 @@ class ExamineSite(Action):
             Item.TaleOfTerror: 1,
         }
 
-class ExamineSiteWithDaughter(Action):
+class OldBones2_ExamineSiteWithDaughter(Action):
     def __init__(self):
         super().__init__("Examine the site (A Daughter in the Shadows)")
 
@@ -711,7 +854,6 @@ class ExamineSiteWithDaughter(Action):
 
     def pass_items(self, state: NadirState):
         return {
-            Item.ADaughterInTheShadows: 1,
             Item.Irrigo: 1,
             Item.VisionOfTheSurface: 1,
             Item.RomanticNotion: 1,
@@ -730,9 +872,9 @@ class OldSins(OpportunityCard):
         super().__init__("Old Sins")
         self.actions = [
             # Thirst(),
-            LookIntoTheWaterWithoutSeeking(),
+            Sins_LookIntoTheWaterWithoutSeeking(),
             # LookIntoTheWaterWithSeeking(),
-            AllowImmaculateEel()
+            Sins_AllowImmaculateEel()
         ]
 
 # class Thirst(Action):
@@ -746,7 +888,7 @@ class OldSins(OpportunityCard):
 #             Item.Irrigo: 1,
 #         }
 
-class LookIntoTheWaterWithoutSeeking(Action):
+class Sins_LookIntoTheWaterWithoutSeeking(Action):
     def __init__(self):
         super().__init__("Look into the water (Not Seeking Mr Eaten's Name)")
 
@@ -782,7 +924,7 @@ class LookIntoTheWaterWithoutSeeking(Action):
 #             Item.Nightmares: 2,
 #         }
 
-class AllowImmaculateEel(Action):
+class Sins_AllowImmaculateEel(Action):
     def __init__(self):
         super().__init__("Allow the Immaculate Eel to swim in the water")
 
@@ -792,7 +934,7 @@ class AllowImmaculateEel(Action):
     def pass_items(self, state: NadirState):
         return {
             Item.Irrigo: 1,
-            Item.MemoryOfAMuchLesserSelf: 1,
+            Item.MemoryOfMuchLesserSelf: 1,
             Item.ExtraordinaryImplication: 1.5
         }
 
@@ -804,11 +946,11 @@ class SomethingMoves(OpportunityCard):
     def __init__(self):
         super().__init__("Something Moves")
         self.actions = [
-            WhatDoYouSee(),
-            CanIHelp()
+            SomethingMoves1_WhatDoYouSee(),
+            SomethingMoves2_CanIHelp()
         ]
 
-class WhatDoYouSee(Action):
+class SomethingMoves1_WhatDoYouSee(Action):
     def __init__(self):
         super().__init__('"What do you see?"')
 
@@ -817,7 +959,7 @@ class WhatDoYouSee(Action):
             Item.Irrigo: 1,
         }
 
-class CanIHelp(Action):
+class SomethingMoves2_CanIHelp(Action):
     def __init__(self):
         super().__init__('"Can I help?"')
 
@@ -844,9 +986,9 @@ class TheCatafalquerie(OpportunityCard):
     def __init__(self):
         super().__init__("The Catafalquerie")
         self.actions = [
-            CasketMarkedWithName(),
-            EmptyCasket(),
-            RebelsWhoWillNotRise(),
+            Cata1_CasketMarkedWithName(),
+            Cata2_EmptyCasket(),
+            Cata3_RebelsWhoWillNotRise(),
             # CasketWithBlackRibbon()
         ]
 
@@ -855,7 +997,7 @@ class TheCatafalquerie(OpportunityCard):
     #     return state.get(Item.Nightmares) < 21 
 
 # TODO
-class CasketMarkedWithName(Action):
+class Cata1_CasketMarkedWithName(Action):
     def __init__(self):
         super().__init__("A casket marked with a familiar name")
 
@@ -867,7 +1009,7 @@ class CasketMarkedWithName(Action):
             Item.Irrigo: 2,
         }
 
-class EmptyCasket(Action):
+class Cata2_EmptyCasket(Action):
     def __init__(self):
         super().__init__("An empty casket")
 
@@ -878,12 +1020,12 @@ class EmptyCasket(Action):
             Item.Irrigo: 2,
         }
 
-class RebelsWhoWillNotRise(Action):
+class Cata3_RebelsWhoWillNotRise(Action):
     def __init__(self):
         super().__init__("Rebels who will not rise")
 
-    def can_perform(self, state: NadirState):
-        return not state.has(Item.ComplaisantFrostMoth)
+    # def can_perform(self, state: NadirState):
+    #     return not state.get(Item.ComplaisantFrostMoth)
 
     def pass_items(self, state: NadirState):
         return {
@@ -915,13 +1057,13 @@ class EndOfBattles(OpportunityCard):
     def __init__(self):
         super().__init__("The End of Battles")
         self.actions = [
-            Wisdom(),
-            Pleasure(),
-            Experience(),
-            Truth()
+            Battles1_Wisdom(),
+            Battles2_Pleasure(),
+            Battles3_Experience(),
+            Battles4_Truth()
         ]
 
-class Wisdom(Action):
+class Battles1_Wisdom(Action):
     def __init__(self):
         super().__init__("Wisdom")
 
@@ -932,7 +1074,7 @@ class Wisdom(Action):
             Item.Irrigo: 2,
         }
 
-class Pleasure(Action):
+class Battles2_Pleasure(Action):
     def __init__(self):
         super().__init__("Pleasure")
 
@@ -943,7 +1085,7 @@ class Pleasure(Action):
             Item.Irrigo: 2,
         }
 
-class Experience(Action):
+class Battles3_Experience(Action):
     def __init__(self):
         super().__init__("Experience")
 
@@ -954,7 +1096,7 @@ class Experience(Action):
             Item.Irrigo: 2,
         }
 
-class Truth(Action):
+class Battles4_Truth(Action):
     def __init__(self):
         super().__init__("Truth")
 
@@ -976,11 +1118,11 @@ class HoleInYourHead(OpportunityCard):
             # RipOutWordsWithoutDiscordantStudies(),
             # RipOutWordsWithDiscordantStudiesCap(),
             # RipOutWordsWithDiscordantStudiesOneCap(),
-            RipOutWordsWithDiscordantStudiesTwoCap()
+            Hole_RipOutWordsWithDiscordantStudiesTwoCap()
         ]
 
     def can_draw(self, state):
-        return state.has(Item.DiscordantLaw)
+        return state.get(Item.DiscordantLaw)
 
 # class RipOutWordsWithoutDiscordantStudies(Action):
 #     def __init__(self):
@@ -1026,7 +1168,7 @@ class HoleInYourHead(OpportunityCard):
 #             Item.Irrigo: 1,
 #         }
 
-class RipOutWordsWithDiscordantStudiesTwoCap(Action):
+class Hole_RipOutWordsWithDiscordantStudiesTwoCap(Action):
     def __init__(self):
         super().__init__("Rip out the words (with Discordant Studies, Exactly 2, at cap)")
 
@@ -1037,7 +1179,7 @@ class RipOutWordsWithDiscordantStudiesTwoCap(Action):
             # Item.SomeoneFollowingYou: -1,
             # Item.FrozenThoughts: -1,
             # Item.AnotherMouth: -1,
-            Item.Irrigo: 1,
+            Item.Irrigo: 2,
         }
 
 ################################################################
@@ -1048,12 +1190,12 @@ class TheWeb(OpportunityCard):
     def __init__(self):
         super().__init__("The Web")
         self.actions = [
-            NoWeb(),
-            YesWeb(),
-            Ascend()
+            Web_NoWeb(),
+            Web_YesWeb(),
+            Web_Ascend()
         ]
 
-class NoWeb(Action):
+class Web_NoWeb(Action):
     def __init__(self):
         super().__init__("No")
 
@@ -1063,7 +1205,7 @@ class NoWeb(Action):
             Item.HardEarnedLesson: 1,
         }
 
-class YesWeb(Action):
+class Web_YesWeb(Action):
     def __init__(self):
         super().__init__("Yes")
 
@@ -1074,7 +1216,7 @@ class YesWeb(Action):
             Item.SuddenInsight: 1,
         }
 
-class Ascend(Action):
+class Web_Ascend(Action):
     def __init__(self):
         super().__init__("The Third Choice: Ascend")
 
@@ -1096,11 +1238,11 @@ class UnjustlyImprisoned(OpportunityCard):
     def __init__(self):
         super().__init__("Unjustly Imprisoned!")
         self.actions = [
-            RecallWhereYouAre(),
-            ConcentrateOnEscaping()
+            Imprisoned_RecallWhereYouAre(),
+            Imprisoned_ConcentrateOnEscaping()
         ]
 
-class RecallWhereYouAre(Action):
+class Imprisoned_RecallWhereYouAre(Action):
     def __init__(self):
         super().__init__("Recall where you are")
 
@@ -1111,7 +1253,7 @@ class RecallWhereYouAre(Action):
             Item.CrypticClue: 1,
         }
 
-class ConcentrateOnEscaping(Action):
+class Imprisoned_ConcentrateOnEscaping(Action):
     def __init__(self):
         super().__init__("Concentrate on escaping!")
 
@@ -1132,12 +1274,12 @@ class WoodsInWinter(OpportunityCard):
     def __init__(self):
         super().__init__("Woods in winter")
         self.actions = [
-            FortunesPage(),
+            Woods_FortunesPage(),
             # DanceGoesOnWithoutClathermont(),
-            DanceGoesOnWithClathermont()
+            Woods_DanceGoesOnWithClathermont()
         ]
 
-class FortunesPage(Action):
+class Woods_FortunesPage(Action):
     def __init__(self):
         super().__init__("Fortune's page")
 
@@ -1164,7 +1306,7 @@ class FortunesPage(Action):
 #             Item.Irrigo: 2,
 #         }
 
-class DanceGoesOnWithClathermont(Action):
+class Woods_DanceGoesOnWithClathermont(Action):
     def __init__(self):
         super().__init__("The dance goes on (with Clathermont Family 30)")
 
@@ -1180,3 +1322,82 @@ class DanceGoesOnWithClathermont(Action):
             Item.FavSociety: 1,
             Item.Irrigo: 2,
         }
+
+################################################################
+#                   The Sound of Wings
+################################################################
+
+class SoundOfWings(OpportunityCard):
+    def __init__(self):
+        super().__init__("The Sound of Wings")
+        self.actions = [
+            SoundOfWings1_Confront(),
+        ]
+
+    def can_draw(self, state):
+        return state.get(Item.WingsOfChange) > 0
+
+class SoundOfWings1_Confront(Action):
+    def __init__(self):
+        super().__init__("Confront it")
+
+    def pass_items(self, state: NadirState):
+        return {
+            Item.Irrigo: 2,
+            Item.WingsOfChange: -1,
+            Item.MemoryOfAMuchStrangerSelf: 1,
+            Item.CausticApocryphon: 1
+        }
+
+
+class NadirSimRunner(SimulationRunner):
+    def __init__(self, runs: int, initial_values: dict):
+        super().__init__(runs, initial_values)
+
+
+        self.storylets = [
+            StoryletNadir()
+        ]
+
+        self.cards = [
+            CardGame(),
+            FamiliarFace(),
+            PauseForRefreshment(),
+            WakingDreamOfMotion(),
+            WakingDreamOfReflections(),
+            WakingDreamOfWater(),
+            WeaknessInTheAir(),
+            AltarfulOfStrangers(),
+            UnlikelyGarden(),
+            RecallHowTheyCame(),
+            Losing(),
+            LostAtSea(),
+            OldBones(),
+            OldSins(),
+            SomethingMoves(),
+            TheCatafalquerie(),
+            EndOfBattles(),
+            HoleInYourHead(),
+            SoundOfWings(),
+            TheWeb(),
+            UnjustlyImprisoned(),
+            WoodsInWinter()
+        ]
+
+    def create_state(self):
+        state = NadirState()
+        return state
+    
+runner = NadirSimRunner(
+    runs = 20000,
+    initial_values= {
+        # Item.
+        Item.WingsOfChange: 1,
+        Item.Nightmares: 0,
+        # Item.DiscordantLaw: 1
+    }
+)
+
+runner.outfit = PlayerOutfit(340, 18)
+
+runner.run_simulation()

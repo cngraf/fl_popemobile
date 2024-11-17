@@ -830,6 +830,7 @@ class Item(Enum):
     GlimEncrustedCarapace = auto()
     TantalisingPossibility = auto()
     GlimpseOfAnathema = auto()
+    WingsOfChange = auto()
 
     # Firmament - The Stacks
     _StacksProgress = auto()
