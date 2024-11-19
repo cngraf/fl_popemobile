@@ -30,7 +30,8 @@ import london.forgotten_quarter
 
 import bone_market.trades
 
-import parabola
+import parabola.base_camp
+import parabola.adulterine_castle
 
 import unterzee.gaiders_mourn
 import unterzee.khanate
@@ -61,6 +62,8 @@ import uncategorized.menace_locations
 import fate.philosofruits
 import fate.upwards
 import fate.whiskerways
+
+import posi
 
 # --------------------------------------------
 # -------------- Parameters    ---------------
@@ -107,7 +110,8 @@ unterzee.wakeful_eye.add_trades(config)
 unterzee.port_cecil.add_trades(config)
 unterzee.gaiders_mourn.add_trades(config)
 
-parabola.add_trades(config)
+parabola.base_camp.add_trades(config)
+parabola.adulterine_castle.add_trades(config)
 
 upper_river.upper_river_exchange.add_trades(config)
 upper_river.uncategorized.add_trades(config)
@@ -135,6 +139,7 @@ fate.philosofruits.add_trades(config)
 fate.upwards.add_trades(config)
 fate.whiskerways.add_trades(config)
 
+posi.add_trades(config)
 
 runner = ModelRunner(
     optimize_input=optimization.params.solution_input,

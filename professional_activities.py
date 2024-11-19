@@ -176,34 +176,34 @@ def add_trades(config: config.Config):
                 Item.ApproximateValueOfOutstandingInvoicesInPennies: 410
             })            
 
-        if spec == Specialization.OntologicalCartographer:
-            for airs in airs_list[:5]:
-                trade(0, {
-                    airs: -1,
-                    Item.ApproximateValueOfOutstandingInvoicesInPennies: 450,
-                    Item.ServicesBohemians: 1
-                })
+        # if spec == Specialization.OntologicalCartographer:
+        #     for airs in airs_list[:5]:
+        #         trade(0, {
+        #             airs: -1,
+        #             Item.ApproximateValueOfOutstandingInvoicesInPennies: 450,
+        #             Item.ServicesBohemians: 1
+        #         })
 
-            for airs in airs_list[:4]:
-                trade(0, {
-                    airs: -1,
-                    Item.ApproximateValueOfOutstandingInvoicesInPennies: 410,
-                    Item.ServicesTheHoneyAddledDetective: 1
-                })
+        #     for airs in airs_list[:4]:
+        #         trade(0, {
+        #             airs: -1,
+        #             Item.ApproximateValueOfOutstandingInvoicesInPennies: 410,
+        #             Item.ServicesTheHoneyAddledDetective: 1
+        #         })
 
-        if spec == Specialization.Oneirotect:
-            for airs in airs_list[5:]:
-                trade(0, {
-                    airs: -1,
-                    Item.ApproximateValueOfOutstandingInvoicesInPennies: 450
-                })
+        # if spec == Specialization.Oneirotect:
+        #     for airs in airs_list[5:]:
+        #         trade(0, {
+        #             airs: -1,
+        #             Item.ApproximateValueOfOutstandingInvoicesInPennies: 450
+        #         })
 
-            for airs in airs_list[7:]:
-                trade(0, {
-                    airs: -1,
-                    Item.ApproximateValueOfOutstandingInvoicesInPennies: 410,
-                    Item.ServicesTheGreatGame: 1
-                })    
+        #     for airs in airs_list[7:]:
+        #         trade(0, {
+        #             airs: -1,
+        #             Item.ApproximateValueOfOutstandingInvoicesInPennies: 410,
+        #             Item.ServicesTheGreatGame: 1
+        #         })    
                 
     # if profession == Profession.MonsterHunter:
 

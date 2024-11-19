@@ -99,6 +99,10 @@ item_conversion_rates = {
         Item.JadeFragment: 13
     },
 
+    Item._BannedWorksPrize: { Item.Stuiver: 2320 },
+    Item._DeadStarsPrize: { Item.Stuiver: 2000, Item.Echo: 101.2 },
+    Item._UnrealPlacesPrize: { Item._ApproximateEchoValue: 116 },
+
     # # Second Chances
     # # Ballpark @ 2/action @ 6 EPA
     # Item.SuddenInsight: { Item.Echo: 3, Item.Action: 0.5 },

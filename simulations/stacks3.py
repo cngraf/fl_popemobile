@@ -115,8 +115,11 @@ class LibraryState(GameState):
 
         high_value_card_in_hand = any(card.__class__ in high_value_cards for card in self.hand)
 
-        key_cap = 20
-        route_floor = 10
+        key_cap = 15
+        route_floor = 6
+
+        # not worth skipping for octavo
+        want_noises = keys < key_cap and noises == 0 # and not octavo_available
 
         list = [
             Storylet_EnterStacks,
@@ -125,27 +128,44 @@ class LibraryState(GameState):
             ChainedOctavo1_Unchain,
         ]
 
+        if progress >= 35 and self.get(Item.InSearchOfLostTime) == 2:
+            list.append(DeadEnd2_VantagePoint)
+
+        if any(card.__class__ in [GrandStaircase] for card in self.hand) \
+            and noises > 0:
+            list.append(DeadEnd2_VantagePoint)
+
         # key sources
         if keys < key_cap:
             list.extend([LibrariansOffice1_PickDrawers])
-
+            
             if noises < 22:
                 list.append(GaolerLibrarian2_LiftKey)
+
+        # if want_noises and progress < 40:
+        #     list.append(MapRoom3_CartographerLead)
 
         list.extend([
             # Routes + Econ
             MapRoom4_PaintRoutes,
             MapRoom1_LibraryMaps,
-            
+        ])
+
+        if progress >= 40:# or octavo_available:
+            list.extend([
+                Deck_RefillHand
+            ])
+        
+        list.extend([
             # Advance
             ReadingRoom_OpenTheBook,
             ApocryphaFound_Claim,
         ])
-    
 
-        if progress >= 40:
+        if octavo_available:
             list.extend([
-                Deck_RefillHand
+                DeadEnd1_RopeDescend,
+                GrandStaircase1_InformedDecision
             ])
 
         # if octavo_available:
@@ -160,9 +180,9 @@ class LibraryState(GameState):
                 Atrium2_CourseCorrect
             ])
 
-        # # Routes + more TPs, harder check
-        if routes < 5:
-            list.append(DeadEnd2_VantagePoint)
+        # # # Routes + more TPs, harder check
+        # if routes < 5:
+        #     list.append(DeadEnd2_VantagePoint)
 
         # 5 is min for 100%
         if progress < 35: #and routes >= 5:
@@ -180,10 +200,6 @@ class LibraryState(GameState):
                 GodsEyeView2_FocusPath
             ])
 
-        # # Routes + more TPs, harder check
-        if routes < route_floor:
-            list.append(DeadEnd2_VantagePoint)
-
         # TODO experiment with this placement
         if progress < 35 and routes >= route_floor:
             list.append(StoneGallery3_FollowBorehole)
@@ -191,13 +207,13 @@ class LibraryState(GameState):
         # if len(self.hand) < 4:
         #     list.append(Storylet_ToggleCartographer)
 
-        list.append(Deck_RefillHand)
+        if want_noises:
+            list.append(BlackGallery1_Woesel)        
 
-        if keys < key_cap and noises == 0:
-            list.append(BlackGallery1_Woesel)
+        list.append(Deck_RefillHand)  
 
         if not high_value_card_in_hand:
-            if keys < key_cap and noises == 0:
+            if want_noises:
                 list.append(DeadEnd1_Woesel)
 
             list.append(DeadEnd1_RopeDescend)
@@ -206,6 +222,10 @@ class LibraryState(GameState):
                 list.append(Labyrinth1_RethinkMovements)  
 
             list.append(GrandStaircase1_InformedDecision)
+
+        # # Routes + more TPs, harder check
+        if routes < route_floor:
+            list.append(DeadEnd2_VantagePoint)        
 
         if progress < 25:
             list.append(Compass2_Chart)
@@ -219,32 +239,34 @@ class LibraryState(GameState):
             BlackGallery2_NavigateAlternateSenses,
 
             BlackGallery1_LightLantern,
-            StoneGallery1_SilentGallery,
             
             PoisonGallery1_FurnitureSteppingStones,
 
             GaolerLibrarian3_Intervention,
+
+            StoneGallery1_SilentGallery,
+            
+            DeadEnd1_RopeDescend,
+            GrandStaircase1_InformedDecision,
+
+            # 1-3 routes
+            Compass1_Camera,            
+            
             LibrariansOffice2_OppositeDoor,
             TerribleShushing2_HurryAlong,
 
-            DeadEnd1_RopeDescend,
-            GrandStaircase1_InformedDecision,
-            
-            # 1-3 routes
-            Compass1_Camera,
+            Index1_SearchReferenceCard,
+            Atrium2_CourseCorrect,
 
             # 5 progress for 1 fragment
             Labyrinth2_RejectShape,
             Index3_SituateGreaterWhole,
 
-            # Gain routes only
-            DiscardedLadder1_Climb,
-            Index1_SearchReferenceCard,
-
             # 5 progress for 1 route
             Atrium1_Continue,
 
-            Atrium2_CourseCorrect,
+            # Gain routes only
+            DiscardedLadder1_Climb,            
 
             Snuffbox1_ComputeFigure,
             ChainedOctavo2_ExamineSection,
@@ -634,7 +656,7 @@ class Atrium2_CourseCorrect(Action):
     def pass_items(self, state: LibraryState):
         return {
             Item._StacksProgress: 5,
-            Item.RouteTracedThroughTheLibrary: 1.5, # TODO random?
+            Item.RouteTracedThroughTheLibrary: random.randint(1,2), # TODO random?
             Item.FragmentaryOntology: -1
         }
 
@@ -1818,18 +1840,24 @@ class StacksSimRunner(SimulationRunner):
 
             state.items[item] = self.total_item_changes.get(item, 0)
 
+
+        # if state.get(Item.AnathemaUnchained) in (0, 9):
+        #     state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.IndexOfBannedWorks.value
+        # else:
+        
+        state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.CodexOfUnrealPlaces.value            
+
         return state
     
     # def after_run(self, state):
     #     key_count = state.get(Item.LibraryKey)
-
     #     self.key_distro[key_count] = self.key_distro.get(key_count, 0)
     #     self.key_distro[key_count] += 1 
     
 simulation = StacksSimRunner(
-    runs = 10000,
+    runs = 30000,
     initial_values={
-        Item.ApocryphaSought: ApocryphaSoughtBook.AnnalOfDeadStars.value,
+        # Item.ApocryphaSought: ApocryphaSoughtBook.AnnalOfDeadStars.value,
 
         # Item.RouteTracedThroughTheLibrary: 0,
         # Item.FragmentaryOntology: 0,
@@ -1887,6 +1915,9 @@ my_outfit.neathproofed_inerrant = 8 + 3
 simulation.outfit = my_outfit
 
 simulation.run_simulation()
+
+for item in (Item.RouteTracedThroughTheLibrary, Item.LibraryKey):
+    print(f"{item.name} {simulation.total_item_changes[item]}")
 
 # for i in simulation.key_distro.items():
 #     print(i)

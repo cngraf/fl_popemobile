@@ -498,9 +498,9 @@ class SimulationRunner:
         item_summaries.sort(key=lambda x: x[1], reverse=True)
 
         for item_name, avg_change, echo_value, echo_per_action in item_summaries:
-            print(f"{item_name:<40}{avg_change:<15.2f}{echo_value:<15.2f}{echo_per_action:<20.4f}")
+            print(f"{item_name:<36}{avg_change:>10.2f}{echo_value:>15.2f}{echo_per_action:>15.4f}")
 
-        print(f"\n{'Total Echo/Action':<40}{total_echo_value / self.total_actions:.4f}")
+        print(f"\n{'Total':<46}{total_echo_value/self.runs:>15.2f}{total_echo_value / self.total_actions:>15.4f}")
 
     def truncate_string(self, s, length=25):
         if len(s) > length:

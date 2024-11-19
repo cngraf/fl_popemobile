@@ -66,7 +66,7 @@ class NadirState(GameState):
 
         irrigo = self.get(Item.Irrigo)
 
-        irrigo_cap = 9
+        irrigo_cap = 5
 
         list = [
             Storylet_EnterNadir

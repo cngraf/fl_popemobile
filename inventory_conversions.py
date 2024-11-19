@@ -3,7 +3,7 @@ import optimization.params as params
 from helper.utils import *
 
 def add_trades(config, default_rare_success_rate = 0.05):
-    add = config.trade
+    add = config.add
     trade = config.trade
     
     ## --------------------------------------
@@ -80,6 +80,19 @@ def add_trades(config, default_rare_success_rate = 0.05):
         # Item.ZeeLegs: -25, # TODO
         Item.CartographersHoard: 1
     })
+
+    add({
+        Item.Action: -1,
+        Item.OneiromanticRevelation: -5,
+        Item.ParabolanParable: 1
+    })
+
+    add({
+        Item.Action: -1,
+        Item.OneiromanticRevelation: -1,
+        Item.VitreousAlmanac: 5,
+        Item.GlassGazette: 1
+    })    
 
     # ----- Mysteries
 

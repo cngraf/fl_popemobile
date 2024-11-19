@@ -205,16 +205,6 @@ def add_trades(config: Config):
 
     # --- Railway Board Meeting Dividend
     
-    # Add Entrepreneur and vote him off
-    # TODO: confirm action cost
-    # config.add({
-    #     Item.Action: -7,
-    #     Item.InCorporateDebt: -15,
-    #     Item.HinterlandScrip: 10
-    # })
-
-    # TODO: does TLC spur count as a station?
-
     '''
     Action tally
         1 add Tentacled Entrepreneur
@@ -234,7 +224,7 @@ def add_trades(config: Config):
     Total: 1 + 6 + (6 * 2) = 19 actions 
     '''
     
-    stations_built = 9
+    stations_built = 10
     train_luxuries = 6
 
     config.add({

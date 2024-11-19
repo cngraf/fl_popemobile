@@ -712,7 +712,7 @@ def add_trades(config: Config):
     
         Item.DiscordantSoul: 1,
         Item.DirefulReflection: 1,
-        Item.MourningCandle: 2
+        Item.MourningCandle: 2,
     })
 
     add({

@@ -2138,8 +2138,8 @@ def simulate_runs(num_runs):
     simple_mode = True
 
     state = LibraryState()
-    state.apocrypha_sought = ApocryphaSought.BannedWorks
-    state.cartographer_enabled = False
+    state.apocrypha_sought = ApocryphaSought.UnrealPlaces
+    state.cartographer_enabled = True
     state.take_alternate_reward = True
 
     # Progress bar setup

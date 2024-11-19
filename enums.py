@@ -131,6 +131,7 @@ class Item(Enum):
 
     _ParabolaAction = auto()
     _ParabolaRoundTrip = auto()
+    _DiscoAction = auto()
 
     _EalingAction = auto()
     _JerichoAction = auto()
@@ -161,6 +162,54 @@ class Item(Enum):
     _SocialAction = auto()
 
     _TestItem = auto()
+
+    #######################################################
+    #                       POSI
+    #######################################################      
+
+    PersonOfSomeImportance = auto()
+
+    _PersonOfSomeLittleConsequence12 = auto()
+    _PersonOfSomeLittleConsequence11 = auto()
+    _PersonOfSomeLittleConsequence10 = auto()
+    _PersonOfSomeLittleConsequence9 = auto()
+    _PersonOfSomeLittleConsequence8 = auto()
+    _PersonOfSomeLittleConsequence7 = auto()
+    _PersonOfSomeLittleConsequence6 = auto()
+    _PersonOfSomeLittleConsequence5 = auto()
+    _PersonOfSomeLittleConsequence4 = auto()
+    _PersonOfSomeLittleConsequence3 = auto()
+    _PersonOfSomeLittleConsequence2 = auto()
+    _PersonOfSomeLittleConsequence1 = auto()
+
+    BringerOfDeath = auto()
+    FearsomeDuelist = auto()
+    ProcurerOfSavageBeasts = auto()
+
+    DarlingOfAmbassadorsBall = auto()
+    MementoOfPassion = auto()
+    BanishedFromCourt = auto()
+    
+    FeaturingInTalesOfUniversity = auto()
+    MasterThief = auto()
+    FinePieceInTheGame = auto()
+
+    KeyToHandsomeTownhouse = auto()
+    KeyToLairInMarshes = auto()
+    KeyToRooftopShack = auto()
+    KeyToSmokyFlophouse = auto()
+    KeyToCottageByObservatory = auto()
+    KeytoRoomsAboveBookshop = auto()
+    KeytoRoomsAboveGamblingDen = auto()
+
+    _DuelingBlackRibbon_1 = auto()
+    _DuelingBlackRibbon_2 = auto()
+    _DuelingBlackRibbon_3 = auto()
+    _DuelingBlackRibbon_4 = auto()
+    _DuelingBlackRibbon_5 = auto()
+
+    RunningBattle = auto()
+    TheHuntIsOn = auto()
 
     #######################################################
     #                       Stats
@@ -1198,6 +1247,7 @@ class Item(Enum):
 
     DiscordantLaw = auto()
     CrystallisedCurio = auto()
+    MemoryOfAnAnchorhold = auto()
 
     TheMindsAscent1 = auto()
     TheMindsAscent2 = auto()

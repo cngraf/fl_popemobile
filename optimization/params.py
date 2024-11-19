@@ -14,6 +14,7 @@ story_qualities = {
     Item.BagALegend: 4000,
 
     # Item.ListOfAliasesWrittenInGant: 1,
+    Item.SetOfCosmogoneSpectacles: 1,
 
     Item._AllianceWithBigRat: 1,
 }
