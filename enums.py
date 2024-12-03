@@ -960,6 +960,8 @@ class Item(Enum):
     CheerfulGoldfish = auto()
     UntrainedLyrebird = auto()
     TalkativeRattusFaber = auto()
+    MemoriousGoldfish = auto()
+    DaughterInTheShadows = auto()
 
     # Unsorted
     BundleOfRaggedClothing = auto()

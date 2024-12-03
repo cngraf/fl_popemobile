@@ -7,13 +7,16 @@ from simulations.item_conversions import conversion_rate
 from simulations.models import *
 from simulations.models import GameState
 
-# TODO add sound of wings
+# TODO add EV of:
+# second chances for end of battles & unlikely garden
+# dramatic tension for old bones & dance goes on
 
 class NadirState(GameState):
     def __init__(self):
         super().__init__(max_hand_size=5)
         self.status = "InProgress"
         self.skip_econ_inputs = False
+        self.irrigo_cap = 9
 
     def ev_from_item(self, item, val: int):
         if item == Item.Irrigo:
@@ -66,16 +69,18 @@ class NadirState(GameState):
 
         irrigo = self.get(Item.Irrigo)
 
-        irrigo_cap = 5
-
         list = [
             Storylet_EnterNadir
         ]
 
-        if irrigo >= irrigo_cap:
-            list.append(Storylet_LeaveNadir)
+        if irrigo >= 10:
+            list.append(Storylet_AutofireMaxIrrigo)
+
+        if irrigo >= self.irrigo_cap:
+            list.append(Storylet_LeaveNadirLowIrrigo)
+            list.append(Storylet_LeaveNadirHighIrrigo)
     
-        if irrigo + 2 <= irrigo_cap:
+        if irrigo + 2 <= self.irrigo_cap:
             list.extend([
                 Battles1_Wisdom, # 62.5e/2, same as other 3
                 Woods_DanceGoesOnWithClathermont, # 36.5e/2
@@ -85,7 +90,7 @@ class NadirState(GameState):
         # TODO fine-tune at lower Irrigo values?
         list.append(Losing3_Goldfish) # 25e/1
 
-        if irrigo + 2 <= irrigo_cap:
+        if irrigo + 2 <= self.irrigo_cap:
             list.extend([
                 Garden2_RosersReroll,
                 # Garden2_RosersBail
@@ -100,13 +105,14 @@ class NadirState(GameState):
         # TODO where to put Catafalquerie
 
         # Low value 1 Irrigo
-        if irrigo + 1 <= irrigo_cap:
+        if irrigo + 1 <= self.irrigo_cap:
             list.extend([
                 Sins_AllowImmaculateEel, # 6.25e/1
                 Cata3_RebelsWhoWillNotRise, # 5e/1
 
                 Altarful3_Urchins, # 2.5e/1
                 Web_Ascend, # 2.5e/1
+                Losing1_JustOne,
 
                 Pause1_Bread, # 1e/1
                 CardGame1_SpeakManLeft, # 0.6e/1
@@ -116,15 +122,18 @@ class NadirState(GameState):
                 Air1_Dream, # 0e/1
                 Face1_GetOut, # 0e/1
                 SomethingMoves1_WhatDoYouSee, # 0e/1
-                Storylet_LeaveNadir
+                Storylet_LeaveNadirLowIrrigo,
+                Storylet_LeaveNadirHighIrrigo,
                 ])
 
 
         # if irrigo >= 5:
-        list.append(Storylet_LeaveNadir)
+        list.append(Storylet_LeaveNadirLowIrrigo)
+        list.append(Storylet_LeaveNadirHighIrrigo)
 
         # Low value 2 Irrigo
         list.extend([
+            OldBones1_ExamineSiteWithoutDaughter,
             Motion1_Run,
             Reflections1_Run,
             Water1_Run
@@ -155,7 +164,9 @@ class StoryletNadir(OpportunityCard):
         self.actions = [
             Deck_RefillHand(),
             Storylet_EnterNadir(),
-            Storylet_LeaveNadir()
+            Storylet_LeaveNadirLowIrrigo(),
+            Storylet_LeaveNadirHighIrrigo(),
+            Storylet_AutofireMaxIrrigo()
         ]
 
 class Deck_RefillHand(Action):
@@ -176,8 +187,9 @@ class Deck_RefillHand(Action):
 
 class Storylet_EnterNadir(Action):
     def __init__(self):
-        super().__init__("(ENTER)")
-        self.action_cost = 3
+        super().__init__("(FLEETING + ENTER)")
+        # 1 action to reset Irrigo, 3 to enter cave
+        self.action_cost = 4
 
     def can_perform(self, state):
         return state.get(Item.Irrigo) == 0
@@ -187,10 +199,71 @@ class Storylet_EnterNadir(Action):
             Item.Irrigo: 1
         }
 
-class Storylet_LeaveNadir(Action):
+# Leaving costs 0, reseting Irrigo costs 1
+class Storylet_AutofireMaxIrrigo(Action):
     def __init__(self):
-        super().__init__("(LEAVE)")
-    
+        super().__init__("Struggle for the exit + Leave")
+        self.action_cost = 0
+
+    def pass_items(self, state):
+        stat_loss = -(50 + 5 * state.get(Item.Irrigo))
+        nm_loss = -(1 + 3/4 * (state.get(Item.Nightmares) - 1))
+
+        return {
+            Item.Nightmares: nm_loss,
+            Item.Dangerous: stat_loss,
+            Item.Watchful: stat_loss,
+            Item.Persuasive: stat_loss,
+            Item.Shadowy: stat_loss,            
+        }
+
+    def perform_pass(self, state: GameState):
+        result = super().perform_pass(state)
+        state.status = "Complete"
+        return result
+
+# Leaving costs 0, reseting Irrigo costs 1
+class Storylet_LeaveNadirLowIrrigo(Action):
+    def __init__(self):
+        super().__init__("Leave (Irrigo < 6)")
+        self.action_cost = 0
+
+    def can_perform(self, state):
+        return state.get(Item.Irrigo) < 6
+
+    def pass_items(self, state):
+        stat_loss = -1 * state.get(Item.Irrigo)
+
+        return {
+            Item.Nightmares: -1,
+            Item.Dangerous: stat_loss,
+            Item.Watchful: stat_loss,
+            Item.Persuasive: stat_loss,
+            Item.Shadowy: stat_loss,
+        }
+
+    def perform_pass(self, state: GameState):
+        result = super().perform_pass(state)
+        state.status = "Complete"
+        return result
+
+class Storylet_LeaveNadirHighIrrigo(Action):
+    def __init__(self):
+        super().__init__("Leave (Irrigo >= 6)")
+        self.action_cost = 0
+
+    def pass_items(self, state):
+        stat_loss = -5 * state.get(Item.Irrigo)
+        nm_loss = -3/4 * state.get(Item.Nightmares)
+
+        return {
+            Item.Nightmares: nm_loss,
+            Item.Dangerous: stat_loss,
+            Item.Watchful: stat_loss,
+            Item.Persuasive: stat_loss,
+            Item.Shadowy: stat_loss,            
+        }
+
     def perform_pass(self, state: GameState):
         result = super().perform_pass(state)
         state.status = "Complete"
@@ -746,7 +819,7 @@ class Losing1_JustOne(Action):
             Item.CrypticClue: -1,
             Item.Irrigo: 1,
             Item.ExtraordinaryImplication: 1,
-            # Item.Watchful: -10
+            Item.Watchful: -10
         }
 
 class Losing2_DubiousAttribution(Action):
@@ -763,6 +836,9 @@ class Losing2_DubiousAttribution(Action):
 class Losing3_Goldfish(Action):
     def __init__(self):
         super().__init__("Dubious attribution")
+
+    def can_perform(self, state):
+        return state.get(Item.MemoriousGoldfish)
 
     def pass_rate(self, state):
         bonus = state.get(Item.Irrigo) * 20
@@ -830,11 +906,11 @@ class OldBones(OpportunityCard):
     def __init__(self):
         super().__init__("Old Bones")
         self.actions = [
-            OldBones1_ExamineSite(),
+            OldBones1_ExamineSiteWithoutDaughter(),
             OldBones2_ExamineSiteWithDaughter()
         ]
 
-class OldBones1_ExamineSite(Action):
+class OldBones1_ExamineSiteWithoutDaughter(Action):
     def __init__(self):
         super().__init__("Examine the site")
 
@@ -848,9 +924,8 @@ class OldBones2_ExamineSiteWithDaughter(Action):
     def __init__(self):
         super().__init__("Examine the site (A Daughter in the Shadows)")
 
-    # def can_perform(self, state: NadirState):
-    #     # TODO 
-    #     return state.get(Item.DaughterInTheShadows)
+    def can_perform(self, state: NadirState):
+        return state.get(Item.DaughterInTheShadows)
 
     def pass_items(self, state: NadirState):
         return {
@@ -1386,15 +1461,17 @@ class NadirSimRunner(SimulationRunner):
 
     def create_state(self):
         state = NadirState()
+        state.irrigo_cap = 9
         return state
     
 runner = NadirSimRunner(
     runs = 20000,
     initial_values= {
-        # Item.
+        Item.MemoriousGoldfish: 1,
+        Item.DaughterInTheShadows: 1,
         Item.WingsOfChange: 1,
-        Item.Nightmares: 0,
-        # Item.DiscordantLaw: 1
+        Item.DiscordantLaw: 1,
+        # Item.Nightmares: 15,
     }
 )
 

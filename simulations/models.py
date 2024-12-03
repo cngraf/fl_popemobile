@@ -275,7 +275,7 @@ class Action:
     
     @staticmethod
     def narrow_pass_rate(dc, stat_value):
-        if dc is not None and dc > 0:
+        if dc is not None: # and dc > 0:
             return 0.5 + (stat_value - dc) * 0.1
         else:
             return 1.0        

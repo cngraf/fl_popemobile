@@ -323,7 +323,7 @@ item_conversion_rates = {
     Item.ReportedLocationOfAOneTimePrinceOfHell: { Item.Echo: 1560.00 },
 
     # Items with approximate Echo values
-    Item.DiscordantSoul: { Item._ApproximateEchoValue: 62.50 },
+    Item.DiscordantSoul: { Item._ApproximateEchoValue: 50.00 },
     Item.InfernalMachine: { Item._ApproximateEchoValue: 66.00 },
 
     ################################################################################

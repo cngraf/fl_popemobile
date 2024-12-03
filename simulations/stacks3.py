@@ -53,7 +53,7 @@ class LibraryState(GameState):
 
     def step(self):
 
-        best_card, best_action = self.best_action_by_simple_ranking()
+        best_card, best_action = self.best_action_by_simple_ranking_speed()
 
         # holding_octavo = any(card.__class__ == ChainedOctavo for card in self.hand)
         # if holding_octavo and best_card.__class__ != ChainedOctavo:
@@ -91,8 +91,11 @@ class LibraryState(GameState):
             self.step()
 
 
-    # Econ strat, TODO do another one for speed
-    def best_action_by_simple_ranking(self):
+    ################################################################
+    #                     Econ Strat
+    ################################################################
+    
+    def best_action_by_simple_ranking_econ(self):
 
         progress = self.get(Item._StacksProgress)
         keys = self.get(Item.LibraryKey)
@@ -127,7 +130,7 @@ class LibraryState(GameState):
             Storylet_FindYourWayBack,
             ChainedOctavo1_Unchain,
         ]
-
+ 
         if progress >= 35 and self.get(Item.InSearchOfLostTime) == 2:
             list.append(DeadEnd2_VantagePoint)
 
@@ -185,7 +188,7 @@ class LibraryState(GameState):
         #     list.append(DeadEnd2_VantagePoint)
 
         # 5 is min for 100%
-        if progress < 35: #and routes >= 5:
+        if progress < 35 and routes >= 5:
             list.append(TeaRoom2_ConsultMaps)
 
         # 15 progress
@@ -304,6 +307,223 @@ class LibraryState(GameState):
         # If no action can be performed, return None
         return (None, None)
 
+
+    ################################################################
+    #                     Speed Strat
+    ################################################################
+    
+    def best_action_by_simple_ranking_speed(self):
+
+        progress = self.get(Item._StacksProgress)
+        keys = self.get(Item.LibraryKey)
+        routes = self.get(Item.RouteTracedThroughTheLibrary)
+        frags = self.get(Item.FragmentaryOntology)
+        noises = self.get(Item.NoisesInTheLibrary)
+        octavo_available = self.get(Item.AnathemaUnchained) == 0 and self.get(Item.InSearchOfLostTime) == 1
+
+
+        high_value_cards = [
+            TeaRoom,
+            ChainedOctavo,
+            GaolerLibrarian,
+            # MapRoom,
+            LibrariansOffice,
+        ]
+
+        if keys > 1:
+            high_value_cards.append(LockedGate)
+
+        high_value_card_in_hand = any(card.__class__ in high_value_cards for card in self.hand)
+
+        key_cap = 15
+        route_floor = 6
+
+        # not worth skipping for octavo
+        want_noises = keys < key_cap and noises == 0 # and not octavo_available
+
+        list = [
+            Storylet_EnterStacks,
+            Storylet_ReturnToRoof,
+            Storylet_FindYourWayBack,
+            ChainedOctavo1_Unchain,
+        ]
+
+        # if progress >= 35 and self.get(Item.InSearchOfLostTime) == 2:
+        #     list.append(DeadEnd2_VantagePoint)
+
+        # if any(card.__class__ in [GrandStaircase] for card in self.hand) \
+        #     and noises > 0:
+        #     list.append(DeadEnd2_VantagePoint)
+
+        # key sources
+        if keys < key_cap:
+            list.extend([LibrariansOffice1_PickDrawers])
+            
+            if noises < 22:
+                list.append(GaolerLibrarian2_LiftKey)
+
+        # if want_noises and progress < 40:
+        #     list.append(MapRoom3_CartographerLead)
+
+        # list.extend([
+        #     # Routes + Econ
+        #     MapRoom4_PaintRoutes,
+        #     MapRoom1_LibraryMaps,
+        # ])
+
+        if progress >= 40:# or octavo_available:
+            list.extend([
+                Deck_RefillHand
+            ])
+        
+        list.extend([
+            # Advance
+            ReadingRoom_OpenTheBook,
+            ApocryphaFound_Claim,
+        ])
+
+        # if octavo_available:
+        #     list.extend([
+        #         DeadEnd1_RopeDescend,
+        #         GrandStaircase1_InformedDecision
+        #     ])
+
+        # if octavo_available:
+        #     list.extend([
+        #         DeadEnd1_RopeDescend,
+        #         GrandStaircase1_InformedDecision
+        #     ])
+
+        # Minor improvement even below 100%?
+        if frags >= 5:
+            list.extend([
+                Atrium2_CourseCorrect
+            ])
+
+        # # # Routes + more TPs, harder check
+        # if routes < 5:
+        #     list.append(DeadEnd2_VantagePoint)
+
+        # 5 is min for 100%
+        if progress < 35 and routes >= 5:
+            list.append(TeaRoom2_ConsultMaps)
+
+        # 15 progress
+        if progress < 30 and keys >= 2:
+            list.extend([
+                LockedGate1_UseKey,
+                LibrariansOffice3_UnlockCart,
+            ])
+
+        if progress < 30:
+            list.extend([
+                GodsEyeView2_FocusPath
+            ])
+
+        # TODO experiment with this placement
+        if progress < 35 and routes >= route_floor:
+            list.append(StoneGallery3_FollowBorehole)
+
+        # if len(self.hand) < 4:
+        #     list.append(Storylet_ToggleCartographer)
+
+        if want_noises:
+            list.append(BlackGallery1_Woesel)        
+
+        list.append(Deck_RefillHand)  
+
+        if not high_value_card_in_hand:
+            if want_noises:
+                list.append(DeadEnd1_Woesel)
+
+            list.append(DeadEnd1_RopeDescend)
+
+            if progress < 35:
+                list.append(Labyrinth1_RethinkMovements)  
+
+            list.append(GrandStaircase1_InformedDecision)
+
+        # # Routes + more TPs, harder check
+        if routes < route_floor:
+            list.append(Compass1_Camera)        
+
+        if progress < 25:
+            list.append(Compass2_Chart)
+
+        list.extend([        
+            # 5 progress free*
+            GlimpseWindow2_MoveQuickly,
+            FloweringGallery1_KeepGoing,
+
+            GreyCardinal1_FurryLunch,
+            BlackGallery2_NavigateAlternateSenses,
+
+            BlackGallery1_LightLantern,
+            
+            PoisonGallery1_FurnitureSteppingStones,
+
+            GaolerLibrarian3_Intervention,
+
+            StoneGallery1_SilentGallery,
+            
+            DeadEnd1_RopeDescend,
+            GrandStaircase1_InformedDecision,
+
+            # 1-3 routes
+            Compass1_Camera,            
+            
+            LibrariansOffice2_OppositeDoor,
+            TerribleShushing2_HurryAlong,
+
+            Index1_SearchReferenceCard,
+            Atrium2_CourseCorrect,
+
+            # 5 progress for 1 fragment
+            Labyrinth2_RejectShape,
+            Index3_SituateGreaterWhole,
+
+            # 5 progress for 1 route
+            Atrium1_Continue,
+
+            # Gain routes only
+            DiscardedLadder1_Climb,            
+
+            Snuffbox1_ComputeFigure,
+            ChainedOctavo2_ExamineSection,
+            GrandStaircase2_UpDown,
+            TeaRoom3_MakeSense,
+
+            # Redundant Safety
+            TeaRoom1_Regroup,
+            MapRoom4_PaintRoutes,
+            Compass1_Camera,
+        ])
+
+        # Find the best action from the ranked list that is in the hand
+        for ranked_action in list:
+            for storylet in self.storylets:
+                for action in storylet.actions:
+                    if isinstance(action, ranked_action) and action.can_perform(self):
+                        return (storylet, action)
+            for card in self.hand:
+                for card_action in card.actions:
+                    if isinstance(card_action, ranked_action) and card_action.can_perform(self):
+                        return (card, card_action)
+
+        # # If no card matches, check the refill action
+        # if self.refill_action.can_perform(self):
+        #     return (None, self.refill_action)
+        
+        # for ranked_action in low_prio:
+        #     for card in self.hand:
+        #         for card_action in card.actions:
+        #             if isinstance(card_action, ranked_action) and card_action.can_perform(self):
+        #                 return (card, card_action)
+
+
+        # If no action can be performed, return None
+        return (None, None)
+    
     def book_prize(self):
         book = self.get(Item.ApocryphaSought)
         if book == ApocryphaSoughtBook.IndexOfBannedWorks.value:
@@ -1669,6 +1889,9 @@ class TeaRoom2_ConsultMaps(Action):
     def __init__(self):
         super().__init__("Consult your maps of the library")
 
+    def can_perform(self, state):
+        return state.get(Item.RouteTracedThroughTheLibrary)
+
     def pass_rate(self, state: LibraryState):
         return self.narrow_pass_rate(0, state.get(Item.RouteTracedThroughTheLibrary))
 
@@ -1845,7 +2068,7 @@ class StacksSimRunner(SimulationRunner):
         #     state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.IndexOfBannedWorks.value
         # else:
         
-        state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.CodexOfUnrealPlaces.value            
+        state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.LePrecipiceDeLaTombee.value            
 
         return state
     
@@ -1855,7 +2078,7 @@ class StacksSimRunner(SimulationRunner):
     #     self.key_distro[key_count] += 1 
     
 simulation = StacksSimRunner(
-    runs = 30000,
+    runs = 5000,
     initial_values={
         # Item.ApocryphaSought: ApocryphaSoughtBook.AnnalOfDeadStars.value,
 
@@ -1886,7 +2109,7 @@ my_outfit.dangerous_watchful = 332 + 261
 my_outfit.watchful_cthonosophy15 = 323 + 9 * 15
 
 # gaoler1 (334), shushing1, shushing2, overdue (334 + 10 * noise lvl)
-my_outfit.shadowy = 333
+my_outfit.shadowy = 333 + 6
 
 # posiongallery1 (400)
 my_outfit.shadowy_neathproofed15 = 281 + 9 * 15
@@ -1895,7 +2118,7 @@ my_outfit.shadowy_neathproofed15 = 281 + 9 * 15
 my_outfit.shadowy_inerrant15 = 292 + 7 * 15
 
 # blackGallery1 (400), gaoler2 (417)
-my_outfit.shadowy_insubstantial15 = 314 + 4 * 15
+my_outfit.shadowy_insubstantial15 = 314 + 4 * 15 + 20
 
 # stonegallery2, shape2, octavo2
 my_outfit.cthonosophy = 10
