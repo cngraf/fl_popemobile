@@ -1987,7 +1987,7 @@ class Compass1_Camera(Action):
         super().__init__("Camera2.png")
 
     def pass_rate(self, state: LibraryState):
-        return self.broad_pass_rate(220, state.outfit.watchful_inerrant15)
+        return self.broad_pass_rate(200, state.outfit.watchful_inerrant15)
 
     def pass_items(self, state: LibraryState):
         return {

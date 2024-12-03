@@ -2034,8 +2034,7 @@ class CartographerCompassAction1(Action):
         super().__init__("Camera2.png")
 
     def pass_rate(self, state: LibraryState):
-        # TODO need exact DC
-        return self.broad_success_rate(220, state.outfits.watchful_plus_inerrant15)
+        return self.broad_success_rate(200, state.outfits.watchful_plus_inerrant15)
 
     def perform_success(self, state: LibraryState):
         routes = random.randint(1, 3)
