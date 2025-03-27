@@ -14,7 +14,8 @@ def add_trades(config: Config):
         Item._LondonKhanateRoundTrip: 1,
         Item._AgentInTransit: 1,
         Item._UnassumingCratePickup: 3,
-        Item._TriflingDiplomatSale: 1
+        Item._TriflingDiplomatSale: 1,
+        Item.ZeeLegs: 4
     })
 
     # TODO: move this

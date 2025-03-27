@@ -115,6 +115,8 @@ class Bone():
                 theology = 1
             elif Item.HeadlessSkeleton in recipe:
                 theology = 1
+            elif Item.GlimEncrustedCarapace in recipe:
+                theology = 5
 
             result.theology += count * theology
 
@@ -135,6 +137,7 @@ def bone_table():
         Bone(Item.LeviathanFrame, 312.5, anitquity=1, menace=1),
         Bone(Item.PrismaticFrame, 312.5, anitquity=2, amalgamy=2),
         Bone(Item.FivePointedRibcage, 312.5, amalgamy=2, menace=1),
+        Bone(Item.GlimEncrustedCarapace, 60, amalgamy=1),
 
         Bone(Item.VictimsSkull, 2.5, skulls=1),
         Bone(Item.CarvedBallOfStygianIvory, 2.5),

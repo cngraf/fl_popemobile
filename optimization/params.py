@@ -32,6 +32,8 @@ core_constraint = {
     Item.Constraint: 1,
     solution_input: actions_per_day * 7,
 
+    Item.GlimEncrustedCarapace: 10,
+
     Item._RatMarketRotation: 1,
     Item._BoneMarketRotation: 1,
     Item._VisitFromTimeTheHealer: 1,

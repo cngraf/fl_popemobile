@@ -13,6 +13,7 @@ def add_trades(config):
         Item.Action: -11.5 - 40,
         Item.StashedTreasure: 2700,
         Item._PortCecilAction: 40,
+        Item.ZeeLegs: 2
     })
 
     # ideal cycle w/ maxed stats

@@ -48,7 +48,8 @@ def add_trades(config: Config):
     add({
         Item.Action: -13.5,
         Item.StashedTreasure: 3100,
-        Item._WakefulEyeRoundTrip: 1
+        Item._WakefulEyeRoundTrip: 1,
+        Item.ZeeLegs: 2
     })
 
     visit_length = 13

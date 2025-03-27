@@ -77,7 +77,7 @@ def add_trades(config, default_rare_success_rate = 0.05):
         Item.PartialMap: -25,
         Item.VitreousAlmanac: -5,
         Item.GlassGazette: -25,
-        # Item.ZeeLegs: -25, # TODO
+        Item.ZeeLegs: -25, # TODO
         Item.CartographersHoard: 1
     })
 
@@ -92,7 +92,13 @@ def add_trades(config, default_rare_success_rate = 0.05):
         Item.OneiromanticRevelation: -1,
         Item.VitreousAlmanac: 5,
         Item.GlassGazette: 1
-    })    
+    })
+
+    add({
+        Item.Action: -1,
+        Item.VitreousAlmanac: -1,
+        Item.GlassGazette: 6
+    })
 
     # ----- Mysteries
 
