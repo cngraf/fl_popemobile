@@ -943,6 +943,20 @@ class Item(Enum):
     CF_RescuedHungers = auto()
     CF_Sloughing = auto()    
 
+    # Burgundy
+    BurgundianBeneficence = auto()
+    AgainstTimeAndKings = auto()
+    PreparationsForASaintsDay = auto()
+    SeasonOfHunting = auto()
+    Malefactor = auto()
+    SaddledWithAStolenSack = auto()
+    SaintsDayConflictsResolved = auto()
+    VisitorToBurgundy = auto()
+
+    AsAboveBecomesBelow = auto()
+    NotesOnJoyousEntry = auto()
+    FuelForGlorysFlame = auto()
+
     ################################################################################
     ###                          Equipment                                       ###
     ################################################################################

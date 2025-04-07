@@ -352,14 +352,12 @@ class LibraryState(GameState):
     ################################################################
     
     def best_action_by_simple_ranking_speed(self):
-
         progress = self.get(Item._StacksProgress)
         keys = self.get(Item.LibraryKey)
         routes = self.get(Item.RouteTracedThroughTheLibrary)
         frags = self.get(Item.FragmentaryOntology)
         noises = self.get(Item.NoisesInTheLibrary)
         octavo_available = self.get(Item.AnathemaUnchained) == 0 and self.get(Item.InSearchOfLostTime) == 1
-
 
         high_value_cards = [
             TeaRoom,
@@ -2109,7 +2107,7 @@ class StacksSimRunner(SimulationRunner):
         #     state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.IndexOfBannedWorks.value
         # else:
         
-        state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.CodexOfUnrealPlaces.value            
+        state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.BookOfProperSpeech.value            
 
         return state
     

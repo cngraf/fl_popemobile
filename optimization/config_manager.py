@@ -115,7 +115,7 @@ class ConfigManager:
         """
         return OptimizationConfig(
             optimize_input=Item.Action,
-            optimize_output=Item.Echo,
+            optimize_output=Item.MourningCandle,
             actions_per_day=120,
             cards_per_day=40,
             story_qualities={

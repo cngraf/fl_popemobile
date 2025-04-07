@@ -152,6 +152,8 @@ class PlayerOutfit:
         self.reduce_tw = 0 # TODO re-implement
 
         self.cthonosophy = 5
+        self.insubstantial = 10
+        self.inerrant = 10
         self.shadowy_inerrant15 = 292 + 15 * 7
         self.watchful_inerrant15 = 313 + 15 * 6
 

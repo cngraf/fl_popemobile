@@ -102,6 +102,7 @@ item_conversion_rates = {
     Item._BannedWorksPrize: { Item.Stuiver: 2320 },
     Item._DeadStarsPrize: { Item.Stuiver: 2000, Item.Echo: 101.2 },
     Item._UnrealPlacesPrize: { Item._ApproximateEchoValue: 116 },
+    Item._ProperSpeechPrize: { Item._ApproximateEchoValue: 116.1 },
 
     # # Second Chances
     # # Ballpark @ 2/action @ 6 EPA
