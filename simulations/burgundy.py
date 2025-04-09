@@ -26,9 +26,9 @@ from simulations.models import GameState
 class BurgundyState(GameState):
     """State management for Burgundy exploration."""
     def __init__(self):
-        super().__init__(max_hand_size=5)
+        super().__init__(max_hand_size=3)
         self.status = "InProgress"
-        self.skip_econ_inputs = False
+        self.skip_econ_inputs = True
         self.ev_threshold = 6.0
 
     def aiding_feast(self):
@@ -71,6 +71,7 @@ class BurgundyState(GameState):
     def step(self):
         """Execute one step of the simulation."""
         best_card, best_action = self.best_action_by_simple_ranking()
+        # print(best_action)
 
         if best_action is None:
             # Log state when no actions available
@@ -89,6 +90,9 @@ class BurgundyState(GameState):
                 self.hand.remove(best_card)
 
         self.hand = [card for card in self.hand if card.can_draw(self)]
+
+        if self.actions >= 500:
+            self.status = "Complete"        
 
     def best_action_by_simple_ranking(self):
         """Determine the best action based on economic optimization."""
@@ -138,7 +142,6 @@ class BurgundyState(GameState):
         })
 
         bb_gains = [
-            # StrangerOut
             StrangerOutOfTime_AcquireHelp,
             VineStrangledAisles_SavePriest,
             HonoursOfTheCourt_RescueReichsgraf,
@@ -166,6 +169,15 @@ class BurgundyState(GameState):
             action_list.extend(bb_gains)
 
         action_list.append(Deck_RefillHand)
+        action_list.append(Deck_DiscardLowValue)
+        
+        # Menace cards, if our hand is fully non discardable
+        action_list.extend({
+            DreamsOfHonourAndGlory_ConquerSelf,
+            SoughtByPikeAndGuardsman_DonateCharts,
+            BurgundyOfBlood_PurchaseRelief,
+            StrangerOutOfTime_AcquireHelp
+        })
 
         # Find the best available action
         for ranked_action in action_list:
@@ -190,12 +202,14 @@ class StoryletBurgundy(OpportunityCard):
         super().__init__("Storylet: Burgundy")
         self.actions = [
             Deck_RefillHand(),
+            Deck_DiscardLowValue()
         ]
 
 class Deck_RefillHand(Action):
     """Action to refill the player's hand."""
     def __init__(self):
         super().__init__("(REFILL HAND)")
+        self.action_cost = 0
 
     def can_perform(self, state: BurgundyState):
         return len(state.hand) < state.max_hand_size
@@ -204,6 +218,31 @@ class Deck_RefillHand(Action):
         while len(state.hand) < state.max_hand_size:
             state.draw_card()
         return ActionResult.Pass
+    
+class Deck_DiscardLowValue(Action):
+    """Action to discard the lowest value card in hand."""
+    def __init__(self):
+        super().__init__("(DISCARD LOW VALUE)")
+        self.action_cost = 0
+
+    def can_perform(self, state: BurgundyState):
+        return any(card.free_discard for card in state.hand)
+    
+    def perform(self, state: BurgundyState):
+        # Find card with highest weight that can be freely discarded
+        best_card = None
+        best_weight = -1
+        for card in state.hand:
+            if card.free_discard and card.weight > best_weight:
+                best_card = card
+                best_weight = card.weight
+        
+        if best_card:
+            # print(f"Discarding {best_card.name}")
+            state.hand.remove(best_card)
+            return ActionResult.Pass
+
+        return ActionResult.Fail
 
 ################################################################
 #                     Opportunity Cards
@@ -279,6 +318,7 @@ class MarchForThePeople(OpportunityCard):
     """A March for the People card."""
     def __init__(self):
         super().__init__("A March for the People")
+        self.free_discard = True
         self.actions = [
             MarchForThePeople_AttendPilgrimage()
         ]
@@ -369,6 +409,7 @@ class AidingFeastChurchAndState(OpportunityCard):
     """Aiding a Feast: Church and State card."""
     def __init__(self):
         super().__init__("Aiding a Feast: Church and State")
+        self.free_discard = True
         self.actions = [
             AidingFeastChurchAndState_HighlightVerses(),
             AidingFeastChurchAndState_ExposePriest()
@@ -419,6 +460,7 @@ class AidingFeastHeartsAndStomachs(OpportunityCard):
     """Aiding a Feast: Hearts and Stomachs card."""
     def __init__(self):
         super().__init__("Aiding a Feast: Hearts and Stomachs")
+        self.free_discard = True
         self.actions = [
             AidingFeastHeartsAndStomachs_SupplyVenison(),
             AidingFeastHeartsAndStomachs_TestSupplies()
@@ -469,6 +511,7 @@ class AllAroundTheCountsRock(OpportunityCard):
     """All Around the Count's Rock card."""
     def __init__(self):
         super().__init__("All Around the Count's Rock")
+        self.free_discard = True
         self.actions = [
             AllAroundTheCountsRock_CharmWithoutCrown(),
             AllAroundTheCountsRock_CharmWithCrown(),
@@ -603,6 +646,7 @@ class InvitationFromTheSwashbucklingChevalier(OpportunityCard):
     """An Invitation from the Swashbuckling Chevalier card."""
     def __init__(self):
         super().__init__("An Invitation from the Swashbuckling Chevalier")
+        self.free_discard = True
         self.weight = 1_000_000 # HACK for urgent freq
         # self.urgency = 1 # TODO
         self.actions = [
@@ -636,6 +680,7 @@ class BeneathTheGiltExterior(OpportunityCard):
     """Beneath the Gilt Exterior card."""
     def __init__(self):
         super().__init__("Beneath the Gilt Exterior")
+        self.free_discard = True
         self.actions = [
             BeneathTheGiltExterior_DisseminatePamphlets(),
             BeneathTheGiltExterior_GiveAlms(),
@@ -693,6 +738,7 @@ class CardinalDisagreements(OpportunityCard):
     """Cardinal Disagreements card."""
     def __init__(self):
         super().__init__("Cardinal Disagreements")
+        self.free_discard = True
         self.actions = [
             CardinalDisagreements_StudyLight(),
             CardinalDisagreements_ProbeGravity(),
@@ -781,6 +827,7 @@ class CutthroatsAndCanalmen(OpportunityCard):
     """Cutthroats and Canalmen card."""
     def __init__(self):
         super().__init__("Cutthroats and Canalmen")
+        self.free_discard = True
         self.actions = [
             CutthroatsAndCanalmen_TradeKnowledge(),
             CutthroatsAndCanalmen_ViewCity(),
@@ -829,7 +876,7 @@ class CutthroatsAndCanalmen_ForayBeyond(Action):
 
     def pass_items(self, state: BurgundyState):
         return {
-            Item.HuntIsOn: 3,
+            Item.TheHuntIsOn: 3,
             Item.SampleOfRoofDrip: 10
             # TODO: airs change
         }
@@ -839,7 +886,7 @@ class CutthroatsAndCanalmen_HeedCall(Action):
         super().__init__("Heed the call of the hunting-bell")
 
     def can_perform(self, state: BurgundyState):
-        return state.get(Item.HuntIsOn) >= 15 # or state.skip_econ_inputs
+        return state.get(Item.TheHuntIsOn) >= 15 # or state.skip_econ_inputs
 
     def pass_rate(self, state: BurgundyState):
         # TODO combo score
@@ -870,8 +917,8 @@ class DreamsOfHonourAndGlory(OpportunityCard):
     """Dreams of Honour and Glory card."""
     def __init__(self):
         super().__init__("Dreams of Honour and Glory")
+        self.free_discard = False
         self.weight = 2.0
-        self.disruptive = False
         self.actions = [
             DreamsOfHonourAndGlory_DetermineSleep(),
             DreamsOfHonourAndGlory_SinkDreams(),
@@ -942,6 +989,7 @@ class EchoesOfStormsPast(OpportunityCard):
     """Echoes of Storms Past card."""
     def __init__(self):
         super().__init__("Echoes of Storms Past")
+        self.free_discard = True
         self.actions = [
             EchoesOfStormsPast_ReportPatterns(),
             EchoesOfStormsPast_ShelterDamp(),
@@ -1106,6 +1154,7 @@ class GloriesAndHalfLives(OpportunityCard):
     """Glories and Half-Lives card."""
     def __init__(self):
         super().__init__("Glories and Half-Lives")
+        self.free_discard = True
         self.actions = [
             GloriesAndHalfLives_AidWeaver(),
             GloriesAndHalfLives_ObserveMoths(),
@@ -1176,6 +1225,7 @@ class HeraldsFromElsewhere(OpportunityCard):
     """Heralds from Elsewhere card."""
     def __init__(self):
         super().__init__("Heralds from Elsewhere")
+        self.free_discard = True
         self.weight = 0.8
         self.actions = [
             HeraldsFromElsewhere_ChatGossip(),
@@ -1308,6 +1358,7 @@ class HuntingTheRoofPrey(OpportunityCard):
     """Hunting the (Roof Prey) card."""
     def __init__(self):
         super().__init__("Hunting the (Roof Prey)")
+        self.free_discard = True
         self.actions = [
             HuntingTheRoofPrey_GoForGlory(),
             HuntingTheRoofPrey_StayWithPack()
@@ -1406,6 +1457,7 @@ class PreparationsForASaintsDay(OpportunityCard):
     """Preparations for a Saint's Day card."""
     def __init__(self):
         super().__init__("Preparations for a Saint's Day")
+        self.free_discard = True
         self.weight = 0.5
         self.actions = [
             PreparationsForASaintsDay_PledgeFeast(),
@@ -1447,6 +1499,7 @@ class RisingAndFalling(OpportunityCard):
     """Rising and Falling card."""
     def __init__(self):
         super().__init__("Rising and Falling")
+        self.free_discard = True
         self.actions = [
             RisingAndFalling_WanderStreets(),
             RisingAndFalling_SkirtEmptyPlaces(),
@@ -1607,6 +1660,7 @@ class SpreadingSeditionTwistedPilgrimage(OpportunityCard):
     """Spreading Sedition: A Twisted Pilgrimage card."""
     def __init__(self):
         super().__init__("Spreading Sedition: A Twisted Pilgrimage")
+        self.free_discard = True
         self.actions = [
             SpreadingSeditionTwistedPilgrimage_SeedDebauchery(),
             SpreadingSeditionTwistedPilgrimage_TweakRoute()
@@ -1657,6 +1711,7 @@ class SpreadingSeditionHeartsAndMinds(OpportunityCard):
     """Spreading Sedition: Hearts and Minds card."""
     def __init__(self):
         super().__init__("Spreading Sedition: Hearts and Minds")
+        self.free_discard = True
         self.actions = [
             SpreadingSeditionHeartsAndMinds_LubricateMarchers(),
             SpreadingSeditionHeartsAndMinds_BendEars()
@@ -1707,6 +1762,7 @@ class StoppedByTheGuards(OpportunityCard):
     """Stopped by the Guards card."""
     def __init__(self):
         super().__init__("Stopped by the Guards")
+        self.free_discard = False
         self.autofire = True
         self.weight = 2.0
         self.actions = [
@@ -1714,6 +1770,9 @@ class StoppedByTheGuards(OpportunityCard):
             StoppedByTheGuards_MakeRun(),
             StoppedByTheGuards_Bluff()
         ]
+
+    def can_draw(self, state: BurgundyState):
+        return state.get(Item.SaddledWithAStolenSack) >= 1
 
 class StoppedByTheGuards_Bribe(Action):
     def __init__(self):
@@ -1765,6 +1824,7 @@ class BannersOfTheGuilds(OpportunityCard):
     """The Banners of the Guilds card."""
     def __init__(self):
         super().__init__("The Banners of the Guilds")
+        self.free_discard = True
         self.actions = [
             BannersOfTheGuilds_FerretApothecaries(),
             BannersOfTheGuilds_VisitBoatmen(),
@@ -1866,6 +1926,8 @@ class BurgundyOfBlood(OpportunityCard):
             BurgundyOfBlood_PurchaseRelief()
         ]
 
+    def can_draw(self, state: BurgundyState):
+        return state.get(Item.Wounds) >= 15
 
 
 class BurgundyOfBlood_CallDoctor(Action):
@@ -1927,6 +1989,7 @@ class HonoursOfTheCourt(OpportunityCard):
     """The Honours of the Court card."""
     def __init__(self):
         super().__init__("The Honours of the Court")
+        self.free_discard = True
         self.actions = [
             HonoursOfTheCourt_CentreAttention(),
             HonoursOfTheCourt_RescueReichsgraf(),
@@ -2020,6 +2083,7 @@ class SpoilsOfRebellion(OpportunityCard):
     """The Spoils of Rebellion card."""
     def __init__(self):
         super().__init__("The Spoils of Rebellion")
+        self.free_discard = True
         self.weight = 1_000_000 # HACK urgency
         self.actions = [
             SpoilsOfRebellion_AspirationalChronicle(),
@@ -2033,8 +2097,8 @@ class SpoilsOfRebellion(OpportunityCard):
 
 class SpoilsOfRebellion_AspirationalChronicle(Action):
     def __init__(self):
-        self.action_cost = 0
         super().__init__("An aspirational chronicle")
+        self.action_cost = 0
 
     def can_perform(self, state: BurgundyState):
         return state.get(Item.AgainstTimeAndKings) >= 10 or state.skip_econ_inputs
@@ -2048,8 +2112,8 @@ class SpoilsOfRebellion_AspirationalChronicle(Action):
 
 class SpoilsOfRebellion_PromiseOfCooperation(Action):
     def __init__(self):
-        self.action_cost = 0
         super().__init__("The promise of cooperation")
+        self.action_cost = 0
 
     def can_perform(self, state: BurgundyState):
         return state.get(Item.AgainstTimeAndKings) >= 10 or state.skip_econ_inputs
@@ -2063,8 +2127,8 @@ class SpoilsOfRebellion_PromiseOfCooperation(Action):
 
 class SpoilsOfRebellion_SparkingAnachronism(Action):
     def __init__(self):
-        self.action_cost = 0
         super().__init__("A sparking anachronism")
+        self.action_cost = 0
 
     def can_perform(self, state: BurgundyState):
         return state.get(Item.AgainstTimeAndKings) >= 10 or state.skip_econ_inputs
@@ -2078,8 +2142,8 @@ class SpoilsOfRebellion_SparkingAnachronism(Action):
 
 class SpoilsOfRebellion_TheCoffin(Action):
     def __init__(self):
-        self.action_cost = 0
         super().__init__("The coffin")
+        self.action_cost = 0
 
     def can_perform(self, state: BurgundyState):
         return state.get(Item.AgainstTimeAndKings) >= 10 or state.skip_econ_inputs
@@ -2099,6 +2163,7 @@ class TintOfUnworthiness(OpportunityCard):
     """The Tint of Unworthiness card."""
     def __init__(self):
         super().__init__("The Tint of Unworthiness")
+        self.free_discard = True
         self.actions = [
             TintOfUnworthiness_CarrySupplies(),
             TintOfUnworthiness_RevelHypocrisy(),
@@ -2169,6 +2234,7 @@ class TollingOfTheThiefBells(OpportunityCard):
     """The Tolling of the Thief-Bells card."""
     def __init__(self):
         super().__init__("The Tolling of the Thief-Bells")
+        self.free_discard = True
         self.actions = [
             TollingOfTheThiefBells_PlunderStudy(),
             TollingOfTheThiefBells_StealGravensteen(),
@@ -2259,6 +2325,7 @@ class VineStrangledAisles(OpportunityCard):
     """Vine-Strangled Aisles card."""
     def __init__(self):
         super().__init__("Vine-Strangled Aisles")
+        self.free_discard = True
         self.actions = [
             VineStrangledAisles_PickFruit(),
             VineStrangledAisles_GiveCharity(),
@@ -2323,6 +2390,7 @@ class WarrensOfWorship(OpportunityCard):
     """Warrens of Worship card."""
     def __init__(self):
         super().__init__("Warrens of Worship")
+        self.free_discard = True
         self.actions = [
             WarrensOfWorship_AskDirections(),
             WarrensOfWorship_LightCandles(),
@@ -2409,12 +2477,13 @@ class WhosoListToHunt(OpportunityCard):
     """Whoso List to Hunt card."""
     def __init__(self):
         super().__init__("Whoso List to Hunt")
+        self.free_discard = True
         self.weight = 0.5
         self.actions = [
             WhosoListToHunt_ChooseSteedAndWeapon(),
         ]
 
-    def can_perform(self, state: BurgundyState):
+    def can_draw(self, state: BurgundyState):
         return state.get(Item.SeasonOfHunting) == 0
 
 class WhosoListToHunt_ChooseSteedAndWeapon(Action):
@@ -2485,7 +2554,7 @@ class BurgundySimRunner(SimulationRunner):
 # Example usage
 if __name__ == "__main__":
     runner = BurgundySimRunner(
-        runs=10000,
+        runs=1000,
         initial_values={
             Item.Scandal: 0,
             Item.Suspicion: 0,

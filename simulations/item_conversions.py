@@ -125,6 +125,8 @@ item_conversion_rates = {
 
     Item.MemoryOfDiscordance: { Item._ApproximateEchoValue: 12.50 },
 
+    Item.SampleOfRoofDrip: { Item._ApproximateEchoValue: 0.1, Item.Stuiver: 2 },
+
     ################################################################################
     ###                                 Contraband                               ###
     ################################################################################
@@ -250,6 +252,18 @@ item_conversion_rates = {
     Item.MuchNeededGap: {
         Item.AssortmentOfKhaganianCoinage: 125
     },
+
+
+    ################################################################################
+    ###                                 Industrial                                ###
+    ################################################################################
+    
+
+    Item.CracklingDevice: {
+        Item.Echo: 62.5,
+        Item.AssortmentOfKhaganianCoinage: 125
+    },
+
     ################################################################################
     ###                                 Influence                               ###
     ################################################################################
@@ -340,7 +354,7 @@ item_conversion_rates = {
     Item.ExtraordinaryImplication: { Item.Echo: 2.50 },
     Item.UncannyIncunabulum: { Item.Echo: 12.50 },
     Item.DirefulReflection: { Item.Echo: 12.50 },
-    Item.MemoryOfAMuchStrangerSelf: { Item.Stuiver: 250 },
+    Item.MemoryOfAMuchStrangerSelf: { Item.Stuiver: 250, Item._ApproximateEchoValue: 12.5 },
     Item.SearingEnigma: { Item.Echo: 62.50 },
     Item.DreadfulSurmise: { Item.Echo: 312.50 },
     Item.ImpossibleTheorem: { Item.Echo: 1562.60 },
@@ -481,6 +495,9 @@ item_conversion_rates = {
     Item.BottleOfFourthCityAirag: { Item.Echo: 62.5,
                                    Item.AssortmentOfKhaganianCoinage: 125 },
 
+    Item.CellarOfWine: {
+        Item.Echo: 12.5,
+    },
 
     ################################################################################
     ###                              Zee-Treasures                               ###
