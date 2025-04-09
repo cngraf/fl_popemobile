@@ -211,6 +211,8 @@ class Item(Enum):
     RunningBattle = auto()
     TheHuntIsOn = auto()
 
+    MakingWaves = auto()
+
     #######################################################
     #                       Stats
     #######################################################  
@@ -954,7 +956,7 @@ class Item(Enum):
     VisitorToBurgundy = auto()
 
     AsAboveBecomesBelow = auto()
-    NotesOnJoyousEntry = auto()
+    NotesOnAJoyousEntry = auto()
     FuelForGlorysFlame = auto()
 
     ################################################################################
