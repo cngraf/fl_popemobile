@@ -53,7 +53,6 @@ def add_trades(config: Config):
         # (Item.MemoryOfMoonlight, 250),
     ):
         trade(0, { item: -1, Item.Stuiver: sale_value })
-
     
     # Ecdysis
     trade(11, {

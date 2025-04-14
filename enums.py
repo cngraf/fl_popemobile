@@ -158,6 +158,7 @@ class Item(Enum):
     _MidnightMoonAction = auto()
     _ZenithAction = auto()
     _StacksAction = auto()
+    _BurgundyAction = auto()
 
     _SocialAction = auto()
 

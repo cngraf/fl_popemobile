@@ -158,7 +158,8 @@ def setup_registry() -> ModuleRegistry:
         'firmament.hallows_throat',
         'firmament.midnight_moon',
         'firmament.zenith',
-        'firmament.stacks'
+        'firmament.stacks',
+        'firmament.risen_burgundy'
     ]
     for module in firmament_modules:
         registry.register_module(module)

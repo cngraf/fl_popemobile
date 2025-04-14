@@ -79,6 +79,16 @@ def add_trades(config: Config):
         Item.Nightmares: 1,  
     })
 
+    # Book of Proper Speech
+    add({
+        Item._StacksAction: -23,
+        Item.TantalisingPossibility: 175,
+        Item.GlimpseOfAnathema: 0.06,
+        Item.CracklingDevice: 1,
+        Item.RatworkMechanism: 4,
+        Item.DevilboneDie: 4
+    })
+
     # Cartographer
     if config.player.get(Item.AcquaintanceTheClamorousCartographer):
         add({        

@@ -41,6 +41,17 @@ class GameState:
             return val * item 
         return val * simulations.item_conversions.conversion_rate(item, Item.Echo)
     
+    def perform_action(self, card, action):
+        if action:
+            result = action.perform(self)
+            self.actions += action.action_cost
+            self.action_result_counts[action][result] += 1
+
+        if card is not None:
+            self.card_play_counts[card] += 1
+            if card in self.hand:
+                self.hand.remove(card)
+
     def clear_hand(self):
         self.hand.clear()
 
@@ -57,6 +68,7 @@ class GameState:
             self.cards_drawn += 1
             self.card_draw_counts[drawn] += 1
             self.hand.append(drawn)
+            return drawn
 
     def add_items(self, dict):
         for item, amount in dict.items():
@@ -285,9 +297,11 @@ class Action:
             return 1.0        
 
 class SimulationRunner:
-    def __init__(self, runs: int, initial_values: dict):
+    def __init__(self, runs: int, initial_values: dict,
+                 target_currencies: list[Item] = None):
         self.runs = runs
         self.initial_values = initial_values
+        self.target_currencies = target_currencies
         self.total_item_changes = defaultdict(int)
 
         self.total_actions = 0
@@ -458,55 +472,102 @@ class SimulationRunner:
 
 
     def print_item_summary(self):
+        currencies = self.target_currencies
+        if currencies is None:
+            currencies = [Item._ApproximateEchoValue]
+
         max_name_length = 35
-        print(f"\n{'Item':<40}{'Avg +/Run':<15}{'Echo Value':<15}{'Total Echo/Action':<20}")
+        print(f"\n{'Item':<40}{'Avg +/Run':<15}{'(Currency per Run | per Action)':<15}")
+        headers = [f"{currency.name:<15}" for currency in currencies]
+        print(f"{'':<55}{' '.join(headers)}")
         print("-" * 85)
 
         total_echo_value = 0.0
-        item_summaries = []
+        # item_summaries = []
+
+        currency_summaries = { currency: {
+            'total_value': 0.0,
+            'per_run': 0.0,
+            'per_action': 0.0,
+        } for currency in currencies }
+
+        item_details = {}
 
         for item, total_change in self.total_item_changes.items():
             if item == None:
                 continue
 
             net_change = total_change
-
             avg_change = net_change / self.runs
-            echo_value = 0 # simulations.item_conversions.conversion_rate(item, Item.Echo)
-
-            for currency in (
-                Item.Echo,
-                Item.HinterlandScrip,
-                Item.Stuiver,
-                Item.AssortmentOfKhaganianCoinage
-            ):
-                item_value_in_currency = simulations.item_conversions.conversion_rate(item, currency)
-                echo_per_currency = simulations.item_conversions.conversion_rate(currency, Item.Echo)
-                laundered_value = item_value_in_currency * echo_per_currency
-                if laundered_value > echo_value:
-                    echo_value = laundered_value
-
-            estimated = False
-            if echo_value == 0:
-                echo_value = simulations.item_conversions.conversion_rate(item, Item._ApproximateEchoValue)
-                estimated = True
-
-            item_total_echo_value = echo_value * net_change
-
-            total_echo_value += item_total_echo_value
             truncated_item_name = item.name if len(item.name) <= max_name_length else item.name[:max_name_length - 3] + "..."
 
-            if avg_change != 0.0:
-                item_summaries.append((truncated_item_name, avg_change, echo_value, item_total_echo_value / self.total_actions))
+            echo_value = 0 # simulations.item_conversions.conversion_rate(item, Item.Echo)
+            # currency_unit_values[item] = []
+            # currency_total_values[item] = []
+            # currency_per_action[item] = []
 
-        item_summaries.sort(key=lambda x: x[1], reverse=True)
+            item_details[item] = {
+                'avg_change': avg_change,
+                'truncated_name': truncated_item_name,
+                'currency_unit_values': {},
+                'currency_total_values': {},
+                'currency_per_action': {},
+                'currency_per_run': {}
+            }
 
-        for item_name, avg_change, echo_value, echo_per_action in item_summaries:
-            print(f"{item_name:<36}{avg_change:>10.2f}{echo_value:>15.2f}{echo_per_action:>15.4f}")
+            for currency in currencies:
+                item_value_in_currency = simulations.item_conversions.conversion_rate(item, currency)
+                item_details[item]['currency_unit_values'][currency] = item_value_in_currency
 
-        print(f"\n{'Total':<46}{total_echo_value/self.runs:>15.2f}{total_echo_value / self.total_actions:>15.4f}")
+                total_currency_gain = item_value_in_currency * net_change
+                item_details[item]['currency_total_values'][currency] = total_currency_gain
+                currency_summaries[currency]['total_value'] += total_currency_gain
 
-    def truncate_string(self, s, length=25):
+                gain_per_action = total_currency_gain / self.total_actions
+                item_details[item]['currency_per_action'][currency] = gain_per_action
+                currency_summaries[currency]['per_action'] += total_currency_gain / self.total_actions
+
+                gain_per_run = total_currency_gain / self.runs
+                item_details[item]['currency_per_run'][currency] = gain_per_run
+                currency_summaries[currency]['per_run'] += gain_per_run
+
+            # if echo_value == 0:
+            #     echo_value = simulations.item_conversions.conversion_rate(item, Item._ApproximateEchoValue)
+
+            # item_total_echo_value = echo_value * net_change
+
+            # total_echo_value += item_total_echo_value
+
+            # if avg_change != 0.0:
+            #     # item_summaries.append((truncated_item_name, avg_change))
+            #     item_summaries.append((item, avg_change))
+
+        # item_summaries.sort(key=lambda x: x[1], reverse=True)
+
+        for item, details in item_details.items():
+            line_item = f"{details['truncated_name']:<36}{details['avg_change']:>10.2f}"
+            for currency in currencies:
+                per_run = details['currency_per_run'][currency]
+                per_action = details['currency_per_action'][currency]
+                unit_str = " " * 10 if per_run == 0 else f"{per_run:>10.2f}"
+                action_str = " " * 5 if per_action == 0 else f"{per_action:>5.2f}"
+                line_item += f"{unit_str} | {action_str}"
+            print(line_item)
+        # for item_name, avg_change in item_summaries:
+        #     currency_value_strs = [f"{val:>15.2f}" for val in currency_values]
+        #     currency_per_action_strs = [f"{val:>15.4f}" for val in currency_per_action]
+        #     print(f"{item_name:<36}{avg_change:>10.2f}{''.join(currency_value_strs)}{''.join(currency_per_action_strs)}")
+        
+        summary_line = f"\n{'Total':<46}"
+        for currency in currencies:
+            per_run = currency_summaries[currency]['per_run']
+            unit_str = " " * 10 if per_run == 0 else f"{per_run:>10.2f}"
+            per_action = currency_summaries[currency]['per_action']
+            action_str = " " * 5 if per_action == 0 else f"{per_action:>5.2f}"
+            summary_line += f"{unit_str} | {action_str}"
+        print(summary_line)
+
+    def truncate_string(self, s, length=25):    
         if len(s) > length:
             return s[:length - 3] + '...'
         return s

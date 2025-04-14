@@ -13,26 +13,56 @@ def conversion_rate(from_item: Item, to_item: Item) -> float:
     - The number of to_item you get after conversion
     """
 
-    if from_item in item_conversion_rates and to_item in item_conversion_rates[from_item]:
-        conversion_rate = item_conversion_rates[from_item][to_item]
-        # return amount // conversion_rate  # Use floor division to convert
-        # return amount / conversion_rate
-        return conversion_rate
-    
+    if from_item in item_conversion_rates:
+        if to_item in item_conversion_rates[from_item]:
+            conversion_rate = item_conversion_rates[from_item][to_item]
+            return conversion_rate
+        
+        for intermediate_item in item_conversion_rates[from_item]:
+            if intermediate_item in item_conversion_rates and to_item in item_conversion_rates[intermediate_item]:
+                conversion_rate = item_conversion_rates[from_item][intermediate_item] * item_conversion_rates[intermediate_item][to_item]
+                return conversion_rate
     # If no conversion is possible, return 0
     return 0
 
 action_echo_value = 6
 
 # TODO clean this up or sth
+
 item_conversion_rates = {
-    Item.Echo: { Item.Echo: 1},
+    Item.Echo: {
+        Item.Echo: 1,
+        Item._ApproximateEchoValue: 1
+    },
 
     # Tinned Ham laundering
-    Item.HinterlandScrip: { Item.Echo: 63.5/125, Item.HinterlandScrip: 1 },
+    Item.HinterlandScrip: {
+        Item.Echo: 63.5/125,
+        Item.HinterlandScrip: 1,
+        Item._ApproximateEchoValue: 63.5/125
+    },
     
     # Moon Pearl laundering
-    Item.Stuiver: { Item.Echo: 2.53/100, Item.Stuiver: 1 },
+    Item.Stuiver: {
+        Item.Echo: 2.53/100,
+        Item.Stuiver: 1,
+        Item._ApproximateEchoValue: 0.05
+    },
+
+    Item.AssortmentOfKhaganianCoinage: {
+        Item.Echo: 0.5,
+        Item.AssortmentOfKhaganianCoinage: 1,
+        Item._ApproximateEchoValue: 0.5
+    },
+
+    Item.RatOnAString: {
+        Item.Echo: 0.1,
+        Item._ApproximateEchoValue: 0.1
+    },
+    
+    Item._ApproximateEchoValue: {
+        Item.Echo: 1
+    },
 
     ################################################################################
     ###                                 Menaces                                  ###
@@ -99,8 +129,13 @@ item_conversion_rates = {
         Item.JadeFragment: 13
     },
 
-    Item._BannedWorksPrize: { Item.Stuiver: 2320 },
-    Item._DeadStarsPrize: { Item.Stuiver: 2000, Item.Echo: 101.2 },
+    Item._BannedWorksPrize: { Item.Stuiver: 9 * 254 + 35 * 2 },
+    
+    # Ignoring Bone Market for Carapace value
+    # 40x Roof Chart reward is best for stuivers
+    # Worth 31.125 Echoes via Roof Chart laundering
+    Item._DeadStarsPrize: { Item.Stuiver: 2000, Item.Echo: 85.125, Item.MoonPearl: 40 * 253 },
+    Item._PrecipicePrize: { Item.Stuiver: 2000, Item.Echo: 91 },
     Item._UnrealPlacesPrize: { Item._ApproximateEchoValue: 116 },
     Item._ProperSpeechPrize: { Item._ApproximateEchoValue: 116.1 },
 
@@ -264,6 +299,11 @@ item_conversion_rates = {
         Item.AssortmentOfKhaganianCoinage: 125
     },
 
+    Item.RatworkMechanism: {
+        Item.MoonPearl: 1250,
+        Item._ApproximateEchoValue: 12.5
+    },
+
     ################################################################################
     ###                                 Influence                               ###
     ################################################################################
@@ -342,6 +382,12 @@ item_conversion_rates = {
     Item.InfernalMachine: { Item._ApproximateEchoValue: 66.00 },
 
     ################################################################################
+    ###                                 Luminosity                                  ###
+    ################################################################################    
+
+    Item.MourningCandle: { Item.Echo: 2.50 },
+
+    ################################################################################
     ###                               Mysteries                                  ###
     ################################################################################
 
@@ -361,7 +407,7 @@ item_conversion_rates = {
 
     # Echo value from Oneiropomp conversion
     # Item.CausticApocryphon: { Item.Echo: 11.0, Item.Stuiver: 250 },
-    Item.CausticApocryphon: { Item.Echo: 0.0, Item.Stuiver: 250 },
+    Item.CausticApocryphon: { Item.Echo: 0.0, Item.Stuiver: 254 },
     Item.GlimpseOfAnathema: {Item.Echo: 312.5, Item.Stuiver: 6250},
 
     Item.MemoryOfMuchLesserSelf: { Item._ApproximateEchoValue: 2.50 },

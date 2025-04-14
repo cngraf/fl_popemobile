@@ -566,17 +566,55 @@ class LibraryState(GameState):
     def book_prize(self):
         book = self.get(Item.ApocryphaSought)
         if book == ApocryphaSoughtBook.IndexOfBannedWorks.value:
-            return Item._BannedWorksPrize
+            return {
+                Item.CausticApocryphon: 9,
+                Item.TantalisingPossibility: 35
+            }
         elif book == ApocryphaSoughtBook.AnnalOfDeadStars.value:
-            return Item._DeadStarsPrize
+            if self.take_alternate_prize:
+                return {
+                    Item.RoofChart: 40,
+                }
+            else:            
+                return {
+                    Item.GlimEncrustedCarapace: 1,
+                    Item.TantalisingPossibility: 495,
+                    Item.ShardOfGlim: 400
+                }
         elif book == ApocryphaSoughtBook.LePrecipiceDeLaTombee.value:
-            return Item._PrecipicePrize
+            if self.take_alternate_prize:
+                return {
+                    Item.Anticandle: 10,
+                    Item.TempestuousTale: 10,
+                    Item.MagnificentDiamond: 5,
+                    Item.RelicOfTheFifthCity: 6,
+                    Item.TantalisingPossibility: 10
+                }
+            else:
+                return {
+                    Item.Anticandle: 10,
+                    Item.FragmentOfTheTragedyProcedures: 1,
+                    Item.RelicOfTheFifthCity: 10,
+                    Item.TantalisingPossibility: 35
+                }
         elif book == ApocryphaSoughtBook.CodexOfUnrealPlaces.value:
-            return Item._UnrealPlacesPrize
+            return {
+                Item.OneiromanticRevelation: 1,
+                Item.StormThrenody: 2,
+                Item.PuzzlingMap: 1,
+                Item.VolumeOfCollatedResearch: 6,
+                Item.TantalisingPossibility: 10
+            }
         elif book == ApocryphaSoughtBook.BookOfProperSpeech.value:
-            return Item._ProperSpeechPrize
+            return {
+                Item.CracklingDevice: 1,
+                Item.RatworkMechanism: 4,
+                Item.DevilboneDie: 4
+            }
         elif book == ApocryphaSoughtBook.ChainedOctavo.value:
-            return Item.GlimpseOfAnathema
+            return {
+                Item.GlimpseOfAnathema: 1
+            }
     
     def book_starting_hour(self):
         book = self.get(Item.ApocryphaSought)
@@ -791,24 +829,25 @@ class ReadingRoom_OpenTheBook(Action):
         super().__init__("Open the book")
         self.action_cost = 2
 
-    def pass_items(self, state):
+    def pass_items(self, state: LibraryState):
         prize = None
-        book = state.get(Item.ApocryphaSought)
-        if book == ApocryphaSoughtBook.IndexOfBannedWorks.value:
-            prize = Item._BannedWorksPrize
-        elif book == ApocryphaSoughtBook.AnnalOfDeadStars.value:
-            prize = Item._DeadStarsPrize
-        elif book == ApocryphaSoughtBook.LePrecipiceDeLaTombee.value:
-            prize = Item._PrecipicePrize
-        elif book == ApocryphaSoughtBook.CodexOfUnrealPlaces.value:
-            prize = Item._UnrealPlacesPrize
-        elif book == ApocryphaSoughtBook.BookOfProperSpeech.value:
-            prize = Item._ProperSpeechPrize
-        elif book == ApocryphaSoughtBook.ChainedOctavo.value:
-            prize = Item.GlimpseOfAnathema
+        # book = state.get(Item.ApocryphaSought)
+        # if book == ApocryphaSoughtBook.IndexOfBannedWorks.value:
+        #     prize = Item._BannedWorksPrize
+        # elif book == ApocryphaSoughtBook.AnnalOfDeadStars.value:
+        #     prize = Item._DeadStarsPrize
+        # elif book == ApocryphaSoughtBook.LePrecipiceDeLaTombee.value:
+        #     prize = Item._PrecipicePrize
+        # elif book == ApocryphaSoughtBook.CodexOfUnrealPlaces.value:
+        #     prize = Item._UnrealPlacesPrize
+        # elif book == ApocryphaSoughtBook.BookOfProperSpeech.value:
+        #     prize = Item._ProperSpeechPrize
+        # elif book == ApocryphaSoughtBook.ChainedOctavo.value:
+        #     prize = Item.GlimpseOfAnathema
 
+        prize_dict = state.book_prize()
         return {
-            prize: 1,
+            **prize_dict,
             Item.UnwoundThread: 32,
             Item.InSearchOfLostTime: 1
         }
@@ -2053,8 +2092,10 @@ class Compass2_Chart(Action):
         }
 
 class StacksSimRunner(SimulationRunner):
-    def __init__(self, runs: int, initial_values: dict):
-        super().__init__(runs, initial_values)
+    def __init__(self, runs: int, initial_values: dict,
+                 target_currencies: list[Item] = None,
+                 take_alternate_prize: bool = False):
+        super().__init__(runs, initial_values, target_currencies)
 
         # self.key_distro = {}
 
@@ -2107,7 +2148,7 @@ class StacksSimRunner(SimulationRunner):
         #     state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.IndexOfBannedWorks.value
         # else:
         
-        state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.BookOfProperSpeech.value            
+        state.items[Item.ApocryphaSought] = ApocryphaSoughtBook.IndexOfBannedWorks.value            
 
         return state
     
@@ -2124,7 +2165,10 @@ simulation = StacksSimRunner(
         # Item.RouteTracedThroughTheLibrary: 0,
         # Item.FragmentaryOntology: 0,
         # Item.LibraryKey: 0
-    })
+    },
+    target_currencies=[Item.Echo, Item.Stuiver, Item._ApproximateEchoValue],
+    take_alternate_prize=False
+)
 
 # HACK IDK why I did it this way but whatever, works for now
 # These are my PC's stats, or close enough

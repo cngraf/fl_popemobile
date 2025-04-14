@@ -25,11 +25,13 @@ from simulations.models import GameState
 
 class BurgundyState(GameState):
     """State management for Burgundy exploration."""
-    def __init__(self):
+    def __init__(self, max_actions: int = 1000, max_draws: int = 10000):
         super().__init__(max_hand_size=3)
         self.status = "InProgress"
         self.skip_econ_inputs = True
         self.ev_threshold = 6.0
+        self.max_actions = max_actions
+        self.max_draws = max_draws
 
     def aiding_feast(self):
         return self.get(Item.PreparationsForASaintsDay) in (10, 11, 12, 13, 14)
@@ -71,35 +73,93 @@ class BurgundyState(GameState):
     def step(self):
         """Execute one step of the simulation."""
         best_card, best_action = self.best_action_by_simple_ranking()
-        # print(best_action)
 
         if best_action is None:
             # Log state when no actions available
-            print("Cards in hand: " + str(len(self.hand)))
+            print("No actions available. Current state:")
+            print(f"Actions taken: {self.actions}")
+            print(f"Cards in hand: {len(self.hand)}")
             for card in self.hand:
-                print(card.name)
+                print(f"- {card.name}")
+            for item, count in self.items.items():
+                if count > 0:
+                    print(f"{item.name}: {count}")
+            self.status = "Complete"
+            return
 
-        if best_action:
-            result = best_action.perform(self)
-            self.actions += best_action.action_cost
-            self.action_result_counts[best_action][result] += 1
+        self.perform_action(best_card, best_action)
 
-        if best_card is not None:
-            self.card_play_counts[best_card] += 1
-            if best_card in self.hand:
-                self.hand.remove(best_card)
-
+        # Discard cards that can't be drawn
+        # TODO: mechanic not fully understood. sometimes cards stick around, eg. woesel
         self.hand = [card for card in self.hand if card.can_draw(self)]
 
-        if self.actions >= 500:
-            self.status = "Complete"        
+        if self.actions >= self.max_actions:
+            self.status = "Complete"
+
+        if self.cards_drawn >= self.max_draws:
+            self.status = "Complete"
+
+    def discard_priority(self):
+        return [
+            # <= 5 EPA
+            CardinalDisagreements,
+            BannersOfTheGuilds,
+            RisingAndFalling,
+            GloriesAndHalfLives,
+
+            # < 6 EPA
+            HeraldsFromElsewhere,
+
+            # 6.2ish
+            AllAroundTheCountsRock, # gain casing, spend fascinating
+            CutthroatsAndCanalmen, # gain and spend THIO
+
+            # ATAK gains w/ menace
+            BeneathTheGiltExterior,
+            EchoesOfStormsPast,
+
+            # ATAK gain
+            TollingOfTheThiefBells,
+            TintOfUnworthiness,
+
+            # BB gain
+            HonoursOfTheCourt,
+            VineStrangledAisles,
+            WarrensOfWorship,
+
+            ## Can't discard
+            # GloomySummer,
+            # StrangerOutOfTime,
+            # BurgundyOfBlood,
+            # DreamsOfHonourAndGlory,
+            # SoughtByPikeAndGuardsman,
+            # StoppedByTheGuards,
+
+            # High value, always playable
+            WhosoListToHunt,
+            MarchForThePeople,
+            AidingFeastChurchAndState,
+            AidingFeastHeartsAndStomachs,
+            EncounterWithThePoetThief,
+            InvitationFromTheSwashbucklingChevalier,
+            GiftsOfBurgundy,
+            InAidOfAFeast,
+            HuntingTheRoofPrey,
+            PreparationsForASaintsDay,
+            SpreadingSeditionTwistedPilgrimage,
+            SpreadingSeditionHeartsAndMinds,  
+            SpoilsOfRebellion,            
+        ]
 
     def best_action_by_simple_ranking(self):
         """Determine the best action based on economic optimization."""
         
         bb = self.get(Item.BurgundianBeneficence)
         atak = self.get(Item.AgainstTimeAndKings)
-        hunt = self.get(Item.SeasonOfHunting)
+        wounds = self.get(Item.Wounds)
+        scandal = self.get(Item.Scandal)
+        nightmares = self.get(Item.Nightmares)
+        suspicion = self.get(Item.Suspicion)
 
         # Define action priority list based on current state
         action_list = []
@@ -107,39 +167,29 @@ class BurgundyState(GameState):
         if len(self.hand) == 0:
             action_list.append(Deck_RefillHand)
         
-        # BB and ATAK cashouts
-        action_list.extend({
-            GiftsOfBurgundy_PlunderHistory,
-            SpoilsOfRebellion_SparkingAnachronism
-        })
+        ##################################
+        ######### Action Groups #########
+        ##################################
 
-        # Feast carousel
-        action_list.extend({
-            MarchForThePeople_AttendPilgrimage,
+        feast_carousel = [
             InAidOfAFeast_AttendFeast,
-
-            PreparationsForASaintsDay_FomentUnrest,
-            SpreadingSeditionTwistedPilgrimage_TweakRoute,
-            SpreadingSeditionHeartsAndMinds_BendEars,
-
             PreparationsForASaintsDay_PledgeFeast,
             AidingFeastHeartsAndStomachs_TestSupplies,
             AidingFeastChurchAndState_ExposePriest
-        })
+        ]
 
-        # Chevalier carousel
-        action_list.extend({
+        protest_carousel = [
+            MarchForThePeople_AttendPilgrimage,
+            SpreadingSeditionTwistedPilgrimage_TweakRoute,
+            SpreadingSeditionHeartsAndMinds_BendEars,
+            PreparationsForASaintsDay_FomentUnrest,
+        ]
+
+        chevalier_carousel = [
             HuntingTheRoofPrey_GoForGlory,
             InvitationFromTheSwashbucklingChevalier_AttendRevels,
             WhosoListToHunt_ChooseSteedAndWeapon,
-        })
-
-        # cash out other
-        action_list.extend({
-            TollingOfTheThiefBells_StealGravensteen,
-            AllAroundTheCountsRock_SeduceMasquer,
-            CutthroatsAndCanalmen_ForayBeyond
-        })
+        ]
 
         bb_gains = [
             StrangerOutOfTime_AcquireHelp,
@@ -148,34 +198,79 @@ class BurgundyState(GameState):
             WarrensOfWorship_LightCandles
         ]
 
-        atak_gains = [
+        atak_gains_free = [
             TintOfUnworthiness_CarrySupplies,
             TollingOfTheThiefBells_InspectPatrols,
+        ]
+
+        atak_gains_wounds = [
             BurgundyOfBlood_PermitAnarchists,
+        ]
+
+        atak_gains_suspicion = [
             BeneathTheGiltExterior_DisseminatePamphlets,
             EchoesOfStormsPast_ReportPatterns
         ]
 
-        if atak >= 5:
-            action_list.extend(atak_gains)
-            if bb < 4:
-                action_list.extend(bb_gains)
-        elif bb >= 5:
-            action_list.extend(bb_gains)
-            if atak < 4:
-                action_list.extend(atak_gains)
+        ##################################
+        ######### Group Priority #########
+        ##################################
+
+        # Autofire bb vs atak
+        if bb >= atak:
+            action_list.append(DisturbanceAtTheMarket_HelpApprehend)
         else:
-            action_list.extend(atak_gains)
-            action_list.extend(bb_gains)
+            action_list.append(DisturbanceAtTheMarket_GiveChance)
+
+        # Autofire poet thief
+        action_list.append(StoppedByTheGuards_Bluff)
+
+        # Poet thief cashout
+        action_list.append(EncounterWithThePoetThief_ConcludeBusiness)
+
+        # ATAK & BB cashouts
+        action_list.extend({
+            GiftsOfBurgundy_PlunderHistory,
+            SpoilsOfRebellion_SparkingAnachronism,
+        })
+
+        action_list.extend(chevalier_carousel)
+        action_list.extend(protest_carousel)
+        action_list.extend(feast_carousel)
+
+        # Casing, Fascinating, THIO cashouts
+        action_list.extend({
+            TollingOfTheThiefBells_StealGravensteen,
+            AllAroundTheCountsRock_SeduceMasquer,
+            CutthroatsAndCanalmen_HeedCall,
+        })
+
+        action_list.extend(bb_gains)
+
+        # if bb >= 5 and atak >= 4:
+        #     action_list.extend(bb_gains)
+        # elif atak >= 5 and bb >= 4:
+        #     action_list.extend(atak_gains_free)
+        #     if wounds < 35:
+        #         action_list.extend(atak_gains_wounds)
+        #     if suspicion < 35:
+        #         action_list.extend(atak_gains_suspicion)
+        # else:
+        #     action_list.extend(bb_gains)
+        #     action_list.extend(atak_gains_free)
+        #     if wounds < 35:
+        #         action_list.extend(atak_gains_wounds)
+        #     if suspicion < 35:
+        #         action_list.extend(atak_gains_suspicion)
 
         action_list.append(Deck_RefillHand)
         action_list.append(Deck_DiscardLowValue)
-        
+                
         # Menace cards, if our hand is fully non discardable
         action_list.extend({
+            BurgundyOfBlood_PurchaseRelief,
             DreamsOfHonourAndGlory_ConquerSelf,
             SoughtByPikeAndGuardsman_DonateCharts,
-            BurgundyOfBlood_PurchaseRelief,
             StrangerOutOfTime_AcquireHelp
         })
 
@@ -216,7 +311,11 @@ class Deck_RefillHand(Action):
     
     def perform(self, state: BurgundyState):
         while len(state.hand) < state.max_hand_size:
-            state.draw_card()
+            card = state.draw_card()
+            # TODO not 100% sure this is correct
+            # assume each draw is handled fully before next draw
+            if card.autofire:
+                break
         return ActionResult.Pass
     
 class Deck_DiscardLowValue(Action):
@@ -229,18 +328,20 @@ class Deck_DiscardLowValue(Action):
         return any(card.free_discard for card in state.hand)
     
     def perform(self, state: BurgundyState):
-        # Find card with highest weight that can be freely discarded
-        best_card = None
-        best_weight = -1
-        for card in state.hand:
-            if card.free_discard and card.weight > best_weight:
-                best_card = card
-                best_weight = card.weight
+        # # Find card with highest weight that can be freely discarded
+        # best_card = None
+        # best_weight = -1
+        # for card in state.hand:
+        #     if card.free_discard and card.weight < best_weight:
+        #         best_card = card
+        #         best_weight = card.weight
         
-        if best_card:
+        for card_prio in state.discard_priority():
             # print(f"Discarding {best_card.name}")
-            state.hand.remove(best_card)
-            return ActionResult.Pass
+            for card_held in state.hand:
+                if isinstance(card_held, card_prio) and card_held.free_discard:
+                    state.hand.remove(card_held)
+                    return ActionResult.Pass
 
         return ActionResult.Fail
 
@@ -336,7 +437,8 @@ class MarchForThePeople_AttendPilgrimage(Action):
     def pass_items(self, state: BurgundyState):
         return {
             Item.CausticApocryphon: 4,
-            Item.PreparationsForASaintsDay: -state.get(Item.PreparationsForASaintsDay)
+            Item.PreparationsForASaintsDay: -state.get(Item.PreparationsForASaintsDay),
+            Item.SaintsDayConflictsResolved: -state.get(Item.SaintsDayConflictsResolved)
         }
 
 ################################################################
@@ -2505,13 +2607,14 @@ class WhosoListToHunt_ChooseSteedAndWeapon(Action):
 
 class BurgundySimRunner(SimulationRunner):
     """Runner for Burgundy simulations."""
-    def __init__(self, runs: int, initial_values: dict):
-        super().__init__(runs, initial_values)
+    def __init__(self, runs: int, initial_values: dict, target_currencies: list[Item] = None):
+        super().__init__(runs, initial_values, target_currencies)
         self.storylets = [
             StoryletBurgundy()
         ]
         self.cards = [
             GloomySummer(),
+            DuchessDisapproval(), 
             MarchForThePeople(),
             StrangerOutOfTime(),
             AidingFeastChurchAndState(),
@@ -2543,25 +2646,136 @@ class BurgundySimRunner(SimulationRunner):
             TollingOfTheThiefBells(),
             VineStrangledAisles(),
             WarrensOfWorship(),
-            WhosoListToHunt()
+            WhosoListToHunt(),
+            DisturbanceAtTheMarket(),  # Added new card
         ]
 
     def create_state(self):
         """Create and initialize a new BurgundyState."""
-        state = BurgundyState()
+        state = BurgundyState(max_actions=10000, max_draws=10000)
         return state
+
+################################################################
+#                     A Disturbance at the Market
+################################################################
+
+class DisturbanceAtTheMarket(OpportunityCard):
+    """A Disturbance at the Market card."""
+    def __init__(self):
+        super().__init__("A Disturbance at the Market")
+        self.autofire = True
+        self.free_discard = False
+        self.weight = 2
+        self.actions = [
+            DisturbanceAtTheMarket_GiveChance(),
+            DisturbanceAtTheMarket_HelpApprehend()
+        ]
+
+    def can_draw(self, state: BurgundyState):
+        return state.get(Item.BurgundianBeneficence) >= 5 \
+            and state.get(Item.AgainstTimeAndKings) >= 5
+
+class DisturbanceAtTheMarket_GiveChance(Action):
+    def __init__(self):
+        super().__init__("Give the Propagandist a chance to escape")
+
+    def can_perform(self, state: BurgundyState):
+        return state.get(Item.BurgundianBeneficence) >= 2
+
+    def pass_items(self, state: BurgundyState):
+        return {
+            Item.AgainstTimeAndKings: 1,
+            Item.BurgundianBeneficence: -2,
+            Item.Suspicion: 3
+            # TODO: airs change
+        }
+
+class DisturbanceAtTheMarket_HelpApprehend(Action):
+    def __init__(self):
+        super().__init__("Help apprehend the criminal")
+
+    def can_perform(self, state: BurgundyState):
+        return state.get(Item.AgainstTimeAndKings) >= 2
+
+    def pass_items(self, state: BurgundyState):
+        return {
+            Item.BurgundianBeneficence: 1,
+            Item.AgainstTimeAndKings: -2,
+            Item.Scandal: 3
+            # TODO: airs change
+        }
+
+################################################################
+#                     A Duchess' Disapproval
+################################################################
+
+class DuchessDisapproval(OpportunityCard):
+    """A Duchess' Disapproval card."""
+    def __init__(self):
+        super().__init__("A Duchess' Disapproval")
+        self.free_discard = False
+        self.actions = [
+            DuchessDisapproval_ArgueForChange(),
+            DuchessDisapproval_WorkInSecret(),
+            DuchessDisapproval_EnlightenDuchess()
+        ]
+
+    def can_draw(self, state: BurgundyState):
+        return state.aiding_march() and state.get(Item.SaintsDayConflictsResolved) == 0
+
+class DuchessDisapproval_ArgueForChange(Action):
+    def __init__(self):
+        super().__init__("Argue in favour of change")
+
+    def can_perform(self, state: BurgundyState):
+        return True
+
+    def pass_items(self, state: BurgundyState):
+        return {
+            Item.FinalBreath: 6,
+            Item.Suspicion: 1
+        }
+
+class DuchessDisapproval_WorkInSecret(Action):
+    def __init__(self):
+        super().__init__("Go about your work in secret")
+
+    def can_perform(self, state: BurgundyState):
+        return True
+
+    def pass_items(self, state: BurgundyState):
+        return {
+            Item.JournalOfInfamy: 6,
+            Item.Suspicion: 1
+        }
+
+class DuchessDisapproval_EnlightenDuchess(Action):
+    def __init__(self):
+        super().__init__("Enlighten the Duchess as to revolutionary codes")
+
+    def can_perform(self, state: BurgundyState):
+        return state.get(Item.CaveAgedCodeOfHonour) >= 1 or state.skip_econ_inputs
+
+    def pass_items(self, state: BurgundyState):
+        return {
+            Item.CaveAgedCodeOfHonour: -1,
+            Item.PalimpsestScrap: 7,
+            Item.SaintsDayConflictsResolved: 1,
+            Item.BurgundianBeneficence: 1
+        }
 
 # Example usage
 if __name__ == "__main__":
     runner = BurgundySimRunner(
-        runs=1000,
+        runs=10,
+        target_currencies=[Item.Echo, Item.Stuiver],
         initial_values={
             Item.Scandal: 0,
             Item.Suspicion: 0,
             Item.BlackmailMaterial: 0,
             Item.Stuiver: 0,
             Item.VolumeOfCollatedResearch: 0,
-            Item.BurgundianBeneficence: 0,
+            Item.BurgundianBeneficence: 5,
             Item.AgainstTimeAndKings: 0,
             Item.PalimpsestScrap: 0,
             Item.PotOfVenisonMarrow: 0,
@@ -2571,13 +2785,14 @@ if __name__ == "__main__":
             Item.Casing: 0,
             Item.Fascinating: 0,
             Item.Wounds: 0,
-            Item.PreparationsForASaintsDay: 0,
+            Item.PreparationsForASaintsDay: 10,
             Item.SaddledWithAStolenSack: 0,
-            Item.SeasonOfHunting: 0,
+            Item.SeasonOfHunting: 3,
             Item.StrongBackedLabour: 0,
             Item.Nightmares: 0,
-            # Item.AdriftOnASeaOfMisery: 0,
-            Item.NotesOnAJoyousEntry: 0
+            Item.AsAboveBecomesBelow: 10,
+            Item.NotesOnAJoyousEntry: 10,
+            Item.FuelForGlorysFlame: 10
         }
     )
     runner.outfit = PlayerOutfit(340, 18)  # Example outfit stats
