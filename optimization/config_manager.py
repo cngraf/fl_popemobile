@@ -122,6 +122,7 @@ class ConfigManager:
                 Item.BagALegend: 4000,
                 Item.SetOfCosmogoneSpectacles: 1,
                 Item._AllianceWithBigRat: 1,
+                Item.SealOfStJoshua: 1,
             },
             fate_qualities={
                 Item.AcquaintanceTheClamorousCartographer: 6
@@ -129,7 +130,6 @@ class ConfigManager:
             core_constraints={
                 Item.Constraint: 1,
                 Item.Action: 120 * 7,  # actions_per_day * 7
-                Item.GlimEncrustedCarapace: 10,
                 Item._RatMarketRotation: 1,
                 Item._BoneMarketRotation: 1,
                 Item._VisitFromTimeTheHealer: 1,

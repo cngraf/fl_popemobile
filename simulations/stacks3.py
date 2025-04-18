@@ -738,8 +738,8 @@ class Storylet_EnterStacks(Action):
 class Storylet_FindYourWayBack(Action):
     def __init__(self):
         super().__init__("Find your way back to the entrance")
-        self.alt_pass_rate = 0.0
-        self.alt_fail_rate = 0.0
+        self.alt_pass_rate = 0.1
+        self.alt_fail_rate = 0.1
 
     def can_perform(self, state: LibraryState):
         return state.get(Item.UnwoundThread) > 0 and state.get(Item.InSearchOfLostTime) == 3
