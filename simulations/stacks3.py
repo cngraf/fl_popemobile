@@ -147,7 +147,7 @@ class LibraryState(GameState):
         # high_value_card_in_hand = any(card.__class__ in high_value_cards for card in self.hand)
         high_value_card_in_hand = self.holding_any(high_value_cards)
 
-        key_cap = 15
+        key_cap = 30
         route_floor = 6
 
         # not worth skipping for octavo
@@ -238,9 +238,15 @@ class LibraryState(GameState):
             list.append(BlackGallery1_Woesel)
 
         if not high_value_card_in_hand:
+            if want_noises:
+                list.append(DeadEnd1_Woesel)
             list.append(DeadEnd1_RopeDescend)
 
         list.append(Deck_RefillHand)
+
+        # if not high_value_card_in_hand:
+        #     if want_noises:
+        #         list.append(DeadEnd1_Woesel)        
 
         # 5 is min for 100%
         if progress < 35 and routes >= 5:
@@ -255,10 +261,6 @@ class LibraryState(GameState):
 
         if progress < 35 and routes >= route_floor:
             list.append(StoneGallery3_FollowBorehole)            
-
-        if not high_value_card_in_hand:
-            if want_noises:
-                list.append(DeadEnd1_Woesel)
 
             list.append(GrandStaircase1_InformedDecision)
 

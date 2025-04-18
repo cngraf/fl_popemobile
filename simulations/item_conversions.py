@@ -61,7 +61,9 @@ item_conversion_rates = {
     },
     
     Item._ApproximateEchoValue: {
-        Item.Echo: 1
+        Item.Echo: 1,
+        Item.Stuiver: 20,
+        Item.HinterlandScrip: 2
     },
 
     ################################################################################
