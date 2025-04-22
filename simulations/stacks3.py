@@ -90,6 +90,7 @@ class LibraryState(GameState):
         while self.status == "InProgress":
             self.step()
 
+
     def holding_any(self, card_classes):
         return any(card.__class__ in [card_classes] for card in self.hand)
 
@@ -149,6 +150,7 @@ class LibraryState(GameState):
 
         key_cap = 30
         route_floor = 6
+        route_cap = 100
 
         # not worth skipping for octavo
         want_noises = keys < key_cap and noises == 0 # and not octavo_available
@@ -174,14 +176,15 @@ class LibraryState(GameState):
             if noises < 22:
                 list.append(GaolerLibrarian2_LiftKey)
 
-        # if want_noises and progress < 40:
-        #     list.append(MapRoom3_CartographerLead)
+        if want_noises and progress < 35 and not self.holding_any([DeadEnd, BlackGallery]):
+            list.append(MapRoom_ToggleCartographerForNoise)
 
-        list.extend([
-            # Routes + Econ
-            MapRoom4_PaintRoutes,
-            MapRoom1_LibraryMaps,
-        ])
+        if routes < route_cap:
+            list.extend([
+                # Routes + Econ
+                MapRoom4_PaintRoutes,
+                MapRoom1_LibraryMaps,
+            ])
 
         if progress >= 40:# or octavo_available:
             list.extend([
@@ -240,6 +243,8 @@ class LibraryState(GameState):
         if not high_value_card_in_hand:
             if want_noises:
                 list.append(DeadEnd1_Woesel)
+            if routes > route_cap and progress < 35:
+                list.append(Labyrinth1_RethinkMovements)
             list.append(DeadEnd1_RopeDescend)
 
         list.append(Deck_RefillHand)
@@ -318,223 +323,6 @@ class LibraryState(GameState):
             TeaRoom3_MakeSense, # only for Cthono gain
 
             # Redundant Safety
-            TeaRoom1_Regroup,
-            MapRoom4_PaintRoutes,
-            Compass1_Camera,
-        ])
-
-        # Find the best action from the ranked list that is in the hand
-        for ranked_action in list:
-            for storylet in self.storylets:
-                for action in storylet.actions:
-                    if isinstance(action, ranked_action) and action.can_perform(self):
-                        return (storylet, action)
-            for card in self.hand:
-                for card_action in card.actions:
-                    if isinstance(card_action, ranked_action) and card_action.can_perform(self):
-                        return (card, card_action)
-
-        # # If no card matches, check the refill action
-        # if self.refill_action.can_perform(self):
-        #     return (None, self.refill_action)
-        
-        # for ranked_action in low_prio:
-        #     for card in self.hand:
-        #         for card_action in card.actions:
-        #             if isinstance(card_action, ranked_action) and card_action.can_perform(self):
-        #                 return (card, card_action)
-
-
-        # If no action can be performed, return None
-        return (None, None)
-
-
-    ################################################################
-    #                     Speed Strat
-    ################################################################
-    
-    def best_action_by_simple_ranking_speed(self):
-        progress = self.get(Item._StacksProgress)
-        keys = self.get(Item.LibraryKey)
-        routes = self.get(Item.RouteTracedThroughTheLibrary)
-        frags = self.get(Item.FragmentaryOntology)
-        noises = self.get(Item.NoisesInTheLibrary)
-        octavo_available = self.get(Item.AnathemaUnchained) == 0 and self.get(Item.InSearchOfLostTime) == 1
-
-        high_value_cards = [
-            TeaRoom,
-            ChainedOctavo,
-            GaolerLibrarian,
-            # MapRoom,
-            LibrariansOffice,
-        ]
-
-        if keys > 1:
-            high_value_cards.append(LockedGate)
-
-        high_value_card_in_hand = any(card.__class__ in high_value_cards for card in self.hand)
-
-        key_cap = 15
-        route_floor = 6
-
-        # not worth skipping for octavo
-        want_keys = keys < key_cap
-        want_noises = want_keys and noises == 0 # and not octavo_available
-
-        list = [
-            Storylet_EnterStacks,
-            Storylet_ReturnToRoof,
-            Storylet_FindYourWayBack,
-            ChainedOctavo1_Unchain,
-        ]
-
-        # if progress >= 35 and self.get(Item.InSearchOfLostTime) == 2:
-        #     list.append(DeadEnd2_VantagePoint)
-
-        # if any(card.__class__ in [GrandStaircase] for card in self.hand) \
-        #     and noises > 0:
-        #     list.append(DeadEnd2_VantagePoint)
-
-        # key sources
-        list.extend([LibrariansOffice1_PickDrawers])
-
-        if want_keys and noises < 22:    
-            list.append(GaolerLibrarian2_LiftKey)
-
-        # if want_noises and progress < 40:
-        #     list.append(MapRoom3_CartographerLead)
-
-        # list.extend([
-        #     # Routes + Econ
-        #     MapRoom4_PaintRoutes,
-        #     MapRoom1_LibraryMaps,
-        # ])
-
-        if progress >= 40:# or octavo_available:
-            list.extend([
-                Deck_RefillHand
-            ])
-        
-        list.extend([
-            # Advance
-            ReadingRoom_OpenTheBook,
-            ApocryphaFound_Claim,
-        ])
-
-        # if octavo_available:
-        #     list.extend([
-        #         DeadEnd1_RopeDescend,
-        #         GrandStaircase1_InformedDecision
-        #     ])
-
-        # if octavo_available:
-        #     list.extend([
-        #         DeadEnd1_RopeDescend,
-        #         GrandStaircase1_InformedDecision
-        #     ])
-
-        # Minor improvement even below 100%?
-        if frags >= 5:
-            list.extend([
-                Atrium2_CourseCorrect
-            ])
-
-        # # # Routes + more TPs, harder check
-        # if routes < 5:
-        #     list.append(DeadEnd2_VantagePoint)
-
-        # 5 is min for 100%
-        if progress < 35 and routes >= 5:
-            list.append(TeaRoom2_ConsultMaps)
-
-        # 15 progress
-        if progress < 30 and keys >= 2:
-            list.extend([
-                LockedGate1_UseKey,
-                LibrariansOffice3_UnlockCart,
-            ])
-
-        if progress < 30:
-            list.extend([
-                GodsEyeView2_FocusPath
-            ])
-
-        # TODO experiment with this placement
-        if progress < 35 and routes >= route_floor:
-            list.append(StoneGallery3_FollowBorehole)
-
-        # if len(self.hand) < 4:
-        #     list.append(Storylet_ToggleCartographer)
-
-        if want_noises:
-            list.append(BlackGallery1_Woesel)        
-
-        list.append(Deck_RefillHand)  
-
-        if not high_value_card_in_hand:
-            if want_noises:
-                list.append(DeadEnd1_Woesel)
-
-            list.append(DeadEnd1_RopeDescend)
-
-            if progress < 35:
-                list.append(Labyrinth1_RethinkMovements)  
-
-            list.append(GrandStaircase1_InformedDecision)
-
-        # # Routes + more TPs, harder check
-        if routes < route_floor:
-            list.append(Compass1_Camera)        
-
-        if progress < 25:
-            list.append(Compass2_Chart)
-
-        list.extend([        
-            # 5 progress free*
-            GlimpseWindow2_MoveQuickly,
-            FloweringGallery1_KeepGoing,
-
-            GreyCardinal1_FurryLunch,
-            BlackGallery2_NavigateAlternateSenses,
-
-            BlackGallery1_LightLantern,
-            
-            PoisonGallery1_FurnitureSteppingStones,
-
-            GaolerLibrarian3_Intervention,
-
-            StoneGallery1_SilentGallery,
-            
-            DeadEnd1_RopeDescend,
-
-            # 1-3 routes
-            Compass1_Camera,            
-            
-            LibrariansOffice2_OppositeDoor,
-            TerribleShushing2_HurryAlong,
-
-            Index1_SearchReferenceCard,
-            Atrium2_CourseCorrect,
-
-            # 5 progress for 1 fragment
-            Labyrinth2_RejectShape,
-            Index3_SituateGreaterWhole,
-
-            # 5 progress for 1 route
-            Atrium1_Continue,
-
-            # Ideally never play any of these
-
-            # Gain routes only
-            DiscardedLadder1_Climb, # +1.5 R
-
-            Snuffbox1_ComputeFigure,
-            ChainedOctavo2_ExamineSection,
-            TeaRoom3_MakeSense,
-            GrandStaircase2_UpDown, # 50% +5 Prog
-
-            # Redundant Safety
-            GrandStaircase1_InformedDecision,
             TeaRoom1_Regroup,
             MapRoom4_PaintRoutes,
             Compass1_Camera,
@@ -1167,7 +955,8 @@ class MapRoom(OpportunityCard):
             MapRoom1_LibraryMaps(),
             MapRoom2_NeathMaps(),
             MapRoom3_CartographerLead(),
-            MapRoom4_PaintRoutes()
+            MapRoom4_PaintRoutes(),
+            MapRoom_ToggleCartographerForNoise()
         ]
 
 class MapRoom1_LibraryMaps(Action):
@@ -1218,7 +1007,7 @@ class MapRoom3_CartographerLead(Action):
 
     def can_perform(self, state: LibraryState):
         return state.cartographer_enabled
-
+    
     def pass_items(self, state: LibraryState):
         return {
             Item._StacksProgress: 5,
@@ -1238,6 +1027,21 @@ class MapRoom4_PaintRoutes(Action):
             Item.RouteTracedThroughTheLibrary: 1.5,  # TODO: Random [1, 2]
             Item.TantalisingPossibility: 50
         }
+    
+class MapRoom_ToggleCartographerForNoise(Action):
+    def __init__(self):
+        super().__init__("(COMBO) Enable + Get a lead + Disable")
+        self.action_cost = 2
+
+    def can_perform(self, state: LibraryState):
+        return not state.cartographer_enabled and state.get(Item.InSearchOfLostTime) == 1
+    
+    def pass_items(self, state: LibraryState):
+        return {
+            Item._StacksProgress: 10,
+            Item.NoisesInTheLibrary: 2
+        }
+
 
 ################################################################
 #                     Poison Gallery
@@ -2160,7 +1964,7 @@ class StacksSimRunner(SimulationRunner):
     #     self.key_distro[key_count] += 1 
     
 simulation = StacksSimRunner(
-    runs = 10000,
+    runs = 100000,
     initial_values={
         # Item.ApocryphaSought: ApocryphaSoughtBook.AnnalOfDeadStars.value,
 

@@ -179,10 +179,10 @@ class BurgundyState(GameState):
         ]
 
         protest_carousel = [
+            PreparationsForASaintsDay_FomentUnrest,
             MarchForThePeople_AttendPilgrimage,
             SpreadingSeditionTwistedPilgrimage_TweakRoute,
             SpreadingSeditionHeartsAndMinds_BendEars,
-            PreparationsForASaintsDay_FomentUnrest,
         ]
 
         chevalier_carousel = [
@@ -230,13 +230,15 @@ class BurgundyState(GameState):
 
         # ATAK & BB cashouts
         action_list.extend({
-            GiftsOfBurgundy_PlunderHistory,
+            GiftsOfBurgundy_SpoilsHunt,
+            # GiftsOfBurgundy_PlunderHistory,
             SpoilsOfRebellion_SparkingAnachronism,
         })
 
-        action_list.extend(chevalier_carousel)
+        # action_list.extend(chevalier_carousel)
+        action_list.append(PreparationsForASaintsDay_FomentUnrest)
         action_list.extend(protest_carousel)
-        action_list.extend(feast_carousel)
+        # action_list.extend(feast_carousel)
 
         # Casing, Fascinating, THIO cashouts
         action_list.extend({
@@ -245,7 +247,9 @@ class BurgundyState(GameState):
             CutthroatsAndCanalmen_HeedCall,
         })
 
+        # action_list.extend(atak_gains_free)
         action_list.extend(bb_gains)
+        # action_list.append(DuchessDisapproval_EnlightenDuchess)
 
         # if bb >= 5 and atak >= 4:
         #     action_list.extend(bb_gains)
@@ -262,6 +266,8 @@ class BurgundyState(GameState):
         #         action_list.extend(atak_gains_wounds)
         #     if suspicion < 35:
         #         action_list.extend(atak_gains_suspicion)
+
+        action_list.extend(bb_gains)
 
         action_list.append(Deck_RefillHand)
         action_list.append(Deck_DiscardLowValue)
@@ -2653,6 +2659,7 @@ class BurgundySimRunner(SimulationRunner):
     def create_state(self):
         """Create and initialize a new BurgundyState."""
         state = BurgundyState(max_actions=10000, max_draws=10000)
+        state.skip_econ_inputs = True
         return state
 
 ################################################################
@@ -2785,9 +2792,9 @@ if __name__ == "__main__":
             Item.Casing: 0,
             Item.Fascinating: 0,
             Item.Wounds: 0,
-            Item.PreparationsForASaintsDay: 10,
+            Item.PreparationsForASaintsDay: 0,
             Item.SaddledWithAStolenSack: 0,
-            Item.SeasonOfHunting: 3,
+            Item.SeasonOfHunting: 0,
             Item.StrongBackedLabour: 0,
             Item.Nightmares: 0,
             Item.AsAboveBecomesBelow: 10,

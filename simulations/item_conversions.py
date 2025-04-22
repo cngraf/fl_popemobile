@@ -103,7 +103,7 @@ item_conversion_rates = {
     Item.PuzzlingMap: {Item.Echo: 12.5, Item.Stuiver: 0},
     Item.FlaskOfAbominableSalts: {Item.Echo: 0.1, Item.Stuiver: 0},
 
-    Item.GlimEncrustedCarapace: {Item.Echo: 0, Item.Stuiver: 1250},
+    Item.GlimEncrustedCarapace: { Item.Stuiver: 1250 },
     Item.ShardOfGlim: {Item.Echo: 0.01, Item.Stuiver: 0},
     Item.RoofChart: {Item.Echo: 2.53, Item.Stuiver: 50},
 
